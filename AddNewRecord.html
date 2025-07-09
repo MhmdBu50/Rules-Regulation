@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <title>System Admin - New Record</title>
@@ -37,8 +36,18 @@
       color: white;
     }
 
+    .top-bar a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .top-bar a:hover {
+      text-decoration: underline;
+    }
+
     .header-logo {
-      max-height: 60px;
+      max-height: 80px;
       width: auto;
     }
 
@@ -46,7 +55,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px 10 0;
+      padding: 20px 0 0;
     }
 
     .main-header {
@@ -86,26 +95,64 @@
       background-color: #fff;
       color: #284161;
       border: none;
+      box-shadow: 0px 4px 8.9px rgba(0, 0, 0, 0.3);
     }
 
-    .btn-outline-primary,
-    .btn-outline-secondary {
-      margin-right: 10px;
+    .btn-outline-primary {
+      border: 2px solid #284161;
+      color: #284161;
+      padding: 6px 12px;
+      background-color: transparent;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+      background-color: #284161;
+      color: #fff;
     }
   </style>
-</head>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const mobileInput = document.getElementById('mobileNumber');
+      mobileInput.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);
+      });
 
+      const telInput = document.getElementById('telephoneNumber');
+      telInput.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
+
+      document.querySelector('form').addEventListener('submit', function (e) {
+        const checkboxes = document.querySelectorAll('.section-checkbox');
+        const oneChecked = Array.from(checkboxes).some(cb => cb.checked);
+        if (!oneChecked) {
+          e.preventDefault();
+          alert("Please select at least one section.");
+          return;
+        }
+
+        const nameField = document.getElementById('responsibleName');
+        const arabicPattern = /^[\u0600-\u06FF\s]+$/;
+        if (!arabicPattern.test(nameField.value)) {
+          e.preventDefault();
+          alert("Name of Responsible Person must be in Arabic.");
+        }
+      });
+    });
+  </script>
+</head>
 <body>
 
   <!-- Top Bar -->
   <div class="top-bar">
-    <span>Home</span>
-    <span>Logout</span>
+    <a href="#" id="home-link">Home</a>
+    <a href="#" id="logout-link">Logout</a>
   </div>
 
   <!-- IAU Logo -->
   <div class="container logo-container">
-    <img class="header-logo" src="iaulogoname.png" alt="IAU Logo">
+    <img class="header-logo mx-auto d-block" src="iaulogoname.png" alt="IAU Logo">
   </div>
 
   <!-- Main Header -->
@@ -120,38 +167,38 @@
         <div class="row mb-3">
           <div class="col-md-6">
             <label>Regulation/Manual Name</label>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" required>
           </div>
           <div class="col-md-6">
             <label>Responsible Department</label>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" required>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-4">
             <label>Version Number</label>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" required>
           </div>
           <div class="col-md-4">
             <label>Version Date</label>
-            <input type="date" class="form-control">
+            <input type="date" class="form-control" required>
           </div>
           <div class="col-md-4">
             <label>Approving Date</label>
-            <input type="date" class="form-control">
+            <input type="date" class="form-control" required>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-4">
             <label>Approving Entity</label>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" required>
           </div>
           <div class="col-md-8">
             <label>Attachment</label><br>
             <button type="button" class="btn btn-outline-primary btn-sm">Word file</button>
-            <button type="button" class="btn btn-outline-secondary btn-sm">PDF file</button>
+            <button type="button" class="btn btn-outline-primary btn-sm">PDF file</button>
           </div>
         </div>
 
@@ -164,37 +211,37 @@
           <div class="col-md-4">
             <label>Document Type</label>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="doctype" id="regulation">
-              <label class="form-check-label" for="regulation">Regulation</label>
+              <input class="form-check-input" type="radio" name="doctype" required>
+              <label class="form-check-label">Regulation</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="doctype" id="guideline">
-              <label class="form-check-label" for="guideline">Guideline</label>
+              <input class="form-check-input" type="radio" name="doctype">
+              <label class="form-check-label">Guideline</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="doctype" id="policy">
-              <label class="form-check-label" for="policy">Policy</label>
+              <input class="form-check-input" type="radio" name="doctype">
+              <label class="form-check-label">Policy</label>
             </div>
           </div>
           <div class="col-md-4">
             <label>Sections</label>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="students">
+              <input class="form-check-input section-checkbox" type="checkbox" id="students">
               <label class="form-check-label" for="students">Students</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="members">
+              <input class="form-check-input section-checkbox" type="checkbox" id="members">
               <label class="form-check-label" for="members">Members</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="program">
+              <input class="form-check-input section-checkbox" type="checkbox" id="program">
               <label class="form-check-label" for="program">Enrolled Program</label>
             </div>
           </div>
           <div class="col-md-4">
             <label>Relevant Department</label>
-            <select class="form-select">
-              <option>Select department</option>
+            <select class="form-select" required>
+              <option value="">Select department</option>
               <option>HR</option>
               <option>IT</option>
               <option>Academic Affairs</option>
@@ -204,23 +251,26 @@
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label>Name of Responsible Person (Ar)</label>
-            <input type="text" class="form-control">
+            <label for="responsibleName">Name of Responsible Person (Ar)</label>
+            <input type="text" class="form-control" id="responsibleName" required>
           </div>
           <div class="col-md-6">
             <label>E-mail</label>
-            <input type="email" class="form-control">
+            <input type="email" class="form-control" required>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label>Telephone number</label>
-            <input type="text" class="form-control">
+            <label for="telephoneNumber">Telephone number</label>
+            <input type="tel" class="form-control" id="telephoneNumber" required>
           </div>
           <div class="col-md-6">
-            <label>Mobile number</label>
-            <input type="text" class="form-control">
+            <label for="mobileNumber">Mobile number</label>
+            <div class="input-group">
+              <span class="input-group-text">+966</span>
+              <input type="tel" class="form-control" id="mobileNumber" required>
+            </div>
           </div>
         </div>
 
@@ -239,5 +289,4 @@
   </div>
 
 </body>
-
 </html>
