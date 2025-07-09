@@ -12,7 +12,7 @@
 
 
         .menu {
-            background-color: #34516C;
+            background-color: #0F1734;
             width: 100%;
             height: 75px;
             margin: 0;
@@ -20,26 +20,33 @@
             justify-content: space-between;
             align-items: center; 
         }
+        .searchLang-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
         body {
             margin:0;
             height: 100vh;
             width: 100vw;
-            background-color: #2C2C2C;
+            background-color: #EAE0CA;
             font-family: "Poppins", sans-serif;
         }
 
         
         .search-container{
+            justify-self: left;
             width: clamp(200px,763px,900px);
             height: 60px;
-            background-color: #0D0B26;
+            background-color: #2F3E5F;
             display: flex;
             align-items: center;
             padding: 0 8px;
             gap: 6px;
             box-shadow: 0 4px 12px rgba(13, 10, 44, 0.06);
-            border-radius: 32px;}
+            border-radius: 32px
+        }
 
         .search-and-filter-buttons {
             background-color: transparent;
@@ -91,7 +98,7 @@
             width: clamp(150px,620px,83.52%);;
             height: 44px; /* Match actual total height */
             padding: 0 16px; /* Only left and right padding */
-            background-color: #0D0B26;
+            background-color: #2F3E5F;
             border-radius: 25.6px;
             text-align: left;
             font-size: 24px;
@@ -116,32 +123,8 @@
 
 
         }
-        .signlog{ background-color: 0;
-                    width:104px;
-                    height:40px;
-                    font-weight: 200;
-                    border-radius: 8px;
-                    text-align: center;
-                    border: 0px;
-                    font-family:'Inter';
-                    font-style: normal;
-                    font-weight: 400;
-                    font-size: 23px;
-                    line-height: 100%;
-                    transition: transform .12s ease-in-out;
-        }
-        .signlog:hover{
-                    transform: scale(1.05);
-                    font-weight: 500;
-        }
-        .signlog:active{
-            transition: transform .02s ease-in-out;
-            transform: scale(0.87);
-}
-        
-        #signup{ background-color: #E3E3E3;
-                 color:#1E1E1E;
-        }
-        #login{ background-color: #2C2C2C;
-                color:#E3E3E3;
+
+        .profile-icon {
+            filter: invert(1);
+            height: 61px;
         }
