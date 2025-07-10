@@ -17,6 +17,8 @@
         /* Dark blue background */
         color: yellow;
         /* Yellow text color */
+        position: relative;
+        /* Needed for the red line positioning */
     }
 
     .custom-navbar .nav-link {
@@ -42,6 +44,21 @@
     .navbar-brand input[type="checkbox"] {
         margin-right: 10px;
     }
+
+    /* Red line styling */
+    .red-line {
+        position: absolute;
+        justify-content: center;
+        align-items: center;
+        bottom: 0;
+        left: 0;
+        width: 97%;
+        height: 4px;
+        background-color: #94331C;
+        margin-bottom: -7px;
+        margin-left: 13px;
+        margin-right: 10px;
+    }
 </style>
 
 <body class="vh-100 d-flex justify-content-center align-items-center">
@@ -62,6 +79,8 @@
                 </ul>
             </div>
         </div>
+        <div class="red-line"></div>
+
     </nav>
 
 </body>
