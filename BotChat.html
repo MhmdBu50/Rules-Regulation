@@ -126,15 +126,46 @@
   const chatIcon = document.getElementById('chat-icon');
   const chatBox = document.getElementById('chat-box');
   const chatClose = document.getElementById('chat-close');
+  const chatInput = document.querySelector('#chat-input input');
+  const chatSend = document.querySelector('#chat-input button');
+  const chatMessages = document.getElementById('chat-messages');
+
 
   chatIcon.addEventListener('click', () => {
     chatBox.classList.add('active');
     chatIcon.style.display = 'none';
   });
 
+
   chatClose.addEventListener('click', () => {
     chatBox.classList.remove('active');
     chatIcon.style.display = 'flex';
+  });
+
+  chatSend.addEventListener('click', () => {
+    const message = chatInput.value.trim();
+    if (message !== '') {
+      const userMsg = document.createElement('p');
+
+      userMsg.innerHTML = `<strong>You:</strong> ${message}`;
+      chatMessages.appendChild(userMsg);
+      chatInput.value = '';
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      setTimeout(() => {
+        const botMsg = document.createElement('p');
+        botMsg.innerHTML = `<strong>Bot:</strong> Eat kabsa habibi`;
+        chatMessages.appendChild(botMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 1000);
+    }
+  });
+
+  chatInput.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      chatSend.click();
+    }
   });
 </script>
 
