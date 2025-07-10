@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home page</title>
-        <link rel="stylesheet" href="style.css">
-
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/Homepage-DocCard.css">  <!--Document card Design-->
+    <script src="js/card-animations.js"></script> <!--Document card Animations-->
     <style>
 
     </style>
@@ -85,6 +86,65 @@
                 <a href="#" class="text-white d-block py-2">Profile</a>
             </div>
         </div>
-    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <script src="js/bootstrap.js"></script>
+<!-----------------------------------------------------------------------------Demonstration of cards, icons can be reapplied with ours--------------------------------------------------------------------------------------------->
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+                <div class="card document-card">
+                    <div class="bookmark" onclick="toggleBookmark(this)"></div>
+                    
+                    <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
+                    </div>
+                    
+                    <h2 class="card-title">Rule and regulations title</h2>
+                    
+                    <div class="info-footer">
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="handleAction('download')" title="Download">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('info')" title="Information">
+                                <i class="fas fa-info"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('read')" title="Read">
+                                <i class="fas fa-book-open"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('chat')" title="Chat">
+                                <i class="fas fa-comments"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card document-card">
+                    <div class="bookmark" onclick="toggleBookmark(this)"></div>
+                    
+                    <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
+                    </div>
+                    
+                    <h2 class="card-title">Rule and regulations title</h2>
+                    
+                    <div class="info-footer">
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="handleAction('download')" title="Download">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('info')" title="Information">
+                                <i class="fas fa-info"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('read')" title="Read">
+                                <i class="fas fa-book-open"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('chat')" title="Chat">
+                                <i class="fas fa-comments"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    
 </body>
 </html>
