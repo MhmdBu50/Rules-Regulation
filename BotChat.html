@@ -2,49 +2,84 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Chatbot Popup</title>
+  <title>Sliding Chatbot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Chat Icon */
     #chat-icon {
       position: fixed;
       bottom: 20px;
       right: 20px;
       background-color: #0d6efd;
+      color: white;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
-      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
       cursor: pointer;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      z-index: 1000;
+      z-index: 9999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
+    /* Chat Box */
     #chat-box {
       position: fixed;
-      bottom: 80px;
+      bottom: 100px;
       right: 20px;
-      width: 300px;
-      height: 400px;
-      background-color: #fff;
+      width: 350px;
+      height: 500px;
+      background: #fff;
+      border-radius: 12px;
       border: 1px solid #ccc;
-      border-radius: 10px;
-      display: none;
+      display: flex;
       flex-direction: column;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      z-index: 1001;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transform: translateY(100%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out;
+      z-index: 10000;
+    }
+
+    #chat-box.active {
+      transform: translateY(0%);
+      opacity: 1;
+      visibility: visible;
     }
 
     #chat-header {
       background-color: #0d6efd;
-      color: #fff;
-      padding: 10px;
+      color: white;
+      padding: 15px;
       font-weight: bold;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #chat-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
     #chat-messages {
       flex: 1;
       padding: 10px;
       overflow-y: auto;
+      background-color: #f8f9fa;
     }
 
     #chat-input {
@@ -56,6 +91,7 @@
       flex: 1;
       border: none;
       padding: 10px;
+      outline: none;
     }
 
     #chat-input button {
@@ -69,28 +105,39 @@
 <body>
 
 <!-- Chat Icon -->
-<div id="chat-icon">
-  <img src="https://img.icons8.com/ios-filled/24/ffffff/chat.png" alt="Chatbot" />
-</div>
+<div id="chat-icon">💬</div>
 
 <!-- Chat Box -->
-<div id="chat-box" class="d-flex flex-column">
-  <div id="chat-header">Chat with Mr. Kabaa</div>
+<div id="chat-box">
+  <div id="chat-header">
+    Chat with Mr. Kabaa
+    <button id="chat-close">&times;</button>
+  </div>
   <div id="chat-messages">
-    <p><strong>Bot:</strong> Hi! How can I help you?</p>
+    <p><strong>Bot:</strong> Hello! How can I help you?</p>
   </div>
   <div id="chat-input">
-    <input type="text" placeholder="Enter a message..." />
+    <input type="text" placeholder="Type a message..." />
     <button>Send</button>
   </div>
 </div>
 
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
   const chatIcon = document.getElementById('chat-icon');
   const chatBox = document.getElementById('chat-box');
+  const chatClose = document.getElementById('chat-close');
 
   chatIcon.addEventListener('click', () => {
-    chatBox.style.display = chatBox.style.display === 'none' ? 'flex' : 'none';
+    chatBox.classList.add('active');
+    chatIcon.style.display = 'none';
+  });
+
+  chatClose.addEventListener('click', () => {
+    chatBox.classList.remove('active');
+    chatIcon.style.display = 'flex';
   });
 </script>
 
