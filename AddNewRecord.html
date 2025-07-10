@@ -19,8 +19,9 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: url('dsc_2499.jpg') no-repeat center center;
+      background: url('imgs/dsc_2499.jpg') no-repeat center center;
       background-size: cover;
+      background-attachment: fixed;
       opacity: 0.08;
       z-index: -1;
     }
@@ -67,7 +68,7 @@
     }
 
     .form-wrapper {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 10px;
       box-shadow: 0 0 15px rgba(0,0,0,0.2);
       padding: 30px;
@@ -98,17 +99,12 @@
       box-shadow: 0px 4px 8.9px rgba(0, 0, 0, 0.3);
     }
 
-    .btn-outline-primary {
-      border: 2px solid #284161;
-      color: #284161;
-      padding: 6px 12px;
-      background-color: transparent;
-      transition: background-color 0.3s ease, color 0.3s ease;
+    input:focus, select:focus, textarea:focus {
+      outline: 2px solid #284161;
     }
 
-    .btn-outline-primary:hover {
-      background-color: #284161;
-      color: #fff;
+    .text-danger {
+      font-size: 0.875em;
     }
   </style>
   <script>
@@ -124,19 +120,28 @@
       });
 
       document.querySelector('form').addEventListener('submit', function (e) {
+        let hasError = false;
+
         const checkboxes = document.querySelectorAll('.section-checkbox');
         const oneChecked = Array.from(checkboxes).some(cb => cb.checked);
         if (!oneChecked) {
-          e.preventDefault();
-          alert("Please select at least one section.");
-          return;
+          document.getElementById('sectionError').textContent = "Please select at least one section.";
+          hasError = true;
+        } else {
+          document.getElementById('sectionError').textContent = "";
         }
 
         const nameField = document.getElementById('responsibleName');
         const arabicPattern = /^[\u0600-\u06FF\s]+$/;
         if (!arabicPattern.test(nameField.value)) {
+          document.getElementById('nameError').textContent = "Name must be in Arabic.";
+          hasError = true;
+        } else {
+          document.getElementById('nameError').textContent = "";
+        }
+
+        if (hasError) {
           e.preventDefault();
-          alert("Name of Responsible Person must be in Arabic.");
         }
       });
     });
@@ -146,13 +151,13 @@
 
   <!-- Top Bar -->
   <div class="top-bar">
-    <a href="#" id="home-link">Home</a>
-    <a href="#" id="logout-link">Logout</a>
+    <a href="#" id="home-link" aria-label="Go to home">Home</a>
+    <a href="#" id="logout-link" aria-label="Logout from system">Logout</a>
   </div>
 
   <!-- IAU Logo -->
   <div class="container logo-container">
-    <img class="header-logo mx-auto d-block" src="iaulogoname.png" alt="IAU Logo">
+    <img class="header-logo mx-auto d-block" src="imgs\iaulogoname.png" alt="IAU Logo">
   </div>
 
   <!-- Main Header -->
@@ -163,127 +168,133 @@
   <!-- Form Section -->
   <div class="container">
     <div class="form-wrapper">
-      <form>
+      <form method="post" action="/submit">
         <div class="row mb-3">
           <div class="col-md-6">
-            <label>Regulation/Manual Name</label>
-            <input type="text" class="form-control" required>
+            <label for="regulationName">Regulation/Manual Name</label>
+            <input type="text" class="form-control" id="regulationName" name="regulationName" required>
           </div>
           <div class="col-md-6">
-            <label>Responsible Department</label>
-            <input type="text" class="form-control" required>
+            <label for="department">Responsible Department</label>
+            <input type="text" class="form-control" id="department" name="department" required>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-4">
-            <label>Version Number</label>
-            <input type="text" class="form-control" required>
+            <label for="versionNumber">Version Number</label>
+            <input type="text" class="form-control" id="versionNumber" name="versionNumber" required>
           </div>
           <div class="col-md-4">
-            <label>Version Date</label>
-            <input type="date" class="form-control" required>
+            <label for="versionDate">Version Date</label>
+            <input type="date" class="form-control" id="versionDate" name="versionDate" required>
           </div>
           <div class="col-md-4">
-            <label>Approving Date</label>
-            <input type="date" class="form-control" required>
+            <label for="approvalDate">Approving Date</label>
+            <input type="date" class="form-control" id="approvalDate" name="approvalDate" required>
           </div>
         </div>
 
+              <div class="mb-3">
+          <label for="approvalEntity">Approving Entity</label>
+          <input type="text" class="form-control" id="approvalEntity" name="approvalEntity" required>
+        </div>
+
         <div class="row mb-3">
-          <div class="col-md-4">
-            <label>Approving Entity</label>
-            <input type="text" class="form-control" required>
+          <div class="col-md-6">
+            <label for="wordAttachment">Word Attachment</label>
+            <input type="file" class="form-control" id="wordAttachment" name="wordAttachment" accept=".doc,.docx">
           </div>
-          <div class="col-md-8">
-            <label>Attachment</label><br>
-            <button type="button" class="btn btn-outline-primary btn-sm">Word file</button>
-            <button type="button" class="btn btn-outline-primary btn-sm">PDF file</button>
+          <div class="col-md-6">
+            <label for="pdfAttachment">PDF Attachment</label>
+            <input type="file" class="form-control" id="pdfAttachment" name="pdfAttachment" accept=".pdf">
           </div>
         </div>
+
 
         <div class="mb-3">
-          <label>Brief Description</label>
-          <textarea class="form-control" rows="3"></textarea>
+          <label for="description">Brief Description</label>
+          <textarea class="form-control" id="description" name="description" rows="3"></textarea>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-4">
             <label>Document Type</label>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="doctype" required>
-              <label class="form-check-label">Regulation</label>
+              <input class="form-check-input" type="radio" name="doctype" value="regulation" id="reg" required>
+              <label class="form-check-label" for="reg">Regulation</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="doctype">
-              <label class="form-check-label">Guideline</label>
+              <input class="form-check-input" type="radio" name="doctype" value="guideline" id="guide">
+              <label class="form-check-label" for="guide">Guideline</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="doctype">
-              <label class="form-check-label">Policy</label>
+              <input class="form-check-input" type="radio" name="doctype" value="policy" id="policy">
+              <label class="form-check-label" for="policy">Policy</label>
             </div>
           </div>
           <div class="col-md-4">
             <label>Sections</label>
             <div class="form-check">
-              <input class="form-check-input section-checkbox" type="checkbox" id="students">
+              <input class="form-check-input section-checkbox" type="checkbox" id="students" name="sections" value="students">
               <label class="form-check-label" for="students">Students</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input section-checkbox" type="checkbox" id="members">
+              <input class="form-check-input section-checkbox" type="checkbox" id="members" name="sections" value="members">
               <label class="form-check-label" for="members">Members</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input section-checkbox" type="checkbox" id="program">
+              <input class="form-check-input section-checkbox" type="checkbox" id="program" name="sections" value="program">
               <label class="form-check-label" for="program">Enrolled Program</label>
             </div>
+            <div id="sectionError" class="text-danger mt-1"></div>
           </div>
           <div class="col-md-4">
-            <label>Relevant Department</label>
-            <select class="form-select" required>
+            <label for="relevantDepartment">Relevant Department</label>
+            <select class="form-select" id="relevantDepartment" name="relevantDepartment" required>
               <option value="">Select department</option>
-              <option>HR</option>
-              <option>IT</option>
-              <option>Academic Affairs</option>
+              <option value="HR">HR</option>
+              <option value="IT">IT</option>
+              <option value="Academic Affairs">Academic Affairs</option>
             </select>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="responsibleName">Name of Responsible Person (Ar)</label>
-            <input type="text" class="form-control" id="responsibleName" required>
+            <label for="responsibleName">Name of Responsible Person (Arabic)</label>
+            <input type="text" class="form-control" id="responsibleName" name="responsibleName" lang="ar" dir="rtl" required>
+            <div id="nameError" class="text-danger mt-1"></div>
           </div>
           <div class="col-md-6">
-            <label>E-mail</label>
-            <input type="email" class="form-control" required>
+            <label for="email">E-mail</label>
+            <input type="email" class="form-control" id="email" name="email" required>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-6">
             <label for="telephoneNumber">Telephone number</label>
-            <input type="tel" class="form-control" id="telephoneNumber" required>
+            <input type="tel" class="form-control" id="telephoneNumber" name="telephoneNumber" required>
           </div>
           <div class="col-md-6">
             <label for="mobileNumber">Mobile number</label>
             <div class="input-group">
               <span class="input-group-text">+966</span>
-              <input type="tel" class="form-control" id="mobileNumber" required>
+              <input type="tel" class="form-control" id="mobileNumber" name="mobileNumber" required>
             </div>
           </div>
         </div>
 
         <div class="mb-3">
-          <label>Notes</label>
-          <input type="text" class="form-control">
+          <label for="notes">Notes</label>
+          <input type="text" class="form-control" id="notes" name="notes">
         </div>
 
         <div class="text-center">
           <button type="submit" class="btn btn-primary me-2">Save and upload</button>
           <button type="reset" class="btn btn-secondary">Cancel</button>
         </div>
-
       </form>
     </div>
   </div>
