@@ -20,6 +20,10 @@
             justify-content: space-between;
             align-items: center; 
         }
+        .container-fluid {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
         .searchLang-container {
             display: flex;
             align-items: center;
@@ -95,7 +99,7 @@
         }
         
         .search{
-            width: clamp(150px,620px,83.52%);;
+            width: clamp(150px,620px,83.52%) !important;
             height: 44px; /* Match actual total height */
             padding: 0 16px; /* Only left and right padding */
             background-color: #2F3E5F;
@@ -107,11 +111,10 @@
         }
 
         .logo { /*changed class name from icon to logo*/
-            width: 56px;
-            height: 56px;
-            margin-right: 12px; 
-            padding-left: 24px;
-
+            width: 56px !important;
+            height: 56px !important;
+            max-width: none !important; /* Kill Bootstrap's max-width */
+            flex-shrink: 0 !important; /* Prevent shrinking */
         }
         .signlog-container{
             display: flex;
@@ -127,4 +130,18 @@
         .profile-icon {
             filter: invert(1);
             height: 61px;
+        }
+        /* Fix search icon alignment */
+        .search-container {
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+        }
+
+        .bootstrap-wrapper { height: 100%; }
+        .navbar-toggler { border: none; padding: 0; }
+        .mobile-logo { display: none; }
+        @media (max-width: 991.98px) {
+            .desktop-logo { display: none; }
+            .mobile-logo { display: block; }
         }
