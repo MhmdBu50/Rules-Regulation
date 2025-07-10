@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kabsa Chatbot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #chat-icon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #0d6efd;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    #chat-box {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      width: 350px;
+      height: 500px;
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transform: translateY(100%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out;
+      z-index: 10000;
+    }
+
+    #chat-box.active {
+      transform: translateY(0%);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    #chat-header {
+      background-color: #0d6efd;
+      color: white;
+      padding: 15px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #chat-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #chat-messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background-color: #f8f9fa;
+    }
+
+    #chat-input {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+
+    #chat-input input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      outline: none;
+    }
+
+    #chat-input button {
+      border: none;
+      background-color: #0d6efd;
+      color: white;
+      padding: 10px 15px;
+    }
+  </style>
+</head>
+<body>
+
+
+<div id="chat-icon">💬</div>
+
+
+<div id="chat-box">
+  <div id="chat-header">
+    Chat with Mr. Kabaa
+    <button id="chat-close">&times;</button>
+  </div>
+  <div id="chat-messages">
+    <p><strong>Bot:</strong> Hello! How can I help you?</p>
+  </div>
+  <div id="chat-input">
+    <input type="text" placeholder="Type a message..." />
+    <button>Send</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  const chatIcon = document.getElementById('chat-icon');
+  const chatBox = document.getElementById('chat-box');
+  const chatClose = document.getElementById('chat-close');
+  const chatInput = document.querySelector('#chat-input input');
+  const chatSend = document.querySelector('#chat-input button');
+  const chatMessages = document.getElementById('chat-messages');
+
+
+  chatIcon.addEventListener('click', () => {
+    chatBox.classList.add('active');
+    chatIcon.style.display = 'none';
+  });
+
+
+  chatClose.addEventListener('click', () => {
+    chatBox.classList.remove('active');
+    chatIcon.style.display = 'flex';
+  });
+
+  chatSend.addEventListener('click', () => {
+    const message = chatInput.value.trim();
+    if (message !== '') {
+      const userMsg = document.createElement('p');
+
+      userMsg.innerHTML = `<strong>You:</strong> ${message}`;
+      chatMessages.appendChild(userMsg);
+      chatInput.value = '';
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      setTimeout(() => {
+        const botMsg = document.createElement('p');
+        botMsg.innerHTML = `<strong>Bot:</strong> Eat kabsa habibi`;
+        chatMessages.appendChild(botMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 1000);
+    }
+  });
+
+  chatInput.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      chatSend.click();
+    }
+  });
+</script>
+
+</body>
+</html>
