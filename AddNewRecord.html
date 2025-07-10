@@ -144,6 +144,14 @@
           e.preventDefault();
         }
       });
+
+      const cancelBtn = document.getElementById('cancelButton');
+      cancelBtn.addEventListener('click', function () {
+        const confirmCancel = confirm("Are you sure you want to cancel and leave this page?");
+        if (confirmCancel) {
+          window.location.href = "AdminDashBourd.html";
+        }
+      });
     });
   </script>
 </head>
@@ -157,7 +165,7 @@
 
   <!-- IAU Logo -->
   <div class="container logo-container">
-    <img class="header-logo mx-auto d-block" src="imgs\iaulogoname.png" alt="IAU Logo">
+    <img class="header-logo mx-auto d-block" src="imgs/iaulogoname.png" alt="IAU Logo">
   </div>
 
   <!-- Main Header -->
@@ -168,7 +176,7 @@
   <!-- Form Section -->
   <div class="container">
     <div class="form-wrapper">
-      <form method="post" action="/submit">
+      <form method="post" action="/submit" enctype="multipart/form-data">
         <div class="row mb-3">
           <div class="col-md-6">
             <label for="regulationName">Regulation/Manual Name</label>
@@ -195,7 +203,7 @@
           </div>
         </div>
 
-              <div class="mb-3">
+        <div class="mb-3">
           <label for="approvalEntity">Approving Entity</label>
           <input type="text" class="form-control" id="approvalEntity" name="approvalEntity" required>
         </div>
@@ -210,7 +218,6 @@
             <input type="file" class="form-control" id="pdfAttachment" name="pdfAttachment" accept=".pdf">
           </div>
         </div>
-
 
         <div class="mb-3">
           <label for="description">Brief Description</label>
@@ -293,7 +300,7 @@
 
         <div class="text-center">
           <button type="submit" class="btn btn-primary me-2">Save and upload</button>
-          <button type="reset" class="btn btn-secondary">Cancel</button>
+          <button type="button" class="btn btn-secondary" id="cancelButton">Cancel</button>
         </div>
       </form>
     </div>
