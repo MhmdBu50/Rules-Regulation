@@ -20,6 +20,10 @@
             justify-content: space-between;
             align-items: center; 
         }
+        .container-fluid {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
         .searchLang-container {
             display: flex;
             align-items: center;
@@ -37,7 +41,9 @@
         
         .search-container{
             justify-self: left;
-            width: clamp(200px,763px,900px);
+            width: 100%;
+            max-width: 763px; /* Your preferred max width */
+            min-width: 200px; /* Your min width */
             height: 60px;
             background-color: #2F3E5F;
             display: flex;
@@ -45,7 +51,8 @@
             padding: 0 8px;
             gap: 6px;
             box-shadow: 0 4px 12px rgba(13, 10, 44, 0.06);
-            border-radius: 32px
+            border-radius: 32px;
+            flex-shrink: 1; /* Allow it to shrink */
         }
 
         .search-and-filter-buttons {
@@ -53,7 +60,7 @@
             border: none;
             margin: 0;
             padding: 0;
-            border-radius: 0;
+            border-radius: 30;
             height: 44px;
             appearance: none;
             transition: transform .08s ease-in-out;
@@ -74,8 +81,14 @@
                 transition: stroke 0.3s ease-in-out; /* Smooth transition */
             }
         .logo {
+            margin: 0 10px 0 15px;
             transform: scale(1.02);
             transition: transform .08s ease-in-out;
+            width: 38px !important;
+            height: 38px !important;
+            max-width: none !important; /* Kill Bootstrap's max-width */
+            flex-shrink: 0 !important; /* Prevent shrinking */
+        
         }
         .logo:hover {
             transform: scale(1.04);
@@ -95,7 +108,9 @@
         }
         
         .search{
-            width: clamp(150px,620px,83.52%);;
+            width:100% !important;
+            max-width: 620px;
+            min-width: 120px;
             height: 44px; /* Match actual total height */
             padding: 0 16px; /* Only left and right padding */
             background-color: #2F3E5F;
@@ -106,13 +121,23 @@
             border: none;
         }
 
-        .logo { /*changed class name from icon to logo*/
-            width: 56px;
-            height: 56px;
-            margin-right: 12px; 
-            padding-left: 24px;
-
-        }
+        @media (max-width: 768px) {
+            .search-container {
+                padding: 0 4px !important;
+                height: 50px !important;
+            }
+            
+            .search {
+                font-size: 18px !important;
+                padding: 0 8px !important;
+            }
+            
+            .search-and-filter-buttons svg {
+                width: 36px !important;
+                height: 36px !important;
+            }
+        }   
+ 
         .signlog-container{
             display: flex;
             align-items: center; 
@@ -121,10 +146,23 @@
             padding-right: 24px;
             padding-left: 24px;
 
-
         }
 
         .profile-icon {
             filter: invert(1);
             height: 61px;
+        }
+        /* Fix search icon alignment */
+        .search-container {
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+        }
+
+        .bootstrap-wrapper { height: 100%; }
+        .navbar-toggler { border: none; padding: 0; }
+        .mobile-logo { display: none; }
+        @media (max-width: 991.98px) {
+            .desktop-logo { display: none; }
+            .mobile-logo { display: block; }
         }
