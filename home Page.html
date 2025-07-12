@@ -88,7 +88,7 @@
             </div>
         </div>
 
-    
+    <!--filter section-->
     <div id="filter-panel" class="filter-panel d-none">
         <div class="filter-column">
             <h3>Sections</h3>
@@ -131,7 +131,7 @@
 
     </div>
 
-    <!--Navigation bar-->
+          <!--Navigation bar-->
     <div class="navigation-bar">
 
         <div>
@@ -273,21 +273,18 @@
 
     <script src="js/bootstrap.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
     const button = document.getElementById("filter-button");
     const panel = document.getElementById("filter-panel");
-
-    button.addEventListener("click", function (e) {
-        e.stopPropagation(); // Prevent the click from bubbling up
+    
+    button.addEventListener("click", function(e) {
+        e.stopPropagation();
         panel.classList.toggle("d-none");
-        panel.classList.toggle("d-flex");
     });
-
-    // Close the filter panel when clicking outside
+    
     document.addEventListener("click", function(e) {
         if (!panel.contains(e.target) && e.target !== button) {
             panel.classList.add("d-none");
-            panel.classList.remove("d-flex");
         }
     });
 });
