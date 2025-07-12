@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <title>AdminPage</title>
+    <style>
+        body {
+            background-color: #EAE0CA;
+        }
+
+        .custom-header {
+            background-color: #1a1a2e;
+            color: #EECA2C;
+            border-radius: 15px;
+            padding: 0;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .custom-header th {
+            color: #EECA2C;
+            font-weight: bold;
+            padding: 18px 12px;
+            vertical-align: middle;
+            font-size: 1.1rem;
+        }
+
+        .custom-header th:first-child {
+            width: 120px;
+        }
+
+        .custom-header input[type="checkbox"] {
+            accent-color: #EECA2C;
+            margin-right: 8px;
+            transform: scale(1.2);
+        }
+
+        .accordion-item {
+            background: none;
+            border: none;
+            margin-bottom: 10px;
+        }
+
+        .accordion-header {
+            border-radius: 15px;
+        }
+
+        .accordion-button {
+            background-color: #34406c;
+            color: #fff;
+            font-weight: 500;
+            border-radius: 15px;
+            border: none;
+            box-shadow: none;
+            display: flex;
+            align-items: center;
+            gap: 0;
+            padding: 14px 18px;
+            font-size: 1.05rem;
+            transition: background 0.2s;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: #232e4a;
+            color: #fff;
+        }
+
+        .accordion-button:focus {
+            box-shadow: none;
+        }
+
+        .accordion-button input[type="checkbox"] {
+            accent-color: #fff;
+            margin-right: 16px;
+            transform: scale(1.2);
+        }
+
+        .accordion-button span {
+            display: inline-block;
+            vertical-align: middle;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .acc-id {
+            width: 40px;
+
+        }
+
+        .acc-name {
+            width: 260px;
+            margin-left: 50px;
+        }
+
+        .acc-section {
+            width: 120px;
+            margin: 20px;
+            margin-left: 88px;
+        }
+
+        .acc-version {
+            width: 120px;
+            margin-left: 30px;
+        }
+
+        .acc-date {
+            width: 120px;
+            margin-left: 95px;
+        }
+
+        .acc-entity {
+            width: 160px;
+            margin-left: 71px;
+        }
+
+        .accordion-button::after {
+            margin-left: auto;
+            color: #fff;
+            filter: invert(1) grayscale(1);
+        }
+
+        .accordion-body {
+            background-color: #fff;
+            border-radius: 0 0 15px 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container my-4">
+        <table class="w-100 custom-header">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" />
+                        Record ID |
+                    </th>
+                    <th>Regulation/ Manual name</th>
+                    <th>Section</th>
+                    <th>Version Number</th>
+                    <th>Approving Date</th>
+                    <th>Responsible Entity</th>
+                </tr>
+            </thead>
+        </table>
+        <div class="accordion" id="regulationAccordion">
+            <!-- سجل 1 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed custom-acc-btn" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        <input type="checkbox" class="me-2" />
+                        <span class="acc-id ">1</span>
+                        <span class="acc-name">Guide to policies and procedures for recruiting...</span>
+                        <span class="acc-section">Students</span>
+                        <span class="acc-version">8.3.4</span>
+                        <span class="acc-date">2025/7/4</span>
+                        <span class="acc-entity">IAU Academic affairs</span>
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                    data-bs-parent="#regulationAccordion">
+                    <div class="accordion-body">
+                        <!-- تفاصيل السجل هنا -->
+                        <!-- ضع هذا الكود داخل <div class="accordion-body"> بدلاً من تفاصيل السجل القديمة -->
+                        <!-- ...existing code... -->
+                        <form>
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Regulation/ Manual name</label>
+                                    <textarea class="form-control" rows="2"
+                                        readonly>Guide to policies and procedures for recruiting, retaining, terminating, and renewing contracts for non-Saudi faculty members</textarea>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Document Type</label>
+                                    <select class="form-select" disabled>
+                                        <option selected>Regulation</option>
+                                    </select>
+                                    <label class="form-label fw-bold mt-2">Attach word file</label>
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control" value="Word file" readonly>
+                                        <span class="input-group-text"><i class="bi bi-paperclip"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Section</label>
+                                    <select class="form-select" disabled>
+                                        <option selected>Student</option>
+                                    </select>
+                                    <label class="form-label fw-bold mt-2">Attach PDF file</label>
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control" value="PDF file..." readonly>
+                                        <span class="input-group-text"><i class="bi bi-paperclip"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Brief Description</label>
+                                    <textarea class="form-control" rows="4"
+                                        readonly>All students are expected to follow the examination rules strictly. Candidates must arrive on time, carry valid identification, and bring only approved materials. Electronic devices are not allowed. Silence must be maintained throughout the exam. Any form of cheating or misconduct will result in disciplinary action. Students may not leave the exam hall without permission and must submit all materials before exiting.</textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Responsible entity’s contact information:</label>
+                                    <div class="mb-1">
+                                        <label class="form-label mb-0">Name (English)</label>
+                                        <input type="text" class="form-control" value="Azzam Alzahrani" readonly>
+                                    </div>
+                                    <div class="mb-1">
+                                        <label class="form-label mb-0">Name (Arabic)</label>
+                                        <input type="text" class="form-control" value="عزام الزهراني" readonly>
+                                    </div>
+                                    <div class="mb-1">
+                                        <label class="form-label mb-0">E-mail</label>
+                                        <input type="email" class="form-control" value="Azzam@gmail.com" readonly>
+                                    </div>
+                                    <div class="mb-1">
+                                        <label class="form-label mb-0">Telephone number</label>
+                                        <input type="text" class="form-control" value="3333139-013" readonly>
+                                    </div>
+                                    <div class="mb-1">
+                                        <label class="form-label mb-0">Mobile number</label>
+                                        <input type="text" class="form-control" value="0569877695" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Approving Date</label>
+                                    <input type="date" class="form-control" value="2025-07-07" readonly>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Accreditation Date</label>
+                                    <input type="date" class="form-control" value="2025-07-07" readonly>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Version Number</label>
+                                    <input type="text" class="form-control" value="10.2.4" readonly>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Note</label>
+                                    <input type="text" class="form-control"
+                                        value="this rules came from minstry of education" readonly>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Accrediting Entity</label>
+                                    <input type="text" class="form-control" value="IAU Academic affairs" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Responsible Department</label>
+                                    <input type="text" class="form-control"
+                                        value="Deanship of Admission and Registration" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-end">
+                                    <button class="btn btn-danger">Delete</button>
+                                    <button class="btn btn-secondary">Edit</button>
+                                    <button class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
