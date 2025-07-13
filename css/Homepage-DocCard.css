@@ -99,13 +99,13 @@
             text-align: left;
             position: relative;
             z-index: 1;
-            margin: 10px 0;
+            margin: 1px 0;
         }
         
         .info-footer {
             background: #F4F0E7;
             border-radius: 0 0 15px 15px;
-            padding: 15px;
+            padding: 7px 10px;  
         }
         
         .action-buttons {
@@ -253,4 +253,8 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        .info-icon svg path {
+            stroke-width: 5;
         }
