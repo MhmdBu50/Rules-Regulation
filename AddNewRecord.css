@@ -1,0 +1,107 @@
+/* Scoped Styles for Add New Record Page */
+.AddNewRecord {
+  background-color: #EAE0CA;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  position: relative;
+  z-index: 0;
+}
+
+.AddNewRecord::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('imgs/dsc_2499.jpg') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+  opacity: 0.08;
+  z-index: -1;
+}
+
+/* Top Navigation Bar */
+.AddNewRecord .top-bar {
+  width: 100%;
+  height: 48px;
+  background: #0F1734;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  color: white;
+}
+
+.AddNewRecord .top-bar a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.AddNewRecord .top-bar a:hover {
+  text-decoration: underline;
+}
+
+/* Logo and Header */
+.AddNewRecord .header-logo {
+  max-height: 80px;
+  width: auto;
+}
+
+.AddNewRecord .logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0 0;
+}
+
+.AddNewRecord .main-header {
+  background: #0F1734;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin: 0 100px 30px 100px;
+}
+
+/* Form Styling */
+.AddNewRecord .form-wrapper {
+  border-radius: 10px;
+  padding: 30px;
+}
+
+.AddNewRecord label {
+  font-weight: 600;
+}
+
+.AddNewRecord .form-control,
+.AddNewRecord .form-select,
+.AddNewRecord textarea {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 3px 8.9px rgba(0, 0, 0, 0.3);
+}
+
+.AddNewRecord input:focus,
+.AddNewRecord select:focus,
+.AddNewRecord textarea:focus {
+  outline: 2px solid #284161;
+}
+
+/* Buttons */
+.AddNewRecord .btn-primary {
+  background-color: #284161;
+  border: none;
+}
+
+.AddNewRecord .btn-secondary {
+  background-color: #fff;
+  color: #284161;
+  border: none;
+  box-shadow: 0px 4px 8.9px rgba(0, 0, 0, 0.3);
+}
+
+/* Error Message */
+.AddNewRecord .text-danger {
+  font-size: 0.875em;
+}

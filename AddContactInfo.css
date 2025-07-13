@@ -1,0 +1,109 @@
+/* Scoped Styles for Add Contact Info Page */
+.AddContactInfo {
+  background-color: #EAE0CA;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  position: relative;
+  z-index: 0;
+}
+
+.AddContactInfo::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('imgs/dsc_2499.jpg') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+  opacity: 0.08;
+  z-index: -1;
+}
+
+/* Top Navigation Bar */
+.AddContactInfo .top-bar {
+  width: 100%;
+  height: 48px;
+  background: #0F1734;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  color: white;
+}
+
+.AddContactInfo .top-bar a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.AddContactInfo .top-bar a:hover {
+  text-decoration: underline;
+}
+
+/* Logo and Header */
+.AddContactInfo .header-logo {
+  max-height: 80px;
+  width: auto;
+}
+
+.AddContactInfo .logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0 0;
+}
+
+.AddContactInfo .main-header {
+  background: #0F1734;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin: 0 100px 30px 100px;
+}
+
+/* Form Layout */
+.AddContactInfo .form-wrapper {
+  border-radius: 10px;
+  padding: 30px;
+  margin-bottom: 40px;
+}
+
+/* Form Elements */
+.AddContactInfo label {
+  font-weight: 600;
+}
+
+.AddContactInfo .form-control,
+.AddContactInfo .form-select,
+.AddContactInfo textarea {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 3px 8.9px rgba(0, 0, 0, 0.3);
+}
+
+.AddContactInfo input:focus,
+.AddContactInfo select:focus,
+.AddContactInfo textarea:focus {
+  outline: 2px solid #284161;
+}
+
+/* Buttons */
+.AddContactInfo .btn-primary {
+  background-color: #284161;
+  border: none;
+}
+
+.AddContactInfo .btn-secondary {
+  background-color: #fff;
+  color: #284161;
+  border: none;
+  box-shadow: 0px 4px 8.9px rgba(0, 0, 0, 0.3);
+}
+
+/* Errors */
+.AddContactInfo .text-danger {
+  font-size: 0.875em;
+}
