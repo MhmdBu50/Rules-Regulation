@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
 
 
+    <link rel="stylesheet" href="AdminPage.css">
     <title>AdminPage</title>
 </head>
 
@@ -64,6 +65,112 @@
 
     </header>
 
+    <!--the statistics part of the admin page-->
+    <div class="dashboard-container">
+        <!-- Main Rectangle Container -->
+        <div class="dashboard-rectangle">
+            <div class="main-row">
+                <!-- Left Section - Charts -->
+                <div class="charts-section">
+                    <div class="row g-0 flex-fill">
+                        <!-- Donut Chart -->
+                        <div class="col-md-6">
+                            <div class="chart-section">
+                                <div class="chart-title">University Rules and Guidelines Overview</div>
+                                <div class="donut-chart-container">
+                                    <div class="donut-chart-canvas">
+                                        <canvas id="chartCanvas"></canvas>
+                                    </div>
+                                    <div class="legend-container">
+                                        <div class="legend-item">
+                                            <div class="legend-color" style="background-color: #8B4513;"></div>
+                                            <span class="legend-text">Academic rules</span>
+                                            <span class="legend-percentage">40%</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="legend-color" style="background-color: #2E8B57;"></div>
+                                            <span class="legend-text">Employment rules & regulations</span>
+                                            <span class="legend-percentage">30%</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="legend-color" style="background-color: #4682B4;"></div>
+                                            <span class="legend-text">Student rules & regulations</span>
+                                            <span class="legend-percentage">25%</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="legend-color" style="background-color: #DAA520;"></div>
+                                            <span class="legend-text">Student rules & regulations</span>
+                                            <span class="legend-percentage">15%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bar Chart -->
+                        <div class="col-md-6">
+                            <div class="chart-section">
+                                <div class="chart-title">Website visits over the past 6 months</div>
+                                <div class="chart-canvas-container">
+                                    <canvas id="barChartCanvas"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vertical Separator -->
+                <div class="chart-sidebar-separator"></div>
+
+                <!-- Right Sidebar -->
+                <div class="sidebar-section">
+                    <div class="sidebar-container">
+                        <!-- Cards Section -->
+                        <div class="sidebar-cards">
+                            <!-- Total Policies Card -->
+                            <div class="stats-card stats-card-blue">
+                                <h6>Total Policies</h6>
+                                <div class="number">30</div>
+                            </div>
+
+                            <!-- Most Viewed Card -->
+                            <div class="stats-card stats-card-green">
+                                <h6>Most Viewed</h6>
+                                <div class="subtitle">Student Code of Conduct</div>
+                                <div class="viewed-text">Viewed: 785 times</div>
+                            </div>
+                        </div>
+
+                        <!-- Buttons Section -->
+                        <div class="sidebar-buttons">
+                            <!-- View Report Button -->
+                            <button class="btn-custom btn-primary-custom" onclick="viewReport()">
+                                View Report
+                            </button>
+
+                            <!-- Add New Record Button -->
+                            <button class="btn-custom btn-dark-custom" onclick="location.href='addNewRecord.html'">
+                                add new record
+                            </button>
+
+                            <!-- Export Data Button -->
+                            <button class="btn-custom btn-dark-custom" onclick="exportData()">
+                                Export Data
+                            </button>
+
+                            <!-- Contact Info Button -->
+                            <button class="btn-custom btn-dark-custom" onclick="location.href='AddNewContactInfo.html'">
+                                Add New Contact Info
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--the table part of the admin page-->
     <div class="container my-4">
         <table class="w-100 ">
             <thead class="text-center">
@@ -353,117 +460,122 @@ All students are expected to follow the examination rules strictly. Candidates m
         </div>
     </div>
     <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize charts when page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeCharts();
+        });
+
+        function initializeCharts() {
+            // Donut Chart
+            const ctx = document.getElementById('chartCanvas').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Academic rules', 'Employment rules & regulations', 'Student rules & regulations', 'Student rules & regulations'],
+                    datasets: [{
+                        data: [40, 30, 25, 15],
+                        backgroundColor: ['#8B4513', '#2E8B57', '#4682B4', '#DAA520'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+
+            // Bar Chart
+            const barCtx = document.getElementById('barChartCanvas').getContext('2d');
+            new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['March', 'April', 'May', 'June', 'July', 'August'],
+                    datasets: [{
+                        data: [180, 150, 220, 180, 320, 200],
+                        backgroundColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA726', '#AB47BC', '#26C6DA'],
+                        borderRadius: 4,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 400,
+                            grid: {
+                                display: true,
+                                color: '#e9ecef'
+                            },
+                            ticks: {
+                                stepSize: 100,
+                                font: {
+                                    size: 10
+                                },
+                                color: '#6c757d'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 10
+                                },
+                                color: '#6c757d'
+                            }
+                        }
+                    },
+                    layout: {
+                        padding: {
+                            top: 10,
+                            right: 10,
+                            bottom: 10,
+                            left: 10
+                        }
+                    }
+                }
+            });
+        }
+
+        // Button functions
+        function viewReport() {
+            alert('View Report clicked!');
+            // Add your functionality here
+        }
+
+        function addNewRecord() {
+            alert('Add New Record clicked!');
+            // Add your functionality here
+        }
+
+        function exportData() {
+            alert('Export Data clicked!');
+            // Add your functionality here
+        }
+
+        function contactInfo() {
+            alert('Contact Info clicked!');
+            // Add your functionality here
+        }
+    </script>
 </body>
 
-</html>
 
-<style>
-    body {
-        background-color: #EAE0CA;
-    }
-
-    :root {
-        --header-height: 100px;
-    }
-
-    .custom-header {
-        background-color: #1a1a2e;
-        color: #EECA2C;
-        border-radius: 20px;
-        margin-bottom: 8px;
-        overflow: hidden;
-        height: var(--header-height);
-    }
-
-    .custom-header th {
-        color: #EECA2C;
-        font-weight: bold;
-        padding: 14px 18px;
-        vertical-align: middle;
-        font-size: 1.1rem;
-    }
-
-
-    .custom-header input[type="checkbox"] {
-        accent-color: #EECA2C;
-        margin-right: 8px;
-        transform: scale(1.2);
-    }
-
-    .accordion-item {
-        background: none;
-        border: none;
-
-    }
-
-
-    .accordion-button {
-        background-color: #34406c;
-        color: #fff;
-        font-weight: 500;
-        border-top-left-radius: 20px !important;
-        border-top-right-radius: 20px !important;
-        border-bottom-left-radius: 20px !important;
-        border-bottom-right-radius: 20px !important;
-        border: none;
-        box-shadow: none;
-        display: flex;
-        align-items: center;
-        gap: 0;
-        font-size: 1.05rem;
-        transition: background 0.2s;
-        overflow: hidden;
-        height: var(--header-height);
-    }
-
-    .accordion-button:not(.collapsed) {
-        background-color: #232e4a;
-        color: #fff;
-    }
-
-
-    .accordion-body {
-        background-color: #fff;
-        border-radius: 0 0 15px 15px;
-        border-left: 7px solid #94331C;
-        /* إضافة الحد الأحمر */
-    }
-
-    /* Red line styling */
-    .red-line {
-        height: 5px;
-        background-color: #94331C;
-        margin-bottom: 12px;
-        margin-left: 13px;
-        margin-right: 10px;
-        border-radius: 5px;
-    }
-
-
-    /* تنسيق الزر داخل شريط البحث */
-    .exit-admin-btn {
-        background-color: #2F3E5F;
-        /* اللون الأساسي للزر */
-        color: white;
-        /* اللون الأبيض للنص */
-        font-size: 1.1rem;
-        font-weight: bold;
-        padding: 12px 20px;
-        border-radius: 30px;
-        border: none;
-        cursor: pointer;
-        transition: background-color 0.2s ease, transform 0.1s ease;
-    }
-
-    /* تأثير عند التمرير على الزر */
-    .exit-admin-btn:hover {
-        background-color: #5c74a9;
-        /* تغيير اللون عند التمرير */
-        transform: scale(1.05);
-    }
-
-    /* تأثير عند الضغط على الزر */
-    .exit-admin-btn:active {
-        transform: scale(0.98);
-    }
 </style>

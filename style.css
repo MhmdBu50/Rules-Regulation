@@ -117,6 +117,26 @@ body {
   border: none;
 }
 
+.adminButton {
+  background-color: #33415c;
+  color: white;
+  border: none;
+  border-radius: 200px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 120%;
+}
+
+.adminButton:hover {
+  background-color: #5c74a9;
+}
+
 @media (max-width: 768px) {
   .search-container {
     padding: 0 4px !important;
