@@ -6,165 +6,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <title>AdminPage</title>
-    <style>
-        body {
-            background-color: #EAE0CA;
-        }
-
-        .custom-header {
-            background-color: #1a1a2e;
-            color: #EECA2C;
-            border-radius: 15px;
-            padding: 0;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .custom-header th {
-            color: #EECA2C;
-            font-weight: bold;
-            padding: 18px 12px;
-            vertical-align: middle;
-            font-size: 1.1rem;
-        }
-
-        .custom-header th:first-child {
-            width: 120px;
-        }
-
-        .custom-header input[type="checkbox"] {
-            accent-color: #EECA2C;
-            margin-right: 8px;
-            transform: scale(1.2);
-        }
-
-        .accordion-item {
-            background: none;
-            border: none;
-            margin-bottom: 10px;
-        }
-
-        .accordion-header {
-            border-radius: 15px;
-        }
-
-        .accordion-button {
-            background-color: #34406c;
-            color: #fff;
-            font-weight: 500;
-            border-radius: 15px;
-            border: none;
-            box-shadow: none;
-            display: flex;
-            align-items: center;
-            gap: 0;
-            padding: 14px 18px;
-            font-size: 1.05rem;
-            transition: background 0.2s;
-        }
-
-        .accordion-button:not(.collapsed) {
-            background-color: #232e4a;
-            color: #fff;
-        }
-
-        .accordion-button:focus {
-            box-shadow: none;
-        }
-
-        .accordion-button input[type="checkbox"] {
-            accent-color: #fff;
-            margin-right: 16px;
-            transform: scale(1.2);
-        }
-
-        .accordion-button span {
-            display: inline-block;
-            vertical-align: middle;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .acc-id {
-            width: 40px;
-
-        }
-
-        .acc-name {
-            width: 260px;
-            margin-left: 50px;
-        }
-
-        .acc-section {
-            width: 120px;
-            margin: 20px;
-            margin-left: 88px;
-        }
-
-        .acc-version {
-            width: 120px;
-            margin-left: 30px;
-        }
-
-        .acc-date {
-            width: 120px;
-            margin-left: 95px;
-        }
-
-        .acc-entity {
-            width: 160px;
-            margin-left: 71px;
-        }
-
-        .accordion-button::after {
-            margin-left: auto;
-            color: #fff;
-            filter: invert(1) grayscale(1);
-        }
-
-        .accordion-body {
-            background-color: #fff;
-            border-radius: 0 0 15px 15px;
-        }
-    </style>
 </head>
 
 <body>
     <div class="container my-4">
         <table class="w-100 custom-header">
-            <thead>
+            <thead class="text-center">
                 <tr>
                     <th>
                         <input type="checkbox" />
+                    </th>
+                    <th class="col-2">
                         Record ID |
                     </th>
-                    <th>Regulation/ Manual name</th>
-                    <th>Section</th>
-                    <th>Version Number</th>
-                    <th>Approving Date</th>
-                    <th>Responsible Entity</th>
+                    <th class="col-3">Regulation/ Manual name</th>
+                    <th class="col-1">Section</th>
+                    <th class="col-2">Version Number</th>
+                    <th class="col-2">Approving Date</th>
+                    <th class="col-3">Responsible Entity</th>
+                    <th></th>
                 </tr>
             </thead>
         </table>
+
+        <div class="red-line"></div>
+
         <div class="accordion" id="regulationAccordion">
             <!-- سجل 1 -->
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
+            <div class="accordion-item" style="height: 88.16px;">
+                <h2 class=" accordion-header" id="headingOne">
                     <button class="accordion-button collapsed custom-acc-btn" type="button" data-bs-toggle="collapse"
                         data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                        <input type="checkbox" class="me-2" />
-                        <span class="acc-id ">1</span>
-                        <span class="acc-name">Guide to policies and procedures for recruiting...</span>
-                        <span class="acc-section">Students</span>
-                        <span class="acc-version">8.3.4</span>
-                        <span class="acc-date">2025/7/4</span>
-                        <span class="acc-entity">IAU Academic affairs</span>
+                        <table class="w-100 ">
+                            <thead class="text-center">
+                                <tr>
+                                    <th style="padding: 14px 18px;">
+                                        <input type="checkbox" />
+                                    </th>
+                                    <th class="col-2" style="padding: 14px 18px;">
+                                        1
+                                    </th>
+                                    <th class="col-3" style="padding: 14px 18px;">Guide to and procedures for
+                                        recruiting...</th>
+                                    <th class="col-1" style="padding: 14px 18px;">Students</th>
+                                    <th class="col-2" style="padding: 14px 18px;">8.3.4</th>
+                                    <th class="col-2" style="padding: 14px 18px;">2025/7/4</th>
+                                    <th class="col-3" style="padding: 14px 18px;">IAU Academic affairs</th>
+
+                                </tr>
+                            </thead>
+                        </table>
                     </button>
                 </h2>
                 <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
                     data-bs-parent="#regulationAccordion">
-                    <div class="accordion-body">
+                    <div class="accordion-body " style="border-radius: 20px;">
 
                         <form>
                             <div class="row mb-2">
@@ -307,7 +203,7 @@ All students are expected to follow the examination rules strictly. Candidates m
                                 <div class="col text-end">
                                     <button class="btn btn-danger">Delete</button>
                                     <button class="btn btn-secondary">Edit</button>
-                                    <button class="btn btn-primary">Save</button>
+                                    <button class="btn btn-success">Save</button>
                                 </div>
                             </div>
                         </form>
@@ -320,3 +216,83 @@ All students are expected to follow the examination rules strictly. Candidates m
 </body>
 
 </html>
+
+<style>
+    body {
+        background-color: #EAE0CA;
+    }
+
+    :root {
+        --header-height: 100px;
+    }
+    .custom-header {
+        background-color: #1a1a2e;
+        color: #EECA2C;
+        border-radius: 20px;
+        margin-bottom: 8px;
+        overflow: hidden;
+        height: var(--header-height);
+    }
+
+    .custom-header th {
+        color: #EECA2C;
+        font-weight: bold;
+        padding: 14px 18px;
+        vertical-align: middle;
+        font-size: 1.1rem;
+    }
+
+
+    .custom-header input[type="checkbox"] {
+        accent-color: #EECA2C;
+        margin-right: 8px;
+        transform: scale(1.2);
+    }
+
+    .accordion-item {
+        background: none;
+        border: none;
+
+    }
+
+
+    .accordion-button {
+        background-color: #34406c;
+        color: #fff;
+        font-weight: 500;
+        border-top-left-radius: 20px !important;
+        border-top-right-radius: 20px !important;
+        border-bottom-left-radius: 20px !important;
+        border-bottom-right-radius: 20px !important;
+        border: none;
+        box-shadow: none;
+        display: flex;
+        align-items: center;
+        gap: 0;
+        font-size: 1.05rem;
+        transition: background 0.2s;
+        overflow: hidden;
+        height: var(--header-height);
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: #232e4a;
+        color: #fff;
+    }
+
+
+    .accordion-body {
+        background-color: #fff;
+        border-radius: 0 0 15px 15px;
+    }
+
+    /* Red line styling */
+    .red-line {
+        height: 5px;
+        background-color: #94331C;
+        margin-bottom: 12px;
+        margin-left: 13px;
+        margin-right: 10px;
+        border-radius: 5px;
+    }
+</style>

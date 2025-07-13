@@ -266,9 +266,51 @@
 
     </div>
 <!-----------------------------------------------------------------------------Demonstration of cards, icons can be reapplied with ours--------------------------------------------------------------------------------------------->
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+    <div class="container-fluid" >
+        <div class="row justify-content-center g-4" style="margin: 0px 40px;">
+
+
+            <div class="col-auto">
+                <div class="card document-card">
+                    <div class="bookmark" onclick="toggleBookmark(this)"></div>
+                    
+                    <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
+                    </div>
+                    
+                    <h2 class="card-title">Rule and regulations title</h2>
+                    
+                    <div class="info-footer">
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="handleAction('download')" title="Download">
+                                <i class="fas fa-download">
+                                    <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M27.125 19.375V24.5417C27.125 25.2268 26.8528 25.8839 26.3684 26.3684C25.8839 26.8528 25.2268 27.125 24.5417 27.125H6.45833C5.77319 27.125 5.11611 26.8528 4.63164 26.3684C4.14717 25.8839 3.875 25.2268 3.875 24.5417V19.375M9.04167 12.9167L15.5 19.375M15.5 19.375L21.9583 12.9167M15.5 19.375V3.875" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('info')" title="Information">
+                                <i class="fas fa-info"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('read')" title="Read">
+                                <i class="fas fa-book-open"><svg width="32" height="31" viewBox="0 0 32 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16.0915 9.04167C16.0915 7.67138 15.5471 6.35722 14.5782 5.38828C13.6093 4.41934 12.2951 3.875 10.9248 3.875H3.1748V23.25H12.2165C13.2442 23.25 14.2298 23.6583 14.9565 24.385C15.6832 25.1117 16.0915 26.0973 16.0915 27.125M16.0915 9.04167V27.125M16.0915 9.04167C16.0915 7.67138 16.6358 6.35722 17.6048 5.38828C18.5737 4.41934 19.8879 3.875 21.2581 3.875H29.0081V23.25H19.9665C18.9388 23.25 17.9531 23.6583 17.2264 24.385C16.4997 25.1117 16.0915 26.0973 16.0915 27.125" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                </i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('chat')" title="Chat">
+                                <i class="fas fa-comments">
+                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.78366 12.7939C9.22389 12.7942 8.67679 12.9605 8.2115 13.2717C7.74622 13.5829 7.38364 14.025 7.16962 14.5423C6.9556 15.0595 6.89975 15.6286 7.00912 16.1775C7.11848 16.7265 7.38816 17.2307 7.78406 17.6264C8.17996 18.0222 8.68431 18.2916 9.23333 18.4007C9.78235 18.5099 10.3514 18.4538 10.8685 18.2395C11.3857 18.0253 11.8277 17.6625 12.1387 17.1971C12.4497 16.7316 12.6157 16.1845 12.6157 15.6247C12.6152 14.8739 12.3166 14.154 11.7856 13.6232C11.2545 13.0924 10.5345 12.7941 9.78366 12.7939ZM9.78366 17.4029C10.1355 17.4031 10.4794 17.299 10.7721 17.1037C11.0647 16.9083 11.2928 16.6306 11.4276 16.3056C11.5623 15.9807 11.5977 15.623 11.5292 15.2779C11.4606 14.9329 11.2913 14.6159 11.0426 14.367C10.7939 14.1182 10.4769 13.9487 10.1319 13.8801C9.78683 13.8114 9.42916 13.8466 9.10413 13.9812C8.77909 14.1159 8.50128 14.3439 8.30585 14.6364C8.11041 14.929 8.00613 15.2729 8.00619 15.6247C8.00658 16.0961 8.19395 16.548 8.52719 16.8814C8.86042 17.2148 9.3123 17.4023 9.78366 17.4029ZM22.2161 12.7939C21.6562 12.7936 21.1088 12.9593 20.6431 13.2702C20.1774 13.581 19.8144 14.023 19.5999 14.5401C19.3854 15.0573 19.3291 15.6265 19.4381 16.1757C19.5472 16.7248 19.8166 17.2293 20.2124 17.6254C20.6081 18.0214 21.1125 18.2912 21.6616 18.4005C22.2107 18.5099 22.7799 18.454 23.2972 18.2398C23.8145 18.0256 24.2567 17.6629 24.5678 17.1974C24.879 16.7319 25.045 16.1846 25.0451 15.6247C25.0439 14.8746 24.7455 14.1556 24.2153 13.625C23.685 13.0945 22.9662 12.7956 22.2161 12.7939ZM22.2161 17.4029C22.5679 17.4031 22.9119 17.299 23.2045 17.1037C23.4972 16.9084 23.7253 16.6307 23.8601 16.3057C23.9949 15.9807 24.0302 15.6231 23.9617 15.278C23.8932 14.9329 23.7239 14.6159 23.4752 14.3671C23.2264 14.1182 22.9095 13.9488 22.5645 13.8801C22.2194 13.8114 21.8617 13.8466 21.5367 13.9812C21.2117 14.1159 20.9338 14.3439 20.7384 14.6364C20.543 14.9289 20.4387 15.2729 20.4387 15.6247C20.4391 16.096 20.6265 16.548 20.9597 16.8813C21.2929 17.2147 21.7448 17.4023 22.2161 17.4029ZM19.9983 21.8532C19.9626 21.7939 19.9156 21.7423 19.8599 21.7013C19.8043 21.6602 19.741 21.6306 19.6739 21.614C19.6068 21.5975 19.537 21.5943 19.4687 21.6048C19.4003 21.6152 19.3347 21.6391 19.2755 21.6749C18.2879 22.274 17.155 22.5907 15.9999 22.5907C14.8448 22.5907 13.7118 22.274 12.7242 21.6749C12.6048 21.6025 12.4616 21.5805 12.326 21.6138C12.1904 21.647 12.0735 21.7327 12.0011 21.8521C11.9287 21.9715 11.9067 22.1147 11.94 22.2503C11.9732 22.3859 12.0589 22.5028 12.1783 22.5752C13.3306 23.2737 14.6524 23.643 15.9999 23.643C17.3474 23.643 18.6691 23.2737 19.8214 22.5752C19.8806 22.5395 19.9321 22.4925 19.973 22.4369C20.014 22.3812 20.0435 22.318 20.0599 22.2509C20.0764 22.1838 20.0794 22.1142 20.0688 22.0459C20.0582 21.9776 20.0343 21.9121 19.9983 21.8532ZM0.917848 24.0131H1.86401V11.4774H0.917848C0.732187 11.4771 0.554029 11.5506 0.42256 11.6817C0.29109 11.8128 0.217076 11.9907 0.216797 12.1764V23.3139C0.217076 23.4996 0.291088 23.6775 0.422554 23.8086C0.554021 23.9397 0.732178 24.0133 0.917848 24.0131ZM29.0838 25.977V9.51331C29.0833 9.1722 28.9474 8.84524 28.7061 8.6042C28.4647 8.36316 28.1376 8.22773 27.7965 8.22765H4.2032C3.8621 8.22773 3.53497 8.36316 3.29363 8.60421C3.05229 8.84525 2.91646 9.17221 2.91595 9.51331V25.977C2.91646 26.3181 3.05229 26.645 3.29363 26.8861C3.53497 27.1271 3.8621 27.2626 4.2032 27.2626H7.51924C7.58825 27.2626 7.6566 27.2762 7.72034 27.3026C7.78409 27.3291 7.84198 27.3678 7.89069 27.4167C7.9394 27.4656 7.97797 27.5236 8.00418 27.5875C8.03039 27.6513 8.04373 27.7197 8.04342 27.7887V31.82L15.8165 27.3332C15.8967 27.2871 15.9876 27.2628 16.0801 27.2629H27.7965C28.1376 27.2628 28.4647 27.1274 28.7061 26.8863C28.9475 26.6453 29.0833 26.3181 29.0838 25.977ZM31.7825 23.3138V12.1764C31.7823 11.9908 31.7083 11.8129 31.5769 11.6818C31.4455 11.5508 31.2675 11.4772 31.0819 11.4774H30.1357V24.0131H31.0819C31.2676 24.0133 31.4457 23.9398 31.5772 23.8087C31.7086 23.6776 31.7822 23.4994 31.7825 23.3138ZM16.5272 4.8383C17.0927 4.70871 17.5906 4.37543 17.926 3.90208C18.2614 3.42873 18.4107 2.84845 18.3455 2.27201C18.2803 1.69556 18.0051 1.16331 17.5725 0.776843C17.1398 0.390377 16.58 0.176758 15.9999 0.176758C15.4198 0.176758 14.8599 0.390377 14.4273 0.776843C13.9946 1.16331 13.7194 1.69556 13.6542 2.27201C13.589 2.84845 13.7384 3.42873 14.0737 3.90208C14.4091 4.37543 14.9071 4.70871 15.4725 4.8383V7.17539H16.5272V4.8383Z" fill="white"/>
+                                    </svg>
+                                </i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="col-auto">
                 <div class="card document-card">
                     <div class="bookmark" onclick="toggleBookmark(this)"></div>
                     
@@ -295,7 +337,8 @@
                     </div>
                 </div>
             </div>
-            <div class="card document-card">
+            <div class="col-auto">
+                <div class="card document-card">
                     <div class="bookmark" onclick="toggleBookmark(this)"></div>
                     
                     <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
@@ -306,11 +349,7 @@
                     <div class="info-footer">
                         <div class="action-buttons">
                             <button class="action-btn" onclick="handleAction('download')" title="Download">
-                                <i class="fas fa-download">
-                                    <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M27.125 19.375V24.5417C27.125 25.2268 26.8528 25.8839 26.3684 26.3684C25.8839 26.8528 25.2268 27.125 24.5417 27.125H6.45833C5.77319 27.125 5.11611 26.8528 4.63164 26.3684C4.14717 25.8839 3.875 25.2268 3.875 24.5417V19.375M9.04167 12.9167L15.5 19.375M15.5 19.375L21.9583 12.9167M15.5 19.375V3.875" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    </i>
+                                <i class="fas fa-download"></i>
                             </button>
                             <button class="action-btn" onclick="handleAction('info')" title="Information">
                                 <i class="fas fa-info"></i>
@@ -324,6 +363,142 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-auto">
+                <div class="card document-card">
+                    <div class="bookmark" onclick="toggleBookmark(this)"></div>
+                    
+                    <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
+                    </div>
+                    
+                    <h2 class="card-title">Rule and regulations title</h2>
+                    
+                    <div class="info-footer">
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="handleAction('download')" title="Download">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('info')" title="Information">
+                                <i class="fas fa-info"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('read')" title="Read">
+                                <i class="fas fa-book-open"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('chat')" title="Chat">
+                                <i class="fas fa-comments"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="card document-card">
+                    <div class="bookmark" onclick="toggleBookmark(this)"></div>
+                    
+                    <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
+                    </div>
+                    
+                    <h2 class="card-title">Rule and regulations title</h2>
+                    
+                    <div class="info-footer">
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="handleAction('download')" title="Download">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('info')" title="Information">
+                                <i class="fas fa-info"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('read')" title="Read">
+                                <i class="fas fa-book-open"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('chat')" title="Chat">
+                                <i class="fas fa-comments"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="card document-card">
+                    <div class="bookmark" onclick="toggleBookmark(this)"></div>
+                    
+                    <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
+                    </div>
+                    
+                    <h2 class="card-title">Rule and regulations title</h2>
+                    
+                    <div class="info-footer">
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="handleAction('download')" title="Download">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('info')" title="Information">
+                                <i class="fas fa-info"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('read')" title="Read">
+                                <i class="fas fa-book-open"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('chat')" title="Chat">
+                                <i class="fas fa-comments"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="card document-card">
+                    <div class="bookmark" onclick="toggleBookmark(this)"></div>
+                    
+                    <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
+                    </div>
+                    
+                    <h2 class="card-title">Rule and regulations title</h2>
+                    
+                    <div class="info-footer">
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="handleAction('download')" title="Download">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('info')" title="Information">
+                                <i class="fas fa-info"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('read')" title="Read">
+                                <i class="fas fa-book-open"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('chat')" title="Chat">
+                                <i class="fas fa-comments"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="card document-card">
+                    <div class="bookmark" onclick="toggleBookmark(this)"></div>
+                    
+                    <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
+                    </div>
+                    
+                    <h2 class="card-title">Rule and regulations title</h2>
+                    
+                    <div class="info-footer">
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="handleAction('download')" title="Download">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('info')" title="Information">
+                                <i class="fas fa-info"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('read')" title="Read">
+                                <i class="fas fa-book-open"></i>
+                            </button>
+                            <button class="action-btn" onclick="handleAction('chat')" title="Chat">
+                                <i class="fas fa-comments"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 <!-----------------------------------------------------------------------------Chatbot--------------------------------------------------------------------------------------------->
@@ -357,7 +532,7 @@
         <input type="text" id="message-input" placeholder="Type your message...">
         <button id="send-button">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="gray" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
       </div>
@@ -368,7 +543,7 @@
     <script>
 
         //chatbot functionality
-        
+
         const chatIcon = document.getElementById('chat-icon');
     const chatBox = document.getElementById('chat-box');
     const chatClose = document.getElementById('chat-close');

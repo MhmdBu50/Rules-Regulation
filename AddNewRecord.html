@@ -4,126 +4,29 @@
   <meta charset="UTF-8">
   <title>System Admin - New Record</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #EAE0CA;
-      font-family: 'Inter', sans-serif;
-    }
 
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('imgs/dsc_2499.jpg') no-repeat center center;
-      background-size: cover;
-      background-attachment: fixed;
-      opacity: 0.08;
-      z-index: -1;
-    }
+  <!-- Scoped Custom CSS -->
+  <link rel="stylesheet" href="AddNewRecord.css">
 
-    .top-bar {
-      width: 100%;
-      height: 48px;
-      background: #0F1734;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      color: white;
-    }
-
-    .top-bar a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .top-bar a:hover {
-      text-decoration: underline;
-    }
-
-    .header-logo {
-      max-height: 80px;
-      width: auto;
-    }
-
-    .logo-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px 0 0;
-    }
-
-    .main-header {
-      background: #0F1734;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      margin:0 100px 30px 100px;
-    }
-    
-
-    .form-wrapper {
-      background: color(#EAE0CA);
-      border-radius: 10px;
-      padding: 30px;
-      margin-bottom: 40px;
-    }
-
-    label {
-      font-weight: 600;
-    }
-
-    .form-control,
-    .form-select,
-    textarea {
-      background: #fff;
-      border-radius: 4px;
-      box-shadow: 0 3px 8.9px rgba(0, 0, 0, 0.3);
-    }
-
-    .btn-primary {
-      background-color: #284161;
-      border: none;
-    }
-
-    .btn-secondary {
-      background-color: #fff;
-      color: #284161;
-      border: none;
-      box-shadow: 0px 4px 8.9px rgba(0, 0, 0, 0.3);
-    }
-
-    input:focus, select:focus, textarea:focus {
-      outline: 2px solid #284161;
-    }
-
-    .text-danger {
-      font-size: 0.875em;
-    }
-  </style>
   <script>
-
-  function confirmCancel() {
-    if (confirm("Are you sure you want to cancel? All unsaved changes will be lost.")) {
-      // Reset the form manually
-      document.querySelector('form').reset();
+    function confirmCancel() {
+      if (confirm("Are you sure you want to cancel? All unsaved changes will be lost.")) {
+        document.querySelector('form').reset();
+      }
     }
-  }
-
 
     document.addEventListener('DOMContentLoaded', function () {
       const mobileInput = document.getElementById('mobileNumber');
+      const telInput = document.getElementById('telephoneNumber');
+      const nameField = document.getElementById('responsibleName');
+
       mobileInput.addEventListener('input', function () {
         this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);
       });
 
-      const telInput = document.getElementById('telephoneNumber');
       telInput.addEventListener('input', function () {
         this.value = this.value.replace(/[^0-9]/g, '');
       });
@@ -140,7 +43,6 @@
           document.getElementById('sectionError').textContent = "";
         }
 
-        const nameField = document.getElementById('responsibleName');
         const arabicPattern = /^[\u0600-\u06FF\s]+$/;
         if (!arabicPattern.test(nameField.value)) {
           document.getElementById('nameError').textContent = "Name must be in Arabic.";
@@ -157,160 +59,158 @@
   </script>
 </head>
 <body>
+  <div class="AddNewRecord">
 
-  <!-- Top Bar -->
-  <div class="top-bar">
-    <a href="AdminDashBourd.html" id="home-link" aria-label="Go to home">Back</a>
-    <a href="home Page.html" id="logout-link" aria-label="Logout from system">Logout</a>
-  </div>
-
-  <!-- IAU Logo -->
-  <div class="container logo-container">
-    <img class="header-logo mx-auto d-block" src="imgs/iaulogoname.png" alt="IAU Logo">
-  </div>
-
-  <!-- Main Header -->
-  <div class="main-header">
-    <h1>New Record</h1>
-  </div>
-
-  <!-- Form Section -->
-  <div class="container">
-    <div class="form-wrapper">
-      <form method="post" action="/submit">
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label for="regulationName">Regulation/Manual Name</label>
-            <input type="text" class="form-control" id="regulationName" name="regulationName" required>
-          </div>
-          <div class="col-md-6">
-            <label for="relevantDepartment">Relevant Department</label>
-            <select class="form-select" id="relevantDepartment" name="relevantDepartment" required>
-              <option value="">Select department</option>
-              <option value="HR">Reg and Admission</option>
-              <option value="IT">CCSIT</option>
-              <option value="IT">Communication and tech</option>
-              <option value="IT">Hospital</option>
-              <option value="IT">Library</option>
-              <option value="IT">Students Affairs</option>
-              <option value="IT">Preparetory</option>
-              <option value="Academic Affairs">Academic Affairs</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-md-4">
-            <label for="versionNumber">Version Number</label>
-            <input type="text" class="form-control" id="versionNumber" name="versionNumber" required>
-          </div>
-          <div class="col-md-4">
-            <label for="versionDate">Version Date</label>
-            <input type="date" class="form-control" id="versionDate" name="versionDate" required>
-          </div>
-          <div class="col-md-4">
-            <label for="approvalDate">Approving Date</label>
-            <input type="date" class="form-control" id="approvalDate" name="approvalDate" required>
-          </div>
-        </div>
-
-              <div class="mb-3">
-          <label for="approvalEntity">Approving Entity</label>
-          <input type="text" class="form-control" id="approvalEntity" name="approvalEntity" required>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label for="wordAttachment">Word Attachment</label>
-            <input type="file" class="form-control" id="wordAttachment" name="wordAttachment" accept=".doc,.docx">
-          </div>
-          <div class="col-md-6">
-            <label for="pdfAttachment">PDF Attachment</label>
-            <input type="file" class="form-control" id="pdfAttachment" name="pdfAttachment" accept=".pdf">
-          </div>
-        </div>
-
-
-        <div class="mb-3">
-          <label for="description">Brief Description</label>
-          <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-md-4">
-            <label>Document Type</label>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="doctype" value="regulation" id="reg" required>
-              <label class="form-check-label" for="reg">Regulation</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="doctype" value="guideline" id="guide">
-              <label class="form-check-label" for="guide">Guideline</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="doctype" value="policy" id="policy">
-              <label class="form-check-label" for="policy">Policy</label>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label>Sections</label>
-            <div class="form-check">
-              <input class="form-check-input section-checkbox" type="checkbox" id="students" name="sections" value="students">
-              <label class="form-check-label" for="students">Students</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input section-checkbox" type="checkbox" id="members" name="sections" value="members">
-              <label class="form-check-label" for="members">Members</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input section-checkbox" type="checkbox" id="program" name="sections" value="program">
-              <label class="form-check-label" for="program">Enrolled Program</label>
-            </div>
-            <div id="sectionError" class="text-danger mt-1"></div>
-          </div>
-          
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label for="responsibleName">Name of Responsible Person (Arabic)</label>
-            <input type="text" class="form-control" id="responsibleName" name="responsibleName" lang="ar" dir="rtl" required>
-            <div id="nameError" class="text-danger mt-1"></div>
-          </div>
-          <div class="col-md-6">
-            <label for="email">E-mail</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-          </div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label for="telephoneNumber">Telephone number</label>
-            <input type="tel" class="form-control" id="telephoneNumber" name="telephoneNumber" required>
-          </div>
-          <div class="col-md-6">
-            <label for="mobileNumber">Mobile number</label>
-            <div class="input-group">
-            <span class="input-group-text" style="box-shadow: 0 3px 8.9px rgba(0, 0, 0, 0.3);">+966</span>
-              <input type="tel" class="form-control" id="mobileNumber" name="mobileNumber" required >
-            </div>
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="notes">Notes</label>
-          <input type="text" class="form-control" id="notes" name="notes">
-        </div>
-
-        <div class="text-center">
-          <button type="submit" class="btn btn-primary me-2">Save and upload</button>
-          <!-- Change type from "reset" to "button" -->
-          <button type="button" class="btn btn-secondary" onclick="confirmCancel()">Cancel</button>
-
-        </div>
-      </form>
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <a href="AdminDashBourd.html" id="home-link" aria-label="Go to home">Back</a>
+      <a href="home Page.html" id="logout-link" aria-label="Logout from system">Logout</a>
     </div>
-  </div>
 
+    <!-- Logo -->
+    <div class="container logo-container">
+      <img class="header-logo mx-auto d-block" src="imgs/iaulogoname.png" alt="IAU Logo">
+    </div>
+
+    <!-- Main Header -->
+    <div class="main-header">
+      <h1>New Record</h1>
+    </div>
+
+    <!-- Form Section -->
+    <div class="container">
+      <div class="form-wrapper">
+        <form method="post" action="/submit">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="regulationName">Regulation/Manual Name</label>
+              <input type="text" class="form-control" id="regulationName" name="regulationName" required>
+            </div>
+            <div class="col-md-6">
+              <label for="relevantDepartment">Relevant Department</label>
+              <select class="form-select" id="relevantDepartment" name="relevantDepartment" required>
+                <option value="">Select department</option>
+                <option value="HR">Reg and Admission</option>
+                <option value="IT">CCSIT</option>
+                <option value="IT">Communication and tech</option>
+                <option value="IT">Hospital</option>
+                <option value="IT">Library</option>
+                <option value="IT">Students Affairs</option>
+                <option value="IT">Preparetory</option>
+                <option value="Academic Affairs">Academic Affairs</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="versionNumber">Version Number</label>
+              <input type="text" class="form-control" id="versionNumber" name="versionNumber" required>
+            </div>
+            <div class="col-md-4">
+              <label for="versionDate">Version Date</label>
+              <input type="date" class="form-control" id="versionDate" name="versionDate" required>
+            </div>
+            <div class="col-md-4">
+              <label for="approvalDate">Approving Date</label>
+              <input type="date" class="form-control" id="approvalDate" name="approvalDate" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="approvalEntity">Approving Entity</label>
+            <input type="text" class="form-control" id="approvalEntity" name="approvalEntity" required>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="wordAttachment">Word Attachment</label>
+              <input type="file" class="form-control" id="wordAttachment" name="wordAttachment" accept=".doc,.docx">
+            </div>
+            <div class="col-md-6">
+              <label for="pdfAttachment">PDF Attachment</label>
+              <input type="file" class="form-control" id="pdfAttachment" name="pdfAttachment" accept=".pdf">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="description">Brief Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+          </div>
+
+          <div class="row mb-5">
+            <div class="col-md-5">
+              <label>Document Type</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="doctype" value="regulation" id="reg" required>
+                <label class="form-check-label" for="reg">Regulation</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="doctype" value="guideline" id="guide">
+                <label class="form-check-label" for="guide">Guideline</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="doctype" value="policy" id="policy">
+                <label class="form-check-label" for="policy">Policy</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label>Sections</label>
+              <div class="form-check">
+                <input class="form-check-input section-checkbox" type="checkbox" id="students" name="sections" value="students">
+                <label class="form-check-label" for="students">Students</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input section-checkbox" type="checkbox" id="members" name="sections" value="members">
+                <label class="form-check-label" for="members">Members</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input section-checkbox" type="checkbox" id="program" name="sections" value="program">
+                <label class="form-check-label" for="program">Enrolled Program</label>
+              </div>
+              <div id="sectionError" class="text-danger mt-1"></div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="responsibleName">Name of Responsible Person (Arabic)</label>
+              <input type="text" class="form-control" id="responsibleName" name="responsibleName" lang="ar" dir="rtl" required>
+              <div id="nameError" class="text-danger mt-1"></div>
+            </div>
+            <div class="col-md-6">
+              <label for="email">E-mail</label>
+              <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="telephoneNumber">Telephone number</label>
+              <input type="tel" class="form-control" id="telephoneNumber" name="telephoneNumber" required>
+            </div>
+            <div class="col-md-6">
+              <label for="mobileNumber">Mobile number</label>
+              <div class="input-group">
+              <span class="input-group-text shadowed">+966</span>
+                <input type="tel" class="form-control" id="mobileNumber" name="mobileNumber" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="notes">Notes</label>
+            <input type="text" class="form-control" id="notes" name="notes">
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary me-2">Save and upload</button>
+            <button type="button" class="btn btn-secondary" onclick="confirmCancel()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
 </body>
 </html>
