@@ -165,97 +165,142 @@
                 <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
                     data-bs-parent="#regulationAccordion">
                     <div class="accordion-body">
-                        <!-- تفاصيل السجل هنا -->
-                        <!-- ضع هذا الكود داخل <div class="accordion-body"> بدلاً من تفاصيل السجل القديمة -->
-                        <!-- ...existing code... -->
+
                         <form>
                             <div class="row mb-2">
+                                <!-- العمود الأيسر -->
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">Regulation/ Manual name</label>
-                                    <textarea class="form-control" rows="2"
-                                        readonly>Guide to policies and procedures for recruiting, retaining, terminating, and renewing contracts for non-Saudi faculty members</textarea>
+                                    <table class="table table-borderless mb-0">
+                                        <tr>
+                                            <td colspan="3">
+                                                <label class="form-label fw-bold">Regulation/ Manual name</label>
+                                                <textarea class="form-control" rows="2" readonly>
+Guide to policies and procedures for recruiting, retaining, terminating, and renewing contracts for non-Saudi faculty members
+                        </textarea>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                <label class="form-label fw-bold">Brief Description</label>
+                                                <textarea class="form-control" rows="4" readonly>
+All students are expected to follow the examination rules strictly. Candidates must arrive on time, carry valid identification, and bring only approved materials. Electronic devices are not allowed. Silence must be maintained throughout the exam. Any form of cheating or misconduct will result in disciplinary action. Students may not leave the exam hall without permission and must submit all materials before exiting.
+                        </textarea>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1">
+                                                <label class="form-label fw-bold">Approving Date</label>
+                                                <input type="date" class="form-control mb-2" value="2025-07-07"
+                                                    readonly>
+                                            </td>
+                                            <td colspan="1">
+                                                <label class="form-label fw-bold">Accreditation Date</label>
+                                                <input type="date" class="form-control mb-2" value="2025-07-07"
+                                                    readonly>
+                                            </td>
+                                            <td colspan="2">
+                                                <label class="form-label fw-bold">Version Number</label>
+                                                <input type="text" class="form-control mb-2" value="10.2.4" readonly>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <label class="form-label fw-bold">Accrediting Entity</label>
+                                                <input type="text" class="form-control" value="IAU Academic affairs"
+                                                    readonly>
+                                            </td>
+
+                                            <td colspan="2">
+                                                <label class="form-label fw-bold">Responsible Department</label>
+                                                <input type="text" class="form-control"
+                                                    value="Deanship of Admission and Registration" readonly>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                <label class="form-label fw-bold">Note</label>
+                                                <input type="text" class="form-control mb-2"
+                                                    value="this rules came from minstry of education" readonly>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div>
-                                <div class="col-md-3">
-                                    <label class="form-label fw-bold">Document Type</label>
-                                    <select class="form-select" disabled>
-                                        <option selected>Regulation</option>
-                                    </select>
-                                    <label class="form-label fw-bold mt-2">Attach word file</label>
-                                    <div class="input-group mb-2">
-                                        <input type="text" class="form-control" value="Word file" readonly>
-                                        <span class="input-group-text"><i class="bi bi-paperclip"></i></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label fw-bold">Section</label>
-                                    <select class="form-select" disabled>
-                                        <option selected>Student</option>
-                                    </select>
-                                    <label class="form-label fw-bold mt-2">Attach PDF file</label>
-                                    <div class="input-group mb-2">
-                                        <input type="text" class="form-control" value="PDF file..." readonly>
-                                        <span class="input-group-text"><i class="bi bi-paperclip"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-2">
+                                <!-- العمود الأيمن -->
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">Brief Description</label>
-                                    <textarea class="form-control" rows="4"
-                                        readonly>All students are expected to follow the examination rules strictly. Candidates must arrive on time, carry valid identification, and bring only approved materials. Electronic devices are not allowed. Silence must be maintained throughout the exam. Any form of cheating or misconduct will result in disciplinary action. Students may not leave the exam hall without permission and must submit all materials before exiting.</textarea>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold">Responsible entity’s contact information:</label>
-                                    <div class="mb-1">
-                                        <label class="form-label mb-0">Name (English)</label>
-                                        <input type="text" class="form-control" value="Azzam Alzahrani" readonly>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-label mb-0">Name (Arabic)</label>
-                                        <input type="text" class="form-control" value="عزام الزهراني" readonly>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-label mb-0">E-mail</label>
-                                        <input type="email" class="form-control" value="Azzam@gmail.com" readonly>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-label mb-0">Telephone number</label>
-                                        <input type="text" class="form-control" value="3333139-013" readonly>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-label mb-0">Mobile number</label>
-                                        <input type="text" class="form-control" value="0569877695" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-2">
-                                <div class="col-md-3">
-                                    <label class="form-label fw-bold">Approving Date</label>
-                                    <input type="date" class="form-control" value="2025-07-07" readonly>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label fw-bold">Accreditation Date</label>
-                                    <input type="date" class="form-control" value="2025-07-07" readonly>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label fw-bold">Version Number</label>
-                                    <input type="text" class="form-control" value="10.2.4" readonly>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label fw-bold">Note</label>
-                                    <input type="text" class="form-control"
-                                        value="this rules came from minstry of education" readonly>
-                                </div>
-                            </div>
-                            <div class="row mb-2">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold">Accrediting Entity</label>
-                                    <input type="text" class="form-control" value="IAU Academic affairs" readonly>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold">Responsible Department</label>
-                                    <input type="text" class="form-control"
-                                        value="Deanship of Admission and Registration" readonly>
+                                    <table class="table table-borderless mb-0">
+                                        <tr>
+                                            <td>
+                                                <label class="form-label fw-bold">Document Type</label>
+                                                <select class="form-select mb-2">
+                                                    <option selected>Regulation</option>
+                                                    <option>Guidelines</option>
+                                                    <option>Policies</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <label class="form-label fw-bold">Section</label>
+                                                <select class="form-select mb-2">
+                                                    <option selected>Student</option>
+                                                    <option>Members</option>
+                                                    <option>Enrolled Program</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label class="form-label fw-bold">Attach word file</label>
+                                                <div class="input-group mb-2">
+                                                    <input type="text" class="form-control" value="Word file" readonly>
+                                                    <span class="input-group-text"><i
+                                                            class="bi bi-paperclip"></i></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <label class="form-label fw-bold">Attach PDF file</label>
+                                                <div class="input-group mb-2">
+                                                    <input type="text" class="form-control" value="PDF file..."
+                                                        readonly>
+                                                    <span class="input-group-text"><i
+                                                            class="bi bi-paperclip"></i></span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="2">
+                                                <label class="form-label fw-bold">Responsible entity’s contact
+                                                    information:</label>
+                                                <div class="mb-1">
+                                                    <label class="form-label mb-0">Name (English)</label>
+                                                    <input type="text" class="form-control" value="Azzam Alzahrani"
+                                                        readonly>
+                                                </div>
+                                                <div class="mb-1">
+                                                    <label class="form-label mb-0">Name (Arabic)</label>
+                                                    <input type="text" class="form-control" value="عزام الزهراني"
+                                                        readonly>
+                                                </div>
+                                                <div class="mb-1">
+                                                    <label class="form-label mb-0">E-mail</label>
+                                                    <input type="email" class="form-control" value="Azzam@gmail.com"
+                                                        readonly>
+                                                </div>
+                                                <div class="mb-1">
+                                                    <label class="form-label mb-0">Telephone number</label>
+                                                    <input type="text" class="form-control" value="3333139-013"
+                                                        readonly>
+                                                </div>
+                                                <div class="mb-1">
+                                                    <label class="form-label mb-0">Mobile number</label>
+                                                    <input type="text" class="form-control" value="0569877695" readonly>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                             <div class="row">
