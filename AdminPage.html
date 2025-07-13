@@ -222,13 +222,16 @@ All students are expected to follow the examination rules strictly. Candidates m
         background-color: #EAE0CA;
     }
 
+    :root {
+        --header-height: 100px;
+    }
     .custom-header {
         background-color: #1a1a2e;
         color: #EECA2C;
         border-radius: 20px;
-        margin-bottom: 20px;
+        margin-bottom: 8px;
         overflow: hidden;
-        height: 100.31px;
+        height: var(--header-height);
     }
 
     .custom-header th {
@@ -269,6 +272,7 @@ All students are expected to follow the examination rules strictly. Candidates m
         font-size: 1.05rem;
         transition: background 0.2s;
         overflow: hidden;
+        height: var(--header-height);
     }
 
     .accordion-button:not(.collapsed) {
@@ -284,16 +288,11 @@ All students are expected to follow the examination rules strictly. Candidates m
 
     /* Red line styling */
     .red-line {
-        position: absolute;
-        justify-content: center;
-        align-items: center;
-        bottom: 0;
-        left: 0;
-        width: 97%;
-        height: 4px;
+        height: 5px;
         background-color: #94331C;
-        margin-bottom: -7px;
+        margin-bottom: 12px;
         margin-left: 13px;
         margin-right: 10px;
+        border-radius: 5px;
     }
 </style>
