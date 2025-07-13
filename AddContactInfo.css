@@ -107,3 +107,7 @@
 .AddContactInfo .text-danger {
   font-size: 0.875em;
 }
+.shadowed {
+  box-shadow: 0 3px 8.9px rgba(0, 0, 0, 0.3);
+}
+
