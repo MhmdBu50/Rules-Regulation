@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>System Admin - Contact Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom Scoped CSS -->
+  <link rel="stylesheet" href="AddContactInfo.css">
+
+  <script>
+    function confirmCancel() {
+      if (confirm("Are you sure you want to cancel? All unsaved changes will be lost.")) {
+        document.querySelector('form').reset();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const nameField = document.getElementById('responsibleName');
+      const mobileInput = document.getElementById('mobileNumber');
+      const telInput = document.getElementById('telephoneNumber');
+
+      nameField.addEventListener('input', function () {
+        const arabicPattern = /^[\u0600-\u06FF\s]*$/;
+        const error = document.getElementById('nameError');
+        if (!arabicPattern.test(this.value)) {
+          error.textContent = "Name must be in Arabic.";
+        } else {
+          error.textContent = "";
+        }
+      });
+
+      mobileInput.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);
+      });
+
+      telInput.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
+
+      document.querySelector('form').addEventListener('submit', function (e) {
+        const nameError = document.getElementById('nameError').textContent;
+        if (nameError) {
+          e.preventDefault();
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="AddContactInfo">
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <a href="AdminDashBourd.html">Back</a>
+      <a href="home Page.html">Logout</a>
+    </div>
+
+    <!-- Logo -->
+    <div class="container logo-container">
+      <img class="header-logo mx-auto d-block" src="imgs/iaulogoname.png" alt="IAU Logo">
+    </div>
+
+    <!-- Main Header -->
+    <div class="main-header">
+      <h1>Contact Information Form</h1>
+    </div>
+
+    <!-- Form Section -->
+    <div class="container">
+      <div class="form-wrapper">
+        <form method="post" action="/submit">
+          <div class="mb-5">
+            <label for="relevantDepartment">Relevant Department</label>
+            <select class="form-select" id="relevantDepartment" name="relevantDepartment" required>
+              <option value="">Select department</option>
+              <option value="HR">Reg and Admission</option>
+              <option value="IT">CCSIT</option>
+              <option value="IT">Communication and tech</option>
+              <option value="IT">Hospital</option>
+              <option value="IT">Library</option>
+              <option value="IT">Students Affairs</option>
+              <option value="IT">Preparetory</option>
+              <option value="Academic Affairs">Academic Affairs</option>
+            </select>
+          </div>
+
+          <div class="mb-5">
+            <label for="responsibleName">Name of Responsible Person (Arabic)</label>
+            <input type="text" class="form-control" id="responsibleName" name="responsibleName" lang="ar" dir="rtl" required>
+            <div id="nameError" class="text-danger mt-1"></div>
+          </div>
+
+          <div class="mb-5">
+            <label for="email">E-mail</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+          </div>
+
+          <div class="mb-5">
+            <label for="telephoneNumber">Telephone number</label>
+            <input type="tel" class="form-control" id="telephoneNumber" name="telephoneNumber" required>
+          </div>
+
+          <div class="mb-5">
+            <label for="mobileNumber">Mobile number</label>
+            <div class="input-group">
+            <span class="input-group-text shadowed">+966</span>
+              <input type="tel" class="form-control" id="mobileNumber" name="mobileNumber" required>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary me-2">Submit</button>
+            <button type="button" class="btn btn-secondary" onclick="confirmCancel()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
