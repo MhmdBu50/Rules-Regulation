@@ -5,166 +5,309 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="style.css">
+
+
+    <link rel="stylesheet" href="AdminPage.css">
     <title>AdminPage</title>
-    <style>
-        body {
-            background-color: #EAE0CA;
-        }
-
-        .custom-header {
-            background-color: #1a1a2e;
-            color: #EECA2C;
-            border-radius: 15px;
-            padding: 0;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .custom-header th {
-            color: #EECA2C;
-            font-weight: bold;
-            padding: 18px 12px;
-            vertical-align: middle;
-            font-size: 1.1rem;
-        }
-
-        .custom-header th:first-child {
-            width: 120px;
-        }
-
-        .custom-header input[type="checkbox"] {
-            accent-color: #EECA2C;
-            margin-right: 8px;
-            transform: scale(1.2);
-        }
-
-        .accordion-item {
-            background: none;
-            border: none;
-            margin-bottom: 10px;
-        }
-
-        .accordion-header {
-            border-radius: 15px;
-        }
-
-        .accordion-button {
-            background-color: #34406c;
-            color: #fff;
-            font-weight: 500;
-            border-radius: 15px;
-            border: none;
-            box-shadow: none;
-            display: flex;
-            align-items: center;
-            gap: 0;
-            padding: 14px 18px;
-            font-size: 1.05rem;
-            transition: background 0.2s;
-        }
-
-        .accordion-button:not(.collapsed) {
-            background-color: #232e4a;
-            color: #fff;
-        }
-
-        .accordion-button:focus {
-            box-shadow: none;
-        }
-
-        .accordion-button input[type="checkbox"] {
-            accent-color: #fff;
-            margin-right: 16px;
-            transform: scale(1.2);
-        }
-
-        .accordion-button span {
-            display: inline-block;
-            vertical-align: middle;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .acc-id {
-            width: 40px;
-
-        }
-
-        .acc-name {
-            width: 260px;
-            margin-left: 50px;
-        }
-
-        .acc-section {
-            width: 120px;
-            margin: 20px;
-            margin-left: 88px;
-        }
-
-        .acc-version {
-            width: 120px;
-            margin-left: 30px;
-        }
-
-        .acc-date {
-            width: 120px;
-            margin-left: 95px;
-        }
-
-        .acc-entity {
-            width: 160px;
-            margin-left: 71px;
-        }
-
-        .accordion-button::after {
-            margin-left: auto;
-            color: #fff;
-            filter: invert(1) grayscale(1);
-        }
-
-        .accordion-body {
-            background-color: #fff;
-            border-radius: 0 0 15px 15px;
-        }
-    </style>
 </head>
 
 <body>
+    <header class="menu">
+        <div class="container-fluid h-100 bootstrap-wrapper">
+            <div class="row align-items-center h-100 g-0">
+                <!-- Left Section - Logo/Hamburger -->
+                <div class="col-auto">
+                    <div class="d-flex align-items-center">
+                        <!-- Hamburger for mobile -->
+                        <button class="logo navbar-toggler d-lg-none me-2" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#mobileMenu">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="#CFEFFF">
+                                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                            </svg>
+                        </button>
+
+                        <!-- Desktop Logo -->
+                        <svg class="desktop-logo logo" width="33" height="33" viewBox="0 0 40 40" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20.0002 39.1668C17.3807 39.1668 14.905 38.6637 12.5731 37.6575C10.2411 36.6512 8.20468 35.2776 6.4637 33.5366C4.72273 31.7957 3.34912 29.7592 2.34287 27.4272C1.33662 25.0953 0.833496 22.6196 0.833496 20.0002C0.833496 17.3488 1.33662 14.8651 2.34287 12.5491C3.34912 10.2331 4.72273 8.20468 6.4637 6.4637C8.20468 4.72273 10.2411 3.34912 12.5731 2.34287C14.905 1.33662 17.3807 0.833496 20.0002 0.833496C22.6516 0.833496 25.1352 1.33662 27.4512 2.34287C29.7672 3.34912 31.7957 4.72273 33.5366 6.4637C35.2776 8.20468 36.6512 10.2331 37.6575 12.5491C38.6637 14.8651 39.1668 17.3488 39.1668 20.0002C39.1668 22.6196 38.6637 25.0953 37.6575 27.4272C36.6512 29.7592 35.2776 31.7957 33.5366 33.5366C31.7957 35.2776 29.7672 36.6512 27.4512 37.6575C25.1352 38.6637 22.6516 39.1668 20.0002 39.1668ZM20.0002 35.2377C20.8307 34.0877 21.5495 32.8897 22.1564 31.6439C22.7634 30.3981 23.2585 29.0724 23.6418 27.6668H16.3585C16.7418 29.0724 17.237 30.3981 17.8439 31.6439C18.4509 32.8897 19.1696 34.0877 20.0002 35.2377ZM15.0168 34.471C14.4418 33.4168 13.9387 32.3227 13.5075 31.1887C13.0762 30.0547 12.7168 28.8807 12.4293 27.6668H6.77516C7.70155 29.2641 8.85954 30.6536 10.2491 31.8356C11.6387 33.0175 13.2279 33.896 15.0168 34.471ZM24.9835 34.471C26.7724 33.896 28.3616 33.0175 29.7512 31.8356C31.1408 30.6536 32.2988 29.2641 33.2252 27.6668H27.571C27.2835 28.8807 26.9241 30.0547 26.4929 31.1887C26.0616 32.3227 25.5585 33.4168 24.9835 34.471ZM5.146 23.8335H11.6627C11.5668 23.1946 11.495 22.5637 11.447 21.9408C11.3991 21.3179 11.3752 20.671 11.3752 20.0002C11.3752 19.3293 11.3991 18.6825 11.447 18.0595C11.495 17.4366 11.5668 16.8057 11.6627 16.1668H5.146C4.98627 16.8057 4.86648 17.4366 4.78662 18.0595C4.70676 18.6825 4.66683 19.3293 4.66683 20.0002C4.66683 20.671 4.70676 21.3179 4.78662 21.9408C4.86648 22.5637 4.98627 23.1946 5.146 23.8335ZM15.496 23.8335H24.5043C24.6002 23.1946 24.672 22.5637 24.72 21.9408C24.7679 21.3179 24.7918 20.671 24.7918 20.0002C24.7918 19.3293 24.7679 18.6825 24.72 18.0595C24.672 17.4366 24.6002 16.8057 24.5043 16.1668H15.496C15.4002 16.8057 15.3283 17.4366 15.2804 18.0595C15.2325 18.6825 15.2085 19.3293 15.2085 20.0002C15.2085 20.671 15.2325 21.3179 15.2804 21.9408C15.3283 22.5637 15.4002 23.1946 15.496 23.8335ZM28.3377 23.8335H34.8543C35.0141 23.1946 35.1338 22.5637 35.2137 21.9408C35.2936 21.3179 35.3335 20.671 35.3335 20.0002C35.3335 19.3293 35.2936 18.6825 35.2137 18.0595C35.1338 17.4366 35.0141 16.8057 34.8543 16.1668H28.3377C28.4335 16.8057 28.5054 17.4366 28.5533 18.0595C28.6012 18.6825 28.6252 19.3293 28.6252 20.0002C28.6252 20.671 28.6012 21.3179 28.5533 21.9408C28.5054 22.5637 28.4335 23.1946 28.3377 23.8335ZM27.571 12.3335H33.2252C32.2988 10.7363 31.1408 9.34669 29.7512 8.16475C28.3616 6.9828 26.7724 6.10433 24.9835 5.52933C25.5585 6.5835 26.0616 7.67759 26.4929 8.81162C26.9241 9.94565 27.2835 11.1196 27.571 12.3335ZM16.3585 12.3335H23.6418C23.2585 10.9279 22.7634 9.60225 22.1564 8.35641C21.5495 7.11058 20.8307 5.91266 20.0002 4.76266C19.1696 5.91266 18.4509 7.11058 17.8439 8.35641C17.237 9.60225 16.7418 10.9279 16.3585 12.3335ZM6.77516 12.3335H12.4293C12.7168 11.1196 13.0762 9.94565 13.5075 8.81162C13.9387 7.67759 14.4418 6.5835 15.0168 5.52933C13.2279 6.10433 11.6387 6.9828 10.2491 8.16475C8.85954 9.34669 7.70155 10.7363 6.77516 12.3335Z"
+                                fill="#CFEFFF" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Middle Section - Exit Admin view -->
+                <div class="col flex-nowrap align-items-center">
+                    <div class=" d-flex align-items-center  justify-content-center">
+                        <button class="exit-admin-btn ">
+                            Exit Admin view
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Section - Profile -->
+                <div class="col-auto flex-nowrap">
+                    <div class="signlog-container">
+                        <!-- PNG version for large screens -->
+                        <img class="profile-icon d-none d-xl-block" src="imgs/B&W IAU Logo (Horizontal).png"
+                            alt="IAU Logo">
+
+                        <!-- SVG version for smaller screens -->
+                        <img class="profile-icon d-none d-sm-block d-xl-none" src="imgs/B&W IAU Logo.png"
+                            alt="IAU Logo">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu (hidden by default) -->
+
+    </header>
+
+    <!--the statistics part of the admin page-->
+    <div class="dashboard-container">
+        <!-- Main Rectangle Container -->
+        <div class="dashboard-rectangle">
+            <div class="main-row">
+                <!-- Left Section - Charts -->
+                <div class="charts-section">
+                    <div class="row g-0 flex-fill">
+                        <!-- Donut Chart -->
+                        <div class="col-md-6">
+                            <div class="chart-section">
+                                <div class="chart-title">University Rules and Guidelines Overview</div>
+                                <div class="donut-chart-container">
+                                    <div class="donut-chart-canvas">
+                                        <canvas id="chartCanvas"></canvas>
+                                    </div>
+                                    <div class="legend-container">
+                                        <div class="legend-item">
+                                            <div class="legend-color" style="background-color: #8B4513;"></div>
+                                            <span class="legend-text">Academic rules</span>
+                                            <span class="legend-percentage">40%</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="legend-color" style="background-color: #2E8B57;"></div>
+                                            <span class="legend-text">Employment rules & regulations</span>
+                                            <span class="legend-percentage">30%</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="legend-color" style="background-color: #4682B4;"></div>
+                                            <span class="legend-text">Student rules & regulations</span>
+                                            <span class="legend-percentage">25%</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="legend-color" style="background-color: #DAA520;"></div>
+                                            <span class="legend-text">Student rules & regulations</span>
+                                            <span class="legend-percentage">15%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bar Chart -->
+                        <div class="col-md-6">
+                            <div class="chart-section">
+                                <div class="chart-title">Website visits over the past 6 months</div>
+                                <div class="chart-canvas-container">
+                                    <canvas id="barChartCanvas"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vertical Separator -->
+                <div class="chart-sidebar-separator"></div>
+
+                <!-- Right Sidebar -->
+                <div class="sidebar-section">
+                    <div class="sidebar-container">
+                        <!-- Cards Section -->
+                        <div class="sidebar-cards">
+                            <!-- Total Policies Card -->
+                            <div class="stats-card stats-card-blue">
+                                <h6>Total Policies</h6>
+                                <div class="number">30</div>
+                            </div>
+
+                            <!-- Most Viewed Card -->
+                            <div class="stats-card stats-card-green">
+                                <h6>Most Viewed</h6>
+                                <div class="subtitle">Student Code of Conduct</div>
+                                <div class="viewed-text">Viewed: 785 times</div>
+                            </div>
+                        </div>
+
+                        <!-- Buttons Section -->
+                        <div class="sidebar-buttons">
+                            <!-- View Report Button -->
+                            <button class="btn-custom btn-primary-custom" onclick="viewReport()">
+                                View Report
+                            </button>
+
+                            <!-- Add New Record Button -->
+                            <button class="btn-custom btn-dark-custom" onclick="location.href='addNewRecord.html'">
+                                add new record
+                            </button>
+
+                            <!-- Export Data Button -->
+                            <button class="btn-custom btn-dark-custom" onclick="exportData()">
+                                Export Data
+                            </button>
+
+                            <!-- Contact Info Button -->
+                            <button class="btn-custom btn-dark-custom" onclick="location.href='AddNewContactInfo.html'">
+                                Add New Contact Info
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--the table part of the admin page-->
     <div class="container my-4">
-        <table class="w-100 custom-header">
-            <thead>
+        <table class="w-100 ">
+            <thead class="text-center">
                 <tr>
-                    <th>
-                        <input type="checkbox" />
-                        Record ID |
+                    <th class="col-5">
+                        <div class="col flex-nowrap align-items-center">
+                            <div class="search-container d-flex align-items-center px-2">
+                                <button class="search-and-filter-buttons">
+                                    <svg class="search-icon" width="44" height="44" viewBox="0 0 44 44" fill="none">
+                                        <path
+                                            d="M21 29C25.4183 29 29 25.4183 29 21C29 16.5817 25.4183 13 21 13C16.5817 13 13 16.5817 13 21C13 25.4183 16.5817 29 21 29Z"
+                                            stroke="#ABB7C2" stroke-width="2" />
+                                        <path d="M31.0002 31L26.7002 26.7" stroke="#ABB7C2" stroke-width="2" />
+                                    </svg>
+                                </button>
+                                <input class="search poppins-regular flex-grow-1" type="text"
+                                    placeholder="Search by Name/ID..."
+                                    style="color: #ABB7C2; background: transparent; border: none;">
+                                <button class="search-and-filter-buttons" id="filter-button">
+                                    <svg id="filter" width="44" height="44" viewBox="0 0 44 44 ">
+                                        <path d="M31 14H24" stroke="#ABB7C2" stroke-width="2" />
+                                        <path d="M20 14H13" stroke="#ABB7C2" stroke-width="2" />
+                                        <path d="M31 22H22" stroke="#ABB7C2" stroke-width="2" />
+                                        <path d="M18 22H13" stroke="#ABB7C2" stroke-width="2" />
+                                        <path d="M31 30H26" stroke="#ABB7C2" stroke-width="2" />
+                                        <path d="M22 30H13" stroke="#ABB7C2" stroke-width="2" />
+                                        <path d="M24 12V16" stroke="#ABB7C2" stroke-width="2" />
+                                        <path d="M18 20V24" stroke="#ABB7C2" stroke-width="2" />
+                                        <path d="M26 28V32" stroke="#ABB7C2" stroke-width="2" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
                     </th>
-                    <th>Regulation/ Manual name</th>
-                    <th>Section</th>
-                    <th>Version Number</th>
-                    <th>Approving Date</th>
-                    <th>Responsible Entity</th>
+
+                    <th class="col-3">
+                        <div class="col flex-nowrap align-items-center">
+                            <div class="search-container d-flex align-items-center px-2">
+                                <button class="search-and-filter-buttons">
+                                    <svg class="search-icon" width="44" height="44" viewBox="0 0 44 44" fill="none">
+                                        <path
+                                            d="M21 29C25.4183 29 29 25.4183 29 21C29 16.5817 25.4183 13 21 13C16.5817 13 13 16.5817 13 21C13 25.4183 16.5817 29 21 29Z"
+                                            stroke="#ABB7C2" stroke-width="2" />
+                                        <path d="M31.0002 31L26.7002 26.7" stroke="#ABB7C2" stroke-width="2" />
+                                    </svg>
+                                </button>
+                                <select class="search poppins-regular flex-grow-1" type="text" placeholder="Section"
+                                    style="color: #ABB7C2; background: transparent; border: none;">
+                                    <option>Student</option>
+                                    <option>Members</option>
+                                    <option>Enrolled Program</option>
+                                </select>
+                            </div>
+                        </div>
+                    </th>
+
+
+
+                    <th class="col-3">
+                        <div class="col flex-nowrap align-items-center">
+                            <div class="search-container d-flex align-items-center px-2">
+                                <button class="search-and-filter-buttons">
+                                    <svg class="search-icon" width="44" height="44" viewBox="0 0 44 44" fill="none">
+                                        <path
+                                            d="M21 29C25.4183 29 29 25.4183 29 21C29 16.5817 25.4183 13 21 13C16.5817 13 13 16.5817 13 21C13 25.4183 16.5817 29 21 29Z"
+                                            stroke="#ABB7C2" stroke-width="2" />
+                                        <path d="M31.0002 31L26.7002 26.7" stroke="#ABB7C2" stroke-width="2" />
+                                    </svg>
+                                </button>
+                                <select class="search poppins-regular flex-grow-1"
+                                    style="color: #ABB7C2; background: transparent; border: none;">
+                                    <option value="" selected disabled>Document type</option>
+                                    <option>Regulations</option>
+                                    <option>Guidelines</option>
+                                    <option>Enrolled Program</option>
+                                </select>
+                            </div>
+                        </div>
+                    </th>
+
+
+
                 </tr>
             </thead>
         </table>
+
+        <table class="w-100 custom-header">
+            <thead class="text-center">
+                <tr>
+                    <th>
+                        <input type="checkbox" />
+                    </th>
+                    <th class="col-2">
+                        Record ID |
+                    </th>
+                    <th class="col-3">Regulation/ Manual name</th>
+                    <th class="col-1">Section</th>
+                    <th class="col-2">Version Number</th>
+                    <th class="col-2">Approving Date</th>
+                    <th class="col-3">Responsible Entity</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+
+        <div class="red-line"> </div>
+
         <div class="accordion" id="regulationAccordion">
             <!-- سجل 1 -->
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
+            <div class="accordion-item" style="height: 88.16px;">
+                <h2 class=" accordion-header" id="headingOne">
                     <button class="accordion-button collapsed custom-acc-btn" type="button" data-bs-toggle="collapse"
                         data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                        <input type="checkbox" class="me-2" />
-                        <span class="acc-id ">1</span>
-                        <span class="acc-name">Guide to policies and procedures for recruiting...</span>
-                        <span class="acc-section">Students</span>
-                        <span class="acc-version">8.3.4</span>
-                        <span class="acc-date">2025/7/4</span>
-                        <span class="acc-entity">IAU Academic affairs</span>
+                        <table class="w-100 ">
+                            <thead class="text-center">
+                                <tr>
+                                    <th style="padding: 14px 18px;">
+                                        <input type="checkbox" />
+                                    </th>
+                                    <th class="col-2" style="padding: 14px 18px;">
+                                        1
+                                    </th>
+                                    <th class="col-3" style="padding: 14px 18px;">Guide to and procedures for
+                                        recruiting...</th>
+                                    <th class="col-1" style="padding: 14px 18px;">Students</th>
+                                    <th class="col-2" style="padding: 14px 18px;">8.3.4</th>
+                                    <th class="col-2" style="padding: 14px 18px;">2025/7/4</th>
+                                    <th class="col-3" style="padding: 14px 18px;">IAU Academic affairs</th>
+
+                                </tr>
+                            </thead>
+                        </table>
                     </button>
                 </h2>
                 <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
                     data-bs-parent="#regulationAccordion">
-                    <div class="accordion-body">
+                    <div class="accordion-body" style="border-radius: 20px;">
 
                         <form>
                             <div class="row mb-2">
@@ -307,7 +450,7 @@ All students are expected to follow the examination rules strictly. Candidates m
                                 <div class="col text-end">
                                     <button class="btn btn-danger">Delete</button>
                                     <button class="btn btn-secondary">Edit</button>
-                                    <button class="btn btn-primary">Save</button>
+                                    <button class="btn btn-success">Save</button>
                                 </div>
                             </div>
                         </form>
@@ -317,6 +460,122 @@ All students are expected to follow the examination rules strictly. Candidates m
         </div>
     </div>
     <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize charts when page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeCharts();
+        });
+
+        function initializeCharts() {
+            // Donut Chart
+            const ctx = document.getElementById('chartCanvas').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Academic rules', 'Employment rules & regulations', 'Student rules & regulations', 'Student rules & regulations'],
+                    datasets: [{
+                        data: [40, 30, 25, 15],
+                        backgroundColor: ['#8B4513', '#2E8B57', '#4682B4', '#DAA520'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+
+            // Bar Chart
+            const barCtx = document.getElementById('barChartCanvas').getContext('2d');
+            new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['March', 'April', 'May', 'June', 'July', 'August'],
+                    datasets: [{
+                        data: [180, 150, 220, 180, 320, 200],
+                        backgroundColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA726', '#AB47BC', '#26C6DA'],
+                        borderRadius: 4,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 400,
+                            grid: {
+                                display: true,
+                                color: '#e9ecef'
+                            },
+                            ticks: {
+                                stepSize: 100,
+                                font: {
+                                    size: 10
+                                },
+                                color: '#6c757d'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 10
+                                },
+                                color: '#6c757d'
+                            }
+                        }
+                    },
+                    layout: {
+                        padding: {
+                            top: 10,
+                            right: 10,
+                            bottom: 10,
+                            left: 10
+                        }
+                    }
+                }
+            });
+        }
+
+        // Button functions
+        function viewReport() {
+            alert('View Report clicked!');
+            // Add your functionality here
+        }
+
+        function addNewRecord() {
+            alert('Add New Record clicked!');
+            // Add your functionality here
+        }
+
+        function exportData() {
+            alert('Export Data clicked!');
+            // Add your functionality here
+        }
+
+        function contactInfo() {
+            alert('Contact Info clicked!');
+            // Add your functionality here
+        }
+    </script>
 </body>
 
-</html>
+
+</style>
