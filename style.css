@@ -50,7 +50,6 @@ body {
   box-shadow: 0 4px 12px rgba(13, 10, 44, 0.06);
   border-radius: 32px;
   flex-shrink: 1; /* Allow it to shrink */
-  margin-bottom: 10px;
 }
 
 .search-and-filter-buttons {
