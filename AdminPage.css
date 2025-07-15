@@ -294,8 +294,8 @@ body {
   --header-height: 100px;
 }
 .custom-header {
-  background-color: #1a1a2e;
-  color: #eeca2c;
+  background-color: #212843;
+  filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.39));  color: #eeca2c;
   border-radius: 20px;
   margin-bottom: 8px;
   overflow: hidden;
@@ -322,7 +322,11 @@ body {
 }
 
 .accordion-button {
-  background-color: #34406c;
+  /* Rectangle 54 */
+
+
+  background: #2E3D5E;
+  filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.39));
   color: #fff;
   font-weight: 500;
   border-top-left-radius: 20px !important;
@@ -330,10 +334,8 @@ body {
   border-bottom-left-radius: 20px !important;
   border-bottom-right-radius: 20px !important;
   border: none;
-  box-shadow: none;
   display: flex;
   align-items: center;
-  gap: 0;
   font-size: 1.05rem;
   transition: background 0.2s;
   overflow: hidden;
@@ -345,89 +347,22 @@ body {
   color: #fff;
 }
 
-.accordion-body {
-  background-color: #fff;
-  border-radius: 0 0 15px 15px;
-}
-
-/* Red line styling */
-.red-line {
-  height: 5px;
-  background-color: #94331c;
-  margin-bottom: 12px;
-  margin-left: 13px;
-  margin-right: 10px;
-  border-radius: 5px;
-}
 
 /*-----------------------------------------------------------------------------------------------*/
 
-body {
-  background-color: #eae0ca;
-}
+/* تنسيق شريط البحث */
 
-:root {
-  --header-height: 100px;
-}
-
-.custom-header {
-  background-color: #1a1a2e;
-  color: #eeca2c;
-  border-radius: 20px;
-  margin-bottom: 8px;
-  overflow: hidden;
-  height: var(--header-height);
-}
-
-.custom-header th {
-  color: #eeca2c;
-  font-weight: bold;
-  padding: 14px 18px;
-  vertical-align: middle;
-  font-size: 1.1rem;
-}
-
-.custom-header input[type="checkbox"] {
-  accent-color: #eeca2c;
-  margin-right: 8px;
-  transform: scale(1.2);
-}
-
-.accordion-item {
-  background: none;
-  border: none;
-}
-
-.accordion-button {
-  background-color: #34406c;
-  color: #fff;
-  font-weight: 500;
-  border-top-left-radius: 20px !important;
-  border-top-right-radius: 20px !important;
-  border-bottom-left-radius: 20px !important;
-  border-bottom-right-radius: 20px !important;
-  border: none;
-  box-shadow: none;
-  display: flex;
-  align-items: center;
-  gap: 0;
-  font-size: 1.05rem;
-  transition: background 0.2s;
-  overflow: hidden;
-  height: var(--header-height);
-}
-
-.accordion-button:not(.collapsed) {
-  background-color: #232e4a;
-  color: #fff;
-}
 
 .accordion-body {
   background-color: #fff;
-  border-radius: 0 0 15px 15px;
-  border-left: 7px solid #94331c;
-  /* إضافة الحد الأحمر */
+  border-radius: 0 0 16px 16px;
+  background: linear-gradient(90deg, #BE1A1A 0.48%, #FFF 0.48%);   /*Added a red line on the left more similar to the figma design*/
+
+  width: 97%;
+  margin-left: auto;
+  margin-right: auto;
 }
+
 
 /* Red line styling */
 .red-line {
