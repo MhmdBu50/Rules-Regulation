@@ -29,7 +29,6 @@ body {
   background-color: #f8f9fa;
   border-radius: 8px;
   padding: 20px;
-  height: 320px;
   margin-bottom: 0;
 }
 
@@ -39,7 +38,7 @@ body {
 }
 
 .chart-section:last-child {
-  margin-left: 10px;
+  margin-left: 0px;
 }
 
 .chart-title {
@@ -51,7 +50,6 @@ body {
 
 .chart-canvas-container {
   height: 180px;
-  margin-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -126,6 +124,7 @@ body {
 .sidebar-cards {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 12px;
   flex: 1;
 }
@@ -133,6 +132,7 @@ body {
 .sidebar-buttons {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 12px;
   flex: 1;
   padding-left: 20px;
@@ -217,7 +217,7 @@ body {
 .main-row {
   display: flex;
   align-items: stretch;
-  height: 320px;
+  height: 259px;
 }
 
 .charts-section {
@@ -265,9 +265,6 @@ body {
     margin-bottom: 20px;
   }
 
-  .chart-section:last-child {
-    margin-left: 0;
-  }
 
   .sidebar-container {
     flex-direction: column;
@@ -322,9 +319,6 @@ body {
 }
 
 .accordion-button {
-  /* Rectangle 54 */
-
-
   background: #2E3D5E;
   filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.39));
   color: #fff;
@@ -340,6 +334,7 @@ body {
   transition: background 0.2s;
   overflow: hidden;
   height: var(--header-height);
+  --bs-accordion-border-width: 0; /* Removes the preset border that was in one of bootstrap's components */
 }
 
 .accordion-button:not(.collapsed) {
