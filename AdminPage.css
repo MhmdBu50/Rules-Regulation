@@ -456,8 +456,6 @@ body {
 .search-container {
   justify-self: left;
   width: 100%;
-  max-width: 763px; /* Your preferred max width */
-  min-width: 200px; /* Your min width */
   height: 60px;
   background-color: #2f3e5f;
   display: flex;
@@ -474,6 +472,11 @@ body {
 }
 #document-search {
   margin-left: 20px !important;
+}
+
+#section-document-search-2 {
+  border: 1px solid whitesmoke !important;
+  border-radius: 10px !important;
 }
 
 .search-and-filter-buttons {
