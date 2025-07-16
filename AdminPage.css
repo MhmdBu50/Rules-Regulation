@@ -411,7 +411,7 @@ body {
 }
 
 .delete-btn-container:hover {
-  box-shadow: 0 10px 25px rgba(151, 0, 0, 0.8), 0 0 20px rgba(151, 0, 0, 0.7); /* زيادة الشادو من جميع الجهات عند التفاعل */
+  box-shadow: 0px 0px 25px rgba(151, 0, 0, 1), 0 0 20px rgba(151, 0, 0, 0.7); /* زيادة الشادو من جميع الجهات عند التفاعل */
   stroke: #970000 !important;
 }
 
@@ -469,40 +469,10 @@ body {
   flex-shrink: 1; /* Allow it to shrink */
   margin-bottom: 9px;
 }
-
-.section-container {
-  justify-self: left;
-  width: 100%;
-  max-width: 763px; /* Your preferred max width */
-  min-width: 200px; /* Your min width */
-  height: 60px;
-  background-color: #2f3e5f;
-  display: flex;
-  align-items: center;
-  padding: 0 8px;
-  gap: 6px;
-  box-shadow: 0 4px 12px rgba(13, 10, 44, 0.06);
-  border-radius: 32px;
-  flex-shrink: 1; /* Allow it to shrink */
-  margin-bottom: 9px;
+#section-search {
   margin-left: 10px !important;
 }
-
-.Document-type-container {
-  justify-self: left;
-  width: 100%;
-  max-width: 763px; /* Your preferred max width */
-  min-width: 200px; /* Your min width */
-  height: 60px;
-  background-color: #2f3e5f;
-  display: flex;
-  align-items: center;
-  padding: 0 8px;
-  gap: 6px;
-  box-shadow: 0 4px 12px rgba(13, 10, 44, 0.06);
-  border-radius: 32px;
-  flex-shrink: 1; /* Allow it to shrink */
-  margin-bottom: 9px;
+#document-search {
   margin-left: 20px !important;
 }
 
