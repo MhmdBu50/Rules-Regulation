@@ -156,7 +156,6 @@
             grid-template-columns: 53px 1fr;
             height: 76px; /* or your preferred consistent height */
             box-sizing: border-box;
-            padding: 0px;
             margin: 0px;
             width:fit-content;
             max-width: 100%;

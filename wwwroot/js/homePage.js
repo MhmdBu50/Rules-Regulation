@@ -1,4 +1,6 @@
-//chatbot functionality
+
+
+        //chatbot functionality
 
         const chatIcon = document.getElementById('chat-icon');
         const chatBox = document.getElementById('chat-box');
@@ -139,31 +141,43 @@
             el.style.setProperty('white-space', 'normal', 'important');
         });
 
-        // looks for template elements by ID in the HTML code
-        // if found, clone the content then returns the SVG
-        // if not found, return null
-        function getSVGFromTemplate(id) {
+// ✅ Safe SVG loader using innerHTML
+    function getSVGFromTemplate(id) {
         const tpl = document.getElementById(id);
-        return tpl?.content.cloneNode(true) || null;
-        }
-        //looks for button/a tags interactions
-        //gets the matching normal SVG from the templates section
-        //finds the .svg-container div, clears the container
-        //then appends the SVG
-        function alter(clickedEl) {
+        if (!tpl) return null;
+
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = tpl.innerHTML.trim();
+        return wrapper.firstElementChild;
+    }
+
+    // ✅ Replace .svg-container with normal version from template
+    function initIcons(selector) {
+        document.querySelectorAll(selector).forEach(container => {
+            const parent = container.closest('[data-id]');
+            if (!parent) return;
+
+            const dataId = parent.getAttribute('data-id');
+            const svg = getSVGFromTemplate(`normal-${dataId}`);
+            if (svg) {
+                container.innerHTML = '';  // clean existing
+                container.appendChild(svg);
+            }
+        });
+    }
+
+    // ✅ Toggle between normal and altered SVGs when clicked
+    function alter(clickedEl) {
         document.querySelectorAll('[data-id]').forEach(el => {
             const id = el.dataset.id;
             const container = el.querySelector('.svg-container');
             const normal = getSVGFromTemplate(`normal-${id}`);
             if (container && normal) {
-            container.innerHTML = '';
-            container.appendChild(normal);
+                container.innerHTML = '';
+                container.appendChild(normal);
             }
         });
 
-        //gets the ID of clicked element then finds the 
-        //corresponding .svg-container div then loads the altered
-        //SVG and replaces the normal SVG with the altered version
         const id = clickedEl.dataset.id;
         const container = clickedEl.querySelector('.svg-container');
         const altered = getSVGFromTemplate(`altered-${id}`);
@@ -171,18 +185,10 @@
             container.innerHTML = '';
             container.appendChild(altered);
         }
-        }
+    }
 
-        //waits for the HTML to load then goes through all templates IDs
-        //then Inserts all the normal/unaltered version of the SVGs
-        //into each .svg-container at page load
-        document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('[data-id]').forEach(el => {
-            const id = el.dataset.id;
-            const container = el.querySelector('.svg-container');
-            const normal = getSVGFromTemplate(`normal-${id}`);
-            if (container && normal) {
-            container.appendChild(normal);
-            }
-        });
-        });
+    // ✅ Wait until DOM is fully loaded, then run once
+    document.addEventListener('DOMContentLoaded', () => {
+        initIcons('.navigation-bar .svg-container');
+        initIcons('#sideNavBar .svg-container');
+    });
