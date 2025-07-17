@@ -1,224 +1,3 @@
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\bin\Debug\net9.0\appsettings.Development.json
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\bin\Debug\net9.0\appsettings.json
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.staticwebassets.runtime.json
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.staticwebassets.endpoints.json
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.exe
-C:\Users\Personal\Documents\VS code projects\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.deps.json
-C:\Users\Personal\Documents\VS code projects\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.runtimeconfig.json
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.dll
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.pdb
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\rpswa.dswa.cache.json
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.GeneratedMSBuildEditorConfig.editorconfig
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.AssemblyInfoInputs.cache
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.AssemblyInfo.cs
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.csproj.CoreCompileInputs.cache
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.MvcApplicationPartsAssemblyInfo.cache
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.RazorAssemblyInfo.cache
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.RazorAssemblyInfo.cs
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.sourcelink.json
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\rjimswa.dswa.cache.json
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\scopedcss\bundle\RulesRegulation.styles.css
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\scopedcss\projectbundle\RulesRegulation.bundle.scp.css
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\0mid52cxb2-gm6fuwskx1.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\p41k7132g1-ow31sjaatg.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\inda9ez21m-s507koyb08.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\yd07h5as0q-oxvl2s1r8r.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\cczepe3vsf-b9sayid5wm.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\poj6i9e3ft-uzjiq3djrb.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\7akzeimv7z-61n19gt1b8.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\x9ngl6ljao-v0wzhjltwr.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\7yvvrhif1v-s9morbzc0u.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\txj1cc3g35-xtxxf3hu2r.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\ync1p821ns-bqjiyaj88i.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\942g72jiq4-c2jlpeoesf.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\yiqdmn4gwh-erw9l3u2r3.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\n39if95rpt-aexeepp0ev.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\h1qeh6xlwn-d7shbmvgxk.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\cbewn60cm6-ausgxo2sd3.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\rvh9hm5alq-k8d9w2qqmf.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\6oiq1eh40v-cosvhxvwiu.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\bl0otkrqrg-ub07r2b239.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\f07rxlypkw-fvhpjtyr6v.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\vznm982prp-b7pk76d08c.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\peoz8ytwg4-fsbi9cje9m.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\g49yx9gesj-rzd6atqjts.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\lsik85dlkq-ee0r1s7dh0.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\b4c9mxbe1q-dxx9fxp4il.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\6tkxbvzepk-jd9uben2k1.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\9b811e3ppn-khv3u5hwcm.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\8ysslvt0bn-r4e9w2rdcm.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\388isnqp8n-lcd1t2u6c8.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\k2dmqfvgdo-c2oey78nd0.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\mxfkzc8i1d-tdbxkamptv.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\s3qp7cwhzq-j5mq2jizvt.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\ryo4ftrvx0-06098lyss8.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\nupc7so7lq-nvvlpmu67g.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\krb2jkvn5v-s35ty4nyc5.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\scf719lm49-pj5nd1wqec.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\mv3piy28gx-46ein0sx1k.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\3u3v9iofqg-v0zj4ognzu.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\ybaqlfp7wd-37tfw0ft22.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\ajbw7cs3ow-hrwsygsryq.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\1qsdh1ffny-pk9g2wxc8p.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\kgk5zvlys9-ft3s53vfgj.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\uohsr479b5-6cfz1n2cew.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\nzffthw7uj-6pdc2jztkx.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\r1r0ool0u2-493y06b0oq.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\1ayfkl9euu-iovd86k7lj.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\sx20xkr0d1-vr1egmr9el.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\1bcqcfa8y5-kbrnm935zg.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\k9z9b5t81h-jj8uyg4cgr.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\xsca8m7q2h-y7v9cxd14o.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\f2vcu6gspv-notf2xhcfb.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\qpu8lslzj5-h1s4sie4z3.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\pg3y7rkaac-63fj8s7r0e.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\7uqdk61pr4-0j3bgjxly4.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\oy0z9pvna4-47otxtyo56.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\psxlcsj11g-4v8eqarkd7.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\q576k0hr8r-356vix0kms.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\ewfs7rz2pr-83jwlth58m.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\lx45rknzs5-mrlpezrjn3.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\7znor3qs4x-lzl9nlhx6b.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\c1aafq3lam-ag7o75518u.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\bmz54061ok-x0q3zqp4vz.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\0zdj5alai0-0i3buxo5is.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\0xw8v54h3j-o1o13a6vjx.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\wpgqt0b0py-ttgo8qnofa.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\rholeh0tk0-2z0ns9nrw6.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\dr8pvbhdmc-muycvpuwrr.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\z5mj2t8xzd-87fc7y1x7t.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\dt0q1fa2oi-mlv21k5csn.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\cu7g18ocow-hxq5wtlzg9.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\z6x9usqx90-hxq5wtlzg9.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\staticwebassets.build.json
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\staticwebassets.build.json.cache
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\staticwebassets.development.json
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.dll
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\refint\RulesRegulation.dll
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.pdb
-C:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.genruntimeconfig.cache
-C:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\ref\RulesRegulation.dll
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\ksdlhsk017-ydqgwv4ose.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\2371uodecx-htfb6p9wjf.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\cf2r2zt3vw-67hcu2mewv.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\gemkoeerlo-ln4xt1upn6.gz
-c:\Users\Personal\Documents\VS code projects\Rules-Regulation\obj\Debug\net9.0\compressed\j5vrmqzh2p-5wvs79r892.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\bin\Debug\net9.0\appsettings.Development.json
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\bin\Debug\net9.0\appsettings.json
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.staticwebassets.runtime.json
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.staticwebassets.endpoints.json
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.exe
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.deps.json
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.runtimeconfig.json
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.dll
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.pdb
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\rpswa.dswa.cache.json
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.AssemblyInfoInputs.cache
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.AssemblyInfo.cs
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.csproj.CoreCompileInputs.cache
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.RazorAssemblyInfo.cache
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.RazorAssemblyInfo.cs
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.sourcelink.json
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\rjimswa.dswa.cache.json
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\scopedcss\bundle\RulesRegulation.styles.css
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\scopedcss\projectbundle\RulesRegulation.bundle.scp.css
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\0mid52cxb2-gm6fuwskx1.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\p41k7132g1-ow31sjaatg.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\ksdlhsk017-ydqgwv4ose.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\cczepe3vsf-b9sayid5wm.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\poj6i9e3ft-uzjiq3djrb.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\7akzeimv7z-61n19gt1b8.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\x9ngl6ljao-v0wzhjltwr.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\7yvvrhif1v-s9morbzc0u.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\2371uodecx-htfb6p9wjf.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\txj1cc3g35-xtxxf3hu2r.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\ync1p821ns-bqjiyaj88i.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\942g72jiq4-c2jlpeoesf.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\yiqdmn4gwh-erw9l3u2r3.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\n39if95rpt-aexeepp0ev.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\h1qeh6xlwn-d7shbmvgxk.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\cbewn60cm6-ausgxo2sd3.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\rvh9hm5alq-k8d9w2qqmf.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\6oiq1eh40v-cosvhxvwiu.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\bl0otkrqrg-ub07r2b239.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\f07rxlypkw-fvhpjtyr6v.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\vznm982prp-b7pk76d08c.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\peoz8ytwg4-fsbi9cje9m.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\g49yx9gesj-rzd6atqjts.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\lsik85dlkq-ee0r1s7dh0.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\b4c9mxbe1q-dxx9fxp4il.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\6tkxbvzepk-jd9uben2k1.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\9b811e3ppn-khv3u5hwcm.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\8ysslvt0bn-r4e9w2rdcm.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\388isnqp8n-lcd1t2u6c8.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\k2dmqfvgdo-c2oey78nd0.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\mxfkzc8i1d-tdbxkamptv.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\s3qp7cwhzq-j5mq2jizvt.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\ryo4ftrvx0-06098lyss8.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\nupc7so7lq-nvvlpmu67g.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\krb2jkvn5v-s35ty4nyc5.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\scf719lm49-pj5nd1wqec.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\mv3piy28gx-46ein0sx1k.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\3u3v9iofqg-v0zj4ognzu.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\ybaqlfp7wd-37tfw0ft22.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\ajbw7cs3ow-hrwsygsryq.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\1qsdh1ffny-pk9g2wxc8p.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\kgk5zvlys9-ft3s53vfgj.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\uohsr479b5-6cfz1n2cew.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\nzffthw7uj-6pdc2jztkx.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\r1r0ool0u2-493y06b0oq.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\1ayfkl9euu-iovd86k7lj.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\sx20xkr0d1-vr1egmr9el.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\1bcqcfa8y5-kbrnm935zg.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\k9z9b5t81h-jj8uyg4cgr.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\xsca8m7q2h-y7v9cxd14o.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\f2vcu6gspv-notf2xhcfb.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\qpu8lslzj5-h1s4sie4z3.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\pg3y7rkaac-63fj8s7r0e.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\7uqdk61pr4-0j3bgjxly4.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\oy0z9pvna4-47otxtyo56.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\psxlcsj11g-4v8eqarkd7.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\q576k0hr8r-356vix0kms.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\ewfs7rz2pr-83jwlth58m.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\lx45rknzs5-mrlpezrjn3.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\7znor3qs4x-lzl9nlhx6b.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\c1aafq3lam-ag7o75518u.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\bmz54061ok-x0q3zqp4vz.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\0zdj5alai0-0i3buxo5is.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\0xw8v54h3j-o1o13a6vjx.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\wpgqt0b0py-ttgo8qnofa.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\rholeh0tk0-2z0ns9nrw6.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\dr8pvbhdmc-muycvpuwrr.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\z5mj2t8xzd-87fc7y1x7t.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\dt0q1fa2oi-mlv21k5csn.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\cu7g18ocow-hxq5wtlzg9.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\z6x9usqx90-hxq5wtlzg9.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\staticwebassets.build.json
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\staticwebassets.build.json.cache
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\staticwebassets.development.json
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.dll
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\refint\RulesRegulation.dll
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.pdb
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.genruntimeconfig.cache
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\ref\RulesRegulation.dll
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\izqxghmqud-ln4xt1upn6.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\ifsgois1o8-5wvs79r892.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\cf2r2zt3vw-14b820wsj1.gz
-<<<<<<< HEAD
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\inda9ez21m-4736ozl0nr.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\yd07h5as0q-61ij2zkc5z.gz
-=======
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\yd07h5as0q-oxvl2s1r8r.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\bin\Debug\net9.0\appsettings.Development.json
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\bin\Debug\net9.0\appsettings.json
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\bin\Debug\net9.0\RulesRegulation.staticwebassets.runtime.json
@@ -247,12 +26,14 @@ c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulati
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\p41k7132g1-ow31sjaatg.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\inda9ez21m-4736ozl0nr.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\cf2r2zt3vw-14b820wsj1.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\yd07h5as0q-56v5quxqgq.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\ksdlhsk017-ydqgwv4ose.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\cczepe3vsf-b9sayid5wm.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\poj6i9e3ft-uzjiq3djrb.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\7akzeimv7z-61n19gt1b8.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\x9ngl6ljao-r6dy2d1ycq.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\7yvvrhif1v-s9morbzc0u.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\2371uodecx-kl7wxhsubc.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\txj1cc3g35-xtxxf3hu2r.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\ync1p821ns-t1cqhe9u97.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\942g72jiq4-c2jlpeoesf.gz
@@ -313,9 +94,18 @@ c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulati
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\dr8pvbhdmc-9vr69e8ynj.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\z5mj2t8xzd-87fc7y1x7t.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\dt0q1fa2oi-mlv21k5csn.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\puzjhz35n5-ouwe3pbb03.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\sl8v703imx-o3aiwuoxo4.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\ivk9zo8pky-f58lntrw6e.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\izqxghmqud-ln4xt1upn6.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\cu7g18ocow-hxq5wtlzg9.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\z6x9usqx90-hxq5wtlzg9.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\ojxcp8dqv8-9njj6lyhe2.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\ohdrovcgim-ht5vvsmvoo.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\a3du5mbw6f-1mk756flev.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\keujz3tqu9-7wkpjk8p4i.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\x1h64mrhd0-5wvs79r892.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\1ungyphmla-g3o92tlqdd.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\cu7g18ocow-jgvnm7nsm1.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\z6x9usqx90-jgvnm7nsm1.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\staticwebassets.build.json
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\staticwebassets.build.json.cache
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\staticwebassets.development.json
@@ -325,15 +115,3 @@ c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulati
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.pdb
 C:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.genruntimeconfig.cache
 C:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\ref\RulesRegulation.dll
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\2371uodecx-kl7wxhsubc.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\ojxcp8dqv8-9njj6lyhe2.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\x1h64mrhd0-5wvs79r892.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\1ungyphmla-g3o92tlqdd.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\sl8v703imx-o3aiwuoxo4.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\a3du5mbw6f-1mk756flev.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\puzjhz35n5-ouwe3pbb03.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\ohdrovcgim-ht5vvsmvoo.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\ivk9zo8pky-f58lntrw6e.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\keujz3tqu9-7wkpjk8p4i.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\yd07h5as0q-oqa3omebnu.gz
->>>>>>> 8687ec475a96ae96ef9eafb049a830a8d4a4c952
