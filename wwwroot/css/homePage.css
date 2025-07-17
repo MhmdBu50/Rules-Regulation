@@ -14,28 +14,15 @@
         height: 100%; /*full page*/
         width: 0px; /*changed by JS*/
         position: fixed; /*stay in place*/
-        z-index: 1; /*set on top*/
+        z-index: 1062; /*set on top*/
         top: 0px; /*stays on top*/
         left: 0px; /*stays on left*/
         background-color: #0F1734;
         overflow-x: hidden; /*no side scrolling*/
         transition: 0.5s;
-    }
-
-        .sideNav a {
-            padding: 8px 8px 8px 32px;
-            font-size: 18px;
-            text-decoration: none !important;
-            display: block;
-            transition: 0.5s;
-            color: white;
-            align-items: center;
-            margin-left: 5px;
-        }
-        .sideNav a:hover{
-            opacity: 0.5;
-        }
         
+        }
+
 
         .filter-panel {
             gap: 0;
@@ -149,6 +136,12 @@
             line-height: 1.4;
             border: none;
 
+        }
+
+
+        .mobile-menu-section {
+            text-decoration: none;
+            padding: 0px 5px;
         }
 
         .bar-button{

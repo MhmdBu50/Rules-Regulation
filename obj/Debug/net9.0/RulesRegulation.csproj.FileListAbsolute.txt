@@ -133,7 +133,6 @@ C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulation
 C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\scopedcss\projectbundle\RulesRegulation.bundle.scp.css
 C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\0mid52cxb2-gm6fuwskx1.gz
 C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\p41k7132g1-ow31sjaatg.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\inda9ez21m-s507koyb08.gz
 C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\ksdlhsk017-ydqgwv4ose.gz
 C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\cczepe3vsf-b9sayid5wm.gz
 C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\poj6i9e3ft-uzjiq3djrb.gz
@@ -215,4 +214,5 @@ C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulation
 C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\izqxghmqud-ln4xt1upn6.gz
 C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\ifsgois1o8-5wvs79r892.gz
 C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\cf2r2zt3vw-14b820wsj1.gz
-C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\yd07h5as0q-oxvl2s1r8r.gz
+C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\inda9ez21m-4736ozl0nr.gz
+C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\obj\Debug\net9.0\compressed\yd07h5as0q-61ij2zkc5z.gz

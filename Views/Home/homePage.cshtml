@@ -65,7 +65,7 @@
                             </svg>
                         </button>
                     </div>
-                    <button class="adminButton ms-2 px-3 py-1" onclick="location.href='@Url.Action("AdminPage", "Admin")'">view as Admin
+                    <button class="adminButton ms-2 px-3 py-1 d-none d-lg-flex" onclick="location.href='@Url.Action("AdminPage", "Admin")'">view as Admin
                     </button>
                 </div>
 
@@ -77,7 +77,7 @@
                             alt="IAU Logo">
 
                         <!-- SVG version for smaller screens -->
-                        <img class="profile-icon d-none d-sm-block d-xl-none" src="imgs/B&W IAU Logo.png"
+                        <img class="profile-icon d-none d-sm-block d-xl-none" src="~/imgs/B&W IAU Logo.png"
                             alt="IAU Logo">
                     </div>
                 </div>
@@ -88,10 +88,10 @@
 
     </header>
     <!-- Mobile menu (hidden by default) -->
-    <div id="sideNavBar" class="custom-sidebar text-white" style=" background-color: #0F1734; width: 0; position: fixed; top: 0; left: 0; height: 100%; overflow-x: hidden; transition: 0.3s; z-index: 1050;">
+    <div id="sideNavBar" class="custom-sidebar sideNav text-white">
         <div>
             <!--home button mobile-->
-            <a href="#" class="text-white d-block py-2 " onclick="alter(this); location.href='@Url.Action("homePage", "Home")'" style="background-color: #2B334F; text-decoration: none;"> 
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); location.href='@Url.Action("homePage", "Home")'" style="background-color: #2B334F; "> 
                 <div style="display: flex; align-items: center; gap: 5px;">
                 <svg width="16" height="16" viewBox="0 0 53 53" fill="currentColor" style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -101,7 +101,16 @@
                 </div>
             </a>
 
-            <a href="#"  class="text-white d-block py-2" onclick="alter(this)" data-id="studentGuidesM" style="background-color: #01514F; text-decoration: none;">
+            <a href="#"  class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="studentGuidesM" style="background-color: #01514F; ">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div class="svg-container" >
+    
+                    </div>
+                    <span> view as Admin </span>
+                </div>
+            </a>   
+
+            <a href="#"  class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="studentGuidesM" style="background-color: #01514F; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <div class="svg-container" >
     
@@ -109,7 +118,7 @@
                     <span> Student Guides & Templates </span>
                 </div>
             </a>    
-            <a href="#" class="text-white d-block py-2" onclick="alter(this)" data-id="studentRulesRegulationsM" style="background-color: #A6832C; text-decoration: none;">
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="studentRulesRegulationsM" style="background-color: #A6832C; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <div class="svg-container">
 
@@ -117,7 +126,7 @@
                     <span>Student Rules & Regulations</span>
                 </div>
             </a>
-            <a href="#" class="text-white d-block py-2" onclick="alter(this)" data-id="employeeRuleM" style="background-color: #4F1C34; text-decoration: none;">
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="employeeRuleM" style="background-color: #4F1C34; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <div>
                         <div class="svg-container">
@@ -127,7 +136,7 @@
                 <span>Employees’ Rules & Regulations</span>
                 </div>
             </a>
-            <a href="#" class="text-white d-block py-2" onclick="alter(this)" data-id="academicRulesRegulationsM" style="background-color: #94331C; text-decoration: none;">
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="academicRulesRegulationsM" style="background-color: #94331C; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <div class="svg-container">
                     
@@ -135,7 +144,7 @@
                     <span>Academic Rules & Regulations</span>
                 </div>
             </a>
-            <a href="#" class="text-white d-block py-2" onclick="alter(this)" data-id="SavedRulesRegulationsM" style="background-color: #4F1C34; text-decoration: none;">
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="SavedRulesRegulationsM" style="background-color: #4F1C34; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <div class="svg-container">
             
@@ -143,7 +152,7 @@
                     <span>Saved Rules & Regulations</span>
                 </div>
             </a>
-            <a href="#" class="text-white d-block py-2" style="background-color: #0F1734; text-decoration: none;">
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="historyM" style="background-color: #0F1734; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     
                     <svg width="20" height="20" viewBox="0 0 53 49" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -163,7 +172,7 @@
 
     <div id="sidebarBackdrop"
      style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-     background: rgba(0,0,0,0.5); z-index: 1030; cursor: pointer;"></div>
+     background: rgba(0,0,0,0.5); z-index: 1061; cursor: pointer;"></div>
     
 
     <!--filter section-->
@@ -1093,7 +1102,7 @@
             backdrop.style.display = 'block';
             // Add outside click handler
             setTimeout(() => {
-                sidebar.style.width = '250px';
+                sidebar.style.width = '260px';
                 }, 10);
             });
 
