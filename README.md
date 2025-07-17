@@ -1,4 +1,4 @@
-# Rules-Regulation
+# RulesRegulation
 hello kind sir
 you finally awake?
 jalil is smart

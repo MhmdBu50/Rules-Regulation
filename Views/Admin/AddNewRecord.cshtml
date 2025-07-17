@@ -1,0 +1,182 @@
+@section Styles {
+    <link rel="stylesheet" href="~/css/AddNewRecord.css">
+}
+
+@section Scripts{
+    <script src="~/js/card-animations.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fitty@2.3.6/dist/fitty.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+}
+  <div class="AddNewRecord">
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'" id="home-link" aria-label="Go back to admin page">Back</a>
+      <a class="btn" onclick="location.href='@Url.Action("homePage", "Home")'" id="logout-link" aria-label="Logout from system">Logout</a>
+    </div>
+
+    <!-- Logo -->
+    <div class="container logo-container">
+      <img class="header-logo mx-auto d-block" src="imgs/iaulogoname.png" alt="IAU Logo">
+    </div>
+
+    <!-- Main Header -->
+    <div class="main-header">
+      <h1>New Record</h1>
+    </div>
+
+    <!-- Form Section -->
+    <div class="container">
+      <div class="form-wrapper">
+        <form method="post" action="/submit">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="regulationName">Regulation/Manual Name</label>
+              <input type="text" class="form-control" id="regulationName" name="regulationName" required>
+            </div>
+            <div class="col-md-6">
+              <label for="relevantDepartment">Relevant Department</label>
+              <select class="form-select" id="relevantDepartment" name="relevantDepartment" required>
+                <option value="">Select department</option>
+                <option value="HR">Reg and Admission</option>
+                <option value="IT">CCSIT</option>
+                <option value="IT">Communication and tech</option>
+                <option value="IT">Hospital</option>
+                <option value="IT">Library</option>
+                <option value="IT">Students Affairs</option>
+                <option value="IT">Preparetory</option>
+                <option value="Academic Affairs">Academic Affairs</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="versionNumber">Version Number</label>
+              <input type="text" class="form-control" id="versionNumber" name="versionNumber" required>
+            </div>
+            <div class="col-md-4">
+              <label for="versionDate">Version Date</label>
+              <input type="date" class="form-control" id="versionDate" name="versionDate" required>
+            </div>
+            <div class="col-md-4">
+              <label for="approvalDate">Approving Date</label>
+              <input type="date" class="form-control" id="approvalDate" name="approvalDate" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="approvalEntity">Approving Entity</label>
+            <input type="text" class="form-control" id="approvalEntity" name="approvalEntity" required>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="wordAttachment">Word Attachment</label>
+              <input type="file" class="form-control" id="wordAttachment" name="wordAttachment" accept=".doc,.docx">
+            </div>
+            <div class="col-md-6">
+              <label for="pdfAttachment">PDF Attachment</label>
+              <input type="file" class="form-control" id="pdfAttachment" name="pdfAttachment" accept=".pdf">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="description">Brief Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-md-5">
+              <label>Document Type</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="doctype" value="regulation" id="reg" required>
+                <label class="form-check-label" for="reg">Regulation</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="doctype" value="guideline" id="guide">
+                <label class="form-check-label" for="guide">Guideline</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="doctype" value="policy" id="policy">
+                <label class="form-check-label" for="policy">Policy</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label>Sections</label>
+              <div class="form-check">
+                <input class="form-check-input section-checkbox" type="checkbox" id="students" name="sections" value="students">
+                <label class="form-check-label" for="students">Students</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input section-checkbox" type="checkbox" id="members" name="sections" value="members">
+                <label class="form-check-label" for="members">Members</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input section-checkbox" type="checkbox" id="program" name="sections" value="program">
+                <label class="form-check-label" for="program">Enrolled Program</label>
+              </div>
+              <div id="sectionError" class="text-danger mt-1"></div>
+            </div>
+          </div>
+
+          <div class="mb-5">
+            <label for="notes">Notes</label>
+            <input type="text" class="form-control" id="notes" name="notes">
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary me-2">Save and upload</button>
+            <button type="button" class="btn btn-secondary" onclick="confirmCancel()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    function confirmCancel() {
+      if (confirm("Are you sure you want to cancel? All unsaved changes will be lost.")) {
+        document.querySelector('form').reset();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const mobileInput = document.getElementById('mobileNumber');
+      const telInput = document.getElementById('telephoneNumber');
+      const nameField = document.getElementById('responsibleName');
+
+      mobileInput.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);
+      });
+
+      telInput.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
+
+      document.querySelector('form').addEventListener('submit', function (e) {
+        let hasError = false;
+
+        const checkboxes = document.querySelectorAll('.section-checkbox');
+        const oneChecked = Array.from(checkboxes).some(cb => cb.checked);
+        if (!oneChecked) {
+          document.getElementById('sectionError').textContent = "Please select at least one section.";
+          hasError = true;
+        } else {
+          document.getElementById('sectionError').textContent = "";
+        }
+
+        const arabicPattern = /^[\u0600-\u06FF\s]+$/;
+        if (!arabicPattern.test(nameField.value)) {
+          document.getElementById('nameError').textContent = "Name must be in Arabic.";
+          hasError = true;
+        } else {
+          document.getElementById('nameError').textContent = "";
+        }
+
+        if (hasError) {
+          e.preventDefault();
+        }
+      });
+    });
+  </script>
