@@ -4,11 +4,6 @@ body {
 }
 /* Dashboard Styles */
 
-.search-container {
-    margin-bottom: 10px;
-}
-
-
 .dashboard-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -265,7 +260,6 @@ body {
     margin-bottom: 20px;
   }
 
-
   .sidebar-container {
     flex-direction: column;
     gap: 12px;
@@ -292,7 +286,8 @@ body {
 }
 .custom-header {
   background-color: #212843;
-  filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.39));  color: #eeca2c;
+  filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.39));
+  color: #eeca2c;
   border-radius: 20px;
   margin-bottom: 8px;
   overflow: hidden;
@@ -319,7 +314,7 @@ body {
 }
 
 .accordion-button {
-  background: #2E3D5E;
+  background: #2e3d5e;
   filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.39));
   color: #fff;
   font-weight: 500;
@@ -342,22 +337,23 @@ body {
   color: #fff;
 }
 
-
 /*-----------------------------------------------------------------------------------------------*/
 
 /* تنسيق شريط البحث */
 
-
 .accordion-body {
   background-color: #fff;
   border-radius: 0 0 16px 16px;
-  background: linear-gradient(90deg, #BE1A1A 0.48%, #FFF 0.48%);   /*Added a red line on the left more similar to the figma design*/
+  background: linear-gradient(
+    90deg,
+    #be1a1a 0.48%,
+    #fff 0.48%
+  ); /*Added a red line on the left more similar to the figma design*/
 
   width: 97%;
   margin-left: auto;
   margin-right: auto;
 }
-
 
 /* Red line styling */
 .red-line {
@@ -394,4 +390,226 @@ body {
 /* تأثير عند الضغط على الزر */
 .exit-admin-btn:active {
   transform: scale(0.98);
+}
+
+.delete-btn-container {
+  justify-self: center;
+  width: 60px;
+  height: 60px;
+  background-color: #2f3e5f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(13, 10, 44, 0.06), 0 0 15px rgba(151, 0, 0, 0.6);
+  border-radius: 32px;
+  flex-shrink: 1;
+  margin-bottom: 10px;
+  margin-left: 20px !important;
+  transition: box-shadow 0.3s ease;
+}
+
+.delete-btn-container:hover {
+  box-shadow: 0px 0px 25px rgba(151, 0, 0, 1), 0 0 20px rgba(151, 0, 0, 0.7); /* زيادة الشادو من جميع الجهات عند التفاعل */
+  stroke: #970000 !important;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Joan&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+.poppins-regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Navigation Bar CSS code section*/
+
+.menu {
+  background-color: #0f1734;
+  width: 100%;
+  height: 75px;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.container-fluid {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.searchLang-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+body {
+  margin: 0;
+  padding: 0% !important;
+  height: 100vh;
+  width: 100vw;
+  background-color: #eae0ca;
+  font-family: "Poppins", sans-serif;
+}
+
+.search-container {
+  justify-self: left;
+  width: 100%;
+  height: 60px;
+  background-color: #2f3e5f;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(13, 10, 44, 0.06);
+  border-radius: 32px;
+  flex-shrink: 1; /* Allow it to shrink */
+  margin-bottom: 9px;
+}
+#section-search {
+  margin-left: 10px !important;
+}
+#document-search {
+  margin-left: 20px !important;
+}
+
+#section-document-search-2 {
+  border: 1px solid whitesmoke !important;
+  border-radius: 10px !important;
+}
+
+.search-and-filter-buttons {
+  background-color: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 30;
+  height: 44px;
+  appearance: none;
+  transition: transform 0.08s ease-in-out;
+}
+.search-and-filter-buttons:hover svg path {
+  stroke: #e3e3e3; /* Change to a lighter color */
+}
+.search-and-filter-buttons:hover {
+  transform: scale(1.1);
+}
+.search-and-filter-buttons:active {
+  transition: transform ease-out;
+  transform: scale(1.3);
+}
+
+.search-and-filter-buttons:active svg path {
+  stroke-width: 1.5px; /* Change to a lighter color */
+  transition: stroke 0.3s ease-in-out; /* Smooth transition */
+}
+.logo {
+  margin: 0 10px 0 15px;
+  transform: scale(1.02);
+  transition: transform 0.08s ease-in-out;
+  width: 38px !important;
+  height: 38px !important;
+  max-width: none !important; /* Kill Bootstrap's max-width */
+  flex-shrink: 0 !important; /* Prevent shrinking */
+}
+.logo:hover {
+  transform: scale(1.04);
+}
+.logo:hover svg path {
+  transition: stroke 0.3s ease-in-out; /* Smooth transition */
+}
+.logo:active {
+  transition: transform ease;
+  transform: scale(1.06);
+}
+
+.logo:active svg path {
+  stroke-width: 5.5px; /* Change to a lighter color */
+  transition: stroke 0.3s ease-in-out; /* Smooth transition */
+}
+
+.search {
+  width: 100% !important;
+  max-width: 620px;
+  min-width: 120px;
+  height: 44px; /* Match actual total height */
+  padding: 0 16px; /* Only left and right padding */
+  background-color: #2f3e5f;
+  border-radius: 25.6px;
+  text-align: left;
+  font-size: 24px;
+  color: #abb7c2;
+  border: none;
+}
+
+.adminButton {
+  background-color: #33415c;
+  color: white;
+  border: none;
+  border-radius: 200px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 120%;
+}
+
+.adminButton:hover {
+  background-color: #5c74a9;
+}
+
+@media (max-width: 768px) {
+  .search-container {
+    padding: 0 4px !important;
+    height: 50px !important;
+  }
+
+  .search {
+    font-size: 18px !important;
+    padding: 0 8px !important;
+  }
+
+  .search-and-filter-buttons svg {
+    width: 36px !important;
+    height: 36px !important;
+  }
+}
+
+.signlog-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding-right: 24px;
+  padding-left: 24px;
+}
+
+.profile-icon {
+  filter: invert(1);
+  height: 61px;
+}
+/* Fix search icon alignment */
+
+.bootstrap-wrapper {
+  height: 100%;
+}
+.navbar-toggler {
+  border: none;
+  padding: 0;
+}
+.mobile-logo {
+  display: none;
+}
+@media (max-width: 991.98px) {
+  .desktop-logo {
+    display: none;
+  }
+  .mobile-logo {
+    display: block;
+  }
 }

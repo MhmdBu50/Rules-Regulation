@@ -88,7 +88,7 @@
 
     </header>
     <!-- Mobile menu (hidden by default) -->
-    <div id="sideNavBar" class="custom-sidebar bg-dark text-white" style="width: 0; position: fixed; top: 0; left: 0; height: 100%; overflow-x: hidden; transition: 0.3s; z-index: 1050;">
+    <div id="sideNavBar" class="custom-sidebar text-white" style=" background-color: #0F1734; width: 0; position: fixed; top: 0; left: 0; height: 100%; overflow-x: hidden; transition: 0.3s; z-index: 1050;">
         <div>
             <!--home button mobile-->
             <a href="#" class="text-white d-block py-2 " onclick="alter(this); location.href='@Url.Action("homePage", "Home")'" style="background-color: #2B334F; text-decoration: none;"> 
@@ -296,7 +296,7 @@
 
         <!--Saved rules & regulations button-->
         <div>
-            <button class="bar-button" data-id="SavedRulesRegulations" style="background-color: #4F1C34;" onclick="alter(this)">
+            <button class="bar-button" id="SavedRulesRegulations" data-id="SavedRulesRegulations" style="background-color: #4F1C34;" onclick="alter(this)">
                 <div class="nav-icons svg-container">
                     
                 </div>
@@ -462,7 +462,7 @@
                     </svg>
     </template>
     <template id="altered-SavedRulesRegulations">
-        <svg width="49" height="55" viewBox="0 0 49 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="53" height="55" viewBox="0 0 49 55" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M48 54L24.5 31.74L1 54V1H48V54Z" fill="white" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
     </template>
