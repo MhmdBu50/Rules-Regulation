@@ -150,12 +150,12 @@
             height: 76px; /* or your preferred consistent height */
             box-sizing: border-box;
             margin: 0px;
-            width:fit-content;
-            max-width: 100%;
+            max-width: 250px;
             border: none;
             color: #ffffff;
             white-space: normal !important;
-            
+            gap: 8px;
+            padding-left: 8px;
         }
 
         #homeButton{
@@ -192,8 +192,7 @@
         text-align: left;
         white-space: normal !important;   /* allow wrapping */
         overflow-wrap: break-word;        /* wrap mid-word if needed */
-        word-break: break-word;
-        font-size: 1em; 
+        font-size: clamp(16px, 0.7em + 0.6vw, 1.26rem); /* responsive font size */
         }
 
         .bar-button .nav-label label {
@@ -214,7 +213,7 @@
           */
 
 
-        @media (max-width: 1100px) {
+        @media (max-width: 1130px) {
         .bar-button label {
           display: none !important;
         }
@@ -223,7 +222,12 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          padding-left: 5px;
+          padding: 5px;
+          gap: 0;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          width: 76px;
           }
         }
 

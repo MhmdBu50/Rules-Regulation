@@ -124,12 +124,13 @@
                 });
             });
         });
-
+        /*        // Fitty.js for responsive text sizing
         fitty('.nav-label:not(.history-button) label', {
             minSize: 14,
-            maxSize: 16,
+            maxSize: 18,
             multiLine: true
         });
+        */
 
         fitty('.history-button label', {
             minSize: 12,
@@ -192,3 +193,5 @@
         initIcons('.navigation-bar .svg-container');
         initIcons('#sideNavBar .svg-container');
     });
+
+

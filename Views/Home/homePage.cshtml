@@ -102,7 +102,7 @@
                 </div>
             </a>
 
-            <a href="#"  class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="studentGuidesM" style="background-color: #01514F; ">
+            <a href="#"  class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="AdminViewM" style="background-color: #A6832C; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <div class="svg-container" >
     
@@ -119,7 +119,7 @@
                     <span> Student Guides & Templates </span>
                 </div>
             </a>    
-            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="studentRulesRegulationsM" style="background-color: #A6832C; ">
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="studentRulesRegulationsM" style="background-color: #4D7160; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <div class="svg-container">
 
@@ -145,7 +145,7 @@
                     <span>Academic Rules & Regulations</span>
                 </div>
             </a>
-            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="SavedRulesRegulationsM" style="background-color: #4F1C34; ">
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="SavedRulesRegulationsM" style="background-color: #2F3E5F; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <div class="svg-container">
             
@@ -260,7 +260,7 @@
 
         <!--Student rules & regulations button-->
         <div>
-            <button class="bar-button" id="studentRulesRegulations" data-id="studentRulesRegulations" style="background-color: #A6832C;" onclick="alter(this)">
+            <button class="bar-button" id="studentRulesRegulations" data-id="studentRulesRegulations" style="background-color: #4D7160;" onclick="alter(this)">
                 <div class="nav-icons svg-container">
                     
                 </div>
@@ -304,7 +304,7 @@
 
         <!--Saved rules & regulations button-->
         <div>
-            <button class="bar-button" id="SavedRulesRegulations" data-id="SavedRulesRegulations" style="background-color: #4F1C34;" onclick="alter(this)">
+            <button class="bar-button" id="SavedRulesRegulations" data-id="SavedRulesRegulations" style="background-color: #2F3E5F;" onclick="alter(this)">
                 <div class="nav-icons svg-container">
                     
                 </div>
@@ -344,6 +344,16 @@
 
     <!--template section to save SVGs for navbar icon transitions-->
     <!--this part is for the mobile version-->
+
+    <template id="normal-AdminViewM">
+        <img src="@Url.Content("~/svgs/Normal-AdminView.svg")" width="20" height="20" 
+        style="filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.3));"/>
+    </template>
+
+    <template id="altered-AdminViewM">
+        <img src="@Url.Content("~/svgs/Altered-AdminView.svg")" width="20" height="20"
+        style="filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.3));">
+    </template>
    
     <template id="normal-studentGuidesM">
         <img src="@Url.Content("~/svgs/Normal-studentGuides.svg")" width="20" height="20" />
