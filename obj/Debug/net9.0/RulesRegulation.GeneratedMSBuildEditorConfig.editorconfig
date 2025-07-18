@@ -9,61 +9,61 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = RulesRegulation
 build_property.RootNamespace = RulesRegulation
-build_property.ProjectDir = C:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\
+build_property.ProjectDir = C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation
+build_property.MSBuildProjectDirectory = C:\Users\sheik\Documents\University\4. Fourth year stuff\COOP\Rules & Regulations\Rules-Regulation
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/Personal/Documents/VS code coop project/Rules-Regulation/Rules-Regulation/Views/Account/LoginPage.cshtml]
+[C:/Users/sheik/Documents/University/4. Fourth year stuff/COOP/Rules & Regulations/Rules-Regulation/Views/Account/LoginPage.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpblBhZ2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Personal/Documents/VS code coop project/Rules-Regulation/Rules-Regulation/Views/Admin/AddNewContactInfo.cshtml]
+[C:/Users/sheik/Documents/University/4. Fourth year stuff/COOP/Rules & Regulations/Rules-Regulation/Views/Admin/AddNewContactInfo.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWRkTmV3Q29udGFjdEluZm8uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Personal/Documents/VS code coop project/Rules-Regulation/Rules-Regulation/Views/Admin/AddNewRecord.cshtml]
+[C:/Users/sheik/Documents/University/4. Fourth year stuff/COOP/Rules & Regulations/Rules-Regulation/Views/Admin/AddNewRecord.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWRkTmV3UmVjb3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Personal/Documents/VS code coop project/Rules-Regulation/Rules-Regulation/Views/Admin/AdminPage.cshtml]
+[C:/Users/sheik/Documents/University/4. Fourth year stuff/COOP/Rules & Regulations/Rules-Regulation/Views/Admin/AdminPage.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWRtaW5QYWdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Personal/Documents/VS code coop project/Rules-Regulation/Rules-Regulation/Views/Home/homePage.cshtml]
+[C:/Users/sheik/Documents/University/4. Fourth year stuff/COOP/Rules & Regulations/Rules-Regulation/Views/Home/homePage.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxob21lUGFnZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Personal/Documents/VS code coop project/Rules-Regulation/Rules-Regulation/Views/Home/Index.cshtml]
+[C:/Users/sheik/Documents/University/4. Fourth year stuff/COOP/Rules & Regulations/Rules-Regulation/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Personal/Documents/VS code coop project/Rules-Regulation/Rules-Regulation/Views/Home/Privacy.cshtml]
+[C:/Users/sheik/Documents/University/4. Fourth year stuff/COOP/Rules & Regulations/Rules-Regulation/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Personal/Documents/VS code coop project/Rules-Regulation/Rules-Regulation/Views/Shared/Error.cshtml]
+[C:/Users/sheik/Documents/University/4. Fourth year stuff/COOP/Rules & Regulations/Rules-Regulation/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Personal/Documents/VS code coop project/Rules-Regulation/Rules-Regulation/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/sheik/Documents/University/4. Fourth year stuff/COOP/Rules & Regulations/Rules-Regulation/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Personal/Documents/VS code coop project/Rules-Regulation/Rules-Regulation/Views/_ViewImports.cshtml]
+[C:/Users/sheik/Documents/University/4. Fourth year stuff/COOP/Rules & Regulations/Rules-Regulation/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Personal/Documents/VS code coop project/Rules-Regulation/Rules-Regulation/Views/_ViewStart.cshtml]
+[C:/Users/sheik/Documents/University/4. Fourth year stuff/COOP/Rules & Regulations/Rules-Regulation/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Personal/Documents/VS code coop project/Rules-Regulation/Rules-Regulation/Views/Shared/_Layout.cshtml]
+[C:/Users/sheik/Documents/University/4. Fourth year stuff/COOP/Rules & Regulations/Rules-Regulation/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-urc5jx7kkp
