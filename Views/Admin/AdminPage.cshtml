@@ -1,12 +1,12 @@
 @section Styles {
-    <link rel="stylesheet" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/AdminPage.css">
+    <link rel="stylesheet" href="~/css/homePage.css">
 }
 
 @section Scripts{
-    <script src="~/js/card-animations.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fitty@2.3.6/dist/fitty.min.js"></script>
-    <script src="js/bootstrap.js"></script>
+    <script src="@Url.Content("~/js/card-animations.js")"></script>
+    <script src="@Url.Content("https://cdn.jsdelivr.net/npm/fitty@2.3.6/dist/fitty.min.js")"></script>
+    <script src="@Url.Content("js/bootstrap.js")"></script>
 }
     <header class="menu">
         <div class="container-fluid h-100 bootstrap-wrapper">
@@ -14,13 +14,6 @@
                 <!-- Left Section - Logo/Hamburger -->
                 <div class="col-auto">
                     <div class="d-flex align-items-center">
-                        <!-- Hamburger for mobile -->
-                        <button class="logo navbar-toggler d-lg-none me-2" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#mobileMenu">
-                            <svg width="36" height="36" viewBox="0 0 24 24" fill="#CFEFFF">
-                                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
-                            </svg>
-                        </button>
 
                         <!-- Desktop Logo -->
                         <svg class="desktop-logo logo" width="33" height="33" viewBox="0 0 40 40" fill="none"
@@ -56,7 +49,6 @@
             </div>
         </div>
 
-        <!-- Mobile menu (hidden by default) -->
 
     </header>
 

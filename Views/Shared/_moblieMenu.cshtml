@@ -1,0 +1,88 @@
+    @section styles{
+        <link rel="stylesheet" href="~/css/homePage.css">
+    }
+    <div id="sideNavBar" class="custom-sidebar sideNav text-white">
+        <div>
+            <!--home button mobile-->
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); location.href='@Url.Action("homePage", "Home")'" style="background-color: #2B334F; "> 
+                <div style="display: flex; align-items: center; gap: 5px;">
+                <svg width="16" height="16" viewBox="0 0 53 53" fill="currentColor" style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M51.5668 23.0414L45.6353 17.1099V1.55279C45.6353 0.695237 44.9401 0 44.0825 0H37.4296C36.5721 0 35.8768 0.695237 35.8768 1.55279V7.35164L29.9582 1.43302C29.0342 0.508902 27.8056 0 26.4988 0C25.1919 0 23.9632 0.508902 23.0392 1.43302L1.43074 23.0416C-0.476914 24.9491 -0.476914 28.0531 1.43074 29.9606C2.35486 30.8847 3.58343 31.3936 4.89026 31.3936C5.16407 31.3936 5.43405 31.3699 5.69895 31.3262V47.2913C5.69895 50.4403 8.26085 53.0021 11.4098 53.0021H21.5093C22.3668 53.0021 23.0621 52.3068 23.0621 51.4493V39.6963H29.9358V51.4492C29.9358 52.3067 30.631 53.002 31.4886 53.002H41.5879C44.7369 53.002 47.2987 50.4402 47.2987 47.2912V31.3261C47.5635 31.3699 47.8333 31.3935 48.1072 31.3935H48.1075C49.4141 31.3935 50.6427 30.8846 51.567 29.9604C52.491 29.0364 52.9999 27.8078 53 26.501C52.9998 25.1942 52.4909 23.9655 51.5668 23.0414ZM38.9825 3.10558H42.5298V14.0044L38.9825 10.457V3.10558ZM41.5878 49.8964H33.0412V38.1435C33.0412 37.2859 32.3461 36.5907 31.4886 36.5907H21.5092C20.6516 36.5907 19.9564 37.2859 19.9564 38.1435V49.8964H11.4097C9.97317 49.8964 8.80443 48.7278 8.80443 47.2912V29.5056L26.4988 11.8117L44.193 29.5058V47.2913C44.193 48.7277 43.0243 49.8964 41.5878 49.8964ZM49.371 27.7644C49.2054 27.9309 49.0085 28.0629 48.7916 28.1528C48.5747 28.2427 48.3421 28.2886 48.1073 28.288C47.8725 28.2886 47.64 28.2427 47.4232 28.1529C47.2063 28.063 47.0095 27.9311 46.8439 27.7647L46.8435 27.7643L27.5968 8.51768C26.9906 7.91116 26.0074 7.91137 25.4009 8.51768L6.15402 27.7642L6.15351 27.7647C5.81603 28.1022 5.36748 28.288 4.89026 28.288C4.41303 28.288 3.96428 28.1022 3.6267 27.7646C2.93001 27.068 2.93001 25.9342 3.6267 25.2375L25.2351 3.62898C25.4007 3.46252 25.5977 3.33056 25.8146 3.24072C26.0315 3.15088 26.264 3.10495 26.4988 3.10558C26.976 3.10558 27.4248 3.2915 27.7623 3.62898L36.3317 12.1983L49.3708 25.2373C50.0676 25.934 50.0676 27.0679 49.371 27.7644Z"
+                        fill="white" />
+                </svg> <span>Home</span>
+                </div>
+            </a>
+
+            <a href="#"  class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="AdminViewM" style="background-color: #A6832C; ">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div class="svg-container" >
+    
+                    </div>
+                    <span> view as Admin </span>
+                </div>
+            </a>   
+
+            <a href="#"  class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="studentGuidesM" style="background-color: #01514F; ">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div class="svg-container" >
+    
+                    </div>
+                    <span> Student Guides & Templates </span>
+                </div>
+            </a>    
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="studentRulesRegulationsM" style="background-color: #4D7160; ">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div class="svg-container">
+
+                    </div>
+                    <span>Student Rules & Regulations</span>
+                </div>
+            </a>
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="employeeRuleM" style="background-color: #4F1C34; ">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div>
+                        <div class="svg-container">
+            
+                        </div>
+                    </div>
+                <span>Employees’ Rules & Regulations</span>
+                </div>
+            </a>
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="academicRulesRegulationsM" style="background-color: #94331C; ">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div class="svg-container">
+                    
+                    </div>
+                    <span>Academic Rules & Regulations</span>
+                </div>
+            </a>
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="SavedRulesRegulationsM" style="background-color: #2F3E5F; ">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <div class="svg-container">
+            
+                    </div>
+                    <span>Saved Rules & Regulations</span>
+                </div>
+            </a>
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="historyM" style="background-color: #0F1734; ">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    
+                    <svg width="20" height="20" viewBox="0 0 53 49" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M28.9291 0.208496C23.5887 0.234488 18.4079 2.0313 14.1982 5.31742C9.98857 8.60355 6.98795 13.1933 5.66648 18.3676L4.04998 15.923C3.89694 15.6671 3.69366 15.4448 3.45238 15.2695C3.21111 15.0943 2.93684 14.9697 2.64612 14.9034C2.3554 14.837 2.05425 14.8302 1.76083 14.8834C1.46741 14.9365 1.1878 15.0486 0.938857 15.2128C0.689916 15.3769 0.476803 15.5898 0.31237 15.8386C0.147936 16.0873 0.0355886 16.3668 -0.0178978 16.6602C-0.0713842 16.9536 -0.0649015 17.2547 0.00115929 17.5455C0.0672201 17.8363 0.19149 18.1107 0.366477 18.3522L5.22481 25.7147C5.56229 26.187 6.05985 26.5205 6.62489 26.6533C7.20186 26.7677 7.80072 26.6529 8.29439 26.3331L15.5819 21.424C15.8332 21.267 16.0503 21.0612 16.2203 20.8186C16.3904 20.5761 16.5099 20.3018 16.5718 20.0121C16.6337 19.7224 16.6366 19.4232 16.5805 19.1323C16.5244 18.8415 16.4103 18.5649 16.245 18.319C16.0798 18.0732 15.8668 17.863 15.6186 17.7012C15.3705 17.5394 15.0924 17.4291 14.8008 17.377C14.5092 17.3249 14.21 17.3319 13.9212 17.3978C13.6324 17.4636 13.3598 17.5869 13.1196 17.7603L9.80489 19.9952C10.6871 16.4141 12.5581 13.1531 15.2045 10.5843C17.8508 8.01543 21.166 6.24216 24.7717 5.46679C28.3773 4.69142 32.1284 4.94517 35.5968 6.19909C39.0652 7.45302 42.1113 9.65662 44.3876 12.5585C46.6639 15.4603 48.0787 18.9436 48.4705 22.6108C48.8624 26.2781 48.2155 29.9816 46.6037 33.2989C44.992 36.6162 42.4802 39.4137 39.3551 41.3721C36.2299 43.3306 32.6172 44.3712 28.9291 44.3752C25.7675 44.3666 22.6547 43.5948 19.8553 42.1254C17.056 40.6559 14.6528 38.5322 12.8502 35.9349C12.6887 35.687 12.4791 35.4741 12.2338 35.3087C11.9885 35.1434 11.7124 35.029 11.422 34.9725C11.1316 34.9159 10.8328 34.9182 10.5434 34.9794C10.2539 35.0405 9.97969 35.1592 9.73698 35.3283C9.49427 35.4975 9.28802 35.7137 9.13048 35.9641C8.97294 36.2145 8.86732 36.494 8.8199 36.786C8.77247 37.078 8.7842 37.3766 8.85439 37.664C8.92459 37.9514 9.05182 38.2218 9.22852 38.459C12.1591 42.6839 16.3677 45.8574 21.2357 47.5129C26.1037 49.1685 31.3744 49.2188 36.2731 47.6566C41.1719 46.0944 45.4403 43.0019 48.4511 38.8338C51.4619 34.6657 53.0563 29.6417 52.9999 24.5002C53.0216 18.0892 50.4996 11.9313 45.9871 7.37738C41.4746 2.82344 35.34 0.245301 28.9291 0.208496Z"
+                            fill="white" />
+                        <path
+                            d="M28.7083 11.1396C28.1226 11.1396 27.5609 11.3723 27.1468 11.7865C26.7327 12.2006 26.5 12.7623 26.5 13.348V24.5001C26.5094 25.0838 26.7408 25.6421 27.147 26.0614L33.772 32.746C34.1878 33.1552 34.7469 33.3858 35.3302 33.3887C35.9135 33.3916 36.4749 33.1665 36.8946 32.7614C37.3104 32.3491 37.5453 31.7885 37.5478 31.2029C37.5503 30.6173 37.3201 30.0547 36.9079 29.6389L30.9167 23.5924V13.348C30.9167 12.7623 30.684 12.2006 30.2699 11.7865C29.8557 11.3723 29.294 11.1396 28.7083 11.1396Z"
+                            fill="white" />
+                    </svg>
+                    
+                <span>History</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div id="sidebarBackdrop"
+     style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+     background: rgba(0,0,0,0.5); z-index: 1061; cursor: pointer;"></div>
