@@ -89,13 +89,13 @@
             maxSize: 18,
             multiLine: true
         });
-        */
+        
 
         fitty('.history-button label', {
             minSize: 12,
             maxSize: 24,
             multiLine: true
-        });
+        });*/
 
         document.querySelectorAll('.bar-button .nav-label label').forEach(el => {
             el.style.setProperty('white-space', 'normal', 'important');
@@ -154,3 +154,44 @@
     });
 
 
+document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll('.bar-button');
+    let activeBtn = null;
+
+    buttons.forEach(btn => {
+        // Hover in: expand hovered button, shrink active if different
+        btn.addEventListener('mouseenter', () => {
+            btn.classList.add('hovered');
+            if (activeBtn && activeBtn !== btn) {
+                activeBtn.classList.remove('hovered');
+            }
+        });
+
+        // Hover out: collapse unless active, and restore active if nothing is hovered
+        btn.addEventListener('mouseleave', () => {
+            if (btn !== activeBtn) {
+                btn.classList.remove('hovered');
+            }
+
+            // 👇 This is the important part
+            setTimeout(() => {
+                const isHoveringAny = Array.from(buttons).some(b => b.matches(':hover'));
+                if (!isHoveringAny && activeBtn) {
+                    activeBtn.classList.add('hovered');
+                }
+            }, 10); // Small delay to catch edge cases
+        });
+
+        // Click: mark as active and expand
+        btn.addEventListener('click', () => {
+            if (activeBtn && activeBtn !== btn) {
+                activeBtn.classList.remove('active');
+                activeBtn.classList.remove('hovered');
+            }
+
+            activeBtn = btn;
+            activeBtn.classList.add('active');
+            activeBtn.classList.add('hovered');
+        });
+    });
+});

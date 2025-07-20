@@ -158,18 +158,6 @@
             padding-left: 8px;
         }
 
-        #homeButton{
-          display: flex;
-          width: fit-content;
-          align-items: center;
-          justify-content: center;
-          aspect-ratio: 1/1;
-        }
-
-        #historyButton{
-          display: flex;
-          width: fit-content;
-        }
 
         .nav-icons{
           display: flex;
@@ -204,6 +192,20 @@
             background: #ff0000;
         
         }
+
+        .bar-button.hovered,
+        .bar-button.active {
+          display: inline-grid;
+          grid-template-columns: 53px 1fr;
+          width: auto;
+           gap: 8px;
+          padding-left: 8px;
+        }
+
+        .bar-button.active label {
+            display: block !important;
+        }
+
 
         /*@media (min-width: 1400px){
           .bar-button label {
