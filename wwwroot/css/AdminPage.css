@@ -461,7 +461,6 @@ body {
   display: flex;
   align-items: center;
   padding: 0 8px;
-  gap: 6px;
   box-shadow: 0 4px 12px rgba(13, 10, 44, 0.06);
   border-radius: 32px;
   flex-shrink: 1; /* Allow it to shrink */
@@ -475,8 +474,8 @@ body {
 }
 
 #section-document-search-2 {
-  border: 1px solid whitesmoke !important;
-  border-radius: 10px !important;
+  border-radius: 8px !important;
+  border: 2px solid whitesmoke;
 }
 
 .search-and-filter-buttons {
@@ -602,14 +601,5 @@ body {
   border: none;
   padding: 0;
 }
-.mobile-logo {
-  display: none;
-}
-@media (max-width: 991.98px) {
-  .desktop-logo {
-    display: none;
-  }
-  .mobile-logo {
-    display: block;
-  }
-}
+
+
