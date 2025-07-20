@@ -214,21 +214,36 @@
 
 
         @media (max-width: 1130px) {
-        .bar-button label {
-          display: none !important;
-        }
+          .bar-button label {
+            display: none !important;
+            transition: all 0.3s ease;
+              }
 
-        .bar-button {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 5px;
-          gap: 0;
-          display: flex;
-          align-items: center;
-          flex-direction: column;
-          width: 76px;
-          }
+
+              .bar-button:hover {
+                transition: all 0.3s ease;
+                display:  grid !important;
+                gap: 8px;
+                width: auto;
+              }    
+              .bar-button:hover label{
+                display:  block !important;
+              }     
+            .bar-button:after{
+              display:  block !important;
+            }
+
+          .bar-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            gap: 0;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            width: 76px;
+            }
         }
 
         .form-control {
