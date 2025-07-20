@@ -378,18 +378,15 @@ body {
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
 }
 
 /* تأثير عند التمرير على الزر */
 .exit-admin-btn:hover {
-  background-color: #5c74a9;
-  /* تغيير اللون عند التمرير */
-  transform: scale(1.05);
-}
+  background-color: #5c74a9;  /* تغيير اللون عند التمرير */
 
-/* تأثير عند الضغط على الزر */
-.exit-admin-btn:active {
-  transform: scale(0.98);
 }
 
 .delete-btn-container {
