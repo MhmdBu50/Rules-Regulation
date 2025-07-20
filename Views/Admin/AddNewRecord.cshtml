@@ -11,13 +11,13 @@
 
     <!-- Top Bar -->
     <div class="top-bar">
-      <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'" id="home-link" aria-label="Go back to admin page">Back</a>
-      <a class="btn" onclick="location.href='@Url.Action("homePage", "Home")'" id="logout-link" aria-label="Logout from system">Logout</a>
+      <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"> <img src="@Url.Content("~/svgs/backButton.svg")"> Back</a>
+      <a class="btn" onclick="location.href='@Url.Action("homePage", "Home")'"> Logout   <img src="@Url.Content("~/svgs/logOut.svg")"> </a>
     </div>
 
     <!-- Logo -->
     <div class="container logo-container">
-      <img class="header-logo mx-auto d-block" src="imgs/iaulogoname.png" alt="IAU Logo">
+      <img class="header-logo mx-auto d-block" src="~/imgs/IAU Logo (Horizontal).png" alt="IAU Logo">
     </div>
 
     <!-- Main Header -->
