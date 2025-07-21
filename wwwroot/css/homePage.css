@@ -180,13 +180,19 @@
         text-align: left;
         white-space: normal !important;   /* allow wrapping */
         overflow-wrap: break-word;        /* wrap mid-word if needed */
-        font-size: clamp(16px, 0.7em + 0.6vw, 1.26rem); /* responsive font size */
+        font-size: clamp(16px, 0.7em + 0.6vw, 1.2rem); /* responsive font size. for some reason makeing 1.26 into 1.2 fixes some bug in chrome */
         }
 
         .bar-button .nav-label label {
           white-space: normal !important;
         }
-        
+
+
+        #historyButton{
+          display: flex;
+          width: 100%;
+        }
+
         .bar-button:hover{
             cursor: pointer;
             background: #ff0000;
@@ -221,6 +227,9 @@
             transition: all 0.3s ease;
               }
 
+              #historyButton{
+                display: grid !important;
+              }
 
               .bar-button:hover {
                 transition: all 0.3s ease;
