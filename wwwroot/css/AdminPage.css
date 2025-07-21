@@ -388,8 +388,7 @@ body {
 
 /* تأثير عند التمرير على الزر */
 .exit-admin-btn:hover {
-  background-color: #5c74a9;  /* تغيير اللون عند التمرير */
-
+  background-color: #5c74a9; /* تغيير اللون عند التمرير */
 }
 
 .delete-btn-container {
@@ -570,7 +569,7 @@ body {
   }
 
   div.col-6 {
-  width: 49%;
+    width: 49%;
   }
 
   .search {
@@ -607,4 +606,10 @@ body {
   padding: 0;
 }
 
-
+@media (max-width: 768px) {
+  .custom-col {
+    /* يجبر عرض العمود على 1.3333% */
+    flex: 0 0 auto;
+    width: 1.3333333% !important;
+  }
+}
