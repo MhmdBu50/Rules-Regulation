@@ -569,7 +569,7 @@ body {
   }
 
   div.col-6 {
-    width: 49%;
+    width: 48.55555555%;
   }
 
   .search {
@@ -610,6 +610,6 @@ body {
   .custom-col {
     /* يجبر عرض العمود على 1.3333% */
     flex: 0 0 auto;
-    width: 1.3333333% !important;
+    width: 0.3333333% !important;
   }
 }
