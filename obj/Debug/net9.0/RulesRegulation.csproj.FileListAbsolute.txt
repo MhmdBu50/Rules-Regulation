@@ -260,7 +260,6 @@ C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\scopedcss\bundle\RulesRegu
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\scopedcss\projectbundle\RulesRegulation.bundle.scp.css
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\0mid52cxb2-0oxdqw7r4s.gz
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\p41k7132g1-i9mbj8u00n.gz
-C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\inda9ez21m-r11uwfekuv.gz
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\cf2r2zt3vw-14b820wsj1.gz
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\yd07h5as0q-75gwfsw2fu.gz
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\ksdlhsk017-ydqgwv4ose.gz
@@ -372,3 +371,4 @@ C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\js0t5slqp4-0ot5
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\u3nbejeaxo-mvn2k5wp4h.gz
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\zei9hwhcyo-zz5i63z7wl.gz
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\rqeblm5cc4-huitaa6mj4.gz
+C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\inda9ez21m-do3if43e2a.gz
