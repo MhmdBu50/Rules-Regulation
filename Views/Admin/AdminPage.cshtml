@@ -155,8 +155,9 @@
 </div>
 
 
-<!--the table part of the admin page -->
+<!--------------------- the table part of the admin page ---------------------->
 
+<!------- Search, Section and Document type Bar ------->
 <div class="container my-4">
     <section>
         <table class="w-100 ">
@@ -218,7 +219,7 @@
         </table>
     </section>
 
-    <!-- Mobile Search and Filter Section -->
+    <!------- Mobile Search and Filter Section ------->
     <section>
         <div class="container">
             <!-- Wrapper with background color -->
@@ -269,47 +270,55 @@
         </div>
     </section>
 
-    <!--base Record-->
-    <table class="w-100 custom-header">
-        <thead class="text-center">
-            <tr>
-                <!-- Checkbox - Visible on all screen sizes -->
-                <th class="col-1 custom-col">
-                    <input type="checkbox" />
-                </th>
 
-                <!-- Record ID - Visible on all screen sizes -->
-                <th class="col-1 custom-col">
-                    ID
-                </th>
+    <!------- base Record ------->
+    <div class="container">
+        <div class="col-12">
+            <table class="w-100 custom-header">
+                <thead class="text-center">
+                    <tr>
+                        <!-- Checkbox - Visible on all screen sizes -->
+                        <th class="col-1 custom-col">
+                            <input type="checkbox" />
+                        </th>
 
-                <!-- Regulation/Manual Name - Visible on all screen sizes -->
-                <th class="col-3 d-table-cell d-sm-table-cell">Regulation/ Manual name</th>
+                        <!-- Record ID - Visible on all screen sizes -->
+                        <th class="col-1 custom-col">
+                            ID
+                        </th>
 
-                <!-- Section - Visible on medium screens and up (md) -->
-                <th class="col-1 d-none d-md-table-cell">Section</th>
+                        <!-- Regulation/Manual Name - Visible on all screen sizes -->
+                        <th class="col-3 d-table-cell d-sm-table-cell">Regulation/ Manual name</th>
 
-                <!-- Version Number - Visible on medium screens and up (md) -->
-                <th class="col-2 d-none d-md-table-cell">Version Number</th>
+                        <!-- Section - Visible on medium screens and up (md) -->
+                        <th class="col-1 d-none d-md-table-cell">Section</th>
 
-                <!-- Approving Date - Visible on medium screens and up (md) -->
-                <th class="col-2 d-none d-md-table-cell">Approving Date</th>
+                        <!-- Version Number - Visible on medium screens and up (md) -->
+                        <th class="col-2 d-none d-md-table-cell">Version Number</th>
 
-                <!-- Responsible Entity - Visible on medium screens and up (md) -->
-                <th class="col-3 d-none d-md-table-cell">Responsible Entity</th>
+                        <!-- Approving Date - Visible on medium screens and up (md) -->
+                        <th class="col-2 d-none d-md-table-cell">Approving Date</th>
 
-                <!-- Empty Column (For actions, like edit/delete, etc.) - Visible on all screen sizes -->
-                <th class="d-none d-md-table-cell"></th>
-            </tr>
-        </thead>
-    </table>
+                        <!-- Responsible Entity - Visible on medium screens and up (md) -->
+                        <th class="col-3 d-none d-md-table-cell">Responsible Entity</th>
+
+                        <!-- Empty Column (For actions, like edit/delete, etc.) - Visible on all screen sizes -->
+                        <th class="d-none d-md-table-cell"></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
 
 
 
 
-
+    <!-- red line!! -->
     <div class="red-line"></div>
 
+
+
+    <!-- Accordion Menu -->
     <div class="container">
         <div class="row g-4">
             <!-- سيتم وضع كل عنصر أكورديون داخل col-12 -->
@@ -336,7 +345,8 @@
                                                 recruiting...</th>
                                             <th class="col-1 d-none d-md-table-cell" style="padding: 14px 18px;">
                                                 Students</th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">8.3.4
+                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                                8.3.4
                                             </th>
                                             <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
                                                 2025/7/4</th>
@@ -399,7 +409,8 @@ All students are expected to follow the examination rules strictly. Candidates m
                                                     </td>
 
                                                     <td colspan="2">
-                                                        <label class="form-label fw-bold">Responsible Department</label>
+                                                        <label class="form-label fw-bold">Responsible
+                                                            Department</label>
                                                         <input type="text" class="form-control"
                                                             value="Deanship of Admission and Registration" readonly>
                                                     </td>
@@ -469,7 +480,8 @@ All students are expected to follow the examination rules strictly. Candidates m
 
                                                 <tr>
                                                     <td colspan="2">
-                                                        <label class="form-label fw-bold">Responsible entity’s contact
+                                                        <label class="form-label fw-bold">Responsible entity’s
+                                                            contact
                                                             information:</label>
                                                         <div class="mb-1">
                                                             <label class="form-label mb-0">Name (English)</label>
@@ -536,13 +548,16 @@ All students are expected to follow the examination rules strictly. Candidates m
                                             <th class="col-3 d-table-cell d-sm-table-cell" style="padding: 14px 18px;">
                                                 Another
                                                 guide...</th>
-                                            <th class="col-1 d-none d-md-table-cell" style="padding: 14px 18px;">Faculty
+                                            <th class="col-1 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                                Faculty
                                             </th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">5.1.2
+                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                                5.1.2
                                             </th>
                                             <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
                                                 2025/6/15</th>
-                                            <th class="col-3 d-none d-md-table-cell" style="padding: 14px 18px;">IAU HR
+                                            <th class="col-3 d-none d-md-table-cell" style="padding: 14px 18px;">IAU
+                                                HR
                                                 Department</th>
                                         </tr>
                                     </thead>
@@ -581,7 +596,8 @@ All students are expected to follow the examination rules strictly. Candidates m
                                                 policies...</th>
                                             <th class="col-1 d-none d-md-table-cell" style="padding: 14px 18px;">
                                                 Researchers</th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">7.2.1
+                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                                7.2.1
                                             </th>
                                             <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
                                                 2025/5/20</th>
