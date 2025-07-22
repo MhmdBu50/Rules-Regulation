@@ -252,57 +252,155 @@
             stroke-width: 5;
         }
 
-        /* Mobile responsive height control for col-auto divs */
-        @media (max-width: 576px) {
-            .col-auto {
-                height: auto !important;
-                min-height: unset !important;
-                max-height: fit-content !important;
-                flex: 1 1 auto; /* Allow flexibility */
-                max-width: 100%; /* Full width on mobile */
-            }
-            
-            .document-card {
-                height: auto !important;
-                min-height: 280px; /* Better proportion for mobile */
-                aspect-ratio: 4/5; /* Better mobile aspect ratio */
-                transform: scale(1) !important; /* Remove scaling on mobile */
+        /* ===== RESPONSIVE CONTROLS FOR ALL BOOTSTRAP BREAKPOINTS ===== */
+        
+        /* Extra Small Devices (xs) - 0px to 575px */
+        @media (max-width: 575px) {
+            .container-fluid {
+                padding-left: 5px !important;
+                padding-right: 5px !important;
             }
             
             .row.justify-content-center {
-                justify-content: center !important;
-                margin: 0px 20px !important; /* Reduce side margins on mobile */
+                margin: 0px 5px !important; /* Very tight margins for smallest screens */
             }
-        }
-
-        @media (max-width: 480px) {
-            .col-auto {
-                height: auto !important;
-                align-self: start !important;
-                max-width: 90%; /* Slightly smaller on very small screens */
+            
+            .row.justify-content-center > .col-auto {
+                margin-bottom: 0.5rem; /* Tight vertical spacing */
+                max-width: 95%;
             }
             
             .document-card {
-                min-height: 260px;
-                max-height: 320px;
-            }
-            
-            .row.justify-content-center {
-                margin: 0px 10px !important; /* Even smaller margins */
+                min-height: 250px;
+                max-height: 300px;
+                aspect-ratio: 4/5;
             }
         }
 
-        /* Additional mobile improvements */
-        @media (max-width: 576px) {
+        /* Small Devices (sm) - 576px to 767px */
+        @media (min-width: 576px) and (max-width: 767px) {
             .container-fluid {
                 padding-left: 10px !important;
                 padding-right: 10px !important;
             }
             
-            /* Ensure cards are nicely centered and spaced */
+            .row.justify-content-center {
+                margin: 0px 15px !important; /* Small screen margins */
+            }
+            
             .row.justify-content-center > .col-auto {
-                margin-bottom: 1rem; /* Add some bottom spacing between cards */
+                margin-bottom: 1rem; /* Moderate vertical spacing */
+                max-width: 100%;
+            }
+            
+            .document-card {
+                min-height: 280px;
+                max-height: 340px;
+                aspect-ratio: 4/5;
+            }
+        }
+
+        /* Medium Devices (md) - 768px to 991px */
+        @media (min-width: 768px) and (max-width: 991px) {
+            .container-fluid {
+                padding-left: 15px !important;
+                padding-right: 15px !important;
+            }
+            
+            .row.justify-content-center {
+                margin: 0px 25px !important; /* Medium screen margins */
+            }
+            
+            .row.justify-content-center > .col-auto {
+                margin-bottom: 1.25rem; /* Medium vertical spacing */
+            }
+            
+            .document-card {
+                min-height: 320px;
+                max-height: 380px;
+                aspect-ratio: 300/350; /* Standard ratio */
+            }
+        }
+
+        /* Large Devices (lg) - 992px to 1199px */
+        @media (min-width: 992px) and (max-width: 1199px) {
+            .container-fluid {
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+            
+            .row.justify-content-center {
+                margin: 0px 35px !important; /* Large screen margins */
+            }
+            
+            .row.justify-content-center > .col-auto {
+                margin-bottom: 1.5rem; /* Comfortable vertical spacing */
+            }
+            
+            .document-card {
+                min-height: 350px;
+                max-height: 420px;
+                aspect-ratio: 300/350;
+            }
+        }
+
+        /* Extra Large Devices (xl) - 1200px to 1399px */
+        @media (min-width: 1200px) and (max-width: 1399px) {
+            .container-fluid {
+                padding-left: 25px !important;
+                padding-right: 25px !important;
+            }
+            
+            .row.justify-content-center {
+                margin: 0px 40px !important; /* Default margins */
+            }
+            
+            .row.justify-content-center > .col-auto {
+                margin-bottom: 1.75rem; /* Generous vertical spacing */
+            }
+            
+            .document-card {
+                min-height: 350px;
+                max-height: 450px;
+                aspect-ratio: 300/350;
+            }
+        }
+
+        /* Extra Extra Large Devices (xxl) - 1400px and up */
+        @media (min-width: 1400px) {
+            .container-fluid {
+                padding-left: 30px !important;
+                padding-right: 30px !important;
+            }
+            
+            .row.justify-content-center {
+                margin: 0px 50px !important; /* Wide screen margins */
+            }
+            
+            .row.justify-content-center > .col-auto {
+                margin-bottom: 2rem; /* Maximum vertical spacing */
+            }
+            
+            .document-card {
+                min-height: 350px;
+                max-height: 480px;
+                aspect-ratio: 300/350;
+            }
+        }
+
+        /* ===== UNIVERSAL RESPONSIVE ADJUSTMENTS ===== */
+        @media (max-width: 991px) {
+            .col-auto {
+                height: auto !important;
+                min-height: unset !important;
+                max-height: fit-content !important;
+                flex: 1 1 auto;
                 display: flex;
                 justify-content: center;
+            }
+            
+            .document-card {
+                height: auto !important;
+                transform: scale(1) !important; /* Remove scaling on smaller screens */
             }
         }
