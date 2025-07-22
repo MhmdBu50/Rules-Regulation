@@ -22,7 +22,6 @@ c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulati
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\scopedcss\bundle\RulesRegulation.styles.css
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\scopedcss\projectbundle\RulesRegulation.bundle.scp.css
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\cf2r2zt3vw-14b820wsj1.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\ksdlhsk017-ydqgwv4ose.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\cczepe3vsf-b9sayid5wm.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\poj6i9e3ft-uzjiq3djrb.gz
@@ -357,7 +356,8 @@ C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\cetu3fq9rk-mijg
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\3xq1ry3nta-d0a0eo1jld.gz
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\zv0kcdefdf-wc6dh4dgjx.gz
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\y9ne2er3cf-s8arcabfle.gz
-<<<<<<< HEAD
+C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\inda9ez21m-paj8ajmedy.gz
+C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\4juctiesr9-y38i1wykxj.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\bin\Debug\net9.0\Azure.Core.dll
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\bin\Debug\net9.0\Azure.Identity.dll
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\bin\Debug\net9.0\Microsoft.Bcl.AsyncInterfaces.dll
@@ -420,31 +420,23 @@ c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulati
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\0mid52cxb2-0oxdqw7r4s.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\p41k7132g1-i9mbj8u00n.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\inda9ez21m-paj8ajmedy.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\cf2r2zt3vw-riqmzb81ly.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\yd07h5as0q-75gwfsw2fu.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\5uct54qdrf-m1gi6q1qyt.gz
+c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\up6mpqpnvl-wx8vkqm3hg.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\2371uodecx-61q5mhfa2n.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\t0kejt9w33-1f0ghkdrg9.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\4juctiesr9-y38i1wykxj.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\xtbn9ue4hr-y38i1wykxj.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\g986romf2t-cve9j8kvm9.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\uma116ao4j-zci94bvkbm.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\xeo750ltpx-jc1jd6xeqe.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\s1rb9qav42-jc1jd6xeqe.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\yz21yadp36-8sga3zqe8d.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\bgwbeynpfp-dtzo8cgxmx.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\4poyfw5lkf-c77pmsd0z5.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\51qt0rikzq-8sga3zqe8d.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\js0t5slqp4-0ot54uh6gx.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\u3nbejeaxo-mvn2k5wp4h.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\ibn5mr6gg0-0ot54uh6gx.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\05dtmazwxl-mvn2k5wp4h.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\unsdn7q1qm-zz5i63z7wl.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\700uqup6lq-huitaa6mj4.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\zei9hwhcyo-zz5i63z7wl.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\c1to1rn639-mijg6qsrwo.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\zo82coykv1-dtzo8cgxmx.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\y5jvgwythi-d0a0eo1jld.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\z0iz5sedfp-wc6dh4dgjx.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\s3z3mg8hg8-c77pmsd0z5.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\xcd48qui8l-ouwe3pbb03.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\py0dqlcu64-4zitzqt2w7.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\mt4e0v2yr6-o3aiwuoxo4.gz
@@ -465,10 +457,4 @@ c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulati
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\3xq1ry3nta-d0a0eo1jld.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\zv0kcdefdf-wc6dh4dgjx.gz
 c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\y9ne2er3cf-s8arcabfle.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\8a65an1bkh-s8arcabfle.gz
-c:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\compressed\rqeblm5cc4-huitaa6mj4.gz
 C:\Users\Personal\Documents\VS code coop project\Rules-Regulation\Rules-Regulation\obj\Debug\net9.0\RulesReg.79842794.Up2Date
-=======
-C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\inda9ez21m-paj8ajmedy.gz
-C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\4juctiesr9-y38i1wykxj.gz
->>>>>>> c80819fcb702e5ef2e4526667c3904dca6262a30
