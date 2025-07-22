@@ -1,0 +1,32 @@
+@model System.Data.DataTable
+
+<h2>Oracle Query Result</h2>
+
+@if (Model.Rows.Count == 0)
+{
+    <p>No data returned.</p>
+}
+else
+{
+    <table border="1">
+        <thead>
+            <tr>
+                @foreach (System.Data.DataColumn col in Model.Columns)
+                {
+                    <th>@col.ColumnName</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (System.Data.DataRow row in Model.Rows)
+            {
+                <tr>
+                    @foreach (var item in row.ItemArray)
+                    {
+                        <td>@item</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
