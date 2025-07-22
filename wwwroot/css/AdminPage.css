@@ -608,7 +608,7 @@ body {
 
 @media (max-width: 768px) {
   .custom-col {
-    /* يجبر عرض العمود على 1.3333% */
+    /* يجبر عرض العمود على 0.3333% */
     flex: 0 0 auto;
     width: 0.3333333% !important;
   }
