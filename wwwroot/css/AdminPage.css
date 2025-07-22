@@ -327,9 +327,45 @@ body {
   align-items: center;
   font-size: 1.05rem;
   transition: background 0.2s;
-  overflow: hidden;
+  overflow: visible;
   height: var(--header-height);
   --bs-accordion-border-width: 0; /* Removes the preset border that was in one of bootstrap's components */
+}
+
+/* Remove Bootstrap's default accordion arrow completely */
+.accordion-button::after {
+  display: none !important; /* Hide Bootstrap's default arrow */
+}
+
+/* Add our custom SVG accordion arrow */
+.accordion-button::before {
+  background-image: url('../svgs/admin/accordion-arrow.svg');
+  background-repeat: no-repeat;
+  background-size: 30px 15px;
+  background-position: center;
+  content: '';
+  width: 30px;
+  height: 15px;
+  transform: rotate(0deg);
+  transform-origin: center center;
+  transition: transform 0.3s ease;
+  margin-left: auto;
+  margin-right: 15px;
+  flex-shrink: 0;
+  display: block;
+  order: 999; /* Ensure it appears at the end */
+}
+
+.accordion-button:not(.collapsed)::before {
+  transform: rotate(180deg);
+  transform-origin: center center;
+}
+
+/* Ensure the custom arrow always appears */
+.accordion-button:focus::before,
+.accordion-button:hover::before {
+  display: block !important;
+  opacity: 1 !important;
 }
 
 .accordion-button:not(.collapsed) {
@@ -608,7 +644,7 @@ body {
 
 @media (max-width: 768px) {
   .custom-col {
-    /* يجبر عرض العمود على 1.3333% */
+    /* يجبر عرض العمود على 0.3333% */
     flex: 0 0 auto;
     width: 0.3333333% !important;
   }
