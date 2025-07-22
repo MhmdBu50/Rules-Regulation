@@ -8,24 +8,32 @@
     "net9.0": []
   },
   "packageFolders": {
-    "C:\\Users\\sheik\\.nuget\\packages\\": {}
+    "C:\\Users\\Azzam\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\sheik\\Documents\\University\\4. Fourth year stuff\\COOP\\Rules & Regulations\\Rules-Regulation\\RulesRegulation.csproj",
+      "projectUniqueName": "C:\\Users\\Azzam\\bo50\\Rules-Regulation\\RulesRegulation.csproj",
       "projectName": "RulesRegulation",
-      "projectPath": "C:\\Users\\sheik\\Documents\\University\\4. Fourth year stuff\\COOP\\Rules & Regulations\\Rules-Regulation\\RulesRegulation.csproj",
-      "packagesPath": "C:\\Users\\sheik\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\sheik\\Documents\\University\\4. Fourth year stuff\\COOP\\Rules & Regulations\\Rules-Regulation\\obj\\",
+      "projectPath": "C:\\Users\\Azzam\\bo50\\Rules-Regulation\\RulesRegulation.csproj",
+      "packagesPath": "C:\\Users\\Azzam\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Azzam\\bo50\\Rules-Regulation\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\sheik\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Azzam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
