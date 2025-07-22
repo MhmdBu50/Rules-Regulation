@@ -251,3 +251,58 @@
         .info-icon svg path {
             stroke-width: 5;
         }
+
+        /* Mobile responsive height control for col-auto divs */
+        @media (max-width: 576px) {
+            .col-auto {
+                height: auto !important;
+                min-height: unset !important;
+                max-height: fit-content !important;
+                flex: 1 1 auto; /* Allow flexibility */
+                max-width: 100%; /* Full width on mobile */
+            }
+            
+            .document-card {
+                height: auto !important;
+                min-height: 280px; /* Better proportion for mobile */
+                aspect-ratio: 4/5; /* Better mobile aspect ratio */
+                transform: scale(1) !important; /* Remove scaling on mobile */
+            }
+            
+            .row.justify-content-center {
+                justify-content: center !important;
+                margin: 0px 20px !important; /* Reduce side margins on mobile */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .col-auto {
+                height: auto !important;
+                align-self: start !important;
+                max-width: 90%; /* Slightly smaller on very small screens */
+            }
+            
+            .document-card {
+                min-height: 260px;
+                max-height: 320px;
+            }
+            
+            .row.justify-content-center {
+                margin: 0px 10px !important; /* Even smaller margins */
+            }
+        }
+
+        /* Additional mobile improvements */
+        @media (max-width: 576px) {
+            .container-fluid {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+            
+            /* Ensure cards are nicely centered and spaced */
+            .row.justify-content-center > .col-auto {
+                margin-bottom: 1rem; /* Add some bottom spacing between cards */
+                display: flex;
+                justify-content: center;
+            }
+        }
