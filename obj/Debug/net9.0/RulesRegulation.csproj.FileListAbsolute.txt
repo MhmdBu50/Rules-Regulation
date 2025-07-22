@@ -341,7 +341,6 @@ C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\refint\RulesRegulation.dll
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.pdb
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\RulesRegulation.genruntimeconfig.cache
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\ref\RulesRegulation.dll
-C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\inda9ez21m-8oiccgk41f.gz
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\xtbn9ue4hr-y38i1wykxj.gz
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\g986romf2t-cve9j8kvm9.gz
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\uma116ao4j-zci94bvkbm.gz
@@ -373,3 +372,5 @@ C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\cetu3fq9rk-mijg
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\3xq1ry3nta-d0a0eo1jld.gz
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\zv0kcdefdf-wc6dh4dgjx.gz
 C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\y9ne2er3cf-s8arcabfle.gz
+C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\inda9ez21m-paj8ajmedy.gz
+C:\Users\Azzam\bo50\Rules-Regulation\obj\Debug\net9.0\compressed\4juctiesr9-y38i1wykxj.gz
