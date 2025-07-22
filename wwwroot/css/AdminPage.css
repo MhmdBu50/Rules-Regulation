@@ -339,7 +339,7 @@ body {
 
 /* Add our custom SVG accordion arrow */
 .accordion-button::before {
-  background-image: url('../svgs/accordion-arrow.svg');
+  background-image: url('../svgs/admin/accordion-arrow.svg');
   background-repeat: no-repeat;
   background-size: 30px 15px;
   background-position: center;
