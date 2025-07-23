@@ -1,12 +1,12 @@
 using System;
 using System.Data;
-using Microsoft.Data.SqlClient;
+using Oracle.ManagedDataAccess.Client;
 using System.Threading.Tasks;
 using RulesRegulation.Data;
 
 namespace RulesRegulation.Data
 {
-    public sealed class DatabaseConnection
+    public class DatabaseConnection
     {
         private static readonly Lazy<DatabaseConnection> _instance = new(() => new DatabaseConnection());
         private readonly string _connectionString;
@@ -30,14 +30,14 @@ namespace RulesRegulation.Data
         {
             // Priority order: Environment variable -> appsettings.json -> default
             return Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING") 
-                ?? "Server=localhost:1521;Database=23ai;User Id=system;Password=root;TrustServerCertificate=true;";
+                ?? "Data Source=localhost:1521/FREEPDB1;User Id=system;Password=root;";
         }
 
         // Execute parameterized query (INSERT, UPDATE, DELETE)
-        public async Task<int> ExecuteNonQueryAsync(string query, params SqlParameter[] parameters)
+        public async Task<int> ExecuteNonQueryAsync(string query, params OracleParameter[] parameters)
         {
-            using var connection = new SqlConnection(_connectionString);
-            using var command = new SqlCommand(query, connection);
+            using var connection = new OracleConnection(_connectionString);
+            using var command = new OracleCommand(query, connection);
             
             if (parameters != null)
                 command.Parameters.AddRange(parameters);
@@ -47,10 +47,10 @@ namespace RulesRegulation.Data
         }
 
         // Execute SELECT query and return DataTable
-        public async Task<DataTable> ExecuteQueryAsync(string query, params SqlParameter[] parameters)
+        public async Task<DataTable> ExecuteQueryAsync(string query, params OracleParameter[] parameters)
         {
-            using var connection = new SqlConnection(_connectionString);
-            using var command = new SqlCommand(query, connection);
+            using var connection = new OracleConnection(_connectionString);
+            using var command = new OracleCommand(query, connection);
             
             if (parameters != null)
                 command.Parameters.AddRange(parameters);
@@ -64,10 +64,10 @@ namespace RulesRegulation.Data
         }
 
         // Execute scalar query (COUNT, MAX, etc.)
-        public async Task<T?> ExecuteScalarAsync<T>(string query, params SqlParameter[] parameters)
+        public async Task<T?> ExecuteScalarAsync<T>(string query, params OracleParameter[] parameters)
         {
-            using var connection = new SqlConnection(_connectionString);
-            using var command = new SqlCommand(query, connection);
+            using var connection = new OracleConnection(_connectionString);
+            using var command = new OracleCommand(query, connection);
             
             if (parameters != null)
                 command.Parameters.AddRange(parameters);
@@ -83,7 +83,7 @@ namespace RulesRegulation.Data
         {
             try
             {
-                using var connection = new SqlConnection(_connectionString);
+                using var connection = new OracleConnection(_connectionString);
                 await connection.OpenAsync();
                 return connection.State == ConnectionState.Open;
             }
@@ -94,9 +94,9 @@ namespace RulesRegulation.Data
         }
 
         // Helper method to create SqlParameter
-        public static SqlParameter CreateParameter(string name, object value)
+        public static OracleParameter CreateParameter(string name, object value)
         {
-            return new SqlParameter(name, value ?? DBNull.Value);
+            return new OracleParameter(name, value ?? DBNull.Value);
         }
     }
 }
