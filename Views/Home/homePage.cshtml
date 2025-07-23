@@ -1,6 +1,10 @@
+<!-- this is the home page, it is the main point of the website and that would the users will benefit of
+it contains various things like search with filter and only for the admin, the view admin page will appear
+there's a navigation bar and after that the rules and regualtions appears   -->
 @{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    @await Html.PartialAsync("_svgsTemplate")
 }
 
 @section Styles {
@@ -28,7 +32,7 @@
                             <img src="~/svgs/navigation/hamburger-menu.svg" alt="Menu" width="36" height="36" />
                         </button>
 
-                        <!-- Desktop Logo -->
+                        <!-- Desktop language change Logo -->
                         <img src="~/svgs/navigation/desktop-logo.svg" alt="IAU Logo" class="desktop-logo logo" width="33" height="33" />
                     </div>
                 </div>
@@ -45,11 +49,12 @@
                             <img src="~/svgs/navigation/filter-icon.svg" alt="Filter" id="filter" width="44" height="44" />
                         </button>
                     </div>
+                    <!-- Admin button (visible only for permited users) -->
                     <button class="adminButton ms-2 px-3 py-1 d-none d-lg-flex" onclick="location.href='@Url.Action("AdminPage", "Admin")'">view as Admin
                     </button>
                 </div>
 
-                <!-- Right Section - Profile -->
+                <!-- Right Section - University logo -->
                 <div class="col-auto flex-nowrap">
                     <div class="signlog-container">
                         <!-- PNG version for large screens -->
@@ -233,20 +238,20 @@
 
     </div>
 
-   @await Html.PartialAsync("_svgsTemplate")
 
-    <!-----------------------------------------------------------------------------Demonstration of cards, icons can be reapplied with ours--------------------------------------------------------------------------------------------->
+
+    <!--  Demonstration of cards, icons can be reapplied with ours  -->
     <div class="container-fluid">
         <div class="row justify-content-center g-lg-4 g-md-3 g-sm-2 g-1" style="margin: 0px 40px;">
 
-
+            <!-- cards -->
             <div class="col-auto medium-card">
                 <div class="card document-card">
                     <div class="bookmark" onclick="toggleBookmark(this)"></div>
 
                     <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
                     </div>
-
+                    <!-- Title of the card -->
                     <h2 class="card-title">Rule and regulations title</h2>
 
                     <div class="info-footer">
@@ -522,7 +527,8 @@
 
         </div>
     </div>
-    <!-----------------------------------------------------------------------------Chatbot--------------------------------------------------------------------------------------------->
+
+    <!-- Chatbot Section -->
     <div class="chatbot-container">
         <div class="chat-icon" id="chat-icon">
             <img src="~/svgs/chatbot/chatbot-large.svg" width="80" height="80" />
