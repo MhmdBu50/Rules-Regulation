@@ -1,14 +1,20 @@
+<!-- This File is about the admin page that controls what to be added, wheather its a new record or contact. in this page you can edit and delete.
+there's also many filtering options to find the policy and other adminstrative stuff-->
 @section Styles {
     <link rel="stylesheet" href="~/css/AdminPage.css">
 }
-
+<!-- Scripts for the admin page -->
 @section Scripts {
     <script src="@Url.Content("~/js/card-animations.js")"></script>
     <script src="@Url.Content("https://cdn.jsdelivr.net/npm/fitty@2.3.6/dist/fitty.min.js")"></script>
     <script src="@Url.Content("js/bootstrap.js")"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/StatisticsInAdmin.js"></script>
+
 }
 
-
+<!-- This is the header section of the admin page -->
 <header class="menu">
     <div class="container-fluid h-100 bootstrap-wrapper">
         <div class="row align-items-center h-100 g-0">
@@ -102,7 +108,7 @@
                 </div>
             </div>
 
-            <!-- Vertical Separator -->
+            <!-- Vertical Separator to separate buttons from charts -->
             <div class="chart-sidebar-separator"></div>
 
             <!-- Right Sidebar -->
@@ -313,7 +319,7 @@
 
 
 
-    <!-- red line!! -->
+    <!-- The red line!! -->
     <div class="red-line"></div>
 
 
@@ -321,7 +327,7 @@
     <!-- Accordion Menu -->
     <div class="container">
         <div class="row g-4">
-            <!-- سيتم وضع كل عنصر أكورديون داخل col-12 -->
+            <!-- سيتم وضع كل عنصر أكورديون داخل col-12, max size for col is 12 -->
             <div class="col-12">
                 <div class="accordion" id="regulationAccordion">
                     <!-- Accordion Item 1 -->
@@ -360,168 +366,174 @@
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
                             data-bs-parent="#regulationAccordion">
+                            <!-- content of accordion -->
                             <div class="accordion-body">
-                                <!-- محتوى الأكورديون هنا -->
                                 <form>
                                     <div class="row mb-2">
-                                        <!-- العمود الأيسر -->
-                                        <div class="col-md-6">
-                                            <table class="table table-borderless mb-0">
-                                                <tr>
-                                                    <td colspan="3">
-                                                        <label class="form-label fw-bold">Regulation/ Manual
-                                                            name</label>
-                                                        <textarea class="form-control" rows="2" readonly>
-Guide to policies and procedures for recruiting, retaining, terminating, and renewing contracts for non-Saudi faculty members
-                        </textarea>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="3">
-                                                        <label class="form-label fw-bold">Brief Description</label>
-                                                        <textarea class="form-control" rows="4" readonly>
-All students are expected to follow the examination rules strictly. Candidates must arrive on time, carry valid identification, and bring only approved materials. Electronic devices are not allowed. Silence must be maintained throughout the exam. Any form of cheating or misconduct will result in disciplinary action. Students may not leave the exam hall without permission and must submit all materials before exiting.
-                        </textarea>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="1">
-                                                        <label class="form-label fw-bold">Approving Date</label>
-                                                        <input type="date" class="form-control mb-2" value="2025-07-07"
-                                                            readonly>
-                                                    </td>
-                                                    <td colspan="1">
-                                                        <label class="form-label fw-bold">Accreditation Date</label>
-                                                        <input type="date" class="form-control mb-2" value="2025-07-07"
-                                                            readonly>
-                                                    </td>
-                                                    <td colspan="2">
-                                                        <label class="form-label fw-bold">Version Number</label>
-                                                        <input type="text" class="form-control mb-2" value="10.2.4"
-                                                            readonly>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <label class="form-label fw-bold">Accrediting Entity</label>
-                                                        <input type="text" class="form-control"
-                                                            value="IAU Academic affairs" readonly>
-                                                    </td>
+                                        <!-- left side of the accordion menu inside -->
+                                        <div class="col-lg-6 col-12 mb-3 mb-lg-0">
+                                            <div class="table-responsive">
+                                                <table class="table table-borderless mb-0">
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <label class="form-label fw-bold">Regulation/ Manual
+                                                                name</label>
+                                                            <textarea class="form-control" rows="2"
+                                                                readonly>Guide to policies and procedures for recruiting, retaining, terminating, and renewing contracts for non-Saudi faculty members</textarea>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <label class="form-label fw-bold">Brief Description</label>
+                                                            <textarea class="form-control" rows="4"
+                                                                readonly>All students are expected to follow the examination rules strictly. Candidates must arrive on time, carry valid identification, and bring only approved materials. Electronic devices are not allowed. Silence must be maintained throughout the exam. Any form of cheating or misconduct will result in disciplinary action. Students may not leave the exam hall without permission and must submit all materials before exiting.</textarea>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="col-12 col-sm-4">
+                                                            <label class="form-label fw-bold">Approving Date</label>
+                                                            <input type="date" class="form-control mb-2"
+                                                                value="2025-07-07" readonly>
+                                                        </td>
+                                                        <td class="col-12 col-sm-4">
+                                                            <label class="form-label fw-bold">Accreditation Date</label>
+                                                            <input type="date" class="form-control mb-2"
+                                                                value="2025-07-07" readonly>
+                                                        </td>
 
-                                                    <td colspan="2">
-                                                        <label class="form-label fw-bold">Responsible
-                                                            Department</label>
-                                                        <input type="text" class="form-control"
-                                                            value="Deanship of Admission and Registration" readonly>
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="3">
-                                                        <label class="form-label fw-bold">Note</label>
-                                                        <input type="text" class="form-control mb-2"
-                                                            value="this rules came from minstry of education" readonly>
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <label class="form-label fw-bold">Version Number</label>
+                                                            <input type="text" class="form-control mb-2" value="10.2.4"
+                                                                readonly>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <label class="form-label fw-bold">Accrediting Entity</label>
+                                                            <input type="text" class="form-control"
+                                                                value="IAU Academic affairs" readonly>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <label class="fw-bold">Responsible
+                                                                Department</label>
+                                                            <input type="text" class="form-control"
+                                                                value="Deanship of Admission and Registration" readonly>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <label class="form-label fw-bold">Note</label>
+                                                            <input type="text" class="form-control mb-2"
+                                                                value="this rules came from minstry of education"
+                                                                readonly>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
                                         </div>
-                                        <!-- العمود الأيمن -->
-                                        <div class="col-md-6">
-                                            <table class="table table-borderless mb-0">
-                                                <tr>
-                                                    <td>
-                                                        <label class="form-label fw-bold">Document Type</label>
-                                                        <select class="form-select mb-2">
-                                                            <option selected>Regulation</option>
-                                                            <option>Guidelines</option>
-                                                            <option>Policies</option>
-                                                        </select>
-                                                    </td>
-                                                    <td>
-                                                        <label class="form-label fw-bold">Section</label>
-                                                        <select class="form-select mb-2">
-                                                            <option selected>Student</option>
-                                                            <option>Members</option>
-                                                            <option>Enrolled Program</option>
-                                                        </select>
-                                                    </td>
-                                                </tr>
 
-                                                <tr>
-                                                    <td>
-                                                        <label class="form-label fw-bold">Attach word file</label>
-                                                        <div class="input-group mb-2">
-                                                            <input type="text" class="form-control" value="Word file"
-                                                                readonly>
-                                                            <span class="input-group-text">
-                                                                <i class="bi bi-paperclip">
-                                                                    <img src="~/svgs/admin/upload-file.svg"
-                                                                        alt="upload-file" />
-                                                                </i>
-                                                            </span>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <label class="form-label fw-bold">Attach PDF file</label>
-                                                        <div class="input-group mb-2">
-                                                            <input type="text" class="form-control" value="PDF file..."
-                                                                readonly>
-                                                            <span class="input-group-text">
-                                                                <i class="bi bi-paperclip">
-                                                                    <img src="~/svgs/admin/upload-file.svg"
-                                                                        alt="upload-file" />
-                                                                </i></span>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
+                                        <!-- right side of the accordion menu insde-->
+                                        <div class="col-lg-6 col-12">
+                                            <div class="table-responsive">
+                                                <table class="table table-borderless mb-0">
+                                                    <tr>
+                                                        <td>
+                                                            <label class="form-label fw-bold">Document Type</label>
+                                                            <select class="form-select mb-2">
+                                                                <option selected>Regulation</option>
+                                                                <option>Guidelines</option>
+                                                                <option>Policies</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <label class="form-label fw-bold">Section</label>
+                                                            <select class="form-select mb-2">
+                                                                <option selected>Student</option>
+                                                                <option>Members</option>
+                                                                <option>Enrolled Program</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
 
-                                                </tr>
-
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <label class="form-label fw-bold">Responsible entity’s
-                                                            contact
-                                                            information:</label>
-                                                        <div class="mb-1">
-                                                            <label class="form-label mb-0">Name (English)</label>
-                                                            <input type="text" class="form-control"
-                                                                value="Azzam Alzahrani" readonly>
-                                                        </div>
-                                                        <div class="mb-1">
-                                                            <label class="form-label mb-0">Name (Arabic)</label>
-                                                            <input type="text" class="form-control"
-                                                                value="عزام الزهراني" readonly>
-                                                        </div>
-                                                        <div class="mb-1">
-                                                            <label class="form-label mb-0">E-mail</label>
-                                                            <input type="email" class="form-control"
-                                                                value="Azzam@gmail.com" readonly>
-                                                        </div>
-                                                        <div class="mb-1">
-                                                            <label class="form-label mb-0">Telephone number</label>
-                                                            <input type="text" class="form-control" value="3333139-013"
-                                                                readonly>
-                                                        </div>
-                                                        <div class="mb-1">
-                                                            <label class="form-label mb-0">Mobile number</label>
-                                                            <input type="text" class="form-control" value="0569877695"
-                                                                readonly>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="form-label fw-bold">Attach word file</label>
+                                                            <div class="input-group mb-2">
+                                                                <input type="text" class="form-control"
+                                                                    value="Word file" readonly>
+                                                                <span class="input-group-text">
+                                                                    <i class="bi bi-paperclip">
+                                                                        <img src="~/svgs/admin/upload-file.svg"
+                                                                            alt="upload-file" />
+                                                                    </i>
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <label class="form-label fw-bold">Attach PDF file</label>
+                                                            <div class="input-group mb-2">
+                                                                <input type="text" class="form-control"
+                                                                    value="PDF file..." readonly>
+                                                                <span class="input-group-text">
+                                                                    <i class="bi bi-paperclip">
+                                                                        <img src="~/svgs/admin/upload-file.svg"
+                                                                            alt="upload-file" />
+                                                                    </i></span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <label class="form-label fw-bold">Responsible entity’s
+                                                                contact
+                                                                information:</label>
+                                                            <div class="mb-3">
+                                                                <label class="form-label mb-0">Name (English)</label>
+                                                                <input type="text" class="form-control"
+                                                                    value="Azzam Alzahrani" readonly>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label mb-0">Name (Arabic)</label>
+                                                                <input type="text" class="form-control"
+                                                                    value="عزام الزهراني" readonly>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label mb-0">E-mail</label>
+                                                                <input type="email" class="form-control"
+                                                                    value="Azzam@gmail.com" readonly>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label mb-0">Telephone number</label>
+                                                                <input type="text" class="form-control"
+                                                                    value="3333139-013" readonly>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label mb-0">Mobile number</label>
+                                                                <input type="text" class="form-control"
+                                                                    value="0569877695" readonly>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col text-end">
-                                            <button class="btn btn-danger">Delete</button>
-                                            <button class="btn btn-secondary">Edit</button>
-                                            <button class="btn btn-success">Save</button>
+
+                                    <!-- الأزرار -->
+                                    <div class="row mt-3">
+                                        <div class="col-12">
+                                            <div class="d-flex flex-wrap justify-content-end gap-2">
+                                                <button class="btn btn-danger">Delete</button>
+                                                <button class="btn btn-secondary">Edit</button>
+                                                <button class="btn btn-success">Save</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
-
                             </div>
                         </div>
                     </div>
@@ -567,7 +579,7 @@ All students are expected to follow the examination rules strictly. Candidates m
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
                             data-bs-parent="#regulationAccordion2">
                             <div class="accordion-body">
-                                <!-- محتوى الأكورديون كما هو -->
+                                <!-- content of accordion menu as is-->
                             </div>
                         </div>
                     </div>
@@ -612,7 +624,7 @@ All students are expected to follow the examination rules strictly. Candidates m
                         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
                             data-bs-parent="#regulationAccordion3">
                             <div class="accordion-body">
-                                <!-- محتوى الأكورديون كما هو -->
+                                <!-- content of accordion menu as is-->
                             </div>
                         </div>
                     </div>
@@ -620,121 +632,3 @@ All students are expected to follow the examination rules strictly. Candidates m
             </div>
         </div>
     </div>
-
-
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Initialize charts when page loads
-        document.addEventListener('DOMContentLoaded', function () {
-            initializeCharts();
-        });
-
-        function initializeCharts() {
-            // Donut Chart
-            const ctx = document.getElementById('chartCanvas').getContext('2d');
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Academic rules', 'Employment rules & regulations', 'Student rules & regulations', 'Student rules & regulations'],
-                    datasets: [{
-                        data: [40, 30, 25, 15],
-                        backgroundColor: ['#8B4513', '#2E8B57', '#4682B4', '#DAA520'],
-                        borderWidth: 2,
-                        borderColor: '#ffffff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    cutout: '60%'
-                }
-            });
-
-            // Bar Chart
-            const barCtx = document.getElementById('barChartCanvas').getContext('2d');
-            new Chart(barCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['March', 'April', 'May', 'June', 'July', 'August'],
-                    datasets: [{
-                        data: [180, 150, 220, 180, 320, 200],
-                        backgroundColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA726', '#AB47BC', '#26C6DA'],
-                        borderRadius: 4,
-                        borderSkipped: false,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 400,
-                            grid: {
-                                display: true,
-                                color: '#e9ecef'
-                            },
-                            ticks: {
-                                stepSize: 100,
-                                font: {
-                                    size: 10
-                                },
-                                color: '#6c757d'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                font: {
-                                    size: 10
-                                },
-                                color: '#6c757d'
-                            }
-                        }
-                    },
-                    layout: {
-                        padding: {
-                            top: 10,
-                            right: 10,
-                            bottom: 10,
-                            left: 10
-                        }
-                    }
-                }
-            });
-        }
-
-        // Button functions
-        function viewReport() {
-            alert('View Report clicked!');
-            // Add your functionality here
-        }
-
-        function addNewRecord() {
-            alert('Add New Record clicked!');
-            // Add your functionality here
-        }
-
-        function exportData() {
-            alert('Export Data clicked!');
-            // Add your functionality here
-        }
-
-        function contactInfo() {
-            alert('Contact Info clicked!');
-            // Add your functionality here
-        }
-    </script>
