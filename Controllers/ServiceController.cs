@@ -3,6 +3,7 @@ namespace RulesRegulations.Controllers;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using RulesRegulation.Models;
+using RulesRegulation.Services;
 
 public class ServiceController : Controller
 {
@@ -26,7 +27,7 @@ public class ServiceController : Controller
             var data = _oracleDbService.GetData(query);
             return View(data);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return View("Error", new ErrorViewModel
             {

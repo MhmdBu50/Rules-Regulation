@@ -1,30 +1,115 @@
 using System.Data;
 using Oracle.ManagedDataAccess.Client;
 
-
-public class OracleDbService
+namespace RulesRegulation.Services
 {
-    private readonly string _connectionString;
-
-    public OracleDbService(string connectionString)
+    public class OracleDbService
     {
-        _connectionString = connectionString;
-    }
+        private readonly string _connectionString;
 
-    // Method to retrieve data from a specified table
-    public DataTable GetData(string query)
-    {
-        using (OracleConnection conn = new OracleConnection(_connectionString))
+        public OracleDbService(string connectionString)
         {
-            using (OracleCommand cmd = new OracleCommand(query, conn))
+            _connectionString = connectionString;
+        }
+
+        // Method to retrieve data from a specified table
+        public DataTable GetData(string query)
+        {
+            using (var conn = new OracleConnection(_connectionString))
             {
-                using (OracleDataAdapter adapter = new OracleDataAdapter(cmd))
+                using (var cmd = new OracleCommand(query, conn))
                 {
-                    DataTable dt = new DataTable();
-                    conn.Open();
-                    adapter.Fill(dt);
-                    return dt;
+                    using (var adapter = new OracleDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        conn.Open();
+                        adapter.Fill(dt);
+                        return dt;
+                    }
                 }
+            }
+        }
+
+        // Method to add contact information
+        public bool AddContactInfo(string department, string name, string? email, string? mobile, string? telephone)
+        {
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    
+                    string query = @"INSERT INTO CONTACT_INFORMATION (DEPARTMENT, NAME, EMAIL, MOBILE, TELEPHONE) 
+                                    VALUES (:department, :name, :email, :mobile, :telephone)";
+                    
+                    using (var cmd = new OracleCommand(query, conn))
+                    {
+                        cmd.Parameters.Add(":department", department);
+                        cmd.Parameters.Add(":name", name);
+                        cmd.Parameters.Add(":email", email ?? (object)DBNull.Value);
+                        cmd.Parameters.Add(":mobile", mobile ?? (object)DBNull.Value);
+                        cmd.Parameters.Add(":telephone", telephone ?? (object)DBNull.Value);
+                        
+                        int result = cmd.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // Method to check if department already exists
+        public bool DepartmentExists(string department)
+        {
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    
+                    string query = "SELECT COUNT(*) FROM CONTACT_INFORMATION WHERE UPPER(DEPARTMENT) = UPPER(:department)";
+                    
+                    using (var cmd = new OracleCommand(query, conn))
+                    {
+                        cmd.Parameters.Add(":department", department);
+                        
+                        var result = cmd.ExecuteScalar();
+                        return Convert.ToInt32(result) > 0;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // Method to get existing contact name for a department
+        public string? GetExistingContactInDepartment(string department)
+        {
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    
+                    string query = "SELECT NAME FROM CONTACT_INFORMATION WHERE UPPER(DEPARTMENT) = UPPER(:department) AND ROWNUM = 1";
+                    
+                    using (var cmd = new OracleCommand(query, conn))
+                    {
+                        cmd.Parameters.Add(":department", department);
+                        
+                        var result = cmd.ExecuteScalar();
+                        return result?.ToString();
+                    }
+                }
+            }
+            catch
+            {
+                return null;
             }
         }
     }
