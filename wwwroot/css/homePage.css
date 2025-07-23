@@ -158,18 +158,6 @@
             padding-left: 8px;
         }
 
-        #homeButton{
-          display: flex;
-          width: fit-content;
-          align-items: center;
-          justify-content: center;
-          aspect-ratio: 1/1;
-        }
-
-        #historyButton{
-          display: flex;
-          width: fit-content;
-        }
 
         .nav-icons{
           display: flex;
@@ -192,18 +180,38 @@
         text-align: left;
         white-space: normal !important;   /* allow wrapping */
         overflow-wrap: break-word;        /* wrap mid-word if needed */
-        font-size: clamp(16px, 0.7em + 0.6vw, 1.26rem); /* responsive font size */
+        font-size: clamp(16px, 0.7em + 0.6vw, 1.2rem); /* responsive font size. for some reason makeing 1.26 into 1.2 fixes some bug in chrome */
         }
 
         .bar-button .nav-label label {
           white-space: normal !important;
         }
-        
+
+
+        #historyButton{
+          display: flex;
+          width: 100%;
+        }
+
         .bar-button:hover{
             cursor: pointer;
             background: #ff0000;
         
         }
+
+        .bar-button.hovered,
+        .bar-button.active {
+          display: inline-grid;
+          grid-template-columns: 53px 1fr;
+          width: auto;
+           gap: 8px;
+          padding-left: 8px;
+        }
+
+        .bar-button.active label {
+            display: block !important;
+        }
+
 
         /*@media (min-width: 1400px){
           .bar-button label {
@@ -214,21 +222,39 @@
 
 
         @media (max-width: 1130px) {
-        .bar-button label {
-          display: none !important;
-        }
+          .bar-button label {
+            display: none !important;
+            transition: all 0.3s ease;
+              }
 
-        .bar-button {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 5px;
-          gap: 0;
-          display: flex;
-          align-items: center;
-          flex-direction: column;
-          width: 76px;
-          }
+              #historyButton{
+                display: grid !important;
+              }
+
+              .bar-button:hover {
+                transition: all 0.3s ease;
+                display:  grid !important;
+                gap: 8px;
+                width: auto;
+              }    
+              .bar-button:hover label{
+                display:  block !important;
+              }     
+            .bar-button:after{
+              display:  block !important;
+            }
+
+          .bar-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            gap: 0;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            width: 76px;
+            }
         }
 
         .form-control {

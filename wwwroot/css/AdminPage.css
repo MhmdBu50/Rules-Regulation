@@ -327,9 +327,45 @@ body {
   align-items: center;
   font-size: 1.05rem;
   transition: background 0.2s;
-  overflow: hidden;
+  overflow: visible;
   height: var(--header-height);
   --bs-accordion-border-width: 0; /* Removes the preset border that was in one of bootstrap's components */
+}
+
+/* Remove Bootstrap's default accordion arrow completely */
+.accordion-button::after {
+  display: none !important; /* Hide Bootstrap's default arrow */
+}
+
+/* Add our custom SVG accordion arrow */
+.accordion-button::before {
+  background-image: url("../svgs/admin/accordion-arrow.svg");
+  background-repeat: no-repeat;
+  background-size: 30px 15px;
+  background-position: center;
+  content: "";
+  width: 30px;
+  height: 15px;
+  transform: rotate(0deg);
+  transform-origin: center center;
+  transition: transform 0.3s ease;
+  margin-left: auto;
+  margin-right: 15px;
+  flex-shrink: 0;
+  display: block;
+  order: 999; /* Ensure it appears at the end */
+}
+
+.accordion-button:not(.collapsed)::before {
+  transform: rotate(180deg);
+  transform-origin: center center;
+}
+
+/* Ensure the custom arrow always appears */
+.accordion-button:focus::before,
+.accordion-button:hover::before {
+  display: block !important;
+  opacity: 1 !important;
 }
 
 .accordion-button:not(.collapsed) {
@@ -353,6 +389,9 @@ body {
   width: 97%;
   margin-left: auto;
   margin-right: auto;
+}
+.form-control {
+  font-size: clamp(12px, 0.6rem + 0.6vw, 1em) !important;
 }
 
 /* Red line styling */
@@ -378,18 +417,14 @@ body {
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
 }
 
 /* تأثير عند التمرير على الزر */
 .exit-admin-btn:hover {
-  background-color: #5c74a9;
-  /* تغيير اللون عند التمرير */
-  transform: scale(1.05);
-}
-
-/* تأثير عند الضغط على الزر */
-.exit-admin-btn:active {
-  transform: scale(0.98);
+  background-color: #5c74a9; /* تغيير اللون عند التمرير */
 }
 
 .delete-btn-container {
@@ -406,7 +441,7 @@ body {
   border-radius: 32px;
   flex-shrink: 1;
   margin-bottom: 10px;
-  margin-left: 20px !important;
+  margin-left: auto !important;
   transition: box-shadow 0.3s ease;
 }
 
@@ -461,7 +496,6 @@ body {
   display: flex;
   align-items: center;
   padding: 0 8px;
-  gap: 6px;
   box-shadow: 0 4px 12px rgba(13, 10, 44, 0.06);
   border-radius: 32px;
   flex-shrink: 1; /* Allow it to shrink */
@@ -475,8 +509,8 @@ body {
 }
 
 #section-document-search-2 {
-  border: 1px solid whitesmoke !important;
-  border-radius: 10px !important;
+  border-radius: 8px !important;
+  border: 2px solid whitesmoke;
 }
 
 .search-and-filter-buttons {
@@ -567,6 +601,11 @@ body {
   .search-container {
     padding: 0 4px !important;
     height: 50px !important;
+    margin-bottom: 0;
+  }
+
+  div.col-6 {
+    width: 48.55555555%;
   }
 
   .search {
@@ -602,14 +641,11 @@ body {
   border: none;
   padding: 0;
 }
-.mobile-logo {
-  display: none;
-}
-@media (max-width: 991.98px) {
-  .desktop-logo {
-    display: none;
-  }
-  .mobile-logo {
-    display: block;
+
+@media (max-width: 768px) {
+  .custom-col {
+    /* يجبر عرض العمود على 0.3333% */
+    flex: 0 0 auto;
+    width: 0.3333333% !important;
   }
 }

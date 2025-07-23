@@ -2,30 +2,33 @@
     <link rel="stylesheet" href="~/css/AddContactInfo.css">
 
 }
-
+<!-- Javascripts, from js file  -->
 @section Scripts{
-    <script src="~/js/card-animations.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fitty@2.3.6/dist/fitty.min.js"></script>
+    <script src="~/js/addnewcontactinfo.js"></script>
     <script src="js/bootstrap.js"></script>
 }
+<!-- This section includes the necessary styles and scripts for the Add New Contact Info page -->
   <div class="AddContactInfo">
-
+<!-- #region This section contains the top bar with navigation buttons and the main header for the page -->
     <!-- Top Bar -->
     <div class="top-bar">
-      <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'">Back</a>
-      <a class="btn" onclick="location.href='@Url.Action("homePage", "Home")'">Logout</a>
+      <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"> <img src="@Url.Content("~/svgs/admin/backButton.svg")"> Back</a>
+      <a class="btn" onclick="location.href='@Url.Action("homePage", "Home")'"> Logout   <img src="@Url.Content("~/svgs/admin/logOut.svg")"> </a>
     </div>
 
     <!-- Logo -->
     <div class="container logo-container">
-      <img class="header-logo mx-auto d-block" src="imgs/iaulogoname.png" alt="IAU Logo">
+      <img class="header-logo mx-auto d-block" src="~/imgs/IAU Logo (Horizontal).png" alt="IAU Logo">
     </div>
 
     <!-- Main Header -->
     <div class="main-header">
       <h1>Department Contact Information</h1>
     </div>
-
+<!-- This section contains the form for adding new contact information for a departmentInformation 
+Users must select a department and provide details such as the responsible person's name.
+The form data will be submitted via POST to the '/submit' endpoint for processing.
+Required fields and validation are enforced to ensure data integrity. -- >
     <!-- Form Section -->
     <div class="container">
       <div class="form-wrapper">
@@ -44,75 +47,43 @@
               <option value="Academic Affairs">Academic Affairs</option>
             </select>
           </div>
+<!--  This section contains the input fields for the responsible person's name (in Arabic), email, telephone number, and mobile number.
+// The "responsibleName" field enforces Arabic input and displays an error if non-Arabic characters are entered.
+// The "email" field requires a valid email address.
+// The "telephoneNumber" and "mobileNumber" fields accept only numeric input, with the mobile number prefixed by +966 (saudi arabia code).
+// The form includes Submit and Cancel buttons, Cancel prompts for confirmation before resetting the form.
+// Client-side validation is implemented using JavaScript to ensure correct input formats and prevent form submission if validation fails. -->
+      <div class="mb-5">
+      <label for="responsibleName">Name of Responsible Person (Arabic)</label>
+      <input type="text" class="form-control" id="responsibleName" name="responsibleName" lang="ar" dir="rtl" required>
+      <div id="nameError" class="text-danger mt-1"></div>
+      </div>
 
-          <div class="mb-5">
-            <label for="responsibleName">Name of Responsible Person (Arabic)</label>
-            <input type="text" class="form-control" id="responsibleName" name="responsibleName" lang="ar" dir="rtl" required>
-            <div id="nameError" class="text-danger mt-1"></div>
-          </div>
+      <div class="mb-5">
+      <label for="email">E-mail</label>
+      <input type="email" class="form-control" id="email" name="email" required>
+      </div>
 
-          <div class="mb-5">
-            <label for="email">E-mail</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-          </div>
+    <div class="mb-5">
+      <label for="telephoneNumber">Telephone number</label>
+      <input type="tel" class="form-control" id="telephoneNumber" name="telephoneNumber" required>
+    </div>
 
-          <div class="mb-5">
-            <label for="telephoneNumber">Telephone number</label>
-            <input type="tel" class="form-control" id="telephoneNumber" name="telephoneNumber" required>
-          </div>
-
-          <div class="mb-5">
-            <label for="mobileNumber">Mobile number</label>
-            <div class="input-group">
-            <span class="input-group-text shadowed">+966</span>
-              <input type="tel" class="form-control" id="mobileNumber" name="mobileNumber" required>
-            </div>
-          </div>
-
-          <div class="text-center">
-            <button type="submit" class="btn btn-primary me-2">Submit</button>
-            <button type="button" class="btn btn-secondary" onclick="confirmCancel()">Cancel</button>
-          </div>
-        </form>
+    <div class="mb-5">
+      <label for="mobileNumber">Mobile number</label>
+      <div class="input-group">
+        <span class="input-group-text shadowed">+966</span>
+        <input type="tel" class="form-control" id="mobileNumber" name="mobileNumber" required>
       </div>
     </div>
 
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary me-2">Submit</button>
+      <button type="button" class="btn btn-secondary" onclick="confirmCancel()">Cancel</button>
+    </div>
+      </form>
+    </div>
   </div>
-  <script>
-    function confirmCancel() {
-      if (confirm("Are you sure you want to cancel? All unsaved changes will be lost.")) {
-        document.querySelector('form').reset();
-      }
-    }
 
-    document.addEventListener('DOMContentLoaded', function () {
-      const nameField = document.getElementById('responsibleName');
-      const mobileInput = document.getElementById('mobileNumber');
-      const telInput = document.getElementById('telephoneNumber');
-
-      nameField.addEventListener('input', function () {
-        const arabicPattern = /^[\u0600-\u06FF\s]*$/;
-        const error = document.getElementById('nameError');
-        if (!arabicPattern.test(this.value)) {
-          error.textContent = "Name must be in Arabic.";
-        } else {
-          error.textContent = "";
-        }
-      });
-
-      mobileInput.addEventListener('input', function () {
-        this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);
-      });
-
-      telInput.addEventListener('input', function () {
-        this.value = this.value.replace(/[^0-9]/g, '');
-      });
-
-      document.querySelector('form').addEventListener('submit', function (e) {
-        const nameError = document.getElementById('nameError').textContent;
-        if (nameError) {
-          e.preventDefault();
-        }
-      });
-    });
-  </script>
+  </div>
+ 

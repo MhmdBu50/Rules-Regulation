@@ -134,38 +134,8 @@
         .action-btn:active {
             transform: translateY(0);
         }
-        
-        /* Responsive scaling system */
-        @media (max-width: 1200px) {
-            .document-card {
-                transform: scale(0.9);
-            }
-        }
-        
-        @media (max-width: 992px) {
-            .document-card {
-                transform: scale(0.8);
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .document-card {
-                transform: scale(0.7);
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .document-card {
-                transform: scale(0.6);
-            }
-        }
-        
-        @media (max-width: 400px) {
-            .document-card {
-                transform: scale(0.5);
-            }
-        }
-        
+
+
         /* Container adjustments to prevent overflow */
         .card-container {
             display: flex;
@@ -250,4 +220,51 @@
 
         .info-icon svg path {
             stroke-width: 5;
+        }
+
+        /* Mobile responsive height control for col-auto divs */
+        @media (max-width: 645px) {
+            .medium-card {
+                flex: 1 1 auto; /* Allow flexibility */
+            }
+            
+            .document-card {
+                height: auto !important;
+                min-height: 280px; /* Better proportion for mobile */
+                aspect-ratio: 4/5; /* Better mobile aspect ratio */
+                transform: scale(1) !important; /* Remove scaling on mobile */
+            }
+            
+            .row.justify-content-center {
+                justify-content: center !important;
+                margin: 0px 20px !important; /* Reduce side margins on mobile */
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            
+            .document-card {
+                min-height: 260px;
+                max-height: 320px;
+            }
+            
+            .row.justify-content-center {
+                margin: 0px 10px !important; /* Even smaller margins */
+            }
+        }
+
+        /* Additional mobile improvements */
+        @media (max-width: 576px) {
+            .container-fluid {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+            
+            /* Ensure cards are nicely centered and spaced */
+            .row.justify-content-center > .col-auto {
+                margin-bottom: 1rem; /* Add some bottom spacing between cards */
+                display: flex;
+                justify-content: center;
+            }
         }

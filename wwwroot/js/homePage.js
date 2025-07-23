@@ -49,47 +49,6 @@
             }
         });
 
-        //open and close the side nav menu (mobile only)
-        const sidebar = document.getElementById('sideNavBar');
-        const burgerBtn = document.getElementById('burgerBtn');
-        const backdrop = document.getElementById('sidebarBackdrop');
-
-        burgerBtn.addEventListener('click', () => {
-            sidebar.classList.remove('d-lg-none'); // force show sidebar
-            sidebar.style.display = 'block';
-            backdrop.style.display = 'block';
-            // Add outside click handler
-            setTimeout(() => {
-                sidebar.style.width = '250px';
-                }, 10);
-            });
-
-        backdrop.addEventListener('click', () => {
-            sidebar.style.width = '0';               // Start slide-out animation
-            backdrop.style.display = 'none';         // Instantly hide the backdrop
-
-            setTimeout(() => {
-                sidebar.style.display = 'none';        // Fully hide sidebar after animation
-                sidebar.classList.add('d-lg-none');    // Reapply Bootstrap’s mobile-only hiding
-            }, 300); // matches the CSS transition duration
-            });
-        
-        //this function helps auto-close the side nav bar
-        function closeSidebar() {
-            sidebar.style.width = '0';
-            backdrop.style.display = 'none';
-            setTimeout(() => {
-            sidebar.style.display = 'none';
-            sidebar.classList.add('d-lg-none');
-            }, 300);
-        }
-
-        // Watch window size and auto-close if it's large
-        window.addEventListener('resize', () => {
-            if (window.innerWidth >= 992) {
-            closeSidebar();
-            }
-        });
 
         //filter panel functionality
 
@@ -130,19 +89,19 @@
             maxSize: 18,
             multiLine: true
         });
-        */
+        
 
         fitty('.history-button label', {
             minSize: 12,
             maxSize: 24,
             multiLine: true
-        });
+        });*/
 
         document.querySelectorAll('.bar-button .nav-label label').forEach(el => {
             el.style.setProperty('white-space', 'normal', 'important');
         });
 
-// ✅ Safe SVG loader using innerHTML
+//  Safe SVG loader using innerHTML
     function getSVGFromTemplate(id) {
         const tpl = document.getElementById(id);
         if (!tpl) return null;
@@ -152,7 +111,7 @@
         return wrapper.firstElementChild;
     }
 
-    // ✅ Replace .svg-container with normal version from template
+    //  Replace .svg-container with normal version from template
     function initIcons(selector) {
         document.querySelectorAll(selector).forEach(container => {
             const parent = container.closest('[data-id]');
@@ -167,7 +126,7 @@
         });
     }
 
-    // ✅ Toggle between normal and altered SVGs when clicked
+    //  Toggle between normal and altered SVGs when clicked
     function alter(clickedEl) {
         document.querySelectorAll('[data-id]').forEach(el => {
             const id = el.dataset.id;
@@ -188,10 +147,51 @@
         }
     }
 
-    // ✅ Wait until DOM is fully loaded, then run once
+    //  Wait until DOM is fully loaded, then run once
     document.addEventListener('DOMContentLoaded', () => {
         initIcons('.navigation-bar .svg-container');
         initIcons('#sideNavBar .svg-container');
     });
 
 
+document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll('.bar-button');
+    let activeBtn = null;
+
+    buttons.forEach(btn => {
+        // Hover in: expand hovered button, shrink active if different
+        btn.addEventListener('mouseenter', () => {
+            btn.classList.add('hovered');
+            if (activeBtn && activeBtn !== btn) {
+                activeBtn.classList.remove('hovered');
+            }
+        });
+
+        // Hover out: collapse unless active, and restore active if nothing is hovered
+        btn.addEventListener('mouseleave', () => {
+            if (btn !== activeBtn) {
+                btn.classList.remove('hovered');
+            }
+
+            // 👇 This is the important part
+            setTimeout(() => {
+                const isHoveringAny = Array.from(buttons).some(b => b.matches(':hover'));
+                if (!isHoveringAny && activeBtn) {
+                    activeBtn.classList.add('hovered');
+                }
+            }, 10); // Small delay to catch edge cases
+        });
+
+        // Click: mark as active and expand
+        btn.addEventListener('click', () => {
+            if (activeBtn && activeBtn !== btn) {
+                activeBtn.classList.remove('active');
+                activeBtn.classList.remove('hovered');
+            }
+
+            activeBtn = btn;
+            activeBtn.classList.add('active');
+            activeBtn.classList.add('hovered');
+        });
+    });
+});
