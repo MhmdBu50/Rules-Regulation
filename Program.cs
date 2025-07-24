@@ -1,8 +1,21 @@
 using RulesRegulation.Services;
 using System.Net;
 using System.Net.Sockets;
+using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[]
+    {
+        new System.Globalization.CultureInfo("en-US"),
+        new System.Globalization.CultureInfo("ar-SA"),
+    };
+
+    options.DefaultRequestCulture = new RequestCulture("en-US"); 
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -29,12 +42,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
-
-app.UseAuthorization();
-
 app.MapStaticAssets();
-
+app.UseRequestLocalization();
+app.UseRouting();
+app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
