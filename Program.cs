@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     var supportedCultures = new[]
@@ -15,9 +16,12 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.DefaultRequestCulture = new RequestCulture("en-US"); 
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
+    
+    options.RequestCultureProviders.Clear();
+    options.RequestCultureProviders.Add(new CookieRequestCultureProvider());
+    options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());
 });
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<OracleDbService>(provider =>
@@ -37,7 +41,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -46,6 +49,7 @@ app.MapStaticAssets();
 app.UseRequestLocalization();
 app.UseRouting();
 app.UseAuthorization();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
@@ -58,7 +62,6 @@ static int GetAvailablePort(int preferredPort)
 {
     try
     {
-        // First, try the preferred port
         using var listener = new TcpListener(IPAddress.Any, preferredPort);
         listener.Start();
         listener.Stop();
@@ -66,7 +69,6 @@ static int GetAvailablePort(int preferredPort)
     }
     catch (SocketException)
     {
-        // If preferred port is not available, find any available port
         using var listener = new TcpListener(IPAddress.Any, 0);
         listener.Start();
         var port = ((IPEndPoint)listener.LocalEndpoint).Port;
