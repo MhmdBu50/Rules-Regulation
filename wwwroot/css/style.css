@@ -43,8 +43,6 @@ body {
   min-width: 200px; /* Your min width */
   height: 60px;
   background-color: #2f3e5f;
-  display: flex;
-  align-items: center;
   padding: 0 8px;
   gap: 6px;
   box-shadow: 0 4px 12px rgba(13, 10, 44, 0.06);
@@ -64,11 +62,6 @@ body {
 .search-and-filter-buttons {
   background-color: transparent;
   border: none;
-  margin: 0;
-  padding: 0;
-  border-radius: 30;
-  height: 44px;
-  appearance: none;
   transition: transform 0.08s ease-in-out;
 }
 .search-and-filter-buttons:hover svg path {
@@ -113,14 +106,9 @@ body {
 
 .search {
   width: 100% !important;
-  max-width: 620px;
-  min-width: 120px;
-  height: 44px; /* Match actual total height */
-  padding: 0 16px; /* Only left and right padding */
-  background-color: #2f3e5f;
-  border-radius: 25.6px;
-  text-align: left;
-  font-size: 24px;
+  max-width: 640px;
+  background-color: transparent;
+  font-size: 24px !important;
   color: #abb7c2;
   border: none;
 }
@@ -136,7 +124,6 @@ body {
   border: none;
   border-radius: 200px;
   height: 60px;
-  display: flex;
   align-items: center;
   justify-content: center;
   font-family: "Inter";
@@ -150,6 +137,10 @@ body {
   background-color: #5c74a9;
 }
 
+.iau-logo {
+  padding: 0 21px;
+}
+
 @media (max-width: 768px) {
   .search-container {
     padding: 0 4px !important;
@@ -158,45 +149,24 @@ body {
 
   .search {
     font-size: 18px !important;
-    padding: 0 8px !important;
+    padding: 0!important;
   }
 
   .search-and-filter-buttons svg {
     width: 36px !important;
-    height: 36px !important;
   }
-}
-
-.signlog-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding-right: 24px;
-  padding-left: 24px;
+  
+  .iau-logo {
+    padding:0 10px;
+    scale: 0.8;
+  }
 }
 
 .profile-icon {
   filter: invert(1);
   height: 61px;
 }
-/* Fix search icon alignment */
-.search-container {
-  display: flex;
-  align-items: center;
-  padding: 0 8px;
-}
 
-.bootstrap-wrapper {
-  height: 100%;
-}
-.navbar-toggler {
-  border: none;
-  padding: 0;
-}
-.mobile-logo {
-  display: none;
-}
 @media (max-width: 991.98px) {
   .desktop-logo {
     display: none;

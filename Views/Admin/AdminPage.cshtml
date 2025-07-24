@@ -167,29 +167,28 @@ there's also many filtering options to find the policy and other adminstrative s
 <div class="container my-4">
     <section>
         <div class="container">
-            <table class="w-100 ">
+            <table class="w-100">
                 <thead class="text-center">
                     <tr>
                         <th class="col-5 d-none d-md-table-cell padding-between-search-filter">
                             <div class="col flex-nowrap align-items-center">
-                                <div class="search-container d-flex align-items-center px-2">
+                                <div class="search-container d-flex align-items-center">
                                     <button class="search-and-filter-buttons">
                                         <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon"
                                             width="44" height="44" />
                                     </button>
-                                    <input class="search poppins-regular flex-grow-1" type="text"
+                                    <input class="search poppins-regular flex-grow-1 small-font-size" type="text"
                                         placeholder="Search by Name/ID..."
                                         style="color: #ABB7C2; background: transparent; border: none;">
                                 </div>
                             </div>
                         </th>
 
-
                         <th class="col-3 d-none d-md-table-cell padding-between-search-filter">
                             <div class="col flex-nowrap align-items-center">
                                 <div class="search-container d-flex align-items-center" id="section-search">
-                                    <select class="search poppins-regular flex-grow-1" type="text" placeholder="Section"
-                                        style="color: #ABB7C2; border: none;">
+                                    <select class="search poppins-regular flex-grow-1 small-font-size" type="text"
+                                        placeholder="Section" style="color: #ABB7C2; border: none;">
                                         <option value="" selected disabled>Section</option>
                                         <option>Student</option>
                                         <option>Members</option>
@@ -202,8 +201,7 @@ there's also many filtering options to find the policy and other adminstrative s
                         <th class="col-3 d-none d-md-table-cell padding-between-search-filter">
                             <div class="col flex-nowrap align-items-center">
                                 <div class="search-container d-flex align-items-center px-2" id="document-search">
-
-                                    <select class="search poppins-regular flex-grow-1"
+                                    <select class="search poppins-regular flex-grow-1 small-font-size"
                                         style="color: #ABB7C2; border: none;">
                                         <option value="" selected disabled>Document type</option>
                                         <option>Regulations</option>
@@ -233,23 +231,31 @@ there's also many filtering options to find the policy and other adminstrative s
             <!-- Wrapper with background color -->
             <div class="row gy-3 mb-3 mt-1" style="background-color: #2f3e5f; border-radius: 12px;">
                 <!-- Search by Name/ID (Visible only on small screens, hidden on larger screens) -->
-                <div class="col-12 d-md-none d-block align-items-center" style="margin-top: 10px;">
-                    <div class="search-container d-flex align-items-center w-100"
+                <div class="col-12 d-md-none d-flex align-items-center" style="margin-top: 10px; gap: 10px;">
+                    <!-- Search Container (Take remaining space) -->
+                    <div class="search-container d-flex align-items-center flex-grow-1"
                         style="border: 2px solid whitesmoke; border-radius: 8px;">
                         <button class="search-and-filter-buttons">
                             <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon" width="44"
                                 height="44" />
                         </button>
                         <input class="search poppins-regular flex-grow-1" type="text" placeholder="Search by Name/ID..."
-                            style="color: #ABB7C2; ">
+                            style="color: #ABB7C2; border: none; background: transparent;">
+                    </div>
+
+                    <!-- Delete Button (Fixed width) -->
+                    <div class="delete-btn-container d-flex align-items-center justify-content-center flex-grow-1"
+                        id="delete-btn-mobile">
+                        <button class="search-and-filter-buttons">
+                            <img src="~/svgs/admin/Delete-Button.svg" alt="Delete btn" />
+                        </button>
                     </div>
                 </div>
 
                 <!-- Section and Document Type Dropdowns (Visible only on small screens, hidden on larger screens) -->
-                <div class="col-12 d-md-none d-flex align-items-center gap-0">
+                <div class="col-12 d-md-none d-flex align-items-center" style="gap: 10px;">
                     <!-- Section Dropdown -->
-                    <div class="col-6 d-flex align-items-center p-0"
-                        style="margin-right: 5px; margin-top: -5px; margin-bottom: 10px;">
+                    <div class="d-flex align-items-center p-0 flex-grow-1" style="margin-bottom: 10px;">
                         <div class="search-container d-flex align-items-center w-100" id="section-document-search-2">
                             <select class="search poppins-regular flex-grow-1" style="color: #ABB7C2;">
                                 <option value="" selected disabled>Section</option>
@@ -260,10 +266,8 @@ there's also many filtering options to find the policy and other adminstrative s
                         </div>
                     </div>
 
-
                     <!-- Document Type Dropdown -->
-                    <div class="col-6 d-flex align-items-center p-0"
-                        style=" margin-bottom: 10px; margin-left: 5px; margin-top: -5px;">
+                    <div class="d-flex align-items-center p-0 flex-grow-1" style="margin-bottom: 10px;">
                         <div class="search-container d-flex align-items-center w-100" id="section-document-search-2">
                             <select class="search poppins-regular flex-grow-1" style="color: #ABB7C2;">
                                 <option value="" selected disabled>Document type</option>

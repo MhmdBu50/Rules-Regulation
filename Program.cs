@@ -1,9 +1,19 @@
 using RulesRegulation.Services;
+using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[]
+    {
+        new System.Globalization.CultureInfo("en-US"),
+        new System.Globalization.CultureInfo("ar-SA"),
+    };
 
-// Force Kestrel to use port 5100
-builder.WebHost.UseUrls("http://localhost:5100");
+    options.DefaultRequestCulture = new RequestCulture("en-US"); 
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -27,6 +37,8 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.MapStaticAssets();
+app.UseRequestLocalization();
 app.UseRouting();
 app.UseAuthorization();
 app.MapControllerRoute(
