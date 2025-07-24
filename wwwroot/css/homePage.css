@@ -16,7 +16,6 @@
         position: fixed; /*stay in place*/
         z-index: 1062; /*set on top*/
         top: 0px; /*stays on top*/
-        left: 0px; /*stays on left*/
         background-color: #0F1734;
         overflow-x: hidden; /*no side scrolling*/
         transition: 0.5s;
@@ -124,18 +123,10 @@
 
 
         .navigation-bar{
-            display: flex;
             justify-content: center;
-            align-items: center;
-            text-align: center;
             padding: 12px;
             font-size: 13px;
-            color: #fff;
-            text-decoration: none;
-            cursor: pointer;
             line-height: 1.4;
-            border: none;
-
         }
 
 
@@ -202,7 +193,6 @@
         .bar-button.hovered,
         .bar-button.active {
           display: inline-grid;
-          grid-template-columns: 53px 1fr;
           width: auto;
            gap: 8px;
           padding-left: 8px;
@@ -250,8 +240,6 @@
             justify-content: center;
             padding: 5px;
             gap: 0;
-            display: flex;
-            align-items: center;
             flex-direction: column;
             width: 76px;
             }
@@ -294,10 +282,7 @@
 
 /*chatbot styles*/
 
-.chatbot-container, .chat-icon, .chat-box, .chat-header, .chat-title, .chat-close, .chat-messages, .message, .bot-message, .user-message, .chat-input, .chat-input input, .chat-input button {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+.chatbot-container{
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
@@ -328,13 +313,13 @@
     
     .chat-box {
       position: fixed;
-      bottom: 29px;
-      right: 30px;
+      bottom: 25px;
+      right: 25px;
       width: 350px;
       height: 500px;
       background: white;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      border-radius: 16px;
+      box-shadow: 0px 3px 10px rgba(0, 0, 0, .5);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -343,7 +328,6 @@
       visibility: hidden;
       transition: all 0.3s ease-in-out;
       z-index: 10000;
-      border: 1px solid #eee;
     }
     
     .chat-box.active {
@@ -356,9 +340,7 @@
       background: #2F3E5F;
       padding: 15px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      border-radius: 15px 15px 0 0;
     }
     
     .chat-title {
@@ -447,10 +429,8 @@
       height: 40px;
       border: none;
       background: #2F3E5F;
-      color: white;
       border-radius: 50%;
       margin-left: 10px;
-      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;

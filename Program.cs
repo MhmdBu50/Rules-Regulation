@@ -4,23 +4,6 @@ using System.Net.Sockets;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure Kestrel with dynamic port selection
-builder.WebHost.ConfigureKestrel(options =>
-{
-    // Try to use the configured ports first, fallback to dynamic ports
-    var httpPort = GetAvailablePort(5050);
-    var httpsPort = GetAvailablePort(7050);
-    
-    options.Listen(IPAddress.Any, httpPort);
-    options.Listen(IPAddress.Any, httpsPort, listenOptions =>
-    {
-        listenOptions.UseHttps();
-    });
-    
-    Console.WriteLine($"Application will run on:");
-    Console.WriteLine($"HTTP:  http://localhost:{httpPort}");
-    Console.WriteLine($"HTTPS: https://localhost:{httpsPort}");
-});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

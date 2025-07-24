@@ -256,11 +256,6 @@
 
         /* Additional mobile improvements */
         @media (max-width: 576px) {
-            .container-fluid {
-                padding-left: 10px !important;
-                padding-right: 10px !important;
-            }
-            
             /* Ensure cards are nicely centered and spaced */
             .row.justify-content-center > .col-auto {
                 margin-bottom: 1rem; /* Add some bottom spacing between cards */
