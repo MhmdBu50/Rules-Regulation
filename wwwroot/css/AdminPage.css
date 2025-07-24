@@ -500,7 +500,16 @@ body {
   border-radius: 32px;
   flex-shrink: 1; /* Allow it to shrink */
   margin-bottom: 9px;
+  border: 1px solid transparent; /* baseline border */
+  transition: border .2s ease, box-shadow .2s ease;
 }
+
+.search-container:focus-within {
+  outline: none;
+  border: 1px solid #409cff; /* this Customizes hover border color */
+  box-shadow: 0 0 0 2px rgba(64, 156, 255, 0.4); /* Optional glow */
+}
+
 #section-search {
   margin-left: 10px !important;
 }
@@ -575,6 +584,11 @@ body {
   font-size: 24px;
   color: #abb7c2;
   border: none;
+}
+
+.search:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .adminButton {
