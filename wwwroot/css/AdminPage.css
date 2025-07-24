@@ -284,29 +284,6 @@ body {
 :root {
   --header-height: 100px;
 }
-.custom-header {
-  background-color: #212843;
-  filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.39));
-  color: #eeca2c;
-  border-radius: 20px;
-  margin-bottom: 8px;
-  overflow: hidden;
-  height: var(--header-height);
-}
-
-.custom-header th {
-  color: #eeca2c;
-  font-weight: bold;
-  padding: 14px 18px;
-  vertical-align: middle;
-  font-size: 1.1rem;
-}
-
-.custom-header input[type="checkbox"] {
-  accent-color: #eeca2c;
-  margin-right: 8px;
-  transform: scale(1.2);
-}
 
 .accordion-item {
   background: none;
@@ -330,6 +307,16 @@ body {
   overflow: visible;
   height: var(--header-height);
   --bs-accordion-border-width: 0; /* Removes the preset border that was in one of bootstrap's components */
+}
+
+#headerAccordion {
+  background: #212843 !important;
+  color: #eeca2c !important;
+  filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.39)) !important;
+  background-image: none !important;
+}
+#headerAccordion::before {
+  background-image: none !important;
 }
 
 /* Remove Bootstrap's default accordion arrow completely */
@@ -656,10 +643,25 @@ body {
   padding: 0;
 }
 
-@media (max-width: 768px) {
-  .custom-col {
-    /* يجبر عرض العمود على 0.3333% */
-    flex: 0 0 auto;
-    width: 0.3333333% !important;
-  }
+.custom-col {
+  /* يجبر عرض العمود على 0.3333% */
+  flex: 0 0 auto;
+  width: 0.3333333% !important;
+}
+
+.Regulation-Manual-size {
+  flex: 0 0 auto;
+  width: 38%;
+}
+
+.field-padding {
+  padding: 14px 18px;
+}
+
+/*حيدر: أحتاج دا الكلاس برجع له بعدين*/
+
+.custom-header input[type="checkbox"] {
+  accent-color: #eeca2c;
+  margin-right: 8px;
+  transform: scale(1.2);
 }

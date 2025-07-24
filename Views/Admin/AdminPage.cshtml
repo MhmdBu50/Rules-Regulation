@@ -279,42 +279,44 @@ there's also many filtering options to find the policy and other adminstrative s
 
     <!------- base Record ------->
     <div class="container">
-        <div class="col-12">
-            <table class="w-100 custom-header">
-                <thead class="text-center">
-                    <tr>
-                        <!-- Checkbox - Visible on all screen sizes -->
-                        <th class="col-1 custom-col">
-                            <input type="checkbox" />
-                        </th>
-
-                        <!-- Record ID - Visible on all screen sizes -->
-                        <th class="col-1 custom-col">
-                            ID
-                        </th>
-
-                        <!-- Regulation/Manual Name - Visible on all screen sizes -->
-                        <th class="col-3 d-table-cell d-sm-table-cell">Regulation/ Manual name</th>
-
-                        <!-- Section - Visible on medium screens and up (md) -->
-                        <th class="col-1 d-none d-md-table-cell">Section</th>
-
-                        <!-- Version Number - Visible on medium screens and up (md) -->
-                        <th class="col-2 d-none d-md-table-cell">Version Number</th>
-
-                        <!-- Approving Date - Visible on medium screens and up (md) -->
-                        <th class="col-2 d-none d-md-table-cell">Approving Date</th>
-
-                        <!-- Responsible Entity - Visible on medium screens and up (md) -->
-                        <th class="col-3 d-none d-md-table-cell">Responsible Entity</th>
-
-                        <!-- Empty Column (For actions, like edit/delete, etc.) - Visible on all screen sizes -->
-                        <th class="d-none d-md-table-cell"></th>
-                    </tr>
-                </thead>
-            </table>
+        <div class="accordion">
+            <div class="accordion-item">
+                <h2>
+                    <button class="accordion-button collapsed custom-header-btn" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseHeader" aria-expanded="false" aria-controls="collapseHeader"
+                        id="headerAccordion" disabled>
+                        <table class="table-responsive w-100">
+                            <thead class="text-center">
+                                <tr>
+                                    <th class="custom-col field-padding">
+                                        <input type="checkbox" />
+                                    </th>
+                                    <th class="custom-col field-padding">
+                                        ID
+                                    </th>
+                                    <th
+                                        class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size  field-padding">
+                                        Regulation/ Manual name</th>
+                                    <th class="col-1 d-none d-md-table-cell field-padding">Section</th>
+                                    <th class="col-2 d-none d-md-table-cell field-padding">Version Number
+                                    </th>
+                                    <th class="col-2 d-none d-md-table-cell field-padding">Approving Date
+                                    </th>
+                                    <th class="col-3 d-none d-lg-table-cell field-padding">Responsible
+                                        Entity</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </button>
+                </h2>
+                <div id="collapseHeader" class="accordion-collapse collapse" aria-labelledby="headingHeader"
+                    data-bs-parent="#headerAccordion">
+                    <!-- يمكنك إضافة محتوى إضافي هنا إذا لزم الأمر -->
+                </div>
+            </div>
         </div>
     </div>
+
 
 
 
@@ -339,24 +341,25 @@ there's also many filtering options to find the policy and other adminstrative s
                                 <table class="w-100">
                                     <thead class="text-center">
                                         <tr>
-                                            <th class="col-1 custom-col" style="padding: 14px 18px;">
+                                            <th class="custom-col field-padding">
                                                 <input type="checkbox" />
                                             </th>
-                                            <th class="col-1 custom-col" style="padding: 14px 18px;">
+                                            <th class="custom-col field-padding">
                                                 1
                                             </th>
-                                            <th class="col-3 d-table-cell d-sm-table-cell" style="padding: 14px 18px;">
+                                            <th
+                                                class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size field-padding">
                                                 Guide to
                                                 and procedures for
                                                 recruiting...</th>
-                                            <th class="col-1 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-1 d-none d-md-table-cell field-padding">
                                                 Students</th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-2 d-none d-md-table-cell field-padding">
                                                 8.3.4
                                             </th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-2 d-none d-md-table-cell field-padding">
                                                 2025/7/4</th>
-                                            <th class="col-3 d-none d-md-table-cell" style="padding: 14px 18px;">IAU
+                                            <th class="col-3 d-none d-lg-table-cell field-padding">IAU
                                                 Academic
                                                 affairs</th>
                                         </tr>
@@ -551,24 +554,25 @@ there's also many filtering options to find the policy and other adminstrative s
                                 <table class="w-100">
                                     <thead class="text-center">
                                         <tr>
-                                            <th class="col-1 custom-col" style="padding: 14px 18px;">
+                                            <th class="custom-col field-padding">
                                                 <input type="checkbox" />
                                             </th>
-                                            <th class="col-1 custom-col" style="padding: 14px 18px;">
+                                            <th class="col-1 custom-col field-padding">
                                                 2
                                             </th>
-                                            <th class="col-3 d-table-cell d-sm-table-cell" style="padding: 14px 18px;">
+                                            <th
+                                                class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size field-padding">
                                                 Another
                                                 guide...</th>
-                                            <th class="col-1 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-1 d-none d-md-table-cell field-padding">
                                                 Faculty
                                             </th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-2 d-none d-md-table-cell field-padding">
                                                 5.1.2
                                             </th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-2 d-none d-md-table-cell field-padding">
                                                 2025/6/15</th>
-                                            <th class="col-3 d-none d-md-table-cell" style="padding: 14px 18px;">IAU
+                                            <th class="col-3 d-none d-lg-table-cell field-padding">IAU
                                                 HR
                                                 Department</th>
                                         </tr>
@@ -597,23 +601,24 @@ there's also many filtering options to find the policy and other adminstrative s
                                 <table class="w-100">
                                     <thead class="text-center">
                                         <tr>
-                                            <th class="col-1 custom-col" style="padding: 14px 18px;">
+                                            <th class="custom-col field-padding">
                                                 <input type="checkbox" />
                                             </th>
-                                            <th class="col-1 custom-col" style="padding: 14px 18px;">
+                                            <th class="custom-col field-padding">
                                                 3
                                             </th>
-                                            <th class="col-3 d-table-cell d-sm-table-cell" style="padding: 14px 18px;">
+                                            <th
+                                                class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size field-padding">
                                                 Research
                                                 policies...</th>
-                                            <th class="col-1 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-1 d-none d-md-table-cell field-padding">
                                                 Researchers</th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-2 d-none d-md-table-cell field-padding">
                                                 7.2.1
                                             </th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-2 d-none d-md-table-cell field-padding">
                                                 2025/5/20</th>
-                                            <th class="col-3 d-none d-md-table-cell" style="padding: 14px 18px;">IAU
+                                            <th class="col-3 d-none d-lg-table-cell field-padding">IAU
                                                 Research
                                                 Center</th>
                                         </tr>

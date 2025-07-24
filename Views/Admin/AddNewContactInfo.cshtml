@@ -1,15 +1,58 @@
+@{
+    ViewData["Title"] = "Add New Contact Info";
+}
+
 @section Styles {
     <link rel="stylesheet" href="~/css/AddContactInfo.css">
+}
 
-}
-<!-- Javascripts, from js file  -->
 @section Scripts{
-    <script src="~/js/addnewcontactinfo.js"></script>
-    <script src="js/bootstrap.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const nameInput = document.getElementById('Name');
+            const mobileInput = document.getElementById('Mobile');
+            const telephoneInput = document.getElementById('Telephone');
+
+            // Arabic name validation
+            if (nameInput) {
+                nameInput.addEventListener('input', function () {
+                    const arabicPattern = /^[\u0600-\u06FF\s]*$/;
+                    const error = document.getElementById('nameError');
+                    if (error) {
+                        if (this.value && !arabicPattern.test(this.value)) {
+                            error.textContent = "Name must be in Arabic.";
+                        } else {
+                            error.textContent = "";
+                        }
+                    }
+                });
+            }
+
+            // Mobile number formatting (9 digits max)
+            if (mobileInput) {
+                mobileInput.addEventListener('input', function () {
+                    this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);
+                });
+            }
+
+            // Telephone number formatting (numbers only)
+            if (telephoneInput) {
+                telephoneInput.addEventListener('input', function () {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                });
+            }
+        });
+
+        function confirmCancel() {
+            if (confirm("Are you sure you want to cancel? All unsaved changes will be lost.")) {
+                document.querySelector('form').reset();
+            }
+        }
+    </script>
 }
-<!-- This section includes the necessary styles and scripts for the Add New Contact Info page -->
-  <div class="AddContactInfo">
-<!-- #region This section contains the top bar with navigation buttons and the main header for the page -->
+
+<div class="AddContactInfo">
     <!-- Top Bar -->
     <div class="top-bar">
       <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"> <img src="@Url.Content("~/svgs/admin/backButton.svg")"> Back</a>
@@ -23,67 +66,76 @@
 
     <!-- Main Header -->
     <div class="main-header">
-      <h1>Department Contact Information</h1>
+      <h1>Add Contact Information</h1>
+      <p class="subtitle">Add new contact information for departments</p>
     </div>
-<!-- This section contains the form for adding new contact information for a departmentInformation 
-Users must select a department and provide details such as the responsible person's name.
-The form data will be submitted via POST to the '/submit' endpoint for processing.
-Required fields and validation are enforced to ensure data integrity. -- >
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     <!-- Form Section -->
     <div class="container">
       <div class="form-wrapper">
-        <form method="post" action="/submit">
+        <form method="post" action="@Url.Action("AddNewContactInfo", "Admin")">
+          @Html.AntiForgeryToken()
+          
           <div class="mb-5">
-            <label for="relevantDepartment">Relevant Department</label>
-            <select class="form-select" id="relevantDepartment" name="relevantDepartment" required>
+            <label for="Department">Relevant Department</label>
+            <select class="form-select" id="Department" name="Department" required>
               <option value="">Select department</option>
-              <option value="HR">Reg and Admission</option>
-              <option value="IT">CCSIT</option>
-              <option value="IT">Communication and tech</option>
-              <option value="IT">Hospital</option>
-              <option value="IT">Library</option>
-              <option value="IT">Students Affairs</option>
-              <option value="IT">Preparetory</option>
+              <option value="Reg and Admission">Reg and Admission</option>
+              <option value="CCSIT">CCSIT</option>
+              <option value="Communication and tech">Communication and tech</option>
+              <option value="Hospital">Hospital</option>
+              <option value="Library">Library</option>
+              <option value="Students Affairs">Students Affairs</option>
+              <option value="Preparetory">Preparetory</option>
               <option value="Academic Affairs">Academic Affairs</option>
             </select>
           </div>
-<!--  This section contains the input fields for the responsible person's name (in Arabic), email, telephone number, and mobile number.
-// The "responsibleName" field enforces Arabic input and displays an error if non-Arabic characters are entered.
-// The "email" field requires a valid email address.
-// The "telephoneNumber" and "mobileNumber" fields accept only numeric input, with the mobile number prefixed by +966 (saudi arabia code).
-// The form includes Submit and Cancel buttons, Cancel prompts for confirmation before resetting the form.
-// Client-side validation is implemented using JavaScript to ensure correct input formats and prevent form submission if validation fails. -->
-      <div class="mb-5">
-      <label for="responsibleName">Name of Responsible Person (Arabic)</label>
-      <input type="text" class="form-control" id="responsibleName" name="responsibleName" lang="ar" dir="rtl" required>
-      <div id="nameError" class="text-danger mt-1"></div>
+
+          <div class="mb-5">
+            <label for="Name">Name of Responsible Person (Arabic)</label>
+            <input type="text" class="form-control" id="Name" name="Name" lang="ar" dir="rtl" required>
+            <div id="nameError" class="text-danger mt-1"></div>
+          </div>
+
+          <div class="mb-5">
+            <label for="Email">E-mail</label>
+            <input type="email" class="form-control" id="Email" name="Email">
+          </div>
+
+          <div class="mb-5">
+            <label for="Telephone">Telephone number</label>
+            <input type="tel" class="form-control" id="Telephone" name="Telephone">
+          </div>
+
+          <div class="mb-5">
+            <label for="Mobile">Mobile number</label>
+            <div class="input-group">
+              <span class="input-group-text shadowed">+966</span>
+              <input type="tel" class="form-control" id="Mobile" name="Mobile">
+            </div>
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary me-2">Submit</button>
+            <button type="button" class="btn btn-secondary" onclick="confirmCancel()">Cancel</button>
+          </div>
+        </form>
       </div>
-
-      <div class="mb-5">
-      <label for="email">E-mail</label>
-      <input type="email" class="form-control" id="email" name="email" required>
-      </div>
-
-    <div class="mb-5">
-      <label for="telephoneNumber">Telephone number</label>
-      <input type="tel" class="form-control" id="telephoneNumber" name="telephoneNumber" required>
     </div>
-
-    <div class="mb-5">
-      <label for="mobileNumber">Mobile number</label>
-      <div class="input-group">
-        <span class="input-group-text shadowed">+966</span>
-        <input type="tel" class="form-control" id="mobileNumber" name="mobileNumber" required>
-      </div>
-    </div>
-
-    <div class="text-center">
-      <button type="submit" class="btn btn-primary me-2">Submit</button>
-      <button type="button" class="btn btn-secondary" onclick="confirmCancel()">Cancel</button>
-    </div>
-      </form>
-    </div>
-  </div>
-
-  </div>
- 
+</div>
