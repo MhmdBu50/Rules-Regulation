@@ -1,0 +1,473 @@
+@model List<dynamic>
+
+<!-- This File is about the admin page that controls what to be added, wheather its a new record or contact. in this page you can edit and delete.
+there's also many filtering options to find the policy and other adminstrative stuff-->
+@section Styles {
+    <link rel="stylesheet" href="~/css/AdminPage.css">
+}
+<!-- Scripts for the admin page -->
+@section Scripts {
+    <script src="@Url.Content("~/js/card-animations.js")"></script>
+    <script src="@Url.Content("https://cdn.jsdelivr.net/npm/fitty@2.3.6/dist/fitty.min.js")"></script>
+    <script src="@Url.Content("js/bootstrap.js")"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/StatisticsInAdmin.js"></script>
+    
+    <script>
+        function showAdminRecordDetails(recordId) {
+            const detailsContainer = document.getElementById('adminDetails' + recordId);
+            
+            // Check if details are already loaded
+            if (detailsContainer.innerHTML.includes('record-full-details')) {
+                return; // Already loaded
+            }
+            
+            // Show loading spinner
+            detailsContainer.innerHTML = `
+                <div class="text-center">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Loading record details...</p>
+                </div>
+            `;
+            
+            // Make AJAX call to get record details
+            fetch('/Admin/GetRecordDetails?id=' + recordId)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load record details');
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    detailsContainer.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error loading record details:', error);
+                    detailsContainer.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Failed to load record details. Please try again.
+                        </div>
+                    `;
+                });
+        }
+    </script>
+}
+
+<!-- This is the header section of the admin page -->
+<header class="menu">
+    <div class="container-fluid h-100 bootstrap-wrapper">
+        <div class="row align-items-center h-100 g-0">
+            <!-- Left Section - Logo/Hamburger -->
+            <div class="col-auto">
+                <div class="d-flex align-items-center">
+
+                    <!-- Language Logo -->
+                    <img src="~/svgs/navigation/desktop-logo.svg" alt="IAU Logo" class="desktop-logo logo" width="33"
+                        height="33" />
+                </div>
+            </div>
+
+            <!-- Middle Section - Exit Admin view -->
+            <div class="col flex-nowrap align-items-center">
+                <div class=" d-flex align-items-center  justify-content-center" style="postion: absolute;">
+                    <button class="exit-admin-btn " onclick="location.href='@Url.Action("homePage", "Home")'">
+                        Exit Admin view
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Section - Profile -->
+            <div class="col-auto flex-nowrap">
+                <div class="signlog-container">
+                    <!-- PNG version for large screens -->
+                    <img class="profile-icon d-none d-xl-block" src="~/imgs/B&W IAU Logo (Horizontal).png"
+                        alt="IAU Logo">
+
+                    <!-- SVG version for smaller screens -->
+                    <img class="profile-icon d-none d-sm-block d-xl-none" src="~/imgs/B&W IAU Logo.png" alt="IAU Logo">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+<!-- Success/Error Messages -->
+<div class="container mt-3">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>
+
+<!--the statistics part of the admin page-->
+<div class="dashboard-container">
+    <!-- Main Rectangle Container -->
+    <div class="dashboard-rectangle">
+        <div class="main-row">
+            <!-- Left Section - Charts -->
+            <div class="charts-section">
+                <div class="row g-0 flex-fill">
+                    <!-- Donut Chart -->
+                    <div class="col-md-6">
+                        <div class="chart-section">
+                            <div class="chart-title">University Rules and Guidelines Overview</div>
+                            <div class="donut-chart-container">
+                                <div class="donut-chart-canvas">
+                                    <canvas id="chartCanvas"></canvas>
+                                </div>
+                                <div class="legend-container">
+                                    <div class="legend-item">
+                                        <div class="legend-color" style="background-color: #8B4513;"></div>
+                                        <span class="legend-text">Academic rules</span>
+                                        <span class="legend-percentage">40%</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-color" style="background-color: #2E8B57;"></div>
+                                        <span class="legend-text">Employment rules & regulations</span>
+                                        <span class="legend-percentage">30%</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-color" style="background-color: #4682B4;"></div>
+                                        <span class="legend-text">Student rules & regulations</span>
+                                        <span class="legend-percentage">25%</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-color" style="background-color: #DAA520;"></div>
+                                        <span class="legend-text">Student rules & regulations</span>
+                                        <span class="legend-percentage">15%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bar Chart -->
+                    <div class="col-md-6">
+                        <div class="chart-section">
+                            <div class="chart-title">Website visits over the past 6 months</div>
+                            <div class="chart-canvas-container">
+                                <canvas id="barChartCanvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vertical Separator to separate buttons from charts -->
+            <div class="chart-sidebar-separator"></div>
+
+            <!-- Right Sidebar -->
+            <div class="sidebar-section">
+                <div class="sidebar-container">
+                    <!-- Cards Section -->
+                    <div class="sidebar-cards">
+                        <!-- Total Policies Card -->
+                        <div class="stats-card stats-card-blue">
+                            <h6>Total Policies</h6>
+                            <div class="number">30</div>
+                        </div>
+
+                        <!-- Most Viewed Card -->
+                        <div class="stats-card stats-card-green">
+                            <h6>Most Viewed</h6>
+                            <div class="subtitle">Student Code of Conduct</div>
+                            <div class="viewed-text">Viewed: 785 times</div>
+                        </div>
+                    </div>
+
+                    <!-- Buttons Section -->
+                    <div class="sidebar-buttons">
+                        <!-- View Report Button -->
+                        <button class="btn-custom btn-primary-custom" onclick="viewReport()">
+                            View Report
+                        </button>
+
+                        <!-- Add New Record Button -->
+                        <button class="btn-custom btn-dark-custom"
+                            onclick="location.href='@Url.Action("AddNewRecord", "Admin")'">
+                            add new record
+                        </button>
+
+                        <!-- Export Data Button -->
+                        <button class="btn-custom btn-dark-custom" onclick="exportData()">
+                            Export Data
+                        </button>
+
+                        <!-- Contact Info Button -->
+                        <button class="btn-custom btn-dark-custom"
+                            onclick="location.href='@Url.Action("AddNewContactInfo", "Admin")'">
+                            Add New Contact Info
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--------------------- the table part of the admin page ---------------------->
+
+<!------- Search, Section and Document type Bar ------->
+<div class="container my-4">
+    <section>
+        <div class="container">
+            <table class="w-100 ">
+                <thead class="text-center">
+                    <tr>
+                        <th class="col-5 d-none d-md-table-cell padding-between-search-filter">
+                            <div class="col flex-nowrap align-items-center">
+                                <div class="search-container d-flex align-items-center px-2">
+                                    <button class="search-and-filter-buttons">
+                                        <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon"
+                                            width="44" height="44" />
+                                    </button>
+                                    <input class="search poppins-regular flex-grow-1" type="text"
+                                        placeholder="Search by Name/ID..."
+                                        style="color: #ABB7C2; background: transparent; border: none;">
+                                </div>
+                            </div>
+                        </th>
+
+
+                        <th class="col-3 d-none d-md-table-cell padding-between-search-filter">
+                            <div class="col flex-nowrap align-items-center">
+                                <div class="search-container d-flex align-items-center" id="section-search">
+                                    <select class="search poppins-regular flex-grow-1" type="text" placeholder="Section"
+                                        style="color: #ABB7C2; border: none;">
+                                        <option value="" selected disabled>Section</option>
+                                        <option>Student</option>
+                                        <option>Members</option>
+                                        <option>Enrolled Program</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="col-3 d-none d-md-table-cell padding-between-search-filter">
+                            <div class="col flex-nowrap align-items-center">
+                                <div class="search-container d-flex align-items-center px-2" id="document-search">
+
+                                    <select class="search poppins-regular flex-grow-1"
+                                        style="color: #ABB7C2; border: none;">
+                                        <option value="" selected disabled>Document type</option>
+                                        <option>Regulations</option>
+                                        <option>Guidelines</option>
+                                        <option>Enrolled Program</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="col d-none d-md-table-cell padding-between-search-filter">
+                            <div class="delete-btn-container d-flex align-items-center px-2">
+                                <button class="search-and-filter-buttons">
+                                    <img src="~/svgs/admin/Delete-Button.svg" alt="Delete btn" />
+                                </button>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </section>
+
+    <!------- Mobile Search and Filter Section ------->
+    <section>
+        <div class="container">
+            <!-- Wrapper with background color -->
+            <div class="row gy-3 mb-3 mt-1" style="background-color: #2f3e5f; border-radius: 12px;">
+                <!-- Search by Name/ID (Visible only on small screens, hidden on larger screens) -->
+                <div class="col-12 d-md-none d-block align-items-center" style="margin-top: 10px;">
+                    <div class="search-container d-flex align-items-center w-100"
+                        style="border: 2px solid whitesmoke; border-radius: 8px;">
+                        <button class="search-and-filter-buttons">
+                            <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon" width="44"
+                                height="44" />
+                        </button>
+                        <input class="search poppins-regular flex-grow-1" type="text" placeholder="Search by Name/ID..."
+                            style="color: #ABB7C2; ">
+                    </div>
+                </div>
+
+                <!-- Section and Document Type Dropdowns (Visible only on small screens, hidden on larger screens) -->
+                <div class="col-12 d-md-none d-flex align-items-center gap-0">
+                    <!-- Section Dropdown -->
+                    <div class="col-6 d-flex align-items-center p-0"
+                        style="margin-right: 5px; margin-top: -5px; margin-bottom: 10px;">
+                        <div class="search-container d-flex align-items-center w-100" id="section-document-search-2">
+                            <select class="search poppins-regular flex-grow-1" style="color: #ABB7C2;">
+                                <option value="" selected disabled>Section</option>
+                                <option>Student</option>
+                                <option>Members</option>
+                                <option>Enrolled Program</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <!-- Document Type Dropdown -->
+                    <div class="col-6 d-flex align-items-center p-0"
+                        style=" margin-bottom: 10px; margin-left: 5px; margin-top: -5px;">
+                        <div class="search-container d-flex align-items-center w-100" id="section-document-search-2">
+                            <select class="search poppins-regular flex-grow-1" style="color: #ABB7C2;">
+                                <option value="" selected disabled>Document type</option>
+                                <option>Regulations</option>
+                                <option>Guidelines</option>
+                                <option>Enrolled Program</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!------- base Record ------->
+    <div class="container">
+        <div class="accordion">
+            <div class="accordion-item">
+                <h2>
+                    <button class="accordion-button collapsed custom-header-btn" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseHeader" aria-expanded="false" aria-controls="collapseHeader"
+                        id="headerAccordion" disabled>
+                        <table class="table-responsive w-100">
+                            <thead class="text-center">
+                                <tr>
+                                    <th class="custom-col field-padding">
+                                        <input type="checkbox" />
+                                    </th>
+                                    <th class="custom-col field-padding">
+                                        ID
+                                    </th>
+                                    <th
+                                        class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size  field-padding">
+                                        Regulation/ Manual name</th>
+                                    <th class="col-1 d-none d-md-table-cell field-padding">Section</th>
+                                    <th class="col-2 d-none d-md-table-cell field-padding">Version Number
+                                    </th>
+                                    <th class="col-2 d-none d-md-table-cell field-padding">Approving Date
+                                    </th>
+                                    <th class="col-3 d-none d-lg-table-cell field-padding">Responsible
+                                        Entity</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </button>
+                </h2>
+                <div id="collapseHeader" class="accordion-collapse collapse" aria-labelledby="headingHeader"
+                    data-bs-parent="#headerAccordion">
+                    <!-- يمكنك إضافة محتوى إضافي هنا إذا لزم الأمر -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="container">
+        <!-- The red line!! -->
+        <div class="red-line"></div>
+    </div>
+
+
+
+    <!-- Dynamic Accordion Menu from Database -->
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-12">
+                @if (Model != null && Model.Any())
+                {
+                    <div class="accordion" id="regulationAccordion">
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            var record = Model[i];
+                            var itemNumber = i + 1;
+                            var headingId = "heading" + itemNumber;
+                            var collapseId = "collapse" + itemNumber;
+                            
+                            <!-- Dynamic Accordion Item -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="@headingId">
+                                    <button class="accordion-button collapsed custom-acc-btn" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false"
+                                        aria-controls="@collapseId" onclick="showAdminRecordDetails(@record.Id)">
+                                        <table class="w-100">
+                                            <thead class="text-center">
+                                                <tr>
+                                                    <th class="custom-col field-padding">
+                                                        <input type="checkbox" />
+                                                    </th>
+                                                    <th class="custom-col field-padding">
+                                                        @record.Id
+                                                    </th>
+                                                    <th class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size field-padding">
+                                                        @record.RegulationName
+                                                    </th>
+                                                    <th class="col-1 d-none d-md-table-cell field-padding">
+                                                        @record.Sections
+                                                    </th>
+                                                    <th class="col-2 d-none d-md-table-cell field-padding">
+                                                        @record.Version
+                                                    </th>
+                                                    <th class="col-2 d-none d-md-table-cell field-padding">
+                                                        @record.ApprovalDate
+                                                    </th>
+                                                    <th class="col-3 d-none d-lg-table-cell field-padding">
+                                                        @record.ApprovingEntity
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </button>
+                                </h2>
+                                <div id="@collapseId" class="accordion-collapse collapse" aria-labelledby="@headingId"
+                                    data-bs-parent="#regulationAccordion">
+                                    <!-- Dynamic content of accordion -->
+                                    <div class="accordion-body">
+                                        <div id="adminDetails@(record.Id)">
+                                            <div class="text-center">
+                                                <div class="spinner-border spinner-border-sm" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <!-- No records message for admin -->
+                    <div class="alert alert-info text-center">
+                        <h4>No records found</h4>
+                        <p>There are currently no rules and regulations in the database.</p>
+                        <a href="@Url.Action("AddNewRecord", "Admin")" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Add New Record
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

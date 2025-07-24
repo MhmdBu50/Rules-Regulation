@@ -166,63 +166,63 @@ there's also many filtering options to find the policy and other adminstrative s
 <!------- Search, Section and Document type Bar ------->
 <div class="container my-4">
     <section>
-        <table class="w-100 ">
-            <thead class="text-center">
-                <tr>
-                    <th class="col-5 d-none d-md-table-cell">
-                        <div class="col flex-nowrap align-items-center">
-                            <div class="search-container d-flex align-items-center px-2">
+        <div class="container">
+            <table class="w-100">
+                <thead class="text-center">
+                    <tr>
+                        <th class="col-5 d-none d-md-table-cell padding-between-search-filter">
+                            <div class="col flex-nowrap align-items-center">
+                                <div class="search-container d-flex align-items-center">
+                                    <button class="search-and-filter-buttons">
+                                        <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon"
+                                            width="44" height="44" />
+                                    </button>
+                                    <input class="search poppins-regular flex-grow-1 small-font-size" type="text"
+                                        placeholder="Search by Name/ID..."
+                                        style="color: #ABB7C2; background: transparent; border: none;">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="col-3 d-none d-md-table-cell padding-between-search-filter">
+                            <div class="col flex-nowrap align-items-center">
+                                <div class="search-container d-flex align-items-center" id="section-search">
+                                    <select class="search poppins-regular flex-grow-1 small-font-size" type="text"
+                                        placeholder="Section" style="color: #ABB7C2; border: none;">
+                                        <option value="" selected disabled>Section</option>
+                                        <option>Student</option>
+                                        <option>Members</option>
+                                        <option>Enrolled Program</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="col-3 d-none d-md-table-cell padding-between-search-filter">
+                            <div class="col flex-nowrap align-items-center">
+                                <div class="search-container d-flex align-items-center px-2" id="document-search">
+                                    <select class="search poppins-regular flex-grow-1 small-font-size"
+                                        style="color: #ABB7C2; border: none;">
+                                        <option value="" selected disabled>Document type</option>
+                                        <option>Regulations</option>
+                                        <option>Guidelines</option>
+                                        <option>Enrolled Program</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="col d-none d-md-table-cell padding-between-search-filter">
+                            <div class="delete-btn-container d-flex align-items-center px-2">
                                 <button class="search-and-filter-buttons">
-                                    <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon"
-                                        width="44" height="44" />
+                                    <img src="~/svgs/admin/Delete-Button.svg" alt="Delete btn" />
                                 </button>
-                                <input class="search poppins-regular flex-grow-1" type="text"
-                                    placeholder="Search by Name/ID..."
-                                    style="color: #ABB7C2; background: transparent; border: none;">
                             </div>
-                        </div>
-                    </th>
-
-
-                    <th class="col-3 d-none d-md-table-cell">
-                        <div class="col flex-nowrap align-items-center">
-                            <div class="search-container d-flex align-items-center" id="section-search">
-                                <select class="search poppins-regular flex-grow-1" type="text" placeholder="Section"
-                                    style="color: #ABB7C2; border: none;">
-                                    <option value="" selected disabled>Section</option>
-                                    <option>Student</option>
-                                    <option>Members</option>
-                                    <option>Enrolled Program</option>
-                                </select>
-                            </div>
-                        </div>
-                    </th>
-
-                    <th class="col-3 d-none d-md-table-cell">
-                        <div class="col flex-nowrap align-items-center">
-                            <div class="search-container d-flex align-items-center px-2" id="document-search">
-
-                                <select class="search poppins-regular flex-grow-1"
-                                    style="color: #ABB7C2; border: none;">
-                                    <option value="" selected disabled>Document type</option>
-                                    <option>Regulations</option>
-                                    <option>Guidelines</option>
-                                    <option>Enrolled Program</option>
-                                </select>
-                            </div>
-                        </div>
-                    </th>
-
-                    <th class="col d-none d-md-table-cell">
-                        <div class="delete-btn-container d-flex align-items-center px-2">
-                            <button class="search-and-filter-buttons">
-                                <img src="~/svgs/admin/Delete-Button.svg" alt="Delete btn" />
-                            </button>
-                        </div>
-                    </th>
-                </tr>
-            </thead>
-        </table>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </section>
 
     <!------- Mobile Search and Filter Section ------->
@@ -231,23 +231,31 @@ there's also many filtering options to find the policy and other adminstrative s
             <!-- Wrapper with background color -->
             <div class="row gy-3 mb-3 mt-1" style="background-color: #2f3e5f; border-radius: 12px;">
                 <!-- Search by Name/ID (Visible only on small screens, hidden on larger screens) -->
-                <div class="col-12 d-md-none d-block align-items-center" style="margin-top: 10px;">
-                    <div class="search-container d-flex align-items-center w-100"
+                <div class="col-12 d-md-none d-flex align-items-center" style="margin-top: 10px; gap: 10px;">
+                    <!-- Search Container (Take remaining space) -->
+                    <div class="search-container d-flex align-items-center flex-grow-1"
                         style="border: 2px solid whitesmoke; border-radius: 8px;">
                         <button class="search-and-filter-buttons">
                             <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon" width="44"
                                 height="44" />
                         </button>
                         <input class="search poppins-regular flex-grow-1" type="text" placeholder="Search by Name/ID..."
-                            style="color: #ABB7C2; ">
+                            style="color: #ABB7C2; border: none; background: transparent;">
+                    </div>
+
+                    <!-- Delete Button (Fixed width) -->
+                    <div class="delete-btn-container d-flex align-items-center justify-content-center flex-grow-1"
+                        id="delete-btn-mobile">
+                        <button class="search-and-filter-buttons">
+                            <img src="~/svgs/admin/Delete-Button.svg" alt="Delete btn" />
+                        </button>
                     </div>
                 </div>
 
                 <!-- Section and Document Type Dropdowns (Visible only on small screens, hidden on larger screens) -->
-                <div class="col-12 d-md-none d-flex align-items-center gap-0">
+                <div class="col-12 d-md-none d-flex align-items-center" style="gap: 10px;">
                     <!-- Section Dropdown -->
-                    <div class="col-6 d-flex align-items-center p-0"
-                        style="margin-right: 5px; margin-top: -5px; margin-bottom: 10px;">
+                    <div class="d-flex align-items-center p-0 flex-grow-1" style="margin-bottom: 10px;">
                         <div class="search-container d-flex align-items-center w-100" id="section-document-search-2">
                             <select class="search poppins-regular flex-grow-1" style="color: #ABB7C2;">
                                 <option value="" selected disabled>Section</option>
@@ -258,10 +266,8 @@ there's also many filtering options to find the policy and other adminstrative s
                         </div>
                     </div>
 
-
                     <!-- Document Type Dropdown -->
-                    <div class="col-6 d-flex align-items-center p-0"
-                        style=" margin-bottom: 10px; margin-left: 5px; margin-top: -5px;">
+                    <div class="d-flex align-items-center p-0 flex-grow-1" style="margin-bottom: 10px;">
                         <div class="search-container d-flex align-items-center w-100" id="section-document-search-2">
                             <select class="search poppins-regular flex-grow-1" style="color: #ABB7C2;">
                                 <option value="" selected disabled>Document type</option>
@@ -279,48 +285,51 @@ there's also many filtering options to find the policy and other adminstrative s
 
     <!------- base Record ------->
     <div class="container">
-        <div class="col-12">
-            <table class="w-100 custom-header">
-                <thead class="text-center">
-                    <tr>
-                        <!-- Checkbox - Visible on all screen sizes -->
-                        <th class="col-1 custom-col">
-                            <input type="checkbox" />
-                        </th>
-
-                        <!-- Record ID - Visible on all screen sizes -->
-                        <th class="col-1 custom-col">
-                            ID
-                        </th>
-
-                        <!-- Regulation/Manual Name - Visible on all screen sizes -->
-                        <th class="col-3 d-table-cell d-sm-table-cell">Regulation/ Manual name</th>
-
-                        <!-- Section - Visible on medium screens and up (md) -->
-                        <th class="col-1 d-none d-md-table-cell">Section</th>
-
-                        <!-- Version Number - Visible on medium screens and up (md) -->
-                        <th class="col-2 d-none d-md-table-cell">Version Number</th>
-
-                        <!-- Approving Date - Visible on medium screens and up (md) -->
-                        <th class="col-2 d-none d-md-table-cell">Approving Date</th>
-
-                        <!-- Responsible Entity - Visible on medium screens and up (md) -->
-                        <th class="col-3 d-none d-md-table-cell">Responsible Entity</th>
-
-                        <!-- Empty Column (For actions, like edit/delete, etc.) - Visible on all screen sizes -->
-                        <th class="d-none d-md-table-cell"></th>
-                    </tr>
-                </thead>
-            </table>
+        <div class="accordion">
+            <div class="accordion-item">
+                <h2>
+                    <button class="accordion-button collapsed custom-header-btn" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseHeader" aria-expanded="false" aria-controls="collapseHeader"
+                        id="headerAccordion" disabled>
+                        <table class="table-responsive w-100">
+                            <thead class="text-center">
+                                <tr>
+                                    <th class="custom-col field-padding">
+                                        <input type="checkbox" />
+                                    </th>
+                                    <th class="custom-col field-padding">
+                                        ID
+                                    </th>
+                                    <th
+                                        class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size  field-padding">
+                                        Regulation/ Manual name</th>
+                                    <th class="col-1 d-none d-md-table-cell field-padding">Section</th>
+                                    <th class="col-2 d-none d-md-table-cell field-padding">Version Number
+                                    </th>
+                                    <th class="col-2 d-none d-md-table-cell field-padding">Approving Date
+                                    </th>
+                                    <th class="col-3 d-none d-lg-table-cell field-padding">Responsible
+                                        Entity</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </button>
+                </h2>
+                <div id="collapseHeader" class="accordion-collapse collapse" aria-labelledby="headingHeader"
+                    data-bs-parent="#headerAccordion">
+                    <!-- يمكنك إضافة محتوى إضافي هنا إذا لزم الأمر -->
+                </div>
+            </div>
         </div>
     </div>
 
 
 
 
-    <!-- The red line!! -->
-    <div class="red-line"></div>
+    <div class="container">
+        <!-- The red line!! -->
+        <div class="red-line"></div>
+    </div>
 
 
 
@@ -339,24 +348,25 @@ there's also many filtering options to find the policy and other adminstrative s
                                 <table class="w-100">
                                     <thead class="text-center">
                                         <tr>
-                                            <th class="col-1 custom-col" style="padding: 14px 18px;">
+                                            <th class="custom-col field-padding">
                                                 <input type="checkbox" />
                                             </th>
-                                            <th class="col-1 custom-col" style="padding: 14px 18px;">
+                                            <th class="custom-col field-padding">
                                                 1
                                             </th>
-                                            <th class="col-3 d-table-cell d-sm-table-cell" style="padding: 14px 18px;">
+                                            <th
+                                                class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size field-padding">
                                                 Guide to
                                                 and procedures for
                                                 recruiting...</th>
-                                            <th class="col-1 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-1 d-none d-md-table-cell field-padding">
                                                 Students</th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-2 d-none d-md-table-cell field-padding">
                                                 8.3.4
                                             </th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-2 d-none d-md-table-cell field-padding">
                                                 2025/7/4</th>
-                                            <th class="col-3 d-none d-md-table-cell" style="padding: 14px 18px;">IAU
+                                            <th class="col-3 d-none d-lg-table-cell field-padding">IAU
                                                 Academic
                                                 affairs</th>
                                         </tr>
@@ -384,19 +394,22 @@ there's also many filtering options to find the policy and other adminstrative s
                                                     </tr>
                                                     <tr>
                                                         <td colspan="3">
-                                                            <label class="form-label fw-bold">Brief Description</label>
+                                                            <label class="form-label fw-bold">Brief
+                                                                Description</label>
                                                             <textarea class="form-control" rows="4"
                                                                 readonly>All students are expected to follow the examination rules strictly. Candidates must arrive on time, carry valid identification, and bring only approved materials. Electronic devices are not allowed. Silence must be maintained throughout the exam. Any form of cheating or misconduct will result in disciplinary action. Students may not leave the exam hall without permission and must submit all materials before exiting.</textarea>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td class="col-12 col-sm-4">
-                                                            <label class="form-label fw-bold">Approving Date</label>
+                                                            <label class="form-label fw-bold">Approving
+                                                                Date</label>
                                                             <input type="date" class="form-control mb-2"
                                                                 value="2025-07-07" readonly>
                                                         </td>
                                                         <td class="col-12 col-sm-4">
-                                                            <label class="form-label fw-bold">Accreditation Date</label>
+                                                            <label class="form-label fw-bold">Accreditation
+                                                                Date</label>
                                                             <input type="date" class="form-control mb-2"
                                                                 value="2025-07-07" readonly>
                                                         </td>
@@ -404,14 +417,16 @@ there's also many filtering options to find the policy and other adminstrative s
                                                     </tr>
                                                     <tr>
                                                         <td colspan="2">
-                                                            <label class="form-label fw-bold">Version Number</label>
+                                                            <label class="form-label fw-bold">Version
+                                                                Number</label>
                                                             <input type="text" class="form-control mb-2" value="10.2.4"
                                                                 readonly>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="2">
-                                                            <label class="form-label fw-bold">Accrediting Entity</label>
+                                                            <label class="form-label fw-bold">Accrediting
+                                                                Entity</label>
                                                             <input type="text" class="form-control"
                                                                 value="IAU Academic affairs" readonly>
                                                         </td>
@@ -442,7 +457,8 @@ there's also many filtering options to find the policy and other adminstrative s
                                                 <table class="table table-borderless mb-0">
                                                     <tr>
                                                         <td>
-                                                            <label class="form-label fw-bold">Document Type</label>
+                                                            <label class="form-label fw-bold">Document
+                                                                Type</label>
                                                             <select class="form-select mb-2">
                                                                 <option selected>Regulation</option>
                                                                 <option>Guidelines</option>
@@ -461,7 +477,8 @@ there's also many filtering options to find the policy and other adminstrative s
 
                                                     <tr>
                                                         <td>
-                                                            <label class="form-label fw-bold">Attach word file</label>
+                                                            <label class="form-label fw-bold">Attach word
+                                                                file</label>
                                                             <div class="input-group mb-2">
                                                                 <input type="text" class="form-control"
                                                                     value="Word file" readonly>
@@ -474,7 +491,8 @@ there's also many filtering options to find the policy and other adminstrative s
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <label class="form-label fw-bold">Attach PDF file</label>
+                                                            <label class="form-label fw-bold">Attach PDF
+                                                                file</label>
                                                             <div class="input-group mb-2">
                                                                 <input type="text" class="form-control"
                                                                     value="PDF file..." readonly>
@@ -488,16 +506,19 @@ there's also many filtering options to find the policy and other adminstrative s
                                                     </tr>
                                                     <tr>
                                                         <td colspan="2">
-                                                            <label class="form-label fw-bold">Responsible entity’s
+                                                            <label class="form-label fw-bold">Responsible
+                                                                entity’s
                                                                 contact
                                                                 information:</label>
                                                             <div class="mb-3">
-                                                                <label class="form-label mb-0">Name (English)</label>
+                                                                <label class="form-label mb-0">Name
+                                                                    (English)</label>
                                                                 <input type="text" class="form-control"
                                                                     value="Azzam Alzahrani" readonly>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label class="form-label mb-0">Name (Arabic)</label>
+                                                                <label class="form-label mb-0">Name
+                                                                    (Arabic)</label>
                                                                 <input type="text" class="form-control"
                                                                     value="عزام الزهراني" readonly>
                                                             </div>
@@ -507,12 +528,14 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                     value="Azzam@gmail.com" readonly>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label class="form-label mb-0">Telephone number</label>
+                                                                <label class="form-label mb-0">Telephone
+                                                                    number</label>
                                                                 <input type="text" class="form-control"
                                                                     value="3333139-013" readonly>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label class="form-label mb-0">Mobile number</label>
+                                                                <label class="form-label mb-0">Mobile
+                                                                    number</label>
                                                                 <input type="text" class="form-control"
                                                                     value="0569877695" readonly>
                                                             </div>
@@ -551,24 +574,25 @@ there's also many filtering options to find the policy and other adminstrative s
                                 <table class="w-100">
                                     <thead class="text-center">
                                         <tr>
-                                            <th class="col-1 custom-col" style="padding: 14px 18px;">
+                                            <th class="custom-col field-padding">
                                                 <input type="checkbox" />
                                             </th>
-                                            <th class="col-1 custom-col" style="padding: 14px 18px;">
+                                            <th class="col-1 custom-col field-padding">
                                                 2
                                             </th>
-                                            <th class="col-3 d-table-cell d-sm-table-cell" style="padding: 14px 18px;">
+                                            <th
+                                                class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size field-padding">
                                                 Another
                                                 guide...</th>
-                                            <th class="col-1 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-1 d-none d-md-table-cell field-padding">
                                                 Faculty
                                             </th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-2 d-none d-md-table-cell field-padding">
                                                 5.1.2
                                             </th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-2 d-none d-md-table-cell field-padding">
                                                 2025/6/15</th>
-                                            <th class="col-3 d-none d-md-table-cell" style="padding: 14px 18px;">IAU
+                                            <th class="col-3 d-none d-lg-table-cell field-padding">IAU
                                                 HR
                                                 Department</th>
                                         </tr>
@@ -597,23 +621,24 @@ there's also many filtering options to find the policy and other adminstrative s
                                 <table class="w-100">
                                     <thead class="text-center">
                                         <tr>
-                                            <th class="col-1 custom-col" style="padding: 14px 18px;">
+                                            <th class="custom-col field-padding">
                                                 <input type="checkbox" />
                                             </th>
-                                            <th class="col-1 custom-col" style="padding: 14px 18px;">
+                                            <th class="custom-col field-padding">
                                                 3
                                             </th>
-                                            <th class="col-3 d-table-cell d-sm-table-cell" style="padding: 14px 18px;">
+                                            <th
+                                                class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size field-padding">
                                                 Research
                                                 policies...</th>
-                                            <th class="col-1 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-1 d-none d-md-table-cell field-padding">
                                                 Researchers</th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-2 d-none d-md-table-cell field-padding">
                                                 7.2.1
                                             </th>
-                                            <th class="col-2 d-none d-md-table-cell" style="padding: 14px 18px;">
+                                            <th class="col-2 d-none d-md-table-cell field-padding">
                                                 2025/5/20</th>
-                                            <th class="col-3 d-none d-md-table-cell" style="padding: 14px 18px;">IAU
+                                            <th class="col-3 d-none d-lg-table-cell field-padding">IAU
                                                 Research
                                                 Center</th>
                                         </tr>

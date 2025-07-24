@@ -1,4 +1,5 @@
 using System.Data;
+using System.IO;
 using Oracle.ManagedDataAccess.Client;
 
 namespace RulesRegulation.Services
@@ -110,6 +111,208 @@ namespace RulesRegulation.Services
             catch
             {
                 return null;
+            }
+        }
+
+        // Method to get all records for homepage/admin cards
+        public List<dynamic> GetAllRecords()
+        {
+            var records = new List<dynamic>();
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    string query = @"SELECT 
+                        RECORD_ID, REGULATION_NAME, SECTIONS, VERSION, APPROVAL_DATE, APPROVING_ENTITY,
+                        DEPARTMENT, DOCUMENT_TYPE, DESCRIPTION, VERSION_DATE, NOTES, CREATED_AT
+                        FROM RECORDS 
+                        ORDER BY CREATED_AT DESC";
+                    
+                    using (var cmd = new OracleCommand(query, conn))
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            records.Add(new
+                            {
+                                Id = reader["RECORD_ID"]?.ToString(),
+                                RegulationName = reader["REGULATION_NAME"]?.ToString(),
+                                Sections = reader["SECTIONS"]?.ToString(),
+                                Version = reader["VERSION"]?.ToString(),
+                                ApprovalDate = reader["APPROVAL_DATE"] != DBNull.Value ? 
+                                    Convert.ToDateTime(reader["APPROVAL_DATE"]).ToString("yyyy-MM-dd") : "",
+                                ApprovingEntity = reader["APPROVING_ENTITY"]?.ToString(),
+                                Department = reader["DEPARTMENT"]?.ToString(),
+                                DocumentType = reader["DOCUMENT_TYPE"]?.ToString(),
+                                Description = reader["DESCRIPTION"]?.ToString(),
+                                VersionDate = reader["VERSION_DATE"] != DBNull.Value ? 
+                                    Convert.ToDateTime(reader["VERSION_DATE"]).ToString("yyyy-MM-dd") : "",
+                                Notes = reader["NOTES"]?.ToString(),
+                                CreatedAt = reader["CREATED_AT"] != DBNull.Value ? 
+                                    Convert.ToDateTime(reader["CREATED_AT"]).ToString("yyyy-MM-dd") : ""
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting records: {ex.Message}");
+            }
+            return records;
+        }
+
+        // Method to get single record with full details (for accordion expansion)
+        public dynamic? GetRecordById(int recordId)
+        {
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    string query = @"SELECT r.*, a.FILE_PATH, a.FILE_TYPE 
+                        FROM RECORDS r 
+                        LEFT JOIN ATTACHMENTS a ON r.RECORD_ID = a.RECORD_ID 
+                        WHERE r.RECORD_ID = :recordId";
+                    
+                    using (var cmd = new OracleCommand(query, conn))
+                    {
+                        cmd.Parameters.Add(":recordId", recordId);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            var attachments = new List<dynamic>();
+                            dynamic? record = null;
+                            
+                            while (reader.Read())
+                            {
+                                if (record == null)
+                                {
+                                    record = new
+                                    {
+                                        Id = reader["RECORD_ID"]?.ToString(),
+                                        RegulationName = reader["REGULATION_NAME"]?.ToString(),
+                                        Sections = reader["SECTIONS"]?.ToString(),
+                                        Version = reader["VERSION"]?.ToString(),
+                                        ApprovalDate = reader["APPROVAL_DATE"] != DBNull.Value ? 
+                                            Convert.ToDateTime(reader["APPROVAL_DATE"]).ToString("yyyy-MM-dd") : "",
+                                        ApprovingEntity = reader["APPROVING_ENTITY"]?.ToString(),
+                                        Department = reader["DEPARTMENT"]?.ToString(),
+                                        DocumentType = reader["DOCUMENT_TYPE"]?.ToString(),
+                                        Description = reader["DESCRIPTION"]?.ToString(),
+                                        VersionDate = reader["VERSION_DATE"] != DBNull.Value ? 
+                                            Convert.ToDateTime(reader["VERSION_DATE"]).ToString("yyyy-MM-dd") : "",
+                                        Notes = reader["NOTES"]?.ToString(),
+                                        CreatedAt = reader["CREATED_AT"] != DBNull.Value ? 
+                                            Convert.ToDateTime(reader["CREATED_AT"]).ToString("yyyy-MM-dd") : "",
+                                        UserId = reader["USER_ID"]?.ToString(),
+                                        Attachments = attachments
+                                    };
+                                }
+                                
+                                if (reader["FILE_PATH"] != DBNull.Value)
+                                {
+                                    var filePath = reader["FILE_PATH"]?.ToString();
+                                    var fileName = !string.IsNullOrEmpty(filePath) ? Path.GetFileName(filePath) : "";
+                                    
+                                    attachments.Add(new
+                                    {
+                                        FileName = fileName,
+                                        OriginalFileName = fileName, // For now, same as filename
+                                        FileType = reader["FILE_TYPE"]?.ToString()?.ToLower()
+                                    });
+                                }
+                            }
+                            return record;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting record by ID: {ex.Message}");
+                return null;
+            }
+        }
+
+        // Method to add a new record and its attachments
+        public bool AddNewRecord(
+            string regulationName,
+            string relevantDepartment,
+            string versionNumber,
+            DateTime versionDate,
+            DateTime approvalDate,
+            string approvalEntity,
+            string description,
+            string doctype,
+            string sections,
+            string notes,
+            string? wordPath,
+            string? pdfPath)
+        {
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    // Insert record
+                    string recordQuery = @"INSERT INTO RECORDS (
+                        USER_ID, REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE, APPROVAL_DATE, APPROVING_ENTITY,
+                        DESCRIPTION, DOCUMENT_TYPE, SECTIONS, NOTES, CREATED_AT)
+                        VALUES (
+                        :userId, :regulationName, :relevantDepartment, :versionNumber, :versionDate, :approvalDate, :approvalEntity,
+                        :description, :doctype, :sections, :notes, SYSTIMESTAMP)
+                        RETURNING RECORD_ID INTO :newRecordId";
+                    using (var cmd = new OracleCommand(recordQuery, conn))
+                    {
+                        cmd.Parameters.Add(":userId", 1); // Default user ID
+                        cmd.Parameters.Add(":regulationName", regulationName);
+                        cmd.Parameters.Add(":relevantDepartment", relevantDepartment);
+                        cmd.Parameters.Add(":versionNumber", versionNumber);
+                        cmd.Parameters.Add(":versionDate", versionDate);
+                        cmd.Parameters.Add(":approvalDate", approvalDate);
+                        cmd.Parameters.Add(":approvalEntity", approvalEntity);
+                        cmd.Parameters.Add(":description", description);
+                        cmd.Parameters.Add(":doctype", doctype);
+                        cmd.Parameters.Add(":sections", sections);
+                        cmd.Parameters.Add(":notes", notes);
+                        var newRecordIdParam = new OracleParameter(":newRecordId", OracleDbType.Int32) { Direction = ParameterDirection.Output };
+                        cmd.Parameters.Add(newRecordIdParam);
+                        int result = cmd.ExecuteNonQuery();
+                        if (result == 0) return false;
+                        int newRecordId = Convert.ToInt32(newRecordIdParam.Value);
+                        // Insert attachments
+                        if (!string.IsNullOrEmpty(wordPath))
+                        {
+                            string attachQuery = @"INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH, UPLOAD_DATE)
+                                VALUES (:recordId, 'word', :filePath, SYSTIMESTAMP)";
+                            using (var attachCmd = new OracleCommand(attachQuery, conn))
+                            {
+                                attachCmd.Parameters.Add(":recordId", newRecordId);
+                                attachCmd.Parameters.Add(":filePath", wordPath);
+                                attachCmd.ExecuteNonQuery();
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(pdfPath))
+                        {
+                            string attachQuery = @"INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH, UPLOAD_DATE)
+                                VALUES (:recordId, 'pdf', :filePath, SYSTIMESTAMP)";
+                            using (var attachCmd = new OracleCommand(attachQuery, conn))
+                            {
+                                attachCmd.Parameters.Add(":recordId", newRecordId);
+                                attachCmd.Parameters.Add(":filePath", pdfPath);
+                                attachCmd.ExecuteNonQuery();
+                            }
+                        }
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the actual error for debugging
+                Console.WriteLine($"Database error: {ex.Message}");
+                return false;
             }
         }
     }

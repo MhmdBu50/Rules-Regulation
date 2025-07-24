@@ -284,29 +284,6 @@ body {
 :root {
   --header-height: 100px;
 }
-.custom-header {
-  background-color: #212843;
-  filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.39));
-  color: #eeca2c;
-  border-radius: 20px;
-  margin-bottom: 8px;
-  overflow: hidden;
-  height: var(--header-height);
-}
-
-.custom-header th {
-  color: #eeca2c;
-  font-weight: bold;
-  padding: 14px 18px;
-  vertical-align: middle;
-  font-size: 1.1rem;
-}
-
-.custom-header input[type="checkbox"] {
-  accent-color: #eeca2c;
-  margin-right: 8px;
-  transform: scale(1.2);
-}
 
 .accordion-item {
   background: none;
@@ -332,6 +309,16 @@ body {
   --bs-accordion-border-width: 0; /* Removes the preset border that was in one of bootstrap's components */
 }
 
+#headerAccordion {
+  background: #212843 !important;
+  color: #eeca2c !important;
+  filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.39)) !important;
+  background-image: none !important;
+}
+#headerAccordion::before {
+  background-image: none !important;
+}
+
 /* Remove Bootstrap's default accordion arrow completely */
 .accordion-button::after {
   display: none !important; /* Hide Bootstrap's default arrow */
@@ -339,9 +326,9 @@ body {
 
 /* Add our custom SVG accordion arrow */
 .accordion-button::before {
-  background-image: url("../svgs/admin/accordion-arrow.svg");
+  background-image: url(../svgs/admin/accordion-arrow.svg);
   background-repeat: no-repeat;
-  background-size: 30px 15px;
+  background-size: 20px 10px;
   background-position: center;
   content: "";
   width: 30px;
@@ -353,7 +340,7 @@ body {
   margin-right: 15px;
   flex-shrink: 0;
   display: block;
-  order: 999; /* Ensure it appears at the end */
+  order: 999;
 }
 
 .accordion-button:not(.collapsed)::before {
@@ -428,11 +415,10 @@ body {
 }
 
 .delete-btn-container {
-  justify-self: center;
+  justify-self: left;
   width: 60px;
   height: 60px;
   background-color: #2f3e5f;
-  display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 8px;
@@ -440,14 +426,20 @@ body {
   box-shadow: 0 4px 12px rgba(13, 10, 44, 0.06), 0 0 15px rgba(151, 0, 0, 0.6);
   border-radius: 32px;
   flex-shrink: 1;
-  margin-bottom: 10px;
-  margin-left: auto !important;
+  margin-bottom: 9px;
   transition: box-shadow 0.3s ease;
 }
 
 .delete-btn-container:hover {
   box-shadow: 0px 0px 25px rgba(151, 0, 0, 1), 0 0 20px rgba(151, 0, 0, 0.7); /* زيادة الشادو من جميع الجهات عند التفاعل */
   stroke: #970000 !important;
+}
+
+#delete-btn-mobile {
+  height: 50px !important;
+  margin-bottom: 0px !important;
+  border: 2px solid whitesmoke !important;
+  border-radius: 8px !important;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Joan&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
@@ -500,12 +492,17 @@ body {
   border-radius: 32px;
   flex-shrink: 1; /* Allow it to shrink */
   margin-bottom: 9px;
+  border: 1px solid transparent; /* baseline border */
+  transition: border 0.2s ease, box-shadow 0.2s ease;
 }
-#section-search {
-  margin-left: 10px !important;
+.padding-between-search-filter {
+  padding: 0px 7px;
 }
-#document-search {
-  margin-left: 20px !important;
+
+.search-container:focus-within {
+  outline: none;
+  border: 1px solid #409cff; /* this Customizes hover border color */
+  box-shadow: 0 0 0 2px rgba(64, 156, 255, 0.4); /* Optional glow */
 }
 
 #section-document-search-2 {
@@ -577,6 +574,11 @@ body {
   border: none;
 }
 
+.search:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 .adminButton {
   background-color: #33415c;
   color: white;
@@ -602,10 +604,6 @@ body {
     padding: 0 4px !important;
     height: 50px !important;
     margin-bottom: 0;
-  }
-
-  div.col-6 {
-    width: 48.55555555%;
   }
 
   .search {
@@ -642,10 +640,31 @@ body {
   padding: 0;
 }
 
-@media (max-width: 768px) {
-  .custom-col {
-    /* يجبر عرض العمود على 0.3333% */
-    flex: 0 0 auto;
-    width: 0.3333333% !important;
+.custom-col {
+  /* يجبر عرض العمود على 0.3333% */
+  flex: 0 0 auto;
+  width: 0.3333333% !important;
+}
+
+.Regulation-Manual-size {
+  flex: 0 0 auto;
+  width: 38%;
+}
+
+.field-padding {
+  padding: 14px 18px;
+}
+
+/*حيدر: أحتاج دا الكلاس برجع له بعدين*/
+
+.custom-header input[type="checkbox"] {
+  accent-color: #eeca2c;
+  margin-right: 8px;
+  transform: scale(1.2);
+}
+
+@media (max-width: 992px) {
+  .small-font-size {
+    font-size: 18px !important;
   }
 }

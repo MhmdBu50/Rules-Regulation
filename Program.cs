@@ -1,22 +1,33 @@
 using RulesRegulation.Data;
 using RulesRegulation.Services;
-using System.Net;
-using System.Net.Sockets;
+using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[]
+    {
+        new System.Globalization.CultureInfo("en-US"),
+        new System.Globalization.CultureInfo("ar-SA"),
+    };
 
-// Add services to the container.
+    options.DefaultRequestCulture = new RequestCulture("en-US"); 
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+    
+    options.RequestCultureProviders.Clear();
+    options.RequestCultureProviders.Add(new CookieRequestCultureProvider());
+    options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());
+});
+
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddScoped<OracleDbService>(provider =>
 {
     var config = provider.GetRequiredService<IConfiguration>();
     var connectionString = config.GetConnectionString("OracleConnection");
-
     if (string.IsNullOrWhiteSpace(connectionString))
         throw new InvalidOperationException("Connection string 'OracleConnection' not found.");
-
     return new OracleDbService(connectionString);
 });
 
@@ -29,21 +40,17 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.MapStaticAssets();
+app.UseRequestLocalization();
 app.UseRouting();
-
 app.UseSession();
 app.UseAuthorization();
 
-app.MapStaticAssets();
-
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+    pattern: "{controller=Home}/{action=homePage}/{id?}");
 app.Run();

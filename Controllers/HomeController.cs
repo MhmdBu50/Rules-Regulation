@@ -2,21 +2,24 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using RulesRegulation.Models;
 using RulesRegulation.Data;
+using RulesRegulation.Services;
 
 namespace RulesRegulation.Controllers;
 
 public class HomeController : Controller
 {
     private readonly DatabaseConnection _db;
+    private readonly OracleDbService _oracleDbService;
     private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
+    public HomeController(ILogger<HomeController> logger, IConfiguration configuration, OracleDbService oracleDbService)
     {
         _logger = logger;
+        _oracleDbService = oracleDbService;
 
         // use DI-style constructor
         var connectionString = configuration.GetConnectionString("OracleConnection");
-        _db = new DatabaseConnection(connectionString);
+        _db = new DatabaseConnection(connectionString ?? "");
     }
     public IActionResult Index()
     {
@@ -41,7 +44,17 @@ public class HomeController : Controller
 
     public IActionResult homePage()
     {
-        return View();
+        try
+        {
+            var records = _oracleDbService.GetAllRecords();
+            return View(records);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading records for homepage");
+            // Return empty list if there's an error
+            return View(new List<dynamic>());
+        }
     }
 
     //the get the data to ShowData.cshtml form ExecuteQueryAsync method
@@ -52,5 +65,24 @@ public class HomeController : Controller
         return View("~/Views/Service/ShowData.cshtml", dataTable);
     }
 
-    
+    [HttpGet]
+    public IActionResult GetRecordDetails(int id)
+    {
+        try
+        {
+            var record = _oracleDbService.GetRecordById(id);
+            if (record == null)
+            {
+                return NotFound("Record not found");
+            }
+            
+            // Return partial view with record details
+            return PartialView("_RecordDetails", record);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting record details for ID: {Id}", id);
+            return StatusCode(500, "Error loading record details");
+        }
+    }
 }
