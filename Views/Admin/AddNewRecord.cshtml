@@ -27,10 +27,29 @@
       <h1>New Record</h1>
     </div>
 
+    <!-- Success/Error Messages -->
+    <div class="container">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    </div>
+
     <!-- Form Section -->
     <div class="container">
       <div class="form-wrapper">
-        <form method="post" action="/submit">
+        <form method="post" enctype="multipart/form-data" action="@Url.Action("AddNewRecord", "Admin")">
+          @Html.AntiForgeryToken()
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="regulationName">Regulation/Manual Name</label>
@@ -40,13 +59,13 @@
               <label for="relevantDepartment">Relevant Department</label>
               <select class="form-select" id="relevantDepartment" name="relevantDepartment" required>
                 <option value="">Select department</option>
-                <option value="HR">Reg and Admission</option>
-                <option value="IT">CCSIT</option>
-                <option value="IT">Communication and tech</option>
-                <option value="IT">Hospital</option>
-                <option value="IT">Library</option>
-                <option value="IT">Students Affairs</option>
-                <option value="IT">Preparetory</option>
+                <option value="Reg and Admission">Reg and Admission</option>
+                <option value="CCSIT">CCSIT</option>
+                <option value="Communication and tech">Communication and tech</option>
+                <option value="Hospital">Hospital</option>
+                <option value="Library">Library</option>
+                <option value="Students Affairs">Students Affairs</option>
+                <option value="Preparetory">Preparetory</option>
                 <option value="Academic Affairs">Academic Affairs</option>
               </select>
             </div>
