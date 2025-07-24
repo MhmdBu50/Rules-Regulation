@@ -2,6 +2,10 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using RulesRegulation.Models;
 using RulesRegulation.Services;
+using RulesRegulation.Data;
+using Oracle.ManagedDataAccess.Client;
+using System.Data;
+using Oracle.ManagedDataAccess.Types;
 
 namespace RulesRegulation.Controllers;
 
@@ -9,18 +13,21 @@ public class AdminController : Controller
 {
     private readonly ILogger<AdminController> _logger;
     private readonly OracleDbService _oracleDbService;
+    private readonly DatabaseConnection _db;
+    private readonly string _connectionString;
 
-    public AdminController(ILogger<AdminController> logger, OracleDbService oracleDbService)
+    public AdminController(ILogger<AdminController> logger, IConfiguration configuration)
     {
         _logger = logger;
-        _oracleDbService = oracleDbService;
+        _connectionString = configuration.GetConnectionString("OracleConnection");
+        _db = new DatabaseConnection(_connectionString);
     }
-
     public IActionResult AdminPage()
     {
         return View();
     }
 
+    [HttpGet]
     public IActionResult AddNewRecord()
     {
         return View();
@@ -72,4 +79,111 @@ public class AdminController : Controller
             return View();
         }
     }
+
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+[ActionName("AddNewRecord")]
+public async Task<IActionResult> AddNewRecordAsync(AddNewRecordViewModel model)
+{
+    System.Console.WriteLine("AddNewRecord hit");
+
+    try
+    {
+        string uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+        if (!Directory.Exists(uploadsPath))
+            Directory.CreateDirectory(uploadsPath);
+
+        string? wordPath = null, pdfPath = null;
+
+        // Save Word file
+        if (model.WordAttachment != null)
+        {
+            var wordFileName = Guid.NewGuid() + Path.GetExtension(model.WordAttachment.FileName);
+            var wordFullPath = Path.Combine(uploadsPath, wordFileName);
+            using (var stream = new FileStream(wordFullPath, FileMode.Create))
+                await model.WordAttachment.CopyToAsync(stream);
+            wordPath = "/uploads/" + wordFileName;
+        }
+
+        // Save PDF file
+        if (model.PdfAttachment != null)
+        {
+            var pdfFileName = Guid.NewGuid() + Path.GetExtension(model.PdfAttachment.FileName);
+            var pdfFullPath = Path.Combine(uploadsPath, pdfFileName);
+            using (var stream = new FileStream(pdfFullPath, FileMode.Create))
+                await model.PdfAttachment.CopyToAsync(stream);
+            pdfPath = "/uploads/" + pdfFileName;
+        }
+
+        // Prepare section string
+        var sectionString = string.Join(",", model.Sections ?? new List<string>());
+
+        // Step 1: Insert record and get inserted ID
+        var insertSql = @"
+            INSERT INTO RECORDS (
+                REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
+                APPROVING_ENTITY, APPROVAL_DATE, DESCRIPTION, DOCUMENT_TYPE,
+                SECTIONS, NOTES
+            )
+            VALUES (
+                :RegulationName, :Department, :Version, :VersionDate,
+                :ApprovingEntity, :ApprovalDate, :Description, :DocumentType,
+                :Sections, :Notes
+            )
+            RETURNING RECORD_ID INTO :InsertedId";
+
+        var insertedIdParam = new OracleParameter("InsertedId", OracleDbType.Int32)
+        {
+            Direction = ParameterDirection.Output
+        };
+
+        var parameters = new OracleParameter[]
+        {
+            new("RegulationName", model.RegulationName),
+            new("Department", model.RelevantDepartment),
+            new("Version", model.VersionNumber),
+            new("VersionDate", model.VersionDate),
+            new("ApprovingEntity", model.ApprovingEntity),
+            new("ApprovalDate", model.ApprovingDate),
+            new("Description", model.BriefDescription),
+            new("DocumentType", model.DocumentType),
+            new("Sections", sectionString),
+            new("Notes", model.Notes),
+            insertedIdParam // important
+        };
+
+        // Run insert
+        await _db.ExecuteNonQueryAsync(insertSql, parameters);
+
+        // Get the inserted record ID
+        int newId = ((OracleDecimal)insertedIdParam.Value).ToInt32();
+
+        // Step 2: Insert attachments
+        if (!string.IsNullOrEmpty(wordPath))
+        {
+            var insertWordSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, 'WORD', :path)";
+            await _db.ExecuteNonQueryAsync(insertWordSql,
+                new OracleParameter("id", newId),
+                new OracleParameter("path", wordPath));
+        }
+
+        if (!string.IsNullOrEmpty(pdfPath))
+        {
+            var insertPdfSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, 'PDF', :path)";
+            await _db.ExecuteNonQueryAsync(insertPdfSql,
+                new OracleParameter("id", newId),
+                new OracleParameter("path", pdfPath));
+        }
+
+        TempData["SuccessMessage"] = "Record and attachments saved.";
+        return RedirectToAction("AddNewRecord");
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Insert failed");
+        TempData["ErrorMessage"] = "An error occurred while saving the record.";
+        return View(model);
+    }
+}
 }

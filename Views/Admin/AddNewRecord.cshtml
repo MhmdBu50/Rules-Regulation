@@ -27,10 +27,24 @@
       <h1>New Record</h1>
     </div>
 
+    @if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+    @if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["ErrorMessage"]
+    </div>
+}
     <!-- Form Section -->
     <div class="container">
       <div class="form-wrapper">
-        <form method="post" action="/submit">
+        <form asp-controller="Admin" asp-action="AddNewRecord" method="post" enctype="multipart/form-data">
+          @Html.AntiForgeryToken()
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="regulationName">Regulation/Manual Name</label>

@@ -7,7 +7,7 @@ namespace RulesRegulation.Controllers;
 
 public class HomeController : Controller
 {
-        private readonly DatabaseConnection _db;
+    private readonly DatabaseConnection _db;
     private readonly ILogger<HomeController> _logger;
 
     public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
@@ -51,4 +51,6 @@ public class HomeController : Controller
         var dataTable = await _db.ExecuteQueryAsync(query);
         return View("~/Views/Service/ShowData.cshtml", dataTable);
     }
+
+    
 }
