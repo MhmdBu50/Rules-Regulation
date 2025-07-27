@@ -216,7 +216,8 @@ public class AdminController : Controller
             var record = _oracleDbService.GetRecordById(id);
             if (record == null)
             {
-                return NotFound("Record not found");
+                Response.StatusCode = 404;
+                return PartialView("_AdminRecordDetails", null);
             }
 
             // Return partial view with record details for admin
@@ -225,7 +226,8 @@ public class AdminController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting record details for ID: {Id}", id);
-            return StatusCode(500, "Error loading record details");
+            Response.StatusCode = 500;
+            return PartialView("_AdminRecordDetails", null);
         }
     }
 }
