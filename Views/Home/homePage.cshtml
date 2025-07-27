@@ -23,23 +23,28 @@ there's a navigation bar and after that the rules and regualtions appears   -->
     <script src="@Url.Content("~/js/moblieMenu.js")"></script>
     
     <script>
-        function showRecordDetails(recordId) {
-            const detailsContainer = document.getElementById('fullDetails' + recordId);
-            
-            // Check if details are already loaded
-            if (detailsContainer.innerHTML.includes('record-full-details')) {
-                return; // Already loaded
+        function showRecordDetailsModal(recordId) {
+            // Show toast notification
+            if (typeof showToast === 'function') {
+                showToast('Showing information...');
             }
             
-            // Show loading spinner
-            detailsContainer.innerHTML = `
+            // Show the modal
+            const modal = new bootstrap.Modal(document.getElementById('recordDetailsModal'));
+            const modalBody = document.getElementById('modalRecordDetails');
+            
+            // Reset modal content with loading spinner
+            modalBody.innerHTML = `
                 <div class="text-center">
-                    <div class="spinner-border spinner-border-sm" role="status">
+                    <div class="spinner-border" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
                     <p class="mt-2">Loading record details...</p>
                 </div>
             `;
+            
+            // Show the modal
+            modal.show();
             
             // Make AJAX call to get record details
             fetch('/Home/GetRecordDetails?id=' + recordId)
@@ -49,15 +54,15 @@ there's a navigation bar and after that the rules and regualtions appears   -->
                     }
                     return response.text();
                 })
-                .then(html => {
-                    detailsContainer.innerHTML = html;
+                .then(data => {
+                    modalBody.innerHTML = data;
                 })
                 .catch(error => {
                     console.error('Error loading record details:', error);
-                    detailsContainer.innerHTML = `
-                        <div class="alert alert-danger">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            Failed to load record details. Please try again.
+                    modalBody.innerHTML = `
+                        <div class="alert alert-danger" role="alert">
+                            <h6>Error Loading Details</h6>
+                            <p>Sorry, we couldn't load the record details. Please try again later.</p>
                         </div>
                     `;
                 });
@@ -327,7 +332,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
                                             <img src="~/svgs/cards/download-icon.svg" alt="Download" width="31" height="34" />
                                         </i>
                                     </button>
-                                    <button class="action-btn" onclick="showRecordDetails(@record.Id)" title="Information" data-bs-toggle="collapse" data-bs-target="#recordDetails@(record.Id)" aria-expanded="false">
+                                    <button class="action-btn" onclick="showRecordDetailsModal(@record.Id)" title="Information">
                                         <i class="fas fa-info">
                                             <img src="~/svgs/cards/info-icon.svg" alt="Information" class="info-icon" width="31" height="33" />
                                         </i>
@@ -341,22 +346,6 @@ there's a navigation bar and after that the rules and regualtions appears   -->
                                             <img src="~/svgs/cards/chat-icon.svg" alt="Chat" width="32" height="34" />
                                         </i>
                                     </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Accordion for full record details -->
-                        <div class="collapse mt-2" id="recordDetails@(record.Id)">
-                            <div class="card card-body">
-                                <div class="record-details">
-                                    <div id="fullDetails@(record.Id)">
-                                        <!-- Full details will be loaded here via AJAX -->
-                                        <div class="text-center">
-                                            <div class="spinner-border spinner-border-sm" role="status">
-                                                <span class="visually-hidden">Loading...</span>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -375,76 +364,6 @@ there's a navigation bar and after that the rules and regualtions appears   -->
                     </div>
                 </div>
             }
-
-            <div class="col-auto medium-card">
-                <div class="card document-card">
-                    <div class="bookmark" onclick="toggleBookmark(this)"></div>
-
-                    <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
-                    </div>
-
-                    <h2 class="card-title">Rule and regulations title</h2>
-
-                    <div class="info-footer">
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="handleAction('download')" title="Download">
-                                <i class="fas fa-download">
-                                    <img src="~/svgs/cards/download-icon.svg" alt="Download" width="31" height="34" />
-                                </i>
-                            </button>
-                            <button class="action-btn" onclick="handleAction('info')" title="Information">
-                                <i class="fas fa-info">
-                                    <img src="~/svgs/cards/info-icon.svg" alt="Information" class="info-icon" width="31" height="33" />
-                                </i>
-                            </button>
-                            <button class="action-btn" onclick="handleAction('read')" title="Read">
-                                <i class="fas fa-book-open"><img src="~/svgs/cards/book-icon.svg" alt="Book" width="32" height="34" />
-                                </i>
-                            </button>
-                            <button class="action-btn" onclick="handleAction('chat')" title="Chat">
-                                <i class="fas fa-comments">
-                                    <img src="~/svgs/cards/chat-icon.svg" alt="Chat" width="32" height="34" />
-                                </i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-auto medium-card">
-                <div class="card document-card">
-                    <div class="bookmark" onclick="toggleBookmark(this)"></div>
-
-                    <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
-                    </div>
-
-                    <h2 class="card-title">Rule and regulations title</h2>
-
-                    <div class="info-footer">
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="handleAction('download')" title="Download">
-                                <i class="fas fa-download">
-                                    <img src="~/svgs/cards/download-icon.svg" alt="Download" width="31" height="34" />
-                                </i>
-                            </button>
-                            <button class="action-btn" onclick="handleAction('info')" title="Information">
-                                <i class="fas fa-info">
-                                    <img src="~/svgs/cards/info-icon.svg" alt="Information" class="info-icon" width="31" height="33" />
-                                </i>
-                            </button>
-                            <button class="action-btn" onclick="handleAction('read')" title="Read">
-                                <i class="fas fa-book-open"><img src="~/svgs/cards/book-icon.svg" alt="Book" width="32" height="34" />
-                                </i>
-                            </button>
-                            <button class="action-btn" onclick="handleAction('chat')" title="Chat">
-                                <i class="fas fa-comments">
-                                    <img src="~/svgs/cards/chat-icon.svg" alt="Chat" width="32" height="34" />
-                                </i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
         </div>
     </div>
@@ -479,7 +398,28 @@ there's a navigation bar and after that the rules and regualtions appears   -->
         </div>
     </div>
 
-
-
-
-
+<!-- Record Details Modal -->
+<div class="modal fade" id="recordDetailsModal" tabindex="-1" aria-labelledby="recordDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="recordDetailsModalLabel">Record Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modalRecordDetails">
+                    <!-- Record details will be loaded here -->
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Loading record details...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
