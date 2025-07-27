@@ -45,19 +45,6 @@
         }
     </div>
 
-    @if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
-}
-
-    @if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["ErrorMessage"]
-    </div>
-}
     <!-- Form Section -->
     <div class="container">
       <div class="form-wrapper">
@@ -100,8 +87,8 @@
           </div>
 
           <div class="mb-3">
-            <label for="approvalEntity">Approving Entity</label>
-            <input type="text" class="form-control" id="approvalEntity" name="approvalEntity" required>
+            <label for="ApprovingEntity">Approving Entity</label>
+            <input type="text" class="form-control" id="ApprovingEntity" name="ApprovingEntity" required>
           </div>
 
           <div class="row mb-3">
@@ -116,8 +103,8 @@
           </div>
 
           <div class="mb-3">
-            <label for="description">Brief Description</label>
-            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+            <label for="Description">Brief Description</label>
+            <textarea class="form-control" id="Description" name="Description" rows="3"></textarea>
           </div>
 
           <div class="row mb-4">

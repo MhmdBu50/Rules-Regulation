@@ -104,7 +104,7 @@ public class AdminController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [ActionName("AddNewRecord")]
-    public async Task<IActionResult> AddNewRecordAsync(AddNewRecordViewModel model)
+    public async Task<IActionResult> AddNewRecordAsync(AddNewRecordViewModel model, IFormFile wordAttachment, IFormFile pdfAttachment)
     {
         System.Console.WriteLine("AddNewRecord hit");
 
@@ -136,6 +136,23 @@ public class AdminController : Controller
                 pdfPath = "/uploads/" + pdfFileName;
             }
 
+            string documentType = "";
+
+            if (model.WordAttachment != null && model.WordAttachment.Length > 0)
+                documentType += "word";
+
+            if (model.PdfAttachment != null && model.PdfAttachment.Length > 0)
+            {
+                if (!string.IsNullOrEmpty(documentType))
+                    documentType += ",";
+
+                documentType += "pdf";
+            }
+
+            // Optional fallback
+            if (string.IsNullOrEmpty(documentType))
+                documentType = "none"; // Or return error if both files are required
+
             // Prepare section string
             var sectionString = string.Join(",", model.Sections ?? new List<string>());
 
@@ -166,8 +183,8 @@ public class AdminController : Controller
             new("VersionDate", model.VersionDate),
             new("ApprovingEntity", model.ApprovingEntity),
             new("ApprovalDate", model.ApprovingDate),
-            new("Description", model.BriefDescription),
-            new("DocumentType", model.DocumentType),
+            new("Description", model.Description),
+            new("DocumentType",documentType),
             new("Sections", sectionString),
             new("Notes", model.Notes),
             insertedIdParam // important
