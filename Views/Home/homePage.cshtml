@@ -322,7 +322,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
 
                             <div class="info-footer">
                                 <div class="action-buttons">
-                                    <button class="action-btn" onclick="handleAction('download')" title="Download">
+                                    <button class="action-btn" onclick="downloadPdf(@record.Id)" title="Download">
                                         <i class="fas fa-download">
                                             <img src="~/svgs/cards/download-icon.svg" alt="Download" width="31" height="34" />
                                         </i>
@@ -376,78 +376,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
                 </div>
             }
 
-            <div class="col-auto medium-card">
-                <div class="card document-card">
-                    <div class="bookmark" onclick="toggleBookmark(this)"></div>
-
-                    <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
-                    </div>
-
-                    <h2 class="card-title">Rule and regulations title</h2>
-
-                    <div class="info-footer">
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="handleAction('download')" title="Download">
-                                <i class="fas fa-download">
-                                    <img src="~/svgs/cards/download-icon.svg" alt="Download" width="31" height="34" />
-                                </i>
-                            </button>
-                            <button class="action-btn" onclick="handleAction('info')" title="Information">
-                                <i class="fas fa-info">
-                                    <img src="~/svgs/cards/info-icon.svg" alt="Information" class="info-icon" width="31" height="33" />
-                                </i>
-                            </button>
-                            <button class="action-btn" onclick="handleAction('read')" title="Read">
-                                <i class="fas fa-book-open"><img src="~/svgs/cards/book-icon.svg" alt="Book" width="32" height="34" />
-                                </i>
-                            </button>
-                            <button class="action-btn" onclick="handleAction('chat')" title="Chat">
-                                <i class="fas fa-comments">
-                                    <img src="~/svgs/cards/chat-icon.svg" alt="Chat" width="32" height="34" />
-                                </i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-auto medium-card">
-                <div class="card document-card">
-                    <div class="bookmark" onclick="toggleBookmark(this)"></div>
-
-                    <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
-                    </div>
-
-                    <h2 class="card-title">Rule and regulations title</h2>
-
-                    <div class="info-footer">
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="handleAction('download')" title="Download">
-                                <i class="fas fa-download">
-                                    <img src="~/svgs/cards/download-icon.svg" alt="Download" width="31" height="34" />
-                                </i>
-                            </button>
-                            <button class="action-btn" onclick="handleAction('info')" title="Information">
-                                <i class="fas fa-info">
-                                    <img src="~/svgs/cards/info-icon.svg" alt="Information" class="info-icon" width="31" height="33" />
-                                </i>
-                            </button>
-                            <button class="action-btn" onclick="handleAction('read')" title="Read">
-                                <i class="fas fa-book-open"><img src="~/svgs/cards/book-icon.svg" alt="Book" width="32" height="34" />
-                                </i>
-                            </button>
-                            <button class="action-btn" onclick="handleAction('chat')" title="Chat">
-                                <i class="fas fa-comments">
-                                    <img src="~/svgs/cards/chat-icon.svg" alt="Chat" width="32" height="34" />
-                                </i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
-    </div>
 
     <!-- Chatbot Section -->
     <div class="chatbot-container">
@@ -478,7 +407,6 @@ there's a navigation bar and after that the rules and regualtions appears   -->
             </div>
         </div>
     </div>
-
 
 
 

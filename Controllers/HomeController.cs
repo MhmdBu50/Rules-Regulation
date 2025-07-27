@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using RulesRegulation.Models;
 using RulesRegulation.Data;
 using RulesRegulation.Services;
+using Oracle.ManagedDataAccess.Client;
 
 namespace RulesRegulation.Controllers;
 
@@ -11,6 +12,8 @@ public class HomeController : Controller
     private readonly DatabaseConnection _db;
     private readonly OracleDbService _oracleDbService;
     private readonly ILogger<HomeController> _logger;
+    private readonly string _connectionString;
+
 
     public HomeController(ILogger<HomeController> logger, IConfiguration configuration, OracleDbService oracleDbService)
     {
@@ -18,8 +21,8 @@ public class HomeController : Controller
         _oracleDbService = oracleDbService;
 
         // use DI-style constructor
-        var connectionString = configuration.GetConnectionString("OracleConnection");
-        _db = new DatabaseConnection(connectionString ?? "");
+        _connectionString = configuration.GetConnectionString("OracleConnection");
+        _db = new DatabaseConnection(_connectionString);
     }
     public IActionResult Index()
     {
@@ -76,7 +79,7 @@ public class HomeController : Controller
                 Response.StatusCode = 404;
                 return View("Error404");
             }
-            
+
             // Return partial view with record details
             return PartialView("_RecordDetails", record);
         }
