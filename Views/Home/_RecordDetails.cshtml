@@ -64,6 +64,52 @@
         </div>
     </div>
     
+    <!-- Row 6: Contact Information -->
+    @if (Model.ContactInformation != null && ((IEnumerable<dynamic>)Model.ContactInformation).Any())
+    {
+        <div class="row mb-3">
+            <div class="col-12">
+                <p><strong>Department Contact Information:</strong></p>
+                <div class="contact-info-container p-3" style="background-color: #f8f9fa; border-radius: 8px; border-left: 4px solid #007bff;">
+                    @foreach (var contact in Model.ContactInformation)
+                    {
+                        <div class="contact-item mb-3 pb-3" style="border-bottom: 1px solid #dee2e6;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>@contact.Name</strong></p>
+                                    <p class="mb-1 text-muted small">@contact.Department</p>
+                                </div>
+                                <div class="col-md-6">
+                                    @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
+                                    {
+                                        <p class="mb-1">
+                                            <i class="fas fa-envelope me-2 text-primary"></i>
+                                            <a href="mailto:@contact.Email" class="text-decoration-none">@contact.Email</a>
+                                        </p>
+                                    }
+                                    @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
+                                    {
+                                        <p class="mb-1">
+                                            <i class="fas fa-phone me-2 text-success"></i>
+                                            <a href="tel:@contact.Telephone" class="text-decoration-none">@contact.Telephone</a>
+                                        </p>
+                                    }
+                                    @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
+                                    {
+                                        <p class="mb-1">
+                                            <i class="fas fa-mobile-alt me-2 text-info"></i>
+                                            <a href="tel:@contact.Mobile" class="text-decoration-none">@contact.Mobile</a>
+                                        </p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    
     @if (Model.Attachments != null && ((IEnumerable<dynamic>)Model.Attachments).Any())
     {
         <div class="mt-3">

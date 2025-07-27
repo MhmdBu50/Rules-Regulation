@@ -249,6 +249,59 @@ namespace RulesRegulation.Services
                                     });
                                 }
                             }
+                            
+                            // Add contact information for the department if record exists
+                            if (record != null)
+                            {
+                                var department = record.Department?.ToString();
+                                if (!string.IsNullOrEmpty(department))
+                                {
+                                    var contacts = GetContactsByDepartment(department);
+                                    
+                                    // Create a new record object with contact information
+                                    record = new
+                                    {
+                                        Id = record.Id,
+                                        RegulationName = record.RegulationName,
+                                        Sections = record.Sections,
+                                        Version = record.Version,
+                                        ApprovalDate = record.ApprovalDate,
+                                        ApprovingEntity = record.ApprovingEntity,
+                                        Department = record.Department,
+                                        DocumentType = record.DocumentType,
+                                        Description = record.Description,
+                                        VersionDate = record.VersionDate,
+                                        Notes = record.Notes,
+                                        CreatedAt = record.CreatedAt,
+                                        UserId = record.UserId,
+                                        Attachments = record.Attachments,
+                                        ContactInformation = contacts
+                                    };
+                                }
+                                else
+                                {
+                                    // Add empty contact information if no department
+                                    record = new
+                                    {
+                                        Id = record.Id,
+                                        RegulationName = record.RegulationName,
+                                        Sections = record.Sections,
+                                        Version = record.Version,
+                                        ApprovalDate = record.ApprovalDate,
+                                        ApprovingEntity = record.ApprovingEntity,
+                                        Department = record.Department,
+                                        DocumentType = record.DocumentType,
+                                        Description = record.Description,
+                                        VersionDate = record.VersionDate,
+                                        Notes = record.Notes,
+                                        CreatedAt = record.CreatedAt,
+                                        UserId = record.UserId,
+                                        Attachments = record.Attachments,
+                                        ContactInformation = new List<dynamic>()
+                                    };
+                                }
+                            }
+                            
                             return record;
                         }
                     }
@@ -487,6 +540,50 @@ namespace RulesRegulation.Services
                 Console.WriteLine($"Error deleting contact: {ex.Message}");
                 return false;
             }
+        }
+
+        // Method to get contact information by department
+        public List<dynamic> GetContactsByDepartment(string department)
+        {
+            var contacts = new List<dynamic>();
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    
+                    string query = @"SELECT CONTACT_ID, DEPARTMENT, NAME, EMAIL, MOBILE, TELEPHONE 
+                                    FROM CONTACT_INFORMATION 
+                                    WHERE UPPER(DEPARTMENT) = UPPER(:department)
+                                    ORDER BY NAME";
+                    
+                    using (var cmd = new OracleCommand(query, conn))
+                    {
+                        cmd.Parameters.Add(":department", department);
+                        cmd.CommandTimeout = 10;
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                contacts.Add(new
+                                {
+                                    ContactId = reader.GetInt32("CONTACT_ID"),
+                                    Department = reader.GetString("DEPARTMENT"),
+                                    Name = reader.GetString("NAME"),
+                                    Email = reader.IsDBNull(reader.GetOrdinal("EMAIL")) ? null : reader.GetString("EMAIL"),
+                                    Mobile = reader.IsDBNull(reader.GetOrdinal("MOBILE")) ? null : reader.GetString("MOBILE"),
+                                    Telephone = reader.IsDBNull(reader.GetOrdinal("TELEPHONE")) ? null : reader.GetString("TELEPHONE")
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting contacts by department: {ex.Message}");
+            }
+            return contacts;
         }
     }
 }
