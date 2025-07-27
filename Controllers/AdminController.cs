@@ -122,7 +122,7 @@ public class AdminController : Controller
             // Save Word file
             if (model.WordAttachment != null)
             {
-                var wordFileName = Guid.NewGuid() + Path.GetExtension(model.WordAttachment.FileName);
+                var wordFileName = model.WordAttachment.FileName;
                 var wordFullPath = Path.Combine(uploadsPath, wordFileName);
                 using (var stream = new FileStream(wordFullPath, FileMode.Create))
                     await model.WordAttachment.CopyToAsync(stream);
@@ -132,7 +132,7 @@ public class AdminController : Controller
             // Save PDF file
             if (model.PdfAttachment != null)
             {
-                var pdfFileName = Guid.NewGuid() + Path.GetExtension(model.PdfAttachment.FileName);
+                var pdfFileName = model.PdfAttachment.FileName;
                 var pdfFullPath = Path.Combine(uploadsPath, pdfFileName);
                 using (var stream = new FileStream(pdfFullPath, FileMode.Create))
                     await model.PdfAttachment.CopyToAsync(stream);
