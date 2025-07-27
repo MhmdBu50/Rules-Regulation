@@ -6,6 +6,7 @@ using RulesRegulation.Data;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
 using Oracle.ManagedDataAccess.Types;
+using Microsoft.AspNetCore.Hosting;
 
 namespace RulesRegulation.Controllers;
 
@@ -15,13 +16,15 @@ public class AdminController : Controller
     private readonly OracleDbService _oracleDbService;
     private readonly DatabaseConnection _db;
     private readonly string _connectionString;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public AdminController(ILogger<AdminController> logger, IConfiguration configuration)
+    public AdminController(ILogger<AdminController> logger, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
     {
         _logger = logger;
         _connectionString = configuration.GetConnectionString("OracleConnection") ?? throw new InvalidOperationException("OracleConnection string not found");
         _db = new DatabaseConnection(_connectionString);
         _oracleDbService = new OracleDbService(_connectionString);
+        _webHostEnvironment = webHostEnvironment;
     }
     public IActionResult AdminPage()
     {
@@ -251,7 +254,7 @@ public class AdminController : Controller
             // Save Word file
             if (model.WordAttachment != null)
             {
-                var wordFileName = Guid.NewGuid() + Path.GetExtension(model.WordAttachment.FileName);
+                var wordFileName = model.WordAttachment.FileName;
                 var wordFullPath = Path.Combine(uploadsPath, wordFileName);
                 using (var stream = new FileStream(wordFullPath, FileMode.Create))
                     await model.WordAttachment.CopyToAsync(stream);
@@ -261,7 +264,7 @@ public class AdminController : Controller
             // Save PDF file
             if (model.PdfAttachment != null)
             {
-                var pdfFileName = Guid.NewGuid() + Path.GetExtension(model.PdfAttachment.FileName);
+                var pdfFileName = model.PdfAttachment.FileName;
                 var pdfFullPath = Path.Combine(uploadsPath, pdfFileName);
                 using (var stream = new FileStream(pdfFullPath, FileMode.Create))
                     await model.PdfAttachment.CopyToAsync(stream);
@@ -329,20 +332,23 @@ public class AdminController : Controller
             int newId = ((OracleDecimal)insertedIdParam.Value).ToInt32();
 
             // Step 2: Insert attachments
+            //for word files
             if (!string.IsNullOrEmpty(wordPath))
             {
-                var insertWordSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, 'WORD', :path)";
-                await _db.ExecuteNonQueryAsync(insertWordSql,
-                    new OracleParameter("id", newId),
-                    new OracleParameter("path", wordPath));
+                var insertPdfSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) VALUES (:id, 'PDF', :path, :original)";
+                await _db.ExecuteNonQueryAsync(insertPdfSql,
+                new OracleParameter("id", newId),
+                new OracleParameter("path", pdfPath),
+                new OracleParameter("original", model.PdfAttachment.FileName));
             }
-
+            //for pdf files
             if (!string.IsNullOrEmpty(pdfPath))
             {
-                var insertPdfSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, 'PDF', :path)";
-                await _db.ExecuteNonQueryAsync(insertPdfSql,
-                    new OracleParameter("id", newId),
-                    new OracleParameter("path", pdfPath));
+                var insertWordSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) VALUES (:id, 'WORD', :path, :original)";
+                await _db.ExecuteNonQueryAsync(insertWordSql,
+                new OracleParameter("id", newId),
+                new OracleParameter("path", wordPath),
+                new OracleParameter("original", model.WordAttachment.FileName));
             }
 
             TempData["SuccessMessage"] = "Record and attachments saved.";
@@ -357,7 +363,7 @@ public class AdminController : Controller
     }
 
 
-[HttpGet]
+    [HttpGet]
     public IActionResult GetRecordDetails(int id)
     {
         try
@@ -379,4 +385,46 @@ public class AdminController : Controller
             return PartialView("_AdminRecordDetails", null);
         }
     }
+
+
+ [HttpGet]
+public async Task<IActionResult> DownloadPdf(int id)
+{
+    using (var conn = new OracleConnection(_connectionString))
+    {
+        await conn.OpenAsync();
+
+        string sql = @"
+            SELECT FILE_PATH, ORIGINAL_NAME 
+            FROM ATTACHMENTS 
+            WHERE RECORD_ID = :id AND FILE_TYPE = 'PDF'";
+
+        using (var cmd = new OracleCommand(sql, conn))
+        {
+            cmd.Parameters.Add(new OracleParameter("id", id));
+            using (var reader = await cmd.ExecuteReaderAsync())
+            {
+                if (await reader.ReadAsync())
+                {
+                    string filePath = reader.GetString(0);
+                    string originalName = reader.GetString(1);
+
+                    var physicalPath = Path.Combine(
+                        _webHostEnvironment.WebRootPath,
+                        filePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
+                    );
+
+                    if (!System.IO.File.Exists(physicalPath))
+                        return NotFound();
+
+                    var fileBytes = await System.IO.File.ReadAllBytesAsync(physicalPath);
+                    return File(fileBytes, "application/pdf", originalName);
+                }
+            }
+        }
+    }
+
+    return NotFound(); // if no record found
+}
+
 }

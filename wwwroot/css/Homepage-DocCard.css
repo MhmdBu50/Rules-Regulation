@@ -86,13 +86,23 @@
         }
 
         .card-title {
-            color: #303030;
             font-size: 1.4rem;
             font-weight: 400;
-            text-align: left;
             position: relative;
-            z-index: 1;
             margin: 1px 0;
+            padding-bottom: 7px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-height: 1.8em; /* 1 line */
+            transition: max-height .1s ease-out;
+        }
+
+        .card-title:hover {
+            white-space: normal;
+            overflow: visible;
+            padding-bottom: 0px;
+            max-height: 10em; /*should be enough for 4-5 lines */
         }
         
         .info-footer {
