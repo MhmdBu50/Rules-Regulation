@@ -2,6 +2,10 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using RulesRegulation.Models;
 using RulesRegulation.Services;
+using RulesRegulation.Data;
+using Oracle.ManagedDataAccess.Client;
+using System.Data;
+using Oracle.ManagedDataAccess.Types;
 
 namespace RulesRegulation.Controllers;
 
@@ -9,13 +13,15 @@ public class AdminController : Controller
 {
     private readonly ILogger<AdminController> _logger;
     private readonly OracleDbService _oracleDbService;
+    private readonly DatabaseConnection _db;
+    private readonly string _connectionString;
 
-    public AdminController(ILogger<AdminController> logger, OracleDbService oracleDbService)
+    public AdminController(ILogger<AdminController> logger, IConfiguration configuration)
     {
         _logger = logger;
-        _oracleDbService = oracleDbService;
+        _connectionString = configuration.GetConnectionString("OracleConnection");
+        _db = new DatabaseConnection(_connectionString);
     }
-
     public IActionResult AdminPage()
     {
         // Check if TempData messages exist and log them
@@ -27,7 +33,7 @@ public class AdminController : Controller
         {
             _logger.LogInformation($"Error message found: {TempData["ErrorMessage"]}");
         }
-        
+
         try
         {
             var records = _oracleDbService.GetAllRecords();
@@ -41,6 +47,7 @@ public class AdminController : Controller
         }
     }
 
+    [HttpGet]
     public IActionResult AddNewRecord()
     {
         return View();
@@ -93,98 +100,115 @@ public class AdminController : Controller
         }
     }
 
+
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> AddNewRecord(
-        string regulationName,
-        string relevantDepartment,
-        string versionNumber,
-        DateTime versionDate,
-        DateTime approvalDate,
-        string approvalEntity,
-        string description,
-        string doctype,
-        string[] sections,
-        string notes,
-        IFormFile wordAttachment,
-        IFormFile pdfAttachment)
+    [ActionName("AddNewRecord")]
+    public async Task<IActionResult> AddNewRecordAsync(AddNewRecordViewModel model)
     {
+        System.Console.WriteLine("AddNewRecord hit");
+
         try
         {
-            // Validate required fields
-            if (string.IsNullOrWhiteSpace(regulationName) || string.IsNullOrWhiteSpace(relevantDepartment))
+            string uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+            if (!Directory.Exists(uploadsPath))
+                Directory.CreateDirectory(uploadsPath);
+
+            string? wordPath = null, pdfPath = null;
+
+            // Save Word file
+            if (model.WordAttachment != null)
             {
-                TempData["ErrorMessage"] = "Regulation Name and Department are required fields.";
-                return View();
+                var wordFileName = Guid.NewGuid() + Path.GetExtension(model.WordAttachment.FileName);
+                var wordFullPath = Path.Combine(uploadsPath, wordFileName);
+                using (var stream = new FileStream(wordFullPath, FileMode.Create))
+                    await model.WordAttachment.CopyToAsync(stream);
+                wordPath = "/uploads/" + wordFileName;
             }
 
-            string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-            if (!Directory.Exists(uploadsFolder))
-                Directory.CreateDirectory(uploadsFolder);
-
-            string? wordPath = null;
-            string? pdfPath = null;
-
-            if (wordAttachment != null && wordAttachment.Length > 0)
+            // Save PDF file
+            if (model.PdfAttachment != null)
             {
-                string fileName = Guid.NewGuid() + Path.GetExtension(wordAttachment.FileName);
-                wordPath = $"/uploads/{fileName}";
-                var fullWordPath = Path.Combine(uploadsFolder, fileName);
-                using (var stream = new FileStream(fullWordPath, FileMode.Create))
-                {
-                    await wordAttachment.CopyToAsync(stream);
-                }
-            }
-            if (pdfAttachment != null && pdfAttachment.Length > 0)
-            {
-                string fileName = Guid.NewGuid() + Path.GetExtension(pdfAttachment.FileName);
-                pdfPath = $"/uploads/{fileName}";
-                var fullPdfPath = Path.Combine(uploadsFolder, fileName);
-                using (var stream = new FileStream(fullPdfPath, FileMode.Create))
-                {
-                    await pdfAttachment.CopyToAsync(stream);
-                }
+                var pdfFileName = Guid.NewGuid() + Path.GetExtension(model.PdfAttachment.FileName);
+                var pdfFullPath = Path.Combine(uploadsPath, pdfFileName);
+                using (var stream = new FileStream(pdfFullPath, FileMode.Create))
+                    await model.PdfAttachment.CopyToAsync(stream);
+                pdfPath = "/uploads/" + pdfFileName;
             }
 
-            // Save record to database
-            bool success = _oracleDbService.AddNewRecord(
-                regulationName,
-                relevantDepartment,
-                versionNumber,
-                versionDate,
-                approvalDate,
-                approvalEntity,
-                description,
-                doctype,
-                sections != null ? string.Join(",", sections) : "",
-                notes,
-                wordPath,
-                pdfPath);
+            // Prepare section string
+            var sectionString = string.Join(",", model.Sections ?? new List<string>());
 
-            _logger.LogInformation($"Record insertion result: {success}");
+            // Step 1: Insert record and get inserted ID
+            var insertSql = @"
+            INSERT INTO RECORDS (
+                REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
+                APPROVING_ENTITY, APPROVAL_DATE, DESCRIPTION, DOCUMENT_TYPE,
+                SECTIONS, NOTES
+            )
+            VALUES (
+                :RegulationName, :Department, :Version, :VersionDate,
+                :ApprovingEntity, :ApprovalDate, :Description, :DocumentType,
+                :Sections, :Notes
+            )
+            RETURNING RECORD_ID INTO :InsertedId";
 
-            if (success)
+            var insertedIdParam = new OracleParameter("InsertedId", OracleDbType.Int32)
             {
-                _logger.LogInformation("Setting success message and staying on AddNewRecord page");
-                TempData["SuccessMessage"] = "A new record has been added successfully.";
-                return View(); // Stay on the same page instead of redirecting
-            }
-            else
+                Direction = ParameterDirection.Output
+            };
+
+            var parameters = new OracleParameter[]
             {
-                _logger.LogWarning("Record insertion failed");
-                TempData["ErrorMessage"] = "Failed to add record. Please try again.";
-                return View();
+            new("RegulationName", model.RegulationName),
+            new("Department", model.RelevantDepartment),
+            new("Version", model.VersionNumber),
+            new("VersionDate", model.VersionDate),
+            new("ApprovingEntity", model.ApprovingEntity),
+            new("ApprovalDate", model.ApprovingDate),
+            new("Description", model.BriefDescription),
+            new("DocumentType", model.DocumentType),
+            new("Sections", sectionString),
+            new("Notes", model.Notes),
+            insertedIdParam // important
+            };
+
+            // Run insert
+            await _db.ExecuteNonQueryAsync(insertSql, parameters);
+
+            // Get the inserted record ID
+            int newId = ((OracleDecimal)insertedIdParam.Value).ToInt32();
+
+            // Step 2: Insert attachments
+            if (!string.IsNullOrEmpty(wordPath))
+            {
+                var insertWordSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, 'WORD', :path)";
+                await _db.ExecuteNonQueryAsync(insertWordSql,
+                    new OracleParameter("id", newId),
+                    new OracleParameter("path", wordPath));
             }
+
+            if (!string.IsNullOrEmpty(pdfPath))
+            {
+                var insertPdfSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, 'PDF', :path)";
+                await _db.ExecuteNonQueryAsync(insertPdfSql,
+                    new OracleParameter("id", newId),
+                    new OracleParameter("path", pdfPath));
+            }
+
+            TempData["SuccessMessage"] = "Record and attachments saved.";
+            return RedirectToAction("AddNewRecord");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error adding new record");
-            TempData["ErrorMessage"] = $"An error occurred while adding the record: {ex.Message}";
-            return View();
+            _logger.LogError(ex, "Insert failed");
+            TempData["ErrorMessage"] = "An error occurred while saving the record.";
+            return View(model);
         }
     }
 
-    [HttpGet]
+
+[HttpGet]
     public IActionResult GetRecordDetails(int id)
     {
         try
@@ -194,7 +218,7 @@ public class AdminController : Controller
             {
                 return NotFound("Record not found");
             }
-            
+
             // Return partial view with record details for admin
             return PartialView("_AdminRecordDetails", record);
         }

@@ -1,7 +1,9 @@
+using RulesRegulation.Data;
 using RulesRegulation.Services;
 using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     var supportedCultures = new[]
@@ -13,9 +15,12 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.DefaultRequestCulture = new RequestCulture("en-US"); 
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
+    
+    options.RequestCultureProviders.Clear();
+    options.RequestCultureProviders.Add(new CookieRequestCultureProvider());
+    options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());
 });
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<OracleDbService>(provider =>
 {
@@ -26,13 +31,15 @@ builder.Services.AddScoped<OracleDbService>(provider =>
     return new OracleDbService(connectionString);
 });
 
+builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 app.UseHttpsRedirection();
@@ -40,7 +47,9 @@ app.UseStaticFiles();
 app.MapStaticAssets();
 app.UseRequestLocalization();
 app.UseRouting();
+app.UseSession();
 app.UseAuthorization();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=homePage}/{id?}");
