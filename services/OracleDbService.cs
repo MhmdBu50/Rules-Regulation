@@ -62,7 +62,7 @@ namespace RulesRegulation.Services
             }
         }
 
-        // Method to check if department already exists
+        // Method to check if department already has maximum contacts (5)
         public bool DepartmentExists(string department)
         {
             try
@@ -78,13 +78,39 @@ namespace RulesRegulation.Services
                         cmd.Parameters.Add(":department", department);
                         
                         var result = cmd.ExecuteScalar();
-                        return Convert.ToInt32(result) > 0;
+                        return Convert.ToInt32(result) >= 5;
                     }
                 }
             }
             catch
             {
                 return false;
+            }
+        }
+
+        // Method to get the count of contacts in a department
+        public int GetContactCountInDepartment(string department)
+        {
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    
+                    string query = "SELECT COUNT(*) FROM CONTACT_INFORMATION WHERE UPPER(DEPARTMENT) = UPPER(:department)";
+                    
+                    using (var cmd = new OracleCommand(query, conn))
+                    {
+                        cmd.Parameters.Add(":department", department);
+                        
+                        var result = cmd.ExecuteScalar();
+                        return Convert.ToInt32(result);
+                    }
+                }
+            }
+            catch
+            {
+                return 0;
             }
         }
 
@@ -312,6 +338,153 @@ namespace RulesRegulation.Services
             {
                 // Log the actual error for debugging
                 Console.WriteLine($"Database error: {ex.Message}");
+                return false;
+            }
+        }
+
+        // Method to get all contacts
+        public List<dynamic> GetAllContacts()
+        {
+            var contacts = new List<dynamic>();
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    
+                    string query = @"SELECT CONTACT_ID, DEPARTMENT, NAME, EMAIL, MOBILE, TELEPHONE 
+                                    FROM CONTACT_INFORMATION 
+                                    ORDER BY DEPARTMENT, NAME";
+                    
+                    using (var cmd = new OracleCommand(query, conn))
+                    {
+                        cmd.CommandTimeout = 10; // Reduced timeout to 10 seconds
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                contacts.Add(new
+                                {
+                                    ContactId = reader.GetInt32("CONTACT_ID"),
+                                    Department = reader.GetString("DEPARTMENT"),
+                                    Name = reader.GetString("NAME"),
+                                    Email = reader.IsDBNull(reader.GetOrdinal("EMAIL")) ? null : reader.GetString("EMAIL"),
+                                    Mobile = reader.IsDBNull(reader.GetOrdinal("MOBILE")) ? null : reader.GetString("MOBILE"),
+                                    Telephone = reader.IsDBNull(reader.GetOrdinal("TELEPHONE")) ? null : reader.GetString("TELEPHONE")
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting contacts: {ex.Message}");
+                throw; // Re-throw to let controller handle it
+            }
+            return contacts;
+        }
+
+        // Method to get a contact by ID
+        public dynamic? GetContactById(int id)
+        {
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    
+                    string query = @"SELECT CONTACT_ID, DEPARTMENT, NAME, EMAIL, MOBILE, TELEPHONE 
+                                    FROM CONTACT_INFORMATION 
+                                    WHERE CONTACT_ID = :id";
+                    
+                    using (var cmd = new OracleCommand(query, conn))
+                    {
+                        cmd.Parameters.Add(":id", id);
+                        
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return new
+                                {
+                                    ContactId = reader.GetInt32("CONTACT_ID"),
+                                    Department = reader.GetString("DEPARTMENT"),
+                                    Name = reader.GetString("NAME"),
+                                    Email = reader.IsDBNull(reader.GetOrdinal("EMAIL")) ? null : reader.GetString("EMAIL"),
+                                    Mobile = reader.IsDBNull(reader.GetOrdinal("MOBILE")) ? null : reader.GetString("MOBILE"),
+                                    Telephone = reader.IsDBNull(reader.GetOrdinal("TELEPHONE")) ? null : reader.GetString("TELEPHONE")
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting contact by ID: {ex.Message}");
+            }
+            return null;
+        }
+
+        // Method to update a contact
+        public bool UpdateContact(int id, string department, string name, string? email, string? mobile, string? telephone)
+        {
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    
+                    string query = @"UPDATE CONTACT_INFORMATION 
+                                    SET DEPARTMENT = :department, NAME = :name, EMAIL = :email, 
+                                        MOBILE = :mobile, TELEPHONE = :telephone 
+                                    WHERE CONTACT_ID = :id";
+                    
+                    using (var cmd = new OracleCommand(query, conn))
+                    {
+                        cmd.Parameters.Add(":department", department);
+                        cmd.Parameters.Add(":name", name);
+                        cmd.Parameters.Add(":email", email ?? (object)DBNull.Value);
+                        cmd.Parameters.Add(":mobile", mobile ?? (object)DBNull.Value);
+                        cmd.Parameters.Add(":telephone", telephone ?? (object)DBNull.Value);
+                        cmd.Parameters.Add(":id", id);
+                        
+                        int result = cmd.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating contact: {ex.Message}");
+                return false;
+            }
+        }
+
+        // Method to delete a contact
+        public bool DeleteContact(int id)
+        {
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    
+                    string query = "DELETE FROM CONTACT_INFORMATION WHERE CONTACT_ID = :id";
+                    
+                    using (var cmd = new OracleCommand(query, conn))
+                    {
+                        cmd.Parameters.Add(":id", id);
+                        
+                        int result = cmd.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting contact: {ex.Message}");
                 return false;
             }
         }

@@ -19,8 +19,9 @@ public class AdminController : Controller
     public AdminController(ILogger<AdminController> logger, IConfiguration configuration)
     {
         _logger = logger;
-        _connectionString = configuration.GetConnectionString("OracleConnection");
+        _connectionString = configuration.GetConnectionString("OracleConnection") ?? throw new InvalidOperationException("OracleConnection string not found");
         _db = new DatabaseConnection(_connectionString);
+        _oracleDbService = new OracleDbService(_connectionString);
     }
     public IActionResult AdminPage()
     {
@@ -71,11 +72,11 @@ public class AdminController : Controller
                 return View();
             }
 
-            // Check if department already exists
+            // Check if department already has maximum contacts (5)
             if (_oracleDbService.DepartmentExists(Department))
             {
-                string? existingContact = _oracleDbService.GetExistingContactInDepartment(Department);
-                TempData["ErrorMessage"] = $"Department '{Department}' already has a contact person: {existingContact}. Each department can only have one contact.";
+                int contactCount = _oracleDbService.GetContactCountInDepartment(Department);
+                TempData["ErrorMessage"] = $"Department '{Department}' already has {contactCount} contact information. Maximum 5 contacts allowed per department.";
                 return View();
             }
 
@@ -98,6 +99,137 @@ public class AdminController : Controller
             TempData["ErrorMessage"] = "An error occurred while adding contact information.";
             return View();
         }
+    }
+
+    [HttpGet]
+    public IActionResult ManageContactInfo()
+    {
+        try
+        {
+            _logger.LogInformation("Attempting to retrieve contact information");
+            
+            // First test the database connection
+            using (var conn = new OracleConnection(_connectionString))
+            {
+                conn.Open();
+                _logger.LogInformation("Database connection successful");
+            }
+            
+            var contacts = _oracleDbService.GetAllContacts();
+            _logger.LogInformation($"Retrieved {contacts.Count} contacts successfully");
+            return View(contacts);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving contact information: {Message}", ex.Message);
+            TempData["ErrorMessage"] = $"Database Error: {ex.Message}. Showing mock data for testing.";
+            
+            // Return mock data for testing when database is not available
+            var mockContacts = new List<dynamic>
+            {
+                new {
+                    ContactId = 1,
+                    Department = "IT Department",
+                    Name = "John Doe",
+                    Email = "john.doe@example.com",
+                    Mobile = "+1234567890",
+                    Telephone = "+0987654321"
+                },
+                new {
+                    ContactId = 2,
+                    Department = "HR Department",
+                    Name = "Jane Smith",
+                    Email = "jane.smith@example.com",
+                    Mobile = "+1111111111",
+                    Telephone = "+2222222222"
+                }
+            };
+            
+            return View(mockContacts);
+        }
+    }
+
+    [HttpGet]
+    public IActionResult EditContactInfo(int id)
+    {
+        try
+        {
+            var contact = _oracleDbService.GetContactById(id);
+            if (contact == null)
+            {
+                TempData["ErrorMessage"] = "Contact not found.";
+                return RedirectToAction("ManageContactInfo");
+            }
+            return View(contact);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving contact information for editing");
+            TempData["ErrorMessage"] = "An error occurred while retrieving contact information.";
+            return RedirectToAction("ManageContactInfo");
+        }
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult EditContactInfo(int id, string Department, string Name, string? Email, string? Mobile, string? Telephone)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(Department) || string.IsNullOrWhiteSpace(Name))
+            {
+                TempData["ErrorMessage"] = "Department and Name are required fields.";
+                var contact = _oracleDbService.GetContactById(id);
+                return View(contact);
+            }
+
+            bool success = _oracleDbService.UpdateContact(id, Department, Name, Email, Mobile, Telephone);
+
+            if (success)
+            {
+                TempData["SuccessMessage"] = $"Contact information for {Department} has been updated successfully!";
+                return RedirectToAction("ManageContactInfo");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to update contact information. Please try again.";
+                var contact = _oracleDbService.GetContactById(id);
+                return View(contact);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating contact information");
+            TempData["ErrorMessage"] = "An error occurred while updating contact information.";
+            var contact = _oracleDbService.GetContactById(id);
+            return View(contact);
+        }
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteContactInfo(int id)
+    {
+        try
+        {
+            bool success = _oracleDbService.DeleteContact(id);
+
+            if (success)
+            {
+                TempData["SuccessMessage"] = "Contact information has been deleted successfully!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to delete contact information. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting contact information");
+            TempData["ErrorMessage"] = "An error occurred while deleting contact information.";
+        }
+
+        return RedirectToAction("ManageContactInfo");
     }
 
 

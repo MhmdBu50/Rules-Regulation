@@ -1,0 +1,101 @@
+@model dynamic
+
+@{
+    ViewData["Title"] = "Edit Contact Info";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/AddContactInfo.css">
+}
+
+@section Scripts{
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+}
+
+<div class="AddContactInfo">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <a class="btn" onclick="location.href='@Url.Action("ManageContactInfo", "Admin")'"> <img src="@Url.Content("~/svgs/admin/backButton.svg")"> Back</a>
+      <a class="btn" onclick="location.href='@Url.Action("homePage", "Home")'"> Logout   <img src="@Url.Content("~/svgs/admin/logOut.svg")"> </a>
+    </div>
+
+    <!-- Logo -->
+    <div class="container logo-container">
+      <img class="header-logo mx-auto d-block" src="~/imgs/IAU Logo (Horizontal).png" alt="IAU Logo">
+    </div>
+
+    <!-- Main Header -->
+    <div class="main-header">
+      <h1>Edit Contact Information</h1>
+      <p class="subtitle">Update contact information details</p>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Edit Contact Form -->
+    <div class="container">
+      <div class="form-wrapper">
+        <form method="post" action="@Url.Action("EditContactInfo", "Admin")">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.ContactId" />
+            
+            <div class="mb-5">
+                <label for="Department">Relevant Department</label>
+                <select class="form-select" id="Department" name="Department" required>
+                    <option value="">Select department</option>
+                    <option value="Reg and Admission" selected="@(Model.Department == "Reg and Admission")">Reg and Admission</option>
+                    <option value="CCSIT" selected="@(Model.Department == "CCSIT")">CCSIT</option>
+                    <option value="Communication and tech" selected="@(Model.Department == "Communication and tech")">Communication and tech</option>
+                    <option value="Hospital" selected="@(Model.Department == "Hospital")">Hospital</option>
+                    <option value="Library" selected="@(Model.Department == "Library")">Library</option>
+                    <option value="Students Affairs" selected="@(Model.Department == "Students Affairs")">Students Affairs</option>
+                    <option value="Preparetory" selected="@(Model.Department == "Preparetory")">Preparetory</option>
+                    <option value="Academic Affairs" selected="@(Model.Department == "Academic Affairs")">Academic Affairs</option>
+                </select>
+            </div>
+
+            <div class="mb-5">
+                <label for="Name">Name of Responsible Person (Arabic)</label>
+                <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" lang="ar" dir="rtl" required>
+            </div>
+
+            <div class="mb-5">
+                <label for="Email">E-mail</label>
+                <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email">
+            </div>
+
+            <div class="mb-5">
+                <label for="Telephone">Telephone number</label>
+                <input type="tel" class="form-control" id="Telephone" name="Telephone" value="@Model.Telephone">
+            </div>
+
+            <div class="mb-5">
+                <label for="Mobile">Mobile number</label>
+                <div class="input-group">
+                    <span class="input-group-text shadowed">+966</span>
+                    <input type="tel" class="form-control" id="Mobile" name="Mobile" value="@Model.Mobile">
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary me-2">Update Contact Info</button>
+                <a href="@Url.Action("ManageContactInfo", "Admin")" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>

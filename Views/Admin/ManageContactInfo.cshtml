@@ -1,0 +1,171 @@
+@model List<dynamic>
+
+@{
+    ViewData["Title"] = "Manage Contact Information";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/AddContactInfo.css">
+}
+
+<div class="AddContactInfo">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"> <img src="@Url.Content("~/svgs/admin/backButton.svg")"> Back</a>
+      <a class="btn" onclick="location.href='@Url.Action("homePage", "Home")'"> Logout   <img src="@Url.Content("~/svgs/admin/logOut.svg")"> </a>
+    </div>
+
+    <!-- Logo -->
+    <div class="container logo-container">
+      <img class="header-logo mx-auto d-block" src="~/imgs/IAU Logo (Horizontal).png" alt="IAU Logo">
+    </div>
+
+    <!-- Main Header -->
+    <div class="main-header">
+      <h1>Manage Contact Information</h1>
+      <p class="subtitle">View and manage all contact information</p>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Contact Information Table -->
+    <div class="container">
+      <div class="form-wrapper">
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Department</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <th>Telephone</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var contact in Model)
+                        {
+                            <tr>
+                                <td><strong>@contact.Department</strong></td>
+                                <td>@contact.Name</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(contact.Email))
+                                    {
+                                        <a href="mailto:@contact.Email">@contact.Email</a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(contact.Mobile))
+                                    {
+                                        <a href="tel:@contact.Mobile">@contact.Mobile</a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(contact.Telephone))
+                                    {
+                                        <a href="tel:@contact.Telephone">@contact.Telephone</a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("EditContactInfo", new { id = contact.ContactId })" 
+                                       class="btn btn-sm btn-primary me-2" title="Edit">
+                                        <img src="@Url.Content("~/svgs/admin/upload-file.svg")" width="16" height="16" alt="Edit">
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-danger" 
+                                            onclick="confirmDelete(@contact.ContactId, '@contact.Name', '@contact.Department')" 
+                                            title="Delete">
+                                        <img src="@Url.Content("~/svgs/admin/Delete-Button.svg")" width="16" height="16" alt="Delete">
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <h5>No contact information found</h5>
+                <p class="text-muted">Click the button below to add new contact information.</p>
+                <a href="@Url.Action("AddNewContactInfo", "Admin")" class="btn btn-primary">Add New Contact Info</a>
+            </div>
+        }
+      </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the contact information for:</p>
+                <div class="alert alert-warning">
+                    <strong id="contactName"></strong><br>
+                    <small id="contactDepartment"></small>
+                </div>
+                <p class="text-danger"><strong>This action cannot be undone!</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="deleteContactId" />
+                    <button type="submit" class="btn btn-danger">
+                        <img src="@Url.Content("~/svgs/admin/Delete-Button.svg")" width="16" height="16" alt="Delete" class="me-2">
+                        Delete Contact
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function confirmDelete(contactId, contactName, department) {
+            document.getElementById('contactName').textContent = contactName;
+            document.getElementById('contactDepartment').textContent = department;
+            document.getElementById('deleteContactId').value = contactId;
+            document.getElementById('deleteForm').action = '@Url.Action("DeleteContactInfo", "Admin")';
+            
+            var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            modal.show();
+        }
+    </script>
+}
