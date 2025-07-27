@@ -49,6 +49,16 @@
             }
         });
 
+        document.addEventListener('click', (event) => {
+            // If the chat box is open AND the click target is outside both the chatBox and chatIcon
+            if (
+                chatBox.classList.contains('active') &&
+                !chatBox.contains(event.target) &&
+                !chatIcon.contains(event.target)
+            ) {
+                chatBox.classList.remove('active');
+            }
+        });
 
         //filter panel functionality
 
