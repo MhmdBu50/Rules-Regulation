@@ -19,6 +19,7 @@
             }, 10);
         });
 
+        //this section handles the backdrop click to close the sidebar
         backdrop.addEventListener('click', () => {
             sidebar.style.width = '0';               // Start slide-out animation
             backdrop.style.display = 'none';         // Instantly hide the backdrop
