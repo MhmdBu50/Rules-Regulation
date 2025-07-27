@@ -205,3 +205,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+//redirect to PDF download page
+function DownloadPdf(id) {
+    window.location.href = `/admin/DownloadPdf/${id}`;
+}
