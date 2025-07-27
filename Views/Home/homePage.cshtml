@@ -12,14 +12,16 @@ there's a navigation bar and after that the rules and regualtions appears   -->
 @section Styles {
     <link rel="stylesheet" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/homePage.css">
-    <link rel="stylesheet" href="~/css/Homepage-DocCard.css">
+    <link rel="stylesheet" href="~/css/HomePage-DocCard.css">
+        <link rel="stylesheet" href="~/css/_RecordDetails.css">
+
 }
 
 @section Scripts{
     <script src="@Url.Content("https://cdn.jsdelivr.net/npm/fitty@2.3.6/dist/fitty.min.js")"></script>
     <script src="@Url.Content("~/js/card-animations.js")"></script>
     <script src="@Url.Content("~/lib/bootstrap/dist/js/bootstrap.js")"></script>
-    <script src="@Url.Content("~/js/homePage.js")"></script>
+    <script src="@Url.Content("~/js/HomePage.js")"></script>
     <script src="@Url.Content("~/js/moblieMenu.js")"></script>
     
     <script>
@@ -337,11 +339,10 @@ there's a navigation bar and after that the rules and regualtions appears   -->
                                             <img src="~/svgs/cards/info-icon.svg" alt="Information" class="info-icon" width="31" height="33" />
                                         </i>
                                     </button>
-                                    <button class="action-btn" onclick="handleAction('read')" title="Read">
-                                        <i class="fas fa-book-open"><img src="~/svgs/cards/book-icon.svg" alt="Book" width="32" height="34" />
-                                        </i>
+                                    <button class="action-btn" onclick="ViewPdf(@record.Id)" title="Read">
+                                        <img src="~/svgs/cards/book-icon.svg" alt="Book" width="32" height="34" />
                                     </button>
-                                    <button class="action-btn" onclick="handleAction('chat')" title="Chat">
+                                    <button class="action-btn" onclick="handleAction('chat')" id="chat-icon" title="Chat">
                                         <i class="fas fa-comments">
                                             <img src="~/svgs/cards/chat-icon.svg" alt="Chat" width="32" height="34" />
                                         </i>
@@ -399,27 +400,33 @@ there's a navigation bar and after that the rules and regualtions appears   -->
     </div>
 
 <!-- Record Details Modal -->
-<div class="modal fade" id="recordDetailsModal" tabindex="-1" aria-labelledby="recordDetailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="recordDetailsModalLabel">Record Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="modalRecordDetails">
-                    <!-- Record details will be loaded here -->
-                    <div class="text-center">
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
+    <!-- Enhanced Modal -->
+    <div class="modal fade" id="recordDetailsModal" tabindex="-1" aria-labelledby="recordDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="recordDetailsModalLabel">
+                        Regulation Details
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <img src="~/svgs/cards/close.svg" width="24" height="24" />
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="modalRecordDetails">
+                        <!-- Loading spinner initially -->
+                        <div class="spinner-container">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-3">Loading record details...</p>
                         </div>
-                        <p class="mt-2">Loading record details...</p>
+                        
+                        <!-- Actual content will be loaded here -->
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
             </div>
         </div>
     </div>
-</div>
+

@@ -1,105 +1,133 @@
 @model dynamic
 
-<div class="record-full-details">
-    <!-- Row 1: Regulation Name + Department -->
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <p><strong>Regulation Name:</strong></p>
-            <p>@Model.RegulationName</p>
-        </div>
-        <div class="col-md-6">
-            <p><strong>Department:</strong></p>
-            <p>@Model.Department</p>
-        </div>
-    </div>
-    
-    <!-- Row 2: Version Number + Version Date -->
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <p><strong>Version Number:</strong></p>
-            <p>@Model.Version</p>
-        </div>
-        <div class="col-md-6">
-            <p><strong>Version Date:</strong></p>
-            <p>@Model.VersionDate</p>
+@section Styles {
+    <link rel="stylesheet" href="~/css/_RecordDetails.css" asp-append-version="true">
+}
+
+<div class="regulation-details-container">
+    <!-- Header with gradient and status -->
+    <div class="regulation-header">
+        <div class="header-content">
+            <div>
+                <h3 class="header-title">@Model.RegulationName</h3>
+                <p class="header-subtitle">Comprehensive information about this regulation</p>
+            </div>
         </div>
     </div>
-    
-    <!-- Row 3: Approving Entity + Approving Date -->
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <p><strong>Approving Entity:</strong></p>
-            <p>@Model.ApprovingEntity</p>
+
+    <!-- Main content container -->
+    <div class="regulation-content">
+        <!-- Key details in a responsive grid -->
+        <div class="details-grid">
+            <!--------------------------Regulation Name-----------------------------
+            <div class="detail-card">
+                <div class="detail-label">
+                    <i class="fas fa-heading"></i> Regulation Name
+                </div>
+                <div class="detail-value">@Model.RegulationName</div>
+            </div>
+            -->
+            <div class="detail-card">
+                <div class="detail-label">
+                    <i class="fas fa-building"></i> Department
+                </div>
+                <div class="detail-value">@Model.Department</div>
+            </div>
+            
+            <div class="detail-card">
+                <div class="detail-label">
+                    <i class="fas fa-code-branch"></i> Version Number
+                </div>
+                <div class="detail-value">@Model.Version</div>
+            </div>
+            
+            <div class="detail-card">
+                <div class="detail-label">
+                    <i class="fas fa-calendar-alt"></i> Version Date
+                </div>
+                <div class="detail-value">@Model.VersionDate</div>
+            </div>
+            
+            <div class="detail-card">
+                <div class="detail-label">
+                    <i class="fas fa-book"></i> Sections
+                </div>
+                <div class="detail-value">@Model.Sections</div>
+            </div>
         </div>
-        <div class="col-md-6">
-            <p><strong>Approval Date:</strong></p>
-            <p>@Model.ApprovalDate</p>
+
+        <!-- Approval section with distinct styling -->
+        <div class="section-group">
+            <h3 class="section-title">
+                <i class="fas fa-stamp"></i> Approval Information
+            </h3>
+            <div class="approval-details">
+                <div class="approval-item">
+                    <div class="approval-label">Approving Entity</div>
+                    <div class="approval-value">@Model.ApprovingEntity</div>
+                </div>
+                <div class="approval-item">
+                    <div class="approval-label">Approval Date</div>
+                    <div class="approval-value">@Model.ApprovalDate</div>
+                </div>
+            </div>
         </div>
-    </div>
-    
-    <!-- Row 4: Document Type + Sections -->
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <p><strong>Document Type:</strong></p>
-            <p>@Model.DocumentType</p>
+
+        <!-- Description section -->
+        <div class="section-group">
+            <h3 class="section-title">
+                <i class="fas fa-align-left"></i> Description
+            </h3>
+            <div class="description-box">
+                @if (Model.Description != null && !string.IsNullOrWhiteSpace(Model.Description.ToString()))
+                {
+                    <p>@Model.Description</p>
+                }
+                else
+                {
+                    <p class="no-description">No description available</p>
+                }
+            </div>
         </div>
-        <div class="col-md-6">
-            <p><strong>Sections:</strong></p>
-            <p>@Model.Sections</p>
-        </div>
-    </div>
-    
-    <!-- Row 5: Description -->
-    <div class="row mb-3">
-        <div class="col-12">
-            <p><strong>Description:</strong></p>
-            @if (Model.Description != null && !string.IsNullOrWhiteSpace(Model.Description.ToString()))
-            {
-                <p class="text-muted">@Model.Description</p>
-            }
-            else
-            {
-                <p class="text-muted"><em>No description available.</em></p>
-            }
-        </div>
-    </div>
-    
-    <!-- Row 6: Contact Information -->
-    @if (Model.ContactInformation != null && ((IEnumerable<dynamic>)Model.ContactInformation).Any())
-    {
-        <div class="row mb-3">
-            <div class="col-12">
-                <p><strong>Department Contact Information:</strong></p>
-                <div class="contact-info-container p-3" style="background-color: #f8f9fa; border-radius: 8px; border-left: 4px solid #007bff;">
+
+        <!-- Contact information -->
+        @if (Model.ContactInformation != null && ((IEnumerable<dynamic>)Model.ContactInformation).Any())
+        {
+            <div>
+                <h3 class="section-title">
+                    <i class="fas fa-address-book"></i> Department Contacts
+                </h3>
+                <div class="contacts-container">
                     @foreach (var contact in Model.ContactInformation)
                     {
-                        <div class="contact-item mb-3 pb-3" style="border-bottom: 1px solid #dee2e6;">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <p class="mb-1"><strong>@contact.Name</strong></p>
-                                    <p class="mb-1 text-muted small">@contact.Department</p>
-                                </div>
-                                <div class="col-md-6">
+                        <div class="contact-card">
+                            <div class="contact-avatar">
+                                @contact.Name.ToString().Substring(0, 1)
+                            </div>
+                            <div class="contact-details">
+                                <div class="contact-name">@contact.Name</div>
+                                <div class="contact-position">@contact.Department</div>
+                                <div class="contact-info">
                                     @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
                                     {
-                                        <p class="mb-1">
-                                            <i class="fas fa-envelope me-2 text-primary"></i>
-                                            <a href="mailto:@contact.Email" class="text-decoration-none">@contact.Email</a>
-                                        </p>
+                                        <div class="contact-method">
+                                            <i class="fas fa-envelope"></i>
+                                            <a href="mailto:@contact.Email">@contact.Email</a>
+                                        </div>
                                     }
                                     @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
                                     {
-                                        <p class="mb-1">
-                                            <i class="fas fa-phone me-2 text-success"></i>
-                                            <a href="tel:@contact.Telephone" class="text-decoration-none">@contact.Telephone</a>
-                                        </p>
+                                        <div class="contact-method">
+                                            <i class="fas fa-phone-alt"></i>
+                                            <a href="tel:@contact.Telephone">@contact.Telephone</a>
+                                        </div>
                                     }
                                     @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
                                     {
-                                        <p class="mb-1">
-                                            <i class="fas fa-mobile-alt me-2 text-info"></i>
-                                            <a href="tel:@contact.Mobile" class="text-decoration-none">@contact.Mobile</a>
-                                        </p>
+                                        <div class="contact-method">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <a href="tel:@contact.Mobile">@contact.Mobile</a>
+                                        </div>
                                     }
                                 </div>
                             </div>
@@ -107,39 +135,23 @@
                     }
                 </div>
             </div>
-        </div>
-    }
-    
-    @if (Model.Attachments != null && ((IEnumerable<dynamic>)Model.Attachments).Any())
-    {
-        <div class="mt-3">
-            <h6><strong>Attachments:</strong></h6>
-            <div class="list-group">
-                @foreach (var attachment in Model.Attachments)
-                {
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <i class="fas fa-file-@(attachment.FileType == "pdf" ? "pdf text-danger" : "word text-primary") me-2"></i>
-                            <span>@attachment.OriginalFileName</span>
-                            <small class="text-muted ms-2">(@attachment.FileType.ToUpper())</small>
-                        </div>
-                        <div>
-                            <a href="@Url.Content("~/uploads/" + attachment.FileName)" 
-                               class="btn btn-sm btn-outline-primary me-1" 
-                               target="_blank" 
-                               title="View">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="@Url.Content("~/uploads/" + attachment.FileName)" 
-                               class="btn btn-sm btn-outline-success" 
-                               download="@attachment.OriginalFileName" 
-                               title="Download">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-    }
+        }
+    </div>
+                        @* an optional close button for the modal (might be used - will be decided later)
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i> Close
+                        </button> 
+                        *@
 </div>
+
+
+<script>
+    // Add subtle animations to cards on load
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.detail-card, .approval-item, .contact-card');
+        cards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+            card.classList.add('animate-in');
+        });
+    });
+</script>

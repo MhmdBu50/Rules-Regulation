@@ -110,14 +110,14 @@ public class AdminController : Controller
         try
         {
             _logger.LogInformation("Attempting to retrieve contact information");
-            
+
             // First test the database connection
             using (var conn = new OracleConnection(_connectionString))
             {
                 conn.Open();
                 _logger.LogInformation("Database connection successful");
             }
-            
+
             var contacts = _oracleDbService.GetAllContacts();
             _logger.LogInformation($"Retrieved {contacts.Count} contacts successfully");
             return View(contacts);
@@ -126,7 +126,7 @@ public class AdminController : Controller
         {
             _logger.LogError(ex, "Error retrieving contact information: {Message}", ex.Message);
             TempData["ErrorMessage"] = $"Database Error: {ex.Message}. Showing mock data for testing.";
-            
+
             // Return mock data for testing when database is not available
             var mockContacts = new List<dynamic>
             {
@@ -147,7 +147,7 @@ public class AdminController : Controller
                     Telephone = "+2222222222"
                 }
             };
-            
+
             return View(mockContacts);
         }
     }
@@ -387,17 +387,58 @@ public class AdminController : Controller
     }
 
 
- [HttpGet]
-public async Task<IActionResult> DownloadPdf(int id)
+
+   [HttpGet]
+    public async Task<IActionResult> DownloadPdf(int id)
+    {
+        using (var conn = new OracleConnection(_connectionString))
+        {
+            await conn.OpenAsync();
+
+            string sql = @"
+            SELECT FILE_PATH, ORIGINAL_NAME 
+            FROM ATTACHMENTS 
+            WHERE RECORD_ID = :id AND FILE_TYPE = 'PDF'";
+
+            using (var cmd = new OracleCommand(sql, conn))
+            {
+                cmd.Parameters.Add(new OracleParameter("id", id));
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        string filePath = reader.GetString(0);
+                        string originalName = reader.GetString(1);
+
+                        var physicalPath = Path.Combine(
+                            _webHostEnvironment.WebRootPath,
+                            filePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
+                        );
+
+                        if (!System.IO.File.Exists(physicalPath))
+                            return NotFound();
+
+                        var fileBytes = await System.IO.File.ReadAllBytesAsync(physicalPath);
+                        return File(fileBytes, "application/pdf", originalName);
+                    }
+                }
+            }
+        }
+
+        return NotFound(); // if no record found
+    }
+
+    [HttpGet]
+public async Task<IActionResult> ViewPdf(int id)
 {
     using (var conn = new OracleConnection(_connectionString))
     {
         await conn.OpenAsync();
 
         string sql = @"
-            SELECT FILE_PATH, ORIGINAL_NAME 
-            FROM ATTACHMENTS 
-            WHERE RECORD_ID = :id AND FILE_TYPE = 'PDF'";
+        SELECT FILE_PATH, ORIGINAL_NAME 
+        FROM ATTACHMENTS 
+        WHERE RECORD_ID = :id AND FILE_TYPE = 'PDF'";
 
         using (var cmd = new OracleCommand(sql, conn))
         {
@@ -418,13 +459,19 @@ public async Task<IActionResult> DownloadPdf(int id)
                         return NotFound();
 
                     var fileBytes = await System.IO.File.ReadAllBytesAsync(physicalPath);
-                    return File(fileBytes, "application/pdf", originalName);
+
+                    // This displays the PDF inline in the browser
+                    Response.Headers.Add("Content-Disposition", $"inline; filename*=UTF-8''{Uri.EscapeDataString(originalName)}");
+                    return File(fileBytes, "application/pdf");
+
                 }
             }
         }
     }
 
-    return NotFound(); // if no record found
+    return NotFound();
 }
+
+
 
 }

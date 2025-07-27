@@ -210,3 +210,9 @@ document.addEventListener("DOMContentLoaded", function () {
 function DownloadPdf(id) {
     window.location.href = `/admin/DownloadPdf/${id}`;
 }
+
+// Example: open PDF in a new tab
+function ViewPdf(id) {
+    window.open(`/admin/ViewPdf/${id}`, '_blank');
+}
+
