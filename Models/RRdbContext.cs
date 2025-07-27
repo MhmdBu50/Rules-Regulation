@@ -37,7 +37,7 @@ namespace RulesRegulation.Models
                 entity.Property(e => e.RegulationName).HasColumnName("REGULATION_NAME").HasMaxLength(255);
                 entity.Property(e => e.Notes).HasColumnName("NOTES");
                 entity.Property(e => e.Version).HasColumnName("VERSION").HasMaxLength(50);
-                entity.Property(e => e.BriefDescription).HasColumnName("DESCRIPTION");
+                entity.Property(e => e.Description).HasColumnName("DESCRIPTION");
                 entity.Property(e => e.Department).HasColumnName("DEPARTMENT").HasMaxLength(100);
                 entity.Property(e => e.DocumentType).HasColumnName("DOCUMENT_TYPE").HasMaxLength(100);
                 entity.Property(e => e.VersionDate).HasColumnName("VERSION_DATE");
