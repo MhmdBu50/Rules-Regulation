@@ -115,12 +115,18 @@ public class AdminController : Controller
                 return View();
             }
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error adding contact information");
-            TempData["ErrorMessage"] = "An error occurred while adding contact information.";
-            return View();
-        }
+        catch (Oracle.ManagedDataAccess.Client.OracleException ex)
+            {
+                _logger.LogError(ex, "Oracle DB error while adding contact: {Message}", ex.Message);
+                TempData["ErrorMessage"] = $"Oracle DB error: {ex.Message}";
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error while adding contact: {Message}", ex.Message);
+                TempData["ErrorMessage"] = $"Unexpected error: {ex.Message}";
+                return View();
+            }
     }
 
     [HttpGet]
@@ -346,6 +352,9 @@ public class AdminController : Controller
                 pdfPath = "/uploads/" + pdfFileName;
             }
 
+            Console.WriteLine($"Word file saved: {wordPath ?? "null"}");
+            Console.WriteLine($"PDF file saved: {pdfPath ?? "null"}");
+
             // Validate dates before proceeding
             if (model.VersionDate == default(DateTime))
                 model.VersionDate = DateTime.Now;
@@ -424,6 +433,9 @@ public class AdminController : Controller
 
             // Get the current sequence value for attachments
             int newId = 0;
+            Console.WriteLine($"Attempting to insert attachments for RECORD_ID = {newId}");
+            Console.WriteLine($"WordPath = {wordPath}, HasWordAttachment = {model.WordAttachment != null}");
+            Console.WriteLine($"PdfPath = {pdfPath}, HasPdfAttachment = {model.PdfAttachment != null}");
             try
             {
                 using (var conn = new OracleConnection(_connectionString))
@@ -448,27 +460,66 @@ public class AdminController : Controller
             if (newId > 0)
             {
                 // Word file
-                if (!string.IsNullOrEmpty(wordPath) && model.WordAttachment != null)
-                {
-                var insertWordSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME)";
-                await _db.ExecuteNonQueryAsync(insertWordSql,
-                    new OracleParameter("id", newId),
-                    new OracleParameter("fileType", "DOCX"),
-                    new OracleParameter("path", wordPath),
-                    new OracleParameter("ORIGINAL_NAME", model.WordAttachment.FileName));
+                    if (!string.IsNullOrEmpty(wordPath) && model.WordAttachment != null)
+                    {
+                        try
+                        {
+                            Console.WriteLine("Preparing to insert Word attachment...");
 
-                }
+                            var insertWordSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) " +
+                                                "VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME)";
+
+                            await _db.ExecuteNonQueryAsync(insertWordSql,
+                                new OracleParameter("id", newId),
+                                new OracleParameter("fileType", "DOCX"),
+                                new OracleParameter("path", wordPath),
+                                new OracleParameter("ORIGINAL_NAME", model.WordAttachment.FileName));
+
+                            Console.WriteLine("Word attachment inserted successfully.");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error inserting Word attachment: {ex.Message}");
+                            Console.WriteLine($"Details — ID: {newId}, Path: {wordPath}, FileName: {model.WordAttachment?.FileName ?? "null"}");
+                            throw;
+                        }
+                    }
+
 
                 // PDF file
                 if (!string.IsNullOrEmpty(pdfPath) && model.PdfAttachment != null)
                 {
-                    var insertPdfSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :originalName)";
-                    await _db.ExecuteNonQueryAsync(insertPdfSql,
-                        new OracleParameter("id", newId),
-                        new OracleParameter("fileType", "PDF"),
-                        new OracleParameter("path", pdfPath),
-                        new OracleParameter("ORIGINAL_NAME", model.PdfAttachment.FileName));
+                    try
+                    {
+                        Console.WriteLine("Preparing to insert PDF attachment...");
+                        
+                        var insertPdfSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) " +
+                                        "VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME)";
+                        
+                        await _db.ExecuteNonQueryAsync(insertPdfSql,
+                            new OracleParameter("id", newId),
+                            new OracleParameter("fileType", "PDF"),
+                            new OracleParameter("path", pdfPath),
+                            new OracleParameter("ORIGINAL_NAME", model.PdfAttachment.FileName));
+                        
+                        Console.WriteLine("PDF attachment inserted successfully.");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error inserting PDF: {ex.Message}");
+                        Console.WriteLine($"Details — ID: {newId}, Path: {pdfPath}, FileName: {model.PdfAttachment?.FileName ?? "null"}");
+                        throw;
+                    }
                 }
+                else
+                {
+                    Console.WriteLine("No PDF attachment to insert.");
+                }
+                
+            }
+            else
+            {
+                Console.WriteLine("No attachments inserted due to missing RECORD_ID.");
             }
 
 
