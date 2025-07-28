@@ -23,53 +23,8 @@ there's a navigation bar and after that the rules and regualtions appears   -->
     <script src="@Url.Content("~/lib/bootstrap/dist/js/bootstrap.js")"></script>
     <script src="@Url.Content("~/js/HomePage.js")"></script>
     <script src="@Url.Content("~/js/moblieMenu.js")"></script>
-    
-    <script>
-        function showRecordDetailsModal(recordId) {
-            // Show toast notification
-            if (typeof showToast === 'function') {
-                showToast('Showing information...');
-            }
-            
-            // Show the modal
-            const modal = new bootstrap.Modal(document.getElementById('recordDetailsModal'));
-            const modalBody = document.getElementById('modalRecordDetails');
-            
-            // Reset modal content with loading spinner
-            modalBody.innerHTML = `
-                <div class="text-center">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <p class="mt-2">Loading record details...</p>
-                </div>
-            `;
-            
-            // Show the modal
-            modal.show();
-            
-            // Make AJAX call to get record details
-            fetch('/Home/GetRecordDetails?id=' + recordId)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to load record details');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    modalBody.innerHTML = data;
-                })
-                .catch(error => {
-                    console.error('Error loading record details:', error);
-                    modalBody.innerHTML = `
-                        <div class="alert alert-danger" role="alert">
-                            <h6>Error Loading Details</h6>
-                            <p>Sorry, we couldn't load the record details. Please try again later.</p>
-                        </div>
-                    `;
-                });
-        }
-    </script>
+    <script src="@Url.Content("~/js/recordDetailsModal.js")"></script>
+    <script src="@Url.Content("~/js/homePageFilters.js")"></script>
 }
 
     <header class="menu">
@@ -149,15 +104,15 @@ there's a navigation bar and after that the rules and regualtions appears   -->
     <div id="filter-panel" class="filter-panel poppins-regular d-none">
         <div class="filter-column">
             <h3>Sections</h3>
-            <label><input type="checkbox" class="form-check-input"> Students</label>
-            <label><input type="checkbox" class="form-check-input"> Members</label>
-            <label><input type="checkbox" class="form-check-input"> Enrolled Programes</label>
+            <label><input type="checkbox" class="form-check-input" id="studentsFilter" value="Students"> Students</label>
+            <label><input type="checkbox" class="form-check-input" id="membersFilter" value="Members"> Members</label>
+            <label><input type="checkbox" class="form-check-input" id="enrolledFilter" value="Enrolled Programs"> Enrolled Programs</label>
         </div>
 
         <div class="filter-column">
             <h3>Alphabetical filter</h3>
-            <label><input type="radio" name="alpha" class="form-check-input"> A-Z</label>
-            <label><input type="radio" name="alpha" class="form-check-input"> Z-A</label>
+            <label><input type="radio" name="alpha" class="form-check-input" id="azFilter" value="A-Z"> A-Z</label>
+            <label><input type="radio" name="alpha" class="form-check-input" id="zaFilter" value="Z-A"> Z-A</label>
         </div>
 
         <div class="filter-column">
@@ -184,21 +139,30 @@ there's a navigation bar and after that the rules and regualtions appears   -->
         </div>
 
         <div class="filter-column">
-            <h3>Responsible Entity</h3>
-            <label><input type="checkbox" class="form-check-input"> University Councils</label>
-            <label><input type="checkbox" class="form-check-input"> University Vice Presidents</label>
-            <label><input type="checkbox" class="form-check-input"> Deanships</label>
-            <label><input type="checkbox" class="form-check-input"> Other Responsible Entity</label>
+            <h3>Department</h3>
+            <select class="form-select" id="departmentFilter">
+                <option value="">All Departments</option>
+                <option value="Reg and Admission">Reg and Admission</option>
+                <option value="CCSIT">CCSIT</option>
+                <option value="Communication and tech">Communication and tech</option>
+                <option value="Hospital">Hospital</option>
+                <option value="Library">Library</option>
+                <option value="Students Affairs">Students Affairs</option>
+                <option value="Preparetory">Preparetory</option>
+                <option value="Academic Affairs">Academic Affairs</option>
+            </select>
         </div>
 
         <div class="filter-column">
             <h3>Type</h3>
-            <label><input type="checkbox" class="form-check-input"> Regulations</label>
-            <label><input type="checkbox" class="form-check-input"> Guidelines</label>
-            <label><input type="checkbox" class="form-check-input"> Policies</label>
-            <button class="apply-btn">Apply</button>
+            <label><input type="checkbox" class="form-check-input" id="regulationsFilter" value="Regulation"> Regulations</label>
+            <label><input type="checkbox" class="form-check-input" id="guidelinesFilter" value="Guidelines"> Guidelines</label>
+            <label><input type="checkbox" class="form-check-input" id="policiesFilter" value="Policies"> Policies</label>
+            <div style="margin-top: 15px;">
+                <button class="apply-btn" onclick="applyFilters()">Apply</button>
+                <button class="apply-btn" onclick="clearFilters()" style="background-color: #6c757d; margin-left: 10px;">Clear</button>
+            </div>
         </div>
-
     </div>
 
     <!--Navigation bar (Desktop)-->

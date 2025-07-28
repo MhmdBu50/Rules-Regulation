@@ -33,6 +33,26 @@
                 </div>
                 <div class="detail-value">@Model.Department</div>
             </div>
+
+            <div class="detail-card">
+                <div class="detail-label">
+                    <i class="fas fa-file-alt"></i> Document Type
+                </div>
+                <div class="detail-value">
+                    @if (Model.DocumentType?.ToString().ToLower() == "guidelines")
+                    {
+                        <span class="badge bg-success">@Model.DocumentType</span>
+                    }
+                    else if (Model.DocumentType?.ToString().ToLower() == "policies")
+                    {
+                        <span class="badge bg-warning text-dark">@Model.DocumentType</span>
+                    }
+                    else
+                    {
+                        <span>@Model.DocumentType</span>
+                    }
+                </div>
+            </div>
             
             <div class="detail-card">
                 <div class="detail-label">
