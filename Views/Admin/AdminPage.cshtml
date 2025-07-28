@@ -53,6 +53,91 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                                                     `;
                 });
         }
+
+        function toggleEditMode(recordId) {
+            console.log('Toggle edit mode called for record ID:', recordId);
+            
+            const form = document.getElementById('recordForm_' + recordId);
+            if (!form) {
+                console.error('Form not found for record ID:', recordId);
+                return;
+            }
+            
+            console.log('Form found:', form);
+            
+            const inputs = form.querySelectorAll('input:not([type="hidden"]):not(.contact-input), textarea:not(.contact-input), select:not(.contact-input)');
+            const editBtn = form.querySelector('.edit-btn');
+            const saveBtn = form.querySelector('.save-btn');
+            const cancelBtn = form.querySelector('.cancel-btn');
+
+            console.log('Found inputs:', inputs.length);
+            console.log('Edit button:', editBtn);
+            console.log('Save button:', saveBtn);
+            console.log('Cancel button:', cancelBtn);
+
+            const isCurrentlyEditing = editBtn.style.display === 'none';
+            console.log('Is currently editing:', isCurrentlyEditing);
+
+            // Toggle readonly and disabled state
+            inputs.forEach((input, index) => {
+                console.log('Processing input', index, ':', input);
+                if (isCurrentlyEditing) {
+                    // Switch to view mode
+                    input.readOnly = true;
+                    input.disabled = true;
+                } else {
+                    // Switch to edit mode
+                    input.readOnly = false;
+                    input.disabled = false;
+                }
+            });
+
+            // Toggle button visibility
+            if (isCurrentlyEditing) {
+                // Currently in edit mode, switching to view mode
+                editBtn.style.display = 'inline-block';
+                saveBtn.style.display = 'none';
+                cancelBtn.style.display = 'none';
+                
+                // Reset form to original values if canceling
+                location.reload(); // Simple solution to reset form
+            } else {
+                // Currently in view mode, switching to edit mode
+                editBtn.style.display = 'none';
+                saveBtn.style.display = 'inline-block';
+                cancelBtn.style.display = 'inline-block';
+            }
+            
+            console.log('Toggle edit mode completed');
+        }
+
+        function cancelEdit(recordId) {
+            toggleEditMode(recordId);
+        }
+
+        function deleteRecord(recordId) {
+            if (confirm('Are you sure you want to delete this record? This action cannot be undone.')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '@Url.Action("DeleteRecord", "Admin")';
+                
+                const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = token;
+                
+                const recordIdInput = document.createElement('input');
+                recordIdInput.type = 'hidden';
+                recordIdInput.name = 'recordId';
+                recordIdInput.value = recordId;
+                
+                form.appendChild(tokenInput);
+                form.appendChild(recordIdInput);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
     </script>
 }
 
@@ -447,7 +532,10 @@ there's also many filtering options to find the policy and other adminstrative s
                                 data-bs-parent="#regulationAccordion">
                                 <!-- content of accordion -->
                                 <div class="accordion-body">
-                                    <form>
+                                    <form id="recordForm_@record.Id" method="post" action="@Url.Action("UpdateRecord", "Admin")">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="recordId" value="@record.Id" />
+                                        
                                         <div class="row mb-2">
                                             <!-- left side of the accordion menu inside -->
                                             <div class="col-lg-6 col-12 mb-3 mb-lg-0">
@@ -457,29 +545,29 @@ there's also many filtering options to find the policy and other adminstrative s
                                                             <td colspan="3">
                                                                 <label class="form-label fw-bold">Regulation/ Manual
                                                                     name</label>
-                                                                <textarea class="form-control" rows="2"
-                                                            readonly>@record.RegulationName</textarea>
+                                                                <textarea name="regulationName" class="form-control" rows="2"
+                                                            readonly disabled>@record.RegulationName</textarea>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3">
                                                                 <label class="form-label fw-bold">Brief
                                                                     Description</label>
-                                                                <textarea class="form-control" rows="4"
-                                                            readonly>@record.Description</textarea>
+                                                                <textarea name="description" class="form-control" rows="4"
+                                                            readonly disabled>@record.Description</textarea>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="col-12 col-sm-4">
                                                                 <label class="form-label fw-bold">Approving
                                                                     Date</label>
-                                                                <input type="date" class="form-control mb-2" value="@record.ApprovalDate"
-                                                                    readonly>
+                                                                <input type="date" name="approvalDate" class="form-control mb-2" value="@record.ApprovalDate"
+                                                                    readonly disabled>
                                                             </td>
                                                             <td class="col-12 col-sm-4">
                                                                 <label class="form-label fw-bold">Version Date</label>
-                                                                <input type="date" class="form-control mb-2" value="@record.VersionDate"
-                                                                    readonly>
+                                                                <input type="date" name="versionDate" class="form-control mb-2" value="@record.VersionDate"
+                                                                    readonly disabled>
                                                             </td>
 
                                                         </tr>
@@ -487,30 +575,30 @@ there's also many filtering options to find the policy and other adminstrative s
                                                             <td colspan="2">
                                                                 <label class="form-label fw-bold">Version
                                                                     Number</label>
-                                                                <input type="text" class="form-control mb-2" value="@record.Version"
-                                                                    readonly>
+                                                                <input type="text" name="version" class="form-control mb-2" value="@record.Version"
+                                                                    readonly disabled>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
                                                                 <label class="form-label fw-bold">Approving Entity</label>
-                                                                <input type="text" class="form-control"
-                                                                    value="@record.ApprovingEntity" readonly>
+                                                                <input type="text" name="approvingEntity" class="form-control"
+                                                                    value="@record.ApprovingEntity" readonly disabled>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
                                                                 <label class="fw-bold">Responsible
                                                                     Department</label>
-                                                                <input type="text" class="form-control"
-                                                                    value="@record.Department" readonly>
+                                                                <input type="text" name="department" class="form-control"
+                                                                    value="@record.Department" readonly disabled>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
                                                                 <label class="form-label fw-bold">Note</label>
-                                                                <input type="text" class="form-control mb-2"
-                                                                    value="@record.Notes" readonly>
+                                                                <input type="text" name="notes" class="form-control mb-2"
+                                                                    value="@record.Notes" readonly disabled>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -525,20 +613,20 @@ there's also many filtering options to find the policy and other adminstrative s
                                                             <td>
                                                                 <label class="form-label fw-bold">Document
                                                                     Type</label>
-                                                                <select class="form-select mb-2">
-                                                                    <option selected>@record.DocumentType</option>
-                                                                    <option >Regulation</option>
-                                                                    <option>Guidelines</option>
-                                                                    <option>Policies</option>
+                                                                <select name="documentType" class="form-select mb-2" disabled>
+                                                                    <option value="@record.DocumentType" selected>@record.DocumentType</option>
+                                                                    <option value="Regulation">Regulation</option>
+                                                                    <option value="Guidelines">Guidelines</option>
+                                                                    <option value="Policies">Policies</option>
                                                                 </select>
                                                             </td>
                                                             <td>
                                                                 <label class="form-label fw-bold">Section</label>
-                                                                <select class="form-select mb-2">
-                                                                    <option selected>@record.Sections</option>
-                                                                    <option>Student</option>
-                                                                    <option>Members</option>
-                                                                    <option>Enrolled Program</option>
+                                                                <select name="sections" class="form-select mb-2" disabled>
+                                                                    <option value="@record.Sections" selected>@record.Sections</option>
+                                                                    <option value="Student">Student</option>
+                                                                    <option value="Members">Members</option>
+                                                                    <option value="Enrolled Program">Enrolled Program</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
@@ -586,14 +674,14 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                             <div class="mb-3">
                                                                                 <label class="form-label mb-0">Name
                                                                                     (English)</label>
-                                                                                <input type="text" class="form-control"
+                                                                                <input type="text" class="form-control contact-input"
                                                                                     value="@contact.Name" readonly>
                                                                             </div>
                                                                             @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
                                                                             {
                                                                                 <div class="mb-3">
                                                                                     <label class="form-label mb-0">E-mail</label>
-                                                                                    <input type="email" class="form-control"
+                                                                                    <input type="email" class="form-control contact-input"
                                                                                         value="@contact.Email" readonly>
                                                                                 </div>
                                                                             }
@@ -602,7 +690,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                                 <div class="mb-3">
                                                                                     <label class="form-label mb-0">Telephone
                                                                                         number</label>
-                                                                                    <input type="text" class="form-control" value="@contact.Telephone"
+                                                                                    <input type="text" class="form-control contact-input" value="@contact.Telephone"
                                                                                         readonly>
                                                                                 </div>
                                                                             }
@@ -611,7 +699,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                                 <div class="mb-3">
                                                                                     <label class="form-label mb-0">Mobile
                                                                                         number</label>
-                                                                                    <input type="text" class="form-control" value="@contact.Mobile"
+                                                                                    <input type="text" class="form-control contact-input" value="@contact.Mobile"
                                                                                         readonly>
                                                                                 </div>
                                                                             }
@@ -635,9 +723,10 @@ there's also many filtering options to find the policy and other adminstrative s
                                         <div class="row mt-3">
                                             <div class="col-12">
                                                 <div class="d-flex flex-wrap justify-content-end gap-2">
-                                                    <button class="btn btn-danger">Delete</button>
-                                                    <button class="btn btn-secondary">Edit</button>
-                                                    <button class="btn btn-success">Save</button>
+                                                    <button type="button" class="btn btn-danger" onclick="deleteRecord(@record.Id)">Delete</button>
+                                                    <button type="button" class="btn btn-secondary edit-btn" onclick="toggleEditMode(@record.Id)">Edit</button>
+                                                    <button type="submit" class="btn btn-success save-btn" style="display: none;">Save</button>
+                                                    <button type="button" class="btn btn-outline-secondary cancel-btn" style="display: none;" onclick="cancelEdit(@record.Id)">Cancel</button>
                                                 </div>
                                             </div>
                                         </div>

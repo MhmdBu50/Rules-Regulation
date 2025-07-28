@@ -603,6 +603,71 @@ public async Task<IActionResult> ViewPdf(int id)
     return NotFound();
 }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult UpdateRecord(
+        int recordId,
+        string regulationName,
+        string department,
+        string version,
+        DateTime versionDate,
+        DateTime approvalDate,
+        string approvingEntity,
+        string description,
+        string documentType,
+        string sections,
+        string notes)
+    {
+        try
+        {
+            bool success = _oracleDbService.UpdateRecord(
+                recordId, regulationName, department, version, versionDate,
+                approvalDate, approvingEntity, description, documentType, sections, notes);
+
+            if (success)
+            {
+                TempData["SuccessMessage"] = "Record updated successfully!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to update record. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating record");
+            TempData["ErrorMessage"] = "An error occurred while updating the record.";
+        }
+
+        return RedirectToAction("AdminPage");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteRecord(int recordId)
+    {
+        try
+        {
+            bool success = _oracleDbService.DeleteRecord(recordId);
+
+            if (success)
+            {
+                TempData["SuccessMessage"] = "Record deleted successfully!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to delete record. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting record");
+            TempData["ErrorMessage"] = "An error occurred while deleting the record.";
+        }
+
+        return RedirectToAction("AdminPage");
+    }
+
 
 
 }

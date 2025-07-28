@@ -395,6 +395,100 @@ namespace RulesRegulation.Services
             }
         }
 
+        // Method to update an existing record
+        public bool UpdateRecord(
+            int recordId,
+            string regulationName,
+            string department,
+            string version,
+            DateTime versionDate,
+            DateTime approvalDate,
+            string approvingEntity,
+            string description,
+            string documentType,
+            string sections,
+            string notes)
+        {
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    
+                    string query = @"UPDATE RECORDS 
+                                    SET REGULATION_NAME = :regulationName,
+                                        DEPARTMENT = :department,
+                                        VERSION = :version,
+                                        VERSION_DATE = :versionDate,
+                                        APPROVAL_DATE = :approvalDate,
+                                        APPROVING_ENTITY = :approvingEntity,
+                                        DESCRIPTION = :description,
+                                        DOCUMENT_TYPE = :documentType,
+                                        SECTIONS = :sections,
+                                        NOTES = :notes
+                                    WHERE RECORD_ID = :recordId";
+                    
+                    using (var cmd = new OracleCommand(query, conn))
+                    {
+                        cmd.Parameters.Add(":regulationName", regulationName);
+                        cmd.Parameters.Add(":department", department);
+                        cmd.Parameters.Add(":version", version);
+                        cmd.Parameters.Add(":versionDate", versionDate);
+                        cmd.Parameters.Add(":approvalDate", approvalDate);
+                        cmd.Parameters.Add(":approvingEntity", approvingEntity);
+                        cmd.Parameters.Add(":description", description);
+                        cmd.Parameters.Add(":documentType", documentType);
+                        cmd.Parameters.Add(":sections", sections);
+                        cmd.Parameters.Add(":notes", notes);
+                        cmd.Parameters.Add(":recordId", recordId);
+                        
+                        int result = cmd.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating record: {ex.Message}");
+                return false;
+            }
+        }
+
+        // Method to delete a record
+        public bool DeleteRecord(int recordId)
+        {
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    
+                    // First delete attachments
+                    string deleteAttachmentsQuery = "DELETE FROM ATTACHMENTS WHERE RECORD_ID = :recordId";
+                    using (var cmd = new OracleCommand(deleteAttachmentsQuery, conn))
+                    {
+                        cmd.Parameters.Add(":recordId", recordId);
+                        cmd.ExecuteNonQuery();
+                    }
+                    
+                    // Then delete the record
+                    string deleteRecordQuery = "DELETE FROM RECORDS WHERE RECORD_ID = :recordId";
+                    using (var cmd = new OracleCommand(deleteRecordQuery, conn))
+                    {
+                        cmd.Parameters.Add(":recordId", recordId);
+                        
+                        int result = cmd.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting record: {ex.Message}");
+                return false;
+            }
+        }
+
         // Method to get all contacts
         public List<dynamic> GetAllContacts()
         {
