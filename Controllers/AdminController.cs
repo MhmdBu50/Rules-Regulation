@@ -444,37 +444,33 @@ public class AdminController : Controller
                 newId = 0;
             }
 
-            // Step 2: Insert attachments (with error handling)
+            // Step 2: Insert attachments (no silent failure)
             if (newId > 0)
             {
-                try
+                // Word file
+                if (!string.IsNullOrEmpty(wordPath) && model.WordAttachment != null)
                 {
-                    // For word files
-                    if (!string.IsNullOrEmpty(wordPath) && model.WordAttachment != null)
-                    {
-                        var insertWordSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, :fileType, :path)";
-                        await _db.ExecuteNonQueryAsync(insertWordSql,
-                            new OracleParameter("id", newId),
-                            new OracleParameter("fileType", "docx"),
-                            new OracleParameter("path", wordPath));
-                    }
-                    
-                    // For pdf files
-                    if (!string.IsNullOrEmpty(pdfPath) && model.PdfAttachment != null)
-                    {
-                        var insertPdfSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, :fileType, :path)";
-                        await _db.ExecuteNonQueryAsync(insertPdfSql,
-                            new OracleParameter("id", newId),
-                            new OracleParameter("fileType", "pdf"),
-                            new OracleParameter("path", pdfPath));
-                    }
+                var insertWordSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME)";
+                await _db.ExecuteNonQueryAsync(insertWordSql,
+                    new OracleParameter("id", newId),
+                    new OracleParameter("fileType", "DOCX"),
+                    new OracleParameter("path", wordPath),
+                    new OracleParameter("ORIGINAL_NAME", model.WordAttachment.FileName));
+
                 }
-                catch (Exception attachEx)
+
+                // PDF file
+                if (!string.IsNullOrEmpty(pdfPath) && model.PdfAttachment != null)
                 {
-                    _logger.LogWarning(attachEx, "Failed to insert attachments for record {RecordId}, but record was saved", newId);
-                    // Don't fail the whole operation if just attachments fail
+                    var insertPdfSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :originalName)";
+                    await _db.ExecuteNonQueryAsync(insertPdfSql,
+                        new OracleParameter("id", newId),
+                        new OracleParameter("fileType", "PDF"),
+                        new OracleParameter("path", pdfPath),
+                        new OracleParameter("ORIGINAL_NAME", model.PdfAttachment.FileName));
                 }
             }
+
 
             TempData["SuccessMessage"] = "Record and attachments saved.";
             return RedirectToAction("AddNewRecord");
@@ -539,7 +535,7 @@ public class AdminController : Controller
                     if (await reader.ReadAsync())
                     {
                         string filePath = reader.GetString(0);
-                        string originalName = reader.GetString(1);
+                        string ORIGINAL_NAME = reader.GetString(1);
 
                         var physicalPath = Path.Combine(
                             _webHostEnvironment.WebRootPath,
@@ -550,7 +546,7 @@ public class AdminController : Controller
                             return NotFound();
 
                         var fileBytes = await System.IO.File.ReadAllBytesAsync(physicalPath);
-                        return File(fileBytes, "application/pdf", originalName);
+                        return File(fileBytes, "application/pdf", ORIGINAL_NAME);
                     }
                 }
             }
@@ -579,7 +575,7 @@ public async Task<IActionResult> ViewPdf(int id)
                 if (await reader.ReadAsync())
                 {
                     string filePath = reader.GetString(0);
-                    string originalName = reader.GetString(1);
+                    string ORIGINAL_NAME = reader.GetString(1);
 
                     var physicalPath = Path.Combine(
                         _webHostEnvironment.WebRootPath,
@@ -592,7 +588,7 @@ public async Task<IActionResult> ViewPdf(int id)
                     var fileBytes = await System.IO.File.ReadAllBytesAsync(physicalPath);
 
                     // This displays the PDF inline in the browser
-                    Response.Headers.Add("Content-Disposition", $"inline; filename*=UTF-8''{Uri.EscapeDataString(originalName)}");
+                    Response.Headers.Add("Content-Disposition", $"inline; filename*=UTF-8''{Uri.EscapeDataString(ORIGINAL_NAME)}");
                     return File(fileBytes, "application/pdf");
 
                 }
@@ -663,53 +659,6 @@ public async Task<IActionResult> ViewPdf(int id)
         {
             _logger.LogError(ex, "Error deleting record");
             TempData["ErrorMessage"] = "An error occurred while deleting the record.";
-        }
-
-        return RedirectToAction("AdminPage");
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult DeleteMultipleRecords(List<int> recordIds)
-    {
-        try
-        {
-            if (recordIds == null || !recordIds.Any())
-            {
-                TempData["ErrorMessage"] = "No records selected for deletion.";
-                return RedirectToAction("AdminPage");
-            }
-
-            int successCount = 0;
-            int totalCount = recordIds.Count;
-
-            foreach (int recordId in recordIds)
-            {
-                bool success = _oracleDbService.DeleteRecord(recordId);
-                if (success)
-                {
-                    successCount++;
-                }
-            }
-
-            if (successCount == totalCount)
-            {
-                TempData["SuccessMessage"] = $"Successfully deleted {successCount} record(s)!";
-            }
-            else if (successCount > 0)
-            {
-                TempData["SuccessMessage"] = $"Successfully deleted {successCount} out of {totalCount} record(s).";
-                TempData["ErrorMessage"] = $"Failed to delete {totalCount - successCount} record(s).";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Failed to delete any records. Please try again.";
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error deleting multiple records");
-            TempData["ErrorMessage"] = "An error occurred while deleting the records.";
         }
 
         return RedirectToAction("AdminPage");
