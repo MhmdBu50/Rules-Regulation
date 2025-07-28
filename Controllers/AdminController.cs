@@ -82,52 +82,58 @@ public class AdminController : Controller
         return View();
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult AddNewContactInfo(string Department, string Name, string? Email, string? Mobile, string? Telephone)
+[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult AddNewContactInfo(string Department, string Name, string? Email, string? Mobile, string? Telephone)
+{
+    try
     {
-        try
+        // Step 1: Validate required fields
+        if (string.IsNullOrWhiteSpace(Department) || string.IsNullOrWhiteSpace(Name))
         {
-            if (string.IsNullOrWhiteSpace(Department) || string.IsNullOrWhiteSpace(Name))
-            {
-                TempData["ErrorMessage"] = "Department and Name are required fields.";
-                return View();
-            }
-
-            // Check if department already has maximum contacts (5)
-            if (_oracleDbService.DepartmentExists(Department))
-            {
-                int contactCount = _oracleDbService.GetContactCountInDepartment(Department);
-                TempData["ErrorMessage"] = $"Department '{Department}' already has {contactCount} contact information. Maximum 5 contacts allowed per department.";
-                return View();
-            }
-
-            bool success = _oracleDbService.AddContactInfo(Department, Name, Email, Mobile, Telephone);
-
-            if (success)
-            {
-                TempData["SuccessMessage"] = $"Contact information for {Department} has been added successfully!";
-                return RedirectToAction("AddNewContactInfo");
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Failed to add contact information. Please try again.";
-                return View();
-            }
+            TempData["ErrorMessage"] = "Department and Name are required fields.";
+            return View();
         }
-        catch (Oracle.ManagedDataAccess.Client.OracleException ex)
-            {
-                _logger.LogError(ex, "Oracle DB error while adding contact: {Message}", ex.Message);
-                TempData["ErrorMessage"] = $"Oracle DB error: {ex.Message}";
-                return View();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unexpected error while adding contact: {Message}", ex.Message);
-                TempData["ErrorMessage"] = $"Unexpected error: {ex.Message}";
-                return View();
-            }
+
+        // Step 2: Check if department already has max allowed contacts
+        int contactCount = _oracleDbService.GetContactCountInDepartment(Department);
+        if (contactCount >= 5)
+        {
+            TempData["ErrorMessage"] = $"Department '{Department}' already has {contactCount} contact(s). Maximum 5 allowed.";
+            return View();
+        }
+
+        // Step 3: Attempt to insert contact info
+        bool success = _oracleDbService.AddContactInfo(Department, Name, Email, Mobile, Telephone);
+
+        if (success)
+        {
+            TempData["SuccessMessage"] = $"Contact information for '{Department}' was added successfully.";
+            return RedirectToAction("AddNewContactInfo");
+        }
+        else
+        {
+            _logger.LogWarning("AddContactInfo returned false for Department={Department}, Name={Name}, Email={Email}, Mobile={Mobile}, Telephone={Telephone}", Department, Name, Email, Mobile, Telephone);
+            TempData["ErrorMessage"] = "Failed to add contact information. Please try again. (Check logs for details)";
+            return View();
+        }
     }
+    catch (Oracle.ManagedDataAccess.Client.OracleException ex)
+    {
+        var errorDetails = $"Oracle DB error {ex.Number}: {ex.Message}";
+        if (ex.InnerException != null)
+            errorDetails += $" | Inner: {ex.InnerException.Message}";
+        _logger.LogError(ex, "Oracle DB error while adding contact info: {ErrorDetails}", errorDetails);
+        TempData["ErrorMessage"] = errorDetails;
+        return View();
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Unexpected error while adding contact info: {Message}", ex.Message);
+        TempData["ErrorMessage"] = $"Unexpected error: {ex.Message}";
+        return View();
+    }
+}
 
     [HttpGet]
     public IActionResult ManageContactInfo()

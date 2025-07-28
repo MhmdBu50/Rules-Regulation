@@ -39,26 +39,40 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    
-                    string query = @"INSERT INTO CONTACT_INFORMATION (DEPARTMENT, NAME, EMAIL, MOBILE, TELEPHONE) 
-                                    VALUES (:department, :name, :email, :mobile, :telephone)";
-                    
+                    int contactId = GetNextContactId(); // 🔹 Fetch the next ID from the sequence
+
+                    string query = @"INSERT INTO CONTACT_INFORMATION 
+                                    (CONTACT_ID, DEPARTMENT, NAME, EMAIL, MOBILE, TELEPHONE) 
+                                    VALUES (:contactId, :department, :name, :email, :mobile, :telephone)";
+                                    
                     using (var cmd = new OracleCommand(query, conn))
                     {
+                        cmd.Parameters.Add(":contactId", contactId);
                         cmd.Parameters.Add(":department", department);
                         cmd.Parameters.Add(":name", name);
                         cmd.Parameters.Add(":email", email ?? (object)DBNull.Value);
                         cmd.Parameters.Add(":mobile", mobile ?? (object)DBNull.Value);
                         cmd.Parameters.Add(":telephone", telephone ?? (object)DBNull.Value);
-                        
                         int result = cmd.ExecuteNonQuery();
                         return result > 0;
                     }
                 }
             }
-            catch
+            catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
-                return false;
+                Console.WriteLine($"[OracleException] AddContactInfo failed. Department: {department}, Name: {name}, Email: {email}, Mobile: {mobile}, Telephone: {telephone}");
+                Console.WriteLine($"Oracle Error {ex.Number}: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                if (ex.InnerException != null)
+                    Console.WriteLine($"InnerException: {ex.InnerException.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Exception] AddContactInfo failed. Department: {department}, Name: {name}, Email: {email}, Mobile: {mobile}, Telephone: {telephone}");
+                Console.WriteLine($"Exception: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                if (ex.InnerException != null)
+                    Console.WriteLine($"InnerException: {ex.InnerException.Message}");
+                throw;
             }
         }
 
@@ -70,13 +84,13 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    
+
                     string query = "SELECT COUNT(*) FROM CONTACT_INFORMATION WHERE UPPER(DEPARTMENT) = UPPER(:department)";
-                    
+
                     using (var cmd = new OracleCommand(query, conn))
                     {
                         cmd.Parameters.Add(":department", department);
-                        
+
                         var result = cmd.ExecuteScalar();
                         return Convert.ToInt32(result) >= 5;
                     }
@@ -96,13 +110,13 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    
+
                     string query = "SELECT COUNT(*) FROM CONTACT_INFORMATION WHERE UPPER(DEPARTMENT) = UPPER(:department)";
-                    
+
                     using (var cmd = new OracleCommand(query, conn))
                     {
                         cmd.Parameters.Add(":department", department);
-                        
+
                         var result = cmd.ExecuteScalar();
                         return Convert.ToInt32(result);
                     }
@@ -122,13 +136,13 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    
+
                     string query = "SELECT NAME FROM CONTACT_INFORMATION WHERE UPPER(DEPARTMENT) = UPPER(:department) AND ROWNUM = 1";
-                    
+
                     using (var cmd = new OracleCommand(query, conn))
                     {
                         cmd.Parameters.Add(":department", department);
-                        
+
                         var result = cmd.ExecuteScalar();
                         return result?.ToString();
                     }
@@ -154,7 +168,7 @@ namespace RulesRegulation.Services
                         DEPARTMENT, DOCUMENT_TYPE, DESCRIPTION, VERSION_DATE, NOTES, CREATED_AT
                         FROM RECORDS 
                         ORDER BY CREATED_AT DESC";
-                    
+
                     using (var cmd = new OracleCommand(query, conn))
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -166,16 +180,16 @@ namespace RulesRegulation.Services
                                 RegulationName = reader["REGULATION_NAME"]?.ToString(),
                                 Sections = reader["SECTIONS"]?.ToString(),
                                 Version = reader["VERSION"]?.ToString(),
-                                ApprovalDate = reader["APPROVAL_DATE"] != DBNull.Value ? 
+                                ApprovalDate = reader["APPROVAL_DATE"] != DBNull.Value ?
                                     Convert.ToDateTime(reader["APPROVAL_DATE"]).ToString("yyyy-MM-dd") : "",
                                 ApprovingEntity = reader["APPROVING_ENTITY"]?.ToString(),
                                 Department = reader["DEPARTMENT"]?.ToString(),
                                 DocumentType = reader["DOCUMENT_TYPE"]?.ToString(),
                                 Description = reader["DESCRIPTION"]?.ToString(),
-                                VersionDate = reader["VERSION_DATE"] != DBNull.Value ? 
+                                VersionDate = reader["VERSION_DATE"] != DBNull.Value ?
                                     Convert.ToDateTime(reader["VERSION_DATE"]).ToString("yyyy-MM-dd") : "",
                                 Notes = reader["NOTES"]?.ToString(),
-                                CreatedAt = reader["CREATED_AT"] != DBNull.Value ? 
+                                CreatedAt = reader["CREATED_AT"] != DBNull.Value ?
                                     Convert.ToDateTime(reader["CREATED_AT"]).ToString("yyyy-MM-dd") : ""
                             });
                         }
@@ -201,7 +215,7 @@ namespace RulesRegulation.Services
                         FROM RECORDS r 
                         LEFT JOIN ATTACHMENTS a ON r.RECORD_ID = a.RECORD_ID 
                         WHERE r.RECORD_ID = :recordId";
-                    
+
                     using (var cmd = new OracleCommand(query, conn))
                     {
                         cmd.Parameters.Add(":recordId", recordId);
@@ -209,7 +223,7 @@ namespace RulesRegulation.Services
                         {
                             var attachments = new List<dynamic>();
                             dynamic? record = null;
-                            
+
                             while (reader.Read())
                             {
                                 if (record == null)
@@ -220,27 +234,27 @@ namespace RulesRegulation.Services
                                         RegulationName = reader["REGULATION_NAME"]?.ToString(),
                                         Sections = reader["SECTIONS"]?.ToString(),
                                         Version = reader["VERSION"]?.ToString(),
-                                        ApprovalDate = reader["APPROVAL_DATE"] != DBNull.Value ? 
+                                        ApprovalDate = reader["APPROVAL_DATE"] != DBNull.Value ?
                                             Convert.ToDateTime(reader["APPROVAL_DATE"]).ToString("yyyy-MM-dd") : "",
                                         ApprovingEntity = reader["APPROVING_ENTITY"]?.ToString(),
                                         Department = reader["DEPARTMENT"]?.ToString(),
                                         DocumentType = reader["DOCUMENT_TYPE"]?.ToString(),
                                         Description = reader["DESCRIPTION"]?.ToString(),
-                                        VersionDate = reader["VERSION_DATE"] != DBNull.Value ? 
+                                        VersionDate = reader["VERSION_DATE"] != DBNull.Value ?
                                             Convert.ToDateTime(reader["VERSION_DATE"]).ToString("yyyy-MM-dd") : "",
                                         Notes = reader["NOTES"]?.ToString(),
-                                        CreatedAt = reader["CREATED_AT"] != DBNull.Value ? 
+                                        CreatedAt = reader["CREATED_AT"] != DBNull.Value ?
                                             Convert.ToDateTime(reader["CREATED_AT"]).ToString("yyyy-MM-dd") : "",
                                         UserId = reader["USER_ID"]?.ToString(),
                                         Attachments = attachments
                                     };
                                 }
-                                
+
                                 if (reader["FILE_PATH"] != DBNull.Value)
                                 {
                                     var filePath = reader["FILE_PATH"]?.ToString();
                                     var fileName = !string.IsNullOrEmpty(filePath) ? Path.GetFileName(filePath) : "";
-                                    
+
                                     attachments.Add(new
                                     {
                                         FileName = fileName,
@@ -249,7 +263,7 @@ namespace RulesRegulation.Services
                                     });
                                 }
                             }
-                            
+
                             // Add contact information for the department if record exists
                             if (record != null)
                             {
@@ -257,7 +271,7 @@ namespace RulesRegulation.Services
                                 if (!string.IsNullOrEmpty(department))
                                 {
                                     var contacts = GetContactsByDepartment(department);
-                                    
+
                                     // Create a new record object with contact information
                                     record = new
                                     {
@@ -301,7 +315,7 @@ namespace RulesRegulation.Services
                                     };
                                 }
                             }
-                            
+
                             return record;
                         }
                     }
@@ -414,7 +428,7 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    
+
                     string query = @"UPDATE RECORDS 
                                     SET REGULATION_NAME = :regulationName,
                                         DEPARTMENT = :department,
@@ -427,7 +441,7 @@ namespace RulesRegulation.Services
                                         SECTIONS = :sections,
                                         NOTES = :notes
                                     WHERE RECORD_ID = :recordId";
-                    
+
                     using (var cmd = new OracleCommand(query, conn))
                     {
                         cmd.Parameters.Add(":regulationName", regulationName);
@@ -441,7 +455,7 @@ namespace RulesRegulation.Services
                         cmd.Parameters.Add(":sections", sections);
                         cmd.Parameters.Add(":notes", notes);
                         cmd.Parameters.Add(":recordId", recordId);
-                        
+
                         int result = cmd.ExecuteNonQuery();
                         return result > 0;
                     }
@@ -462,7 +476,7 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    
+
                     // First delete attachments
                     string deleteAttachmentsQuery = "DELETE FROM ATTACHMENTS WHERE RECORD_ID = :recordId";
                     using (var cmd = new OracleCommand(deleteAttachmentsQuery, conn))
@@ -470,13 +484,13 @@ namespace RulesRegulation.Services
                         cmd.Parameters.Add(":recordId", recordId);
                         cmd.ExecuteNonQuery();
                     }
-                    
+
                     // Then delete the record
                     string deleteRecordQuery = "DELETE FROM RECORDS WHERE RECORD_ID = :recordId";
                     using (var cmd = new OracleCommand(deleteRecordQuery, conn))
                     {
                         cmd.Parameters.Add(":recordId", recordId);
-                        
+
                         int result = cmd.ExecuteNonQuery();
                         return result > 0;
                     }
@@ -498,11 +512,11 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    
+
                     string query = @"SELECT CONTACT_ID, DEPARTMENT, NAME, EMAIL, MOBILE, TELEPHONE 
                                     FROM CONTACT_INFORMATION 
                                     ORDER BY DEPARTMENT, NAME";
-                    
+
                     using (var cmd = new OracleCommand(query, conn))
                     {
                         cmd.CommandTimeout = 10; // Reduced timeout to 10 seconds
@@ -540,15 +554,15 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    
+
                     string query = @"SELECT CONTACT_ID, DEPARTMENT, NAME, EMAIL, MOBILE, TELEPHONE 
                                     FROM CONTACT_INFORMATION 
                                     WHERE CONTACT_ID = :id";
-                    
+
                     using (var cmd = new OracleCommand(query, conn))
                     {
                         cmd.Parameters.Add(":id", id);
-                        
+
                         using (var reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
@@ -582,12 +596,12 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    
+
                     string query = @"UPDATE CONTACT_INFORMATION 
                                     SET DEPARTMENT = :department, NAME = :name, EMAIL = :email, 
                                         MOBILE = :mobile, TELEPHONE = :telephone 
                                     WHERE CONTACT_ID = :id";
-                    
+
                     using (var cmd = new OracleCommand(query, conn))
                     {
                         cmd.Parameters.Add(":department", department);
@@ -596,7 +610,7 @@ namespace RulesRegulation.Services
                         cmd.Parameters.Add(":mobile", mobile ?? (object)DBNull.Value);
                         cmd.Parameters.Add(":telephone", telephone ?? (object)DBNull.Value);
                         cmd.Parameters.Add(":id", id);
-                        
+
                         int result = cmd.ExecuteNonQuery();
                         return result > 0;
                     }
@@ -617,13 +631,13 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    
+
                     string query = "DELETE FROM CONTACT_INFORMATION WHERE CONTACT_ID = :id";
-                    
+
                     using (var cmd = new OracleCommand(query, conn))
                     {
                         cmd.Parameters.Add(":id", id);
-                        
+
                         int result = cmd.ExecuteNonQuery();
                         return result > 0;
                     }
@@ -645,12 +659,12 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    
+
                     string query = @"SELECT CONTACT_ID, DEPARTMENT, NAME, EMAIL, MOBILE, TELEPHONE 
                                     FROM CONTACT_INFORMATION 
                                     WHERE UPPER(DEPARTMENT) = UPPER(:department)
                                     ORDER BY NAME";
-                    
+
                     using (var cmd = new OracleCommand(query, conn))
                     {
                         cmd.Parameters.Add(":department", department);
@@ -681,7 +695,7 @@ namespace RulesRegulation.Services
         }
 
         // Method to get filtered records based on filter parameters
-        public List<dynamic> GetFilteredRecords(string? department, string? sections, string? documentTypes, 
+        public List<dynamic> GetFilteredRecords(string? department, string? sections, string? documentTypes,
             string? alphabetical, string? dateSort, string? fromDate, string? toDate)
         {
             var records = new List<dynamic>();
@@ -690,22 +704,22 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    
+
                     // Build dynamic query based on filters
                     var queryBuilder = new System.Text.StringBuilder(@"SELECT 
                         RECORD_ID, REGULATION_NAME, SECTIONS, VERSION, APPROVAL_DATE, APPROVING_ENTITY,
                         DEPARTMENT, DOCUMENT_TYPE, DESCRIPTION, VERSION_DATE, NOTES, CREATED_AT
                         FROM RECORDS WHERE 1=1");
-                    
+
                     var parameters = new List<OracleParameter>();
-                    
+
                     // Add department filter
                     if (!string.IsNullOrEmpty(department))
                     {
                         queryBuilder.Append(" AND UPPER(DEPARTMENT) = UPPER(:department)");
                         parameters.Add(new OracleParameter(":department", department));
                     }
-                    
+
                     // Add sections filter
                     if (!string.IsNullOrEmpty(sections))
                     {
@@ -716,7 +730,7 @@ namespace RulesRegulation.Services
                             for (int i = 0; i < sectionList.Count; i++)
                             {
                                 var section = sectionList[i];
-                                
+
                                 // Handle specific section mappings
                                 if (section.Equals("Enrolled Programs", StringComparison.OrdinalIgnoreCase))
                                 {
@@ -743,7 +757,7 @@ namespace RulesRegulation.Services
                             queryBuilder.Append($" AND ({string.Join(" OR ", sectionConditions)})");
                         }
                     }
-                    
+
                     // Add document types filter
                     if (!string.IsNullOrEmpty(documentTypes))
                     {
@@ -776,7 +790,7 @@ namespace RulesRegulation.Services
                             queryBuilder.Append($" AND ({string.Join(" OR ", typeConditions)})");
                         }
                     }
-                    
+
                     // Add date range filter
                     if (!string.IsNullOrEmpty(fromDate) && DateTime.TryParse(fromDate, out var fromDateTime))
                     {
@@ -784,7 +798,7 @@ namespace RulesRegulation.Services
                         parameters.Add(new OracleParameter(":fromDate", fromDateTime));
                         parameters.Add(new OracleParameter(":fromDateAlt", fromDateTime));
                     }
-                    
+
                     if (!string.IsNullOrEmpty(toDate) && DateTime.TryParse(toDate, out var toDateTime))
                     {
                         // Add one day to include the full end date
@@ -793,7 +807,7 @@ namespace RulesRegulation.Services
                         parameters.Add(new OracleParameter(":toDate", endDate));
                         parameters.Add(new OracleParameter(":toDateAlt", endDate));
                     }
-                    
+
                     // Add sorting
                     if (!string.IsNullOrEmpty(alphabetical))
                     {
@@ -817,15 +831,15 @@ namespace RulesRegulation.Services
                     {
                         queryBuilder.Append(" ORDER BY CREATED_AT DESC NULLS LAST");
                     }
-                    
+
                     using (var cmd = new OracleCommand(queryBuilder.ToString(), conn))
                     {
                         cmd.Parameters.AddRange(parameters.ToArray());
-                        
+
                         // Debug logging
                         Console.WriteLine($"Filter Query: {queryBuilder.ToString()}");
                         Console.WriteLine($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}={p.Value}"))}");
-                        
+
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -836,16 +850,16 @@ namespace RulesRegulation.Services
                                     RegulationName = reader["REGULATION_NAME"]?.ToString(),
                                     Sections = reader["SECTIONS"]?.ToString(),
                                     Version = reader["VERSION"]?.ToString(),
-                                    ApprovalDate = reader["APPROVAL_DATE"] != DBNull.Value ? 
+                                    ApprovalDate = reader["APPROVAL_DATE"] != DBNull.Value ?
                                         Convert.ToDateTime(reader["APPROVAL_DATE"]).ToString("yyyy-MM-dd") : "",
                                     ApprovingEntity = reader["APPROVING_ENTITY"]?.ToString(),
                                     Department = reader["DEPARTMENT"]?.ToString(),
                                     DocumentType = reader["DOCUMENT_TYPE"]?.ToString(),
                                     Description = reader["DESCRIPTION"]?.ToString(),
-                                    VersionDate = reader["VERSION_DATE"] != DBNull.Value ? 
+                                    VersionDate = reader["VERSION_DATE"] != DBNull.Value ?
                                         Convert.ToDateTime(reader["VERSION_DATE"]).ToString("yyyy-MM-dd") : "",
                                     Notes = reader["NOTES"]?.ToString(),
-                                    CreatedAt = reader["CREATED_AT"] != DBNull.Value ? 
+                                    CreatedAt = reader["CREATED_AT"] != DBNull.Value ?
                                         Convert.ToDateTime(reader["CREATED_AT"]).ToString("yyyy-MM-dd") : ""
                                 });
                             }
@@ -861,5 +875,19 @@ namespace RulesRegulation.Services
             }
             return records;
         }
+
+
+        public int GetNextContactId()
+        {
+            using (var conn = new OracleConnection(_connectionString))
+            {
+                conn.Open();
+                using (var cmd = new OracleCommand("SELECT CONTACT_ID_SEQ.NEXTVAL FROM DUAL", conn))
+                {
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+        }
+
     }
 }
