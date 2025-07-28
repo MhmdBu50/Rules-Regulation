@@ -206,11 +206,11 @@ there's a navigation bar and after that the rules and regualtions appears   -->
 
         <!--Nav-bar Home button-->
         <div>
-            <button class="bar-button nav-icons" id="homeButton" data-id="homeButton" style="background-color: #2B334F; border: none;" onclick="alter(this); location.href='@Url.Action("homePage", "Home")'">
+            <button class="bar-button" id="homeButton" data-id="homeButton" style="background-color: #2B334F; border: none;" onclick="alter(this); location.href='@Url.Action("homePage", "Home")'">
                 <div class="nav-icons svg-container">
                 
                 </div>
-                <div>
+                <div style="display: flex;align-items: center;margin: 5px;">
                     <label class="poppins-regular">Home</label>
                 </div>  
             </button>
@@ -342,7 +342,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
                                     <button class="action-btn" onclick="ViewPdf(@record.Id)" title="Read">
                                         <img src="~/svgs/cards/book-icon.svg" alt="Book" width="32" height="34" />
                                     </button>
-                                    <button class="action-btn" onclick="handleAction('chat')" id="chat-icon" title="Chat">
+                                    <button class="action-btn" onclick="handleAction('chat')" id="card-chat-icon" title="Chat">
                                         <i class="fas fa-comments">
                                             <img src="~/svgs/cards/chat-icon.svg" alt="Chat" width="32" height="34" />
                                         </i>
