@@ -21,7 +21,8 @@ public class HomeController : Controller
         _oracleDbService = oracleDbService;
 
         // use DI-style constructor
-        _connectionString = configuration.GetConnectionString("OracleConnection");
+        // Added null-coalescing operator and exception throw to handle missing connection string
+        _connectionString = configuration.GetConnectionString("OracleConnection") ?? throw new InvalidOperationException("Oracle connection string not found");
         _db = new DatabaseConnection(_connectionString);
     }
     public IActionResult Index()
@@ -45,11 +46,13 @@ public class HomeController : Controller
         return View("~/Views/Account/LoginPage.cshtml");
     }
 
-    public IActionResult homePage()
+    public IActionResult homePage(string? department, string? sections, string? documentTypes, 
+        string? alphabetical, string? dateSort, string? fromDate, string? toDate)
     {
         try
         {
-            var records = _oracleDbService.GetAllRecords();
+            var records = _oracleDbService.GetFilteredRecords(department, sections, documentTypes, 
+                alphabetical, dateSort, fromDate, toDate);
             return View(records);
         }
         catch (Exception ex)

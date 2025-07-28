@@ -585,5 +585,187 @@ namespace RulesRegulation.Services
             }
             return contacts;
         }
+
+        // Method to get filtered records based on filter parameters
+        public List<dynamic> GetFilteredRecords(string? department, string? sections, string? documentTypes, 
+            string? alphabetical, string? dateSort, string? fromDate, string? toDate)
+        {
+            var records = new List<dynamic>();
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    
+                    // Build dynamic query based on filters
+                    var queryBuilder = new System.Text.StringBuilder(@"SELECT 
+                        RECORD_ID, REGULATION_NAME, SECTIONS, VERSION, APPROVAL_DATE, APPROVING_ENTITY,
+                        DEPARTMENT, DOCUMENT_TYPE, DESCRIPTION, VERSION_DATE, NOTES, CREATED_AT
+                        FROM RECORDS WHERE 1=1");
+                    
+                    var parameters = new List<OracleParameter>();
+                    
+                    // Add department filter
+                    if (!string.IsNullOrEmpty(department))
+                    {
+                        queryBuilder.Append(" AND UPPER(DEPARTMENT) = UPPER(:department)");
+                        parameters.Add(new OracleParameter(":department", department));
+                    }
+                    
+                    // Add sections filter
+                    if (!string.IsNullOrEmpty(sections))
+                    {
+                        var sectionList = sections.Split(',').Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToList();
+                        if (sectionList.Any())
+                        {
+                            var sectionConditions = new List<string>();
+                            for (int i = 0; i < sectionList.Count; i++)
+                            {
+                                var section = sectionList[i];
+                                
+                                // Handle specific section mappings
+                                if (section.Equals("Enrolled Programs", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    // Check for "Program" in database
+                                    sectionConditions.Add($"(UPPER(SECTIONS) LIKE '%PROGRAM%')");
+                                }
+                                else if (section.Equals("Students", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    // Check for both "Student" and "Students"
+                                    sectionConditions.Add($"(UPPER(SECTIONS) LIKE '%STUDENT%')");
+                                }
+                                else if (section.Equals("Members", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    // Check for both "Member" and "Members" 
+                                    sectionConditions.Add($"(UPPER(SECTIONS) LIKE '%MEMBER%')");
+                                }
+                                else
+                                {
+                                    // Use simple matching for other sections
+                                    sectionConditions.Add($"UPPER(SECTIONS) LIKE UPPER(:section{i})");
+                                    parameters.Add(new OracleParameter($":section{i}", $"%{section}%"));
+                                }
+                            }
+                            queryBuilder.Append($" AND ({string.Join(" OR ", sectionConditions)})");
+                        }
+                    }
+                    
+                    // Add document types filter
+                    if (!string.IsNullOrEmpty(documentTypes))
+                    {
+                        var typeList = documentTypes.Split(',').Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).ToList();
+                        if (typeList.Any())
+                        {
+                            var typeConditions = new List<string>();
+                            for (int i = 0; i < typeList.Count; i++)
+                            {
+                                // Handle both singular and plural forms
+                                var type = typeList[i];
+                                if (type.Equals("Regulation", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    typeConditions.Add($"(UPPER(DOCUMENT_TYPE) = 'REGULATION' OR UPPER(DOCUMENT_TYPE) = 'REGULATIONS')");
+                                }
+                                else if (type.Equals("Guidelines", StringComparison.OrdinalIgnoreCase) || type.Equals("Guideline", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    typeConditions.Add($"(UPPER(DOCUMENT_TYPE) = 'GUIDELINES' OR UPPER(DOCUMENT_TYPE) = 'GUIDELINE')");
+                                }
+                                else if (type.Equals("Policies", StringComparison.OrdinalIgnoreCase) || type.Equals("Policy", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    typeConditions.Add($"(UPPER(DOCUMENT_TYPE) = 'POLICIES' OR UPPER(DOCUMENT_TYPE) = 'POLICY')");
+                                }
+                                else
+                                {
+                                    typeConditions.Add($"UPPER(DOCUMENT_TYPE) LIKE UPPER(:docType{i})");
+                                    parameters.Add(new OracleParameter($":docType{i}", $"%{type}%"));
+                                }
+                            }
+                            queryBuilder.Append($" AND ({string.Join(" OR ", typeConditions)})");
+                        }
+                    }
+                    
+                    // Add date range filter
+                    if (!string.IsNullOrEmpty(fromDate) && DateTime.TryParse(fromDate, out var fromDateTime))
+                    {
+                        queryBuilder.Append(" AND (APPROVAL_DATE >= :fromDate OR (APPROVAL_DATE IS NULL AND CREATED_AT >= :fromDateAlt))");
+                        parameters.Add(new OracleParameter(":fromDate", fromDateTime));
+                        parameters.Add(new OracleParameter(":fromDateAlt", fromDateTime));
+                    }
+                    
+                    if (!string.IsNullOrEmpty(toDate) && DateTime.TryParse(toDate, out var toDateTime))
+                    {
+                        // Add one day to include the full end date
+                        var endDate = toDateTime.AddDays(1);
+                        queryBuilder.Append(" AND (APPROVAL_DATE < :toDate OR (APPROVAL_DATE IS NULL AND CREATED_AT < :toDateAlt))");
+                        parameters.Add(new OracleParameter(":toDate", endDate));
+                        parameters.Add(new OracleParameter(":toDateAlt", endDate));
+                    }
+                    
+                    // Add sorting
+                    if (!string.IsNullOrEmpty(alphabetical))
+                    {
+                        if (alphabetical == "A-Z")
+                            queryBuilder.Append(" ORDER BY UPPER(REGULATION_NAME) ASC");
+                        else if (alphabetical == "Z-A")
+                            queryBuilder.Append(" ORDER BY UPPER(REGULATION_NAME) DESC");
+                    }
+                    else if (!string.IsNullOrEmpty(dateSort))
+                    {
+                        if (dateSort == "newest" || dateSort == "Newest-Oldest")
+                            queryBuilder.Append(" ORDER BY APPROVAL_DATE DESC NULLS LAST");
+                        else if (dateSort == "oldest" || dateSort == "Oldest-Newest")
+                            queryBuilder.Append(" ORDER BY APPROVAL_DATE ASC NULLS LAST");
+                        else if (dateSort == "range")
+                            queryBuilder.Append(" ORDER BY APPROVAL_DATE DESC NULLS LAST");
+                        else
+                            queryBuilder.Append(" ORDER BY CREATED_AT DESC NULLS LAST");
+                    }
+                    else
+                    {
+                        queryBuilder.Append(" ORDER BY CREATED_AT DESC NULLS LAST");
+                    }
+                    
+                    using (var cmd = new OracleCommand(queryBuilder.ToString(), conn))
+                    {
+                        cmd.Parameters.AddRange(parameters.ToArray());
+                        
+                        // Debug logging
+                        Console.WriteLine($"Filter Query: {queryBuilder.ToString()}");
+                        Console.WriteLine($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}={p.Value}"))}");
+                        
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                records.Add(new
+                                {
+                                    Id = reader["RECORD_ID"]?.ToString(),
+                                    RegulationName = reader["REGULATION_NAME"]?.ToString(),
+                                    Sections = reader["SECTIONS"]?.ToString(),
+                                    Version = reader["VERSION"]?.ToString(),
+                                    ApprovalDate = reader["APPROVAL_DATE"] != DBNull.Value ? 
+                                        Convert.ToDateTime(reader["APPROVAL_DATE"]).ToString("yyyy-MM-dd") : "",
+                                    ApprovingEntity = reader["APPROVING_ENTITY"]?.ToString(),
+                                    Department = reader["DEPARTMENT"]?.ToString(),
+                                    DocumentType = reader["DOCUMENT_TYPE"]?.ToString(),
+                                    Description = reader["DESCRIPTION"]?.ToString(),
+                                    VersionDate = reader["VERSION_DATE"] != DBNull.Value ? 
+                                        Convert.ToDateTime(reader["VERSION_DATE"]).ToString("yyyy-MM-dd") : "",
+                                    Notes = reader["NOTES"]?.ToString(),
+                                    CreatedAt = reader["CREATED_AT"] != DBNull.Value ? 
+                                        Convert.ToDateTime(reader["CREATED_AT"]).ToString("yyyy-MM-dd") : ""
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting filtered records: {ex.Message}");
+                // Fallback to all records if filtering fails
+                return GetAllRecords();
+            }
+            return records;
+        }
     }
 }
