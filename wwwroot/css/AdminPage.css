@@ -673,6 +673,55 @@ body {
   transform: scale(1.2);
 }
 
+/* Custom checkbox styling using SVG */
+input[type="checkbox"] {
+  accent-color: #eeca2c;
+  margin-right: 8px;
+  transform: scale(1.5);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+input[type="checkbox"]:hover {
+  transform: scale(1.6);
+  box-shadow: 0 0 5px rgba(238, 202, 44, 0.5);
+}
+
+input[type="checkbox"]:focus {
+  outline: 2px solid #eeca2c;
+  outline-offset: 2px;
+}
+
+/* Master checkbox specific styling */
+#masterCheckbox {
+  accent-color: #eeca2c;
+  margin-right: 8px;
+  transform: scale(1.5);
+  border-radius: 4px;
+}
+
+/* Record checkbox specific styling */
+.record-checkbox {
+  accent-color: #eeca2c;
+  margin-right: 8px;
+  transform: scale(1.5);
+  border-radius: 4px;
+}
+
+@media (max-width: 992px) {
+  .small-font-size {
+    font-size: 18px !important;
+  }
+}
+
+#delete-btn-mobile {
+  height: 50px !important;
+  margin-bottom: 0px !important;
+  border: 2px solid whitesmoke !important;
+  border-radius: 8px !important;
+}
+
 @media (max-width: 992px) {
   .small-font-size {
     font-size: 18px !important;
