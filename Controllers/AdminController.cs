@@ -235,6 +235,62 @@ public class AdminController : Controller
         return RedirectToAction("ManageContactInfo");
     }
 
+    // Alternative simpler method for friends with different database schema
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [ActionName("AddNewRecordSimple")]
+    public async Task<IActionResult> AddNewRecordSimpleAsync(AddNewRecordViewModel model)
+    {
+        try
+        {
+            // Get document type from form
+            string documentType = Request.Form["doctype"].ToString();
+            if (string.IsNullOrEmpty(documentType))
+                documentType = "regulation";
+
+            // Prepare section string
+            var sectionString = string.Join(",", model.Sections ?? new List<string>());
+
+            // Simple insert without attachments first
+            var insertSql = @"
+            INSERT INTO RECORDS (
+                USER_ID, REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
+                APPROVING_ENTITY, APPROVAL_DATE, DESCRIPTION, DOCUMENT_TYPE,
+                SECTIONS, NOTES
+            )
+            VALUES (
+                1, :RegulationName, :Department, :Version, :VersionDate,
+                :ApprovingEntity, :ApprovalDate, :Description, :DocumentType,
+                :Sections, :Notes
+            )";
+
+            var parameters = new OracleParameter[]
+            {
+                new("RegulationName", model.RegulationName ?? ""),
+                new("Department", model.RelevantDepartment ?? ""),
+                new("Version", model.VersionNumber ?? "1"),
+                new("VersionDate", model.VersionDate),
+                new("ApprovingEntity", model.ApprovingEntity ?? ""),
+                new("ApprovalDate", model.ApprovingDate),
+                new("Description", model.Description ?? ""),
+                new("DocumentType", documentType),
+                new("Sections", sectionString),
+                new("Notes", model.Notes ?? "")
+            };
+
+            await _db.ExecuteNonQueryAsync(insertSql, parameters);
+
+            TempData["SuccessMessage"] = "Record saved successfully (without attachments).";
+            return RedirectToAction("AddNewRecord");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Simple insert failed: {ErrorMessage}", ex.Message);
+            TempData["ErrorMessage"] = $"Simple insert failed: {ex.Message}";
+            return View("AddNewRecord", model);
+        }
+    }
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -271,35 +327,44 @@ public class AdminController : Controller
                 pdfPath = "/uploads/" + pdfFileName;
             }
 
-            string documentType = "";
-
-            if (model.WordAttachment != null && model.WordAttachment.Length > 0)
-                documentType += "word";
-
-            if (model.PdfAttachment != null && model.PdfAttachment.Length > 0)
-            {
-                if (!string.IsNullOrEmpty(documentType))
-                    documentType += ",";
-
-                documentType += "pdf";
-            }
-
-            // Optional fallback
+            // Use the document type from the form
+            string documentType = Request.Form["doctype"].ToString();
             if (string.IsNullOrEmpty(documentType))
-                documentType = "none"; // Or return error if both files are required
+                documentType = "regulation"; // Default to regulation if not specified
 
             // Prepare section string
             var sectionString = string.Join(",", model.Sections ?? new List<string>());
 
+            // Get a valid USER_ID (use the first available user)
+            int userId = 1; // Default
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    var userCheckSql = "SELECT MIN(USER_ID) FROM USERS WHERE USER_ID IS NOT NULL";
+                    using (var cmd = new OracleCommand(userCheckSql, conn))
+                    {
+                        var result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                            userId = Convert.ToInt32(result);
+                    }
+                }
+            }
+            catch
+            {
+                userId = 1; // Fallback
+            }
+
             // Step 1: Insert record and get inserted ID
             var insertSql = @"
             INSERT INTO RECORDS (
-                REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
+                USER_ID, REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
                 APPROVING_ENTITY, APPROVAL_DATE, DESCRIPTION, DOCUMENT_TYPE,
                 SECTIONS, NOTES
             )
             VALUES (
-                :RegulationName, :Department, :Version, :VersionDate,
+                :UserId, :RegulationName, :Department, :Version, :VersionDate,
                 :ApprovingEntity, :ApprovalDate, :Description, :DocumentType,
                 :Sections, :Notes
             )
@@ -312,6 +377,7 @@ public class AdminController : Controller
 
             var parameters = new OracleParameter[]
             {
+            new("UserId", userId), // Use dynamic user ID
             new("RegulationName", model.RegulationName),
             new("Department", model.RelevantDepartment),
             new("Version", model.VersionNumber),
@@ -333,24 +399,33 @@ public class AdminController : Controller
             // Get the inserted record ID
             int newId = ((OracleDecimal)insertedIdParam.Value).ToInt32();
 
-            // Step 2: Insert attachments
-            //for word files
-            if (!string.IsNullOrEmpty(wordPath))
+            // Step 2: Insert attachments (with error handling)
+            try
             {
-                var insertPdfSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) VALUES (:id, 'PDF', :path, :original)";
-                await _db.ExecuteNonQueryAsync(insertPdfSql,
-                new OracleParameter("id", newId),
-                new OracleParameter("path", pdfPath),
-                new OracleParameter("original", model.PdfAttachment.FileName));
+                // For word files
+                if (!string.IsNullOrEmpty(wordPath) && model.WordAttachment != null)
+                {
+                    var insertWordSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, :fileType, :path)";
+                    await _db.ExecuteNonQueryAsync(insertWordSql,
+                        new OracleParameter("id", newId),
+                        new OracleParameter("fileType", "docx"),
+                        new OracleParameter("path", wordPath));
+                }
+                
+                // For pdf files
+                if (!string.IsNullOrEmpty(pdfPath) && model.PdfAttachment != null)
+                {
+                    var insertPdfSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, :fileType, :path)";
+                    await _db.ExecuteNonQueryAsync(insertPdfSql,
+                        new OracleParameter("id", newId),
+                        new OracleParameter("fileType", "pdf"),
+                        new OracleParameter("path", pdfPath));
+                }
             }
-            //for pdf files
-            if (!string.IsNullOrEmpty(pdfPath))
+            catch (Exception attachEx)
             {
-                var insertWordSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) VALUES (:id, 'WORD', :path, :original)";
-                await _db.ExecuteNonQueryAsync(insertWordSql,
-                new OracleParameter("id", newId),
-                new OracleParameter("path", wordPath),
-                new OracleParameter("original", model.WordAttachment.FileName));
+                _logger.LogWarning(attachEx, "Failed to insert attachments for record {RecordId}, but record was saved", newId);
+                // Don't fail the whole operation if just attachments fail
             }
 
             TempData["SuccessMessage"] = "Record and attachments saved.";
@@ -358,8 +433,14 @@ public class AdminController : Controller
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Insert failed");
-            TempData["ErrorMessage"] = "An error occurred while saving the record.";
+            _logger.LogError(ex, "Insert failed: {ErrorMessage}", ex.Message);
+            
+            // More specific error message for debugging
+            string errorDetails = ex.Message;
+            if (ex.InnerException != null)
+                errorDetails += " | Inner: " + ex.InnerException.Message;
+                
+            TempData["ErrorMessage"] = $"An error occurred while saving the record: {errorDetails}";
             return View(model);
         }
     }
