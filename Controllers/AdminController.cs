@@ -327,6 +327,12 @@ public class AdminController : Controller
                 pdfPath = "/uploads/" + pdfFileName;
             }
 
+            // Validate dates before proceeding
+            if (model.VersionDate == default(DateTime))
+                model.VersionDate = DateTime.Now;
+            if (model.ApprovingDate == default(DateTime))
+                model.ApprovingDate = DateTime.Now;
+
             // Use the document type from the form
             string documentType = Request.Form["doctype"].ToString();
             if (string.IsNullOrEmpty(documentType))
@@ -356,76 +362,99 @@ public class AdminController : Controller
                 userId = 1; // Fallback
             }
 
-            // Step 1: Insert record and get inserted ID
+            // Step 1: Insert record using sequence for RECORD_ID
             var insertSql = @"
             INSERT INTO RECORDS (
-                USER_ID, REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
+                RECORD_ID, USER_ID, REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
                 APPROVING_ENTITY, APPROVAL_DATE, DESCRIPTION, DOCUMENT_TYPE,
                 SECTIONS, NOTES
             )
             VALUES (
-                :UserId, :RegulationName, :Department, :Version, :VersionDate,
+                RECORDS_SEQ.NEXTVAL, :UserId, :RegulationName, :Department, :Version, :VersionDate,
                 :ApprovingEntity, :ApprovalDate, :Description, :DocumentType,
                 :Sections, :Notes
-            )
-            RETURNING RECORD_ID INTO :InsertedId";
-
-            var insertedIdParam = new OracleParameter("InsertedId", OracleDbType.Int32)
-            {
-                Direction = ParameterDirection.Output
-            };
+            )";
 
             var parameters = new OracleParameter[]
             {
-            new("UserId", userId), // Use dynamic user ID
-            new("RegulationName", model.RegulationName),
-            new("Department", model.RelevantDepartment),
-            new("Version", model.VersionNumber),
+            new("UserId", userId),
+            new("RegulationName", model.RegulationName ?? ""),
+            new("Department", model.RelevantDepartment ?? ""),
+            new("Version", model.VersionNumber ?? "1"),
             new("VersionDate", model.VersionDate),
-            new("ApprovingEntity", model.ApprovingEntity),
+            new("ApprovingEntity", model.ApprovingEntity ?? ""),
             new("ApprovalDate", model.ApprovingDate),
-            new("Description", model.Description),
-            new("DocumentType",documentType),
-            new("WordAttachment",model.WordAttachment),
-            new("PdfAttachment",model.PdfAttachment),
+            new("Description", model.Description ?? ""),
+            new("DocumentType", documentType),
             new("Sections", sectionString),
-            new("Notes", model.Notes),
-            insertedIdParam // important
+            new("Notes", model.Notes ?? "")
             };
 
-            // Run insert
-            await _db.ExecuteNonQueryAsync(insertSql, parameters);
-
-            // Get the inserted record ID
-            int newId = ((OracleDecimal)insertedIdParam.Value).ToInt32();
-
-            // Step 2: Insert attachments (with error handling)
+            // Run insert with debug logging
             try
             {
-                // For word files
-                if (!string.IsNullOrEmpty(wordPath) && model.WordAttachment != null)
+                Console.WriteLine($"About to execute SQL with UserId: {userId}, DocumentType: {documentType}");
+                await _db.ExecuteNonQueryAsync(insertSql, parameters);
+                Console.WriteLine("SQL executed successfully");
+            }
+            catch (Exception sqlEx)
+            {
+                Console.WriteLine($"SQL Error: {sqlEx.Message}");
+                throw; // Re-throw to be caught by outer catch
+            }
+
+            // Get the current sequence value for attachments
+            int newId = 0;
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
                 {
-                    var insertWordSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, :fileType, :path)";
-                    await _db.ExecuteNonQueryAsync(insertWordSql,
-                        new OracleParameter("id", newId),
-                        new OracleParameter("fileType", "docx"),
-                        new OracleParameter("path", wordPath));
-                }
-                
-                // For pdf files
-                if (!string.IsNullOrEmpty(pdfPath) && model.PdfAttachment != null)
-                {
-                    var insertPdfSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, :fileType, :path)";
-                    await _db.ExecuteNonQueryAsync(insertPdfSql,
-                        new OracleParameter("id", newId),
-                        new OracleParameter("fileType", "pdf"),
-                        new OracleParameter("path", pdfPath));
+                    conn.Open();
+                    var seqSql = "SELECT RECORDS_SEQ.CURRVAL FROM DUAL";
+                    using (var cmd = new OracleCommand(seqSql, conn))
+                    {
+                        var result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                            newId = Convert.ToInt32(result);
+                    }
                 }
             }
-            catch (Exception attachEx)
+            catch
             {
-                _logger.LogWarning(attachEx, "Failed to insert attachments for record {RecordId}, but record was saved", newId);
-                // Don't fail the whole operation if just attachments fail
+                // If we can't get the sequence, skip attachments
+                newId = 0;
+            }
+
+            // Step 2: Insert attachments (with error handling)
+            if (newId > 0)
+            {
+                try
+                {
+                    // For word files
+                    if (!string.IsNullOrEmpty(wordPath) && model.WordAttachment != null)
+                    {
+                        var insertWordSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, :fileType, :path)";
+                        await _db.ExecuteNonQueryAsync(insertWordSql,
+                            new OracleParameter("id", newId),
+                            new OracleParameter("fileType", "docx"),
+                            new OracleParameter("path", wordPath));
+                    }
+                    
+                    // For pdf files
+                    if (!string.IsNullOrEmpty(pdfPath) && model.PdfAttachment != null)
+                    {
+                        var insertPdfSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, :fileType, :path)";
+                        await _db.ExecuteNonQueryAsync(insertPdfSql,
+                            new OracleParameter("id", newId),
+                            new OracleParameter("fileType", "pdf"),
+                            new OracleParameter("path", pdfPath));
+                    }
+                }
+                catch (Exception attachEx)
+                {
+                    _logger.LogWarning(attachEx, "Failed to insert attachments for record {RecordId}, but record was saved", newId);
+                    // Don't fail the whole operation if just attachments fail
+                }
             }
 
             TempData["SuccessMessage"] = "Record and attachments saved.";
