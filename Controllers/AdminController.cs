@@ -41,7 +41,26 @@ public class AdminController : Controller
         try
         {
             var records = _oracleDbService.GetAllRecords();
-            return View(records);
+            
+            // Enhance records with contact information
+            var enhancedRecords = records.Select(record => new
+            {
+                Id = record.Id,
+                RegulationName = record.RegulationName,
+                Sections = record.Sections,
+                Version = record.Version,
+                ApprovalDate = record.ApprovalDate,
+                ApprovingEntity = record.ApprovingEntity,
+                Department = record.Department,
+                DocumentType = record.DocumentType,
+                Description = record.Description,
+                VersionDate = record.VersionDate,
+                Notes = record.Notes,
+                CreatedAt = record.CreatedAt,
+                ContactInformation = _oracleDbService.GetContactsByDepartment(record.Department ?? "")
+            }).ToList();
+            
+            return View(enhancedRecords);
         }
         catch (Exception ex)
         {

@@ -1,4 +1,4 @@
-@model List<dynamic>
+@model IEnumerable<dynamic>
 
 <!-- This File is about the admin page that controls what to be added, wheather its a new record or contact. in this page you can edit and delete.
 there's also many filtering options to find the policy and other adminstrative stuff-->
@@ -403,10 +403,11 @@ there's also many filtering options to find the policy and other adminstrative s
                 @if (Model != null && Model.Any())
                 {
                     <div class="accordion" id="regulationAccordion">
-                        @for (int i = 0; i < Model.Count; i++)
+                        @{ int i = 0; }
+                        @foreach (var record in Model)
                         {
-                            var record = Model[i];
-                            var itemNumber = i + 1;
+                            i++;
+                            var itemNumber = i;
                             var headingId = "heading" + itemNumber;
                             var collapseId = "collapse" + itemNumber;
                             <!-- Accordion Item 1 -->
@@ -577,35 +578,52 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                     Department
                                                                     contact
                                                                     information:</label>
-                                                                <div class="mb-3">
-                                                                    <label class="form-label mb-0">Name
-                                                                        (English)</label>
-                                                                    <input type="text" class="form-control"
-                                                                        value="Azzam Alzahrani" readonly>
-                                                                </div>
-                                                                <div class="mb-3">
-                                                                    <label class="form-label mb-0">Name
-                                                                        (Arabic)</label>
-                                                                    <input type="text" class="form-control"
-                                                                        value="عزام الزهراني" readonly>
-                                                                </div>
-                                                                <div class="mb-3">
-                                                                    <label class="form-label mb-0">E-mail</label>
-                                                                    <input type="email" class="form-control"
-                                                                        value="Azzam@gmail.com" readonly>
-                                                                </div>
-                                                                <div class="mb-3">
-                                                                    <label class="form-label mb-0">Telephone
-                                                                        number</label>
-                                                                    <input type="text" class="form-control" value="3333139-013"
-                                                                        readonly>
-                                                                </div>
-                                                                <div class="mb-3">
-                                                                    <label class="form-label mb-0">Mobile
-                                                                        number</label>
-                                                                    <input type="text" class="form-control" value="0569877695"
-                                                                        readonly>
-                                                                </div>
+                                                                @if (record.ContactInformation != null && ((IEnumerable<dynamic>)record.ContactInformation).Any())
+                                                                {
+                                                                    @foreach (var contact in record.ContactInformation)
+                                                                    {
+                                                                        <div class="mb-3 p-3 border rounded">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label mb-0">Name
+                                                                                    (English)</label>
+                                                                                <input type="text" class="form-control"
+                                                                                    value="@contact.Name" readonly>
+                                                                            </div>
+                                                                            @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
+                                                                            {
+                                                                                <div class="mb-3">
+                                                                                    <label class="form-label mb-0">E-mail</label>
+                                                                                    <input type="email" class="form-control"
+                                                                                        value="@contact.Email" readonly>
+                                                                                </div>
+                                                                            }
+                                                                            @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
+                                                                            {
+                                                                                <div class="mb-3">
+                                                                                    <label class="form-label mb-0">Telephone
+                                                                                        number</label>
+                                                                                    <input type="text" class="form-control" value="@contact.Telephone"
+                                                                                        readonly>
+                                                                                </div>
+                                                                            }
+                                                                            @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
+                                                                            {
+                                                                                <div class="mb-3">
+                                                                                    <label class="form-label mb-0">Mobile
+                                                                                        number</label>
+                                                                                    <input type="text" class="form-control" value="@contact.Mobile"
+                                                                                        readonly>
+                                                                                </div>
+                                                                            }
+                                                                        </div>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="mb-3">
+                                                                        <p class="text-muted">No contact information available for this department.</p>
+                                                                    </div>
+                                                                }
                                                             </td>
                                                         </tr>
                                                     </table>
