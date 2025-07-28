@@ -320,6 +320,8 @@ public class AdminController : Controller
             new("ApprovalDate", model.ApprovingDate),
             new("Description", model.Description),
             new("DocumentType",documentType),
+            new("WordAttachment",model.WordAttachment),
+            new("PdfAttachment",model.PdfAttachment),
             new("Sections", sectionString),
             new("Notes", model.Notes),
             insertedIdParam // important
