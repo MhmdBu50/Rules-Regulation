@@ -5,7 +5,7 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/AddContactInfo.css">
+    <link rel="stylesheet" href="~/css/addContactInfo.css">
 }
 
 <div class="AddContactInfo">
@@ -43,29 +43,29 @@
     }
 
     <!-- Contact Information Table -->
-    <div class="container">
-      <div class="form-wrapper">
+<div class="container">
+    <div class="form-wrapper">
         @if (Model != null && Model.Any())
         {
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead class="table-dark">
+            <div class="table-container"> <!-- 🔁 Updated wrapper class -->
+                <table class="table table-hover mb-0"> <!-- 🔁 Added mb-0 -->
+                    <thead>
                         <tr>
                             <th>Department</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Mobile</th>
                             <th>Telephone</th>
-                            <th>Actions</th>
+                            <th class="text-end">Actions</th> <!-- 🔁 Align Actions to right -->
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var contact in Model)
                         {
                             <tr>
-                                <td><strong>@contact.Department</strong></td>
-                                <td>@contact.Name</td>
-                                <td>
+                                <td data-label="Department"><strong>@contact.Department</strong></td>
+                                <td data-label="Name">@contact.Name</td>
+                                <td data-label="Email">
                                     @if (!string.IsNullOrEmpty(contact.Email))
                                     {
                                         <a href="mailto:@contact.Email">@contact.Email</a>
@@ -75,7 +75,7 @@
                                         <span class="text-muted">-</span>
                                     }
                                 </td>
-                                <td>
+                                <td data-label="Mobile">
                                     @if (!string.IsNullOrEmpty(contact.Mobile))
                                     {
                                         <a href="tel:@contact.Mobile">@contact.Mobile</a>
@@ -85,7 +85,7 @@
                                         <span class="text-muted">-</span>
                                     }
                                 </td>
-                                <td>
+                                <td data-label="Telephone">
                                     @if (!string.IsNullOrEmpty(contact.Telephone))
                                     {
                                         <a href="tel:@contact.Telephone">@contact.Telephone</a>
@@ -95,7 +95,7 @@
                                         <span class="text-muted">-</span>
                                     }
                                 </td>
-                                <td>
+                                <td data-label="Actions" class="action-buttons text-end"> <!-- 🔁 Apply action buttons style -->
                                     <a href="@Url.Action("EditContactInfo", new { id = contact.ContactId })" 
                                        class="btn btn-sm btn-primary me-2" title="Edit">
                                         <img src="@Url.Content("~/svgs/admin/upload-file.svg")" width="16" height="16" alt="Edit">
@@ -120,9 +120,9 @@
                 <a href="@Url.Action("AddNewContactInfo", "Admin")" class="btn btn-primary">Add New Contact Info</a>
             </div>
         }
-      </div>
     </div>
 </div>
+
 
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">

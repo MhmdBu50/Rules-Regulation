@@ -1,114 +1,344 @@
-/* Scoped Styles for Add Contact Info Page */
+/* ===================== Global Styles for Table Page ===================== */
+.table-container {
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+    background-color: #516681;
+    border-radius: 12px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+}
+
+.table thead {
+    background: var(--primary-light);
+    color: white;
+}
+tr {
+    height: 100%;
+}
+.table thead th {
+    font-weight: 600;
+    padding: 16px 20px;
+}
+
+.table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(15, 23, 52, 0.03);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.table tbody td {
+    padding: 16px 20px;
+    vertical-align: middle;
+}
+
+
+.btn-custom {
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-dark-custom {
+    background: var(--primary-light);
+    border: none;
+    color: white;
+}
+
+.btn-dark-custom:hover {
+    background: #1a3050;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+    background: var(--primary-light);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #1a3050;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.875rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .table thead {
+        display: none;
+    }
+
+    .table, .table tbody, .table tr, .table td {
+        display: block;
+        width: 100%;
+    }
+
+    .table tr {
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        position: relative;
+    }
+
+    .table td {
+        padding: 12px 15px;
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    .table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 15px;
+        width: calc(50% - 15px);
+        padding-right: 10px;
+        text-align: left;
+        font-weight: 600;
+        color: var(--primary-light);
+    }
+
+    .action-buttons {
+        justify-content: flex-end;
+    }
+}
+
+
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table thead {
+  background: #343a40;
+  color: white;
+  border-radius: 12px 12px 0 0;
+}
+
+.table thead th {
+  padding: 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  color: azure;
+  background: #284161;
+}
+
+.table tbody td {
+  padding: 0.9rem 0.8rem;
+  vertical-align: middle;
+  font-size: 0.92rem;
+  border-top: 1px solid #e7e7e7;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+  transition: background-color 0.2s ease;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn.btn-sm {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  border-radius: 6px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+/* Optional: Make table scrollable on small screens */
+@media (max-width: 768px) {
+  .table-container {
+    padding: 0.5rem;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table, .table tbody, .table tr, .table td {
+    display: block;
+    width: 100%;
+    border-radius: 6px;
+
+  }
+
+  .table tr {
+    margin-bottom: 1rem;
+    border-radius: 6px;
+    background-color: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    border-radius: 6px;
+  }
+
+  .table td {
+    padding: 0.8rem;
+    text-align: right;
+    position: relative;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+    text-align: left;
+    color: #555;
+  }
+
+  .action-buttons {
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+}
+
+
+/* ===================== Scoped Styles for Add Contact Info Page ===================== */
 .AddContactInfo {
-  background-color: #EAE0CA;
-  font-family: 'Inter', sans-serif;
-  min-height: 100vh;
-  position: relative;
-  z-index: 0;
+    background-color: #EAE0CA;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    position: relative;
+    z-index: 0;
 }
 
 .AddContactInfo::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('/imgs/dsc_2499.jpg') no-repeat center center;
-  background-size: cover;
-  background-attachment: fixed;
-  opacity: 0.08;
-  z-index: -1;
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('/imgs/dsc_2499.jpg') no-repeat center center;
+    background-size: cover;
+    background-attachment: fixed;
+    opacity: 0.08;
+    z-index: -1;
 }
 
-/* Top Navigation Bar */
 .AddContactInfo .top-bar {
-  width: 100%;
-  height: 48px;
-  background: #0F1734;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  color: white;
+    width: 100%;
+    height: 48px;
+    background: #0F1734;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    color: white;
 }
 
 .AddContactInfo .top-bar a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  width: max-content;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    width: max-content;
 }
 
 .AddContactInfo .top-bar a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
-/* Logo and Header */
 .AddContactInfo .header-logo {
-  max-height: 80px;
-  width: auto;
+    max-height: 80px;
+    width: auto;
 }
 
 .AddContactInfo .logo-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0 0;
 }
 
 .AddContactInfo .main-header {
-  background: #0F1734;
-  color: white;
-  padding: 20px;
-  text-align: center;
-  margin: 0 100px 30px 100px;
+    background: #0F1734;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    margin: 0 100px 30px 100px;
 }
 
-/* Form Layout */
 .AddContactInfo .form-wrapper {
-  border-radius: 10px;
-  padding: 30px;
-  margin-bottom: 40px;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 40px;
 }
 
-/* Form Elements */
 .AddContactInfo label {
-  font-weight: 600;
+    font-weight: 600;
 }
 
 .AddContactInfo .form-control,
 .AddContactInfo .form-select,
 .AddContactInfo textarea {
-  background: #fff;
-  border-radius: 4px;
-  box-shadow: 0 3px 8.9px rgba(0, 0, 0, 0.3);
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 3px 8.9px rgba(0, 0, 0, 0.3);
 }
 
 .AddContactInfo input:focus,
 .AddContactInfo select:focus,
 .AddContactInfo textarea:focus {
-  outline: 2px solid #284161;
+    outline: 2px solid #284161;
 }
 
-/* Buttons */
 .AddContactInfo .btn-primary {
-  background-color: #284161;
-  border: none;
+    background-color: #284161;
+    border: none;
 }
 
 .AddContactInfo .btn-secondary {
-  background-color: #fff;
-  color: #284161;
-  border: none;
-  box-shadow: 0px 4px 8.9px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    color: #284161;
+    border: none;
+    box-shadow: 0px 4px 8.9px rgba(0, 0, 0, 0.3);
 }
 
-/* Errors */
 .AddContactInfo .text-danger {
-  font-size: 0.875em;
-}
-.shadowed {
-  box-shadow: 0 3px 8.9px rgba(0, 0, 0, 0.3);
+    font-size: 0.875em;
 }
 
+.shadowed {
+    box-shadow: 0 3px 8.9px rgba(0, 0, 0, 0.3);
+}
