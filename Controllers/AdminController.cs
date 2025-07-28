@@ -715,6 +715,53 @@ public async Task<IActionResult> ViewPdf(int id)
         return RedirectToAction("AdminPage");
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteMultipleRecords(List<int> recordIds)
+    {
+        try
+        {
+            if (recordIds == null || !recordIds.Any())
+            {
+                TempData["ErrorMessage"] = "No records selected for deletion.";
+                return RedirectToAction("AdminPage");
+            }
+
+            int successCount = 0;
+            int totalCount = recordIds.Count;
+
+            foreach (int recordId in recordIds)
+            {
+                bool success = _oracleDbService.DeleteRecord(recordId);
+                if (success)
+                {
+                    successCount++;
+                }
+            }
+
+            if (successCount == totalCount)
+            {
+                TempData["SuccessMessage"] = $"Successfully deleted {successCount} record(s)!";
+            }
+            else if (successCount > 0)
+            {
+                TempData["SuccessMessage"] = $"Successfully deleted {successCount} out of {totalCount} record(s).";
+                TempData["ErrorMessage"] = $"Failed to delete {totalCount - successCount} record(s).";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to delete any records. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting multiple records");
+            TempData["ErrorMessage"] = "An error occurred while deleting the records.";
+        }
+
+        return RedirectToAction("AdminPage");
+    }
+
 
 
 }
