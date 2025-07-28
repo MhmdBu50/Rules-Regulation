@@ -111,21 +111,21 @@
                                     @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
                                     {
                                         <div class="contact-method">
-                                            <i class="fas fa-envelope"></i>
+                                            <i class="fas fa-envelope"> <img src="~/svgs/cards/email-icon.svg" width="20px" height="20px"> </i>
                                             <a href="mailto:@contact.Email">@contact.Email</a>
                                         </div>
                                     }
                                     @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
                                     {
                                         <div class="contact-method">
-                                            <i class="fas fa-phone-alt"></i>
+                                            <i class="fas fa-phone-alt"> <img src="~/svgs/cards/telephone.svg" width="20px" height="20px"> </i>
                                             <a href="tel:@contact.Telephone">@contact.Telephone</a>
                                         </div>
                                     }
                                     @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
                                     {
                                         <div class="contact-method">
-                                            <i class="fas fa-mobile-alt"></i>
+                                            <i class="fas fa-mobile-alt"> <img src="~/svgs/cards/phone.svg" width="20px" height="20px"> </i>
                                             <a href="tel:@contact.Mobile">@contact.Mobile</a>
                                         </div>
                                     }
