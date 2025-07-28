@@ -271,22 +271,10 @@ public class AdminController : Controller
                 pdfPath = "/uploads/" + pdfFileName;
             }
 
-            string documentType = "";
-
-            if (model.WordAttachment != null && model.WordAttachment.Length > 0)
-                documentType += "word";
-
-            if (model.PdfAttachment != null && model.PdfAttachment.Length > 0)
-            {
-                if (!string.IsNullOrEmpty(documentType))
-                    documentType += ",";
-
-                documentType += "pdf";
-            }
-
-            // Optional fallback
+            // Use the document type from the form
+            string documentType = Request.Form["doctype"].ToString();
             if (string.IsNullOrEmpty(documentType))
-                documentType = "none"; // Or return error if both files are required
+                documentType = "regulation"; // Default to regulation if not specified
 
             // Prepare section string
             var sectionString = string.Join(",", model.Sections ?? new List<string>());
@@ -294,12 +282,12 @@ public class AdminController : Controller
             // Step 1: Insert record and get inserted ID
             var insertSql = @"
             INSERT INTO RECORDS (
-                REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
+                USER_ID, REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
                 APPROVING_ENTITY, APPROVAL_DATE, DESCRIPTION, DOCUMENT_TYPE,
                 SECTIONS, NOTES
             )
             VALUES (
-                :RegulationName, :Department, :Version, :VersionDate,
+                :UserId, :RegulationName, :Department, :Version, :VersionDate,
                 :ApprovingEntity, :ApprovalDate, :Description, :DocumentType,
                 :Sections, :Notes
             )
@@ -312,6 +300,7 @@ public class AdminController : Controller
 
             var parameters = new OracleParameter[]
             {
+            new("UserId", 1), // Default to user ID 1 for now
             new("RegulationName", model.RegulationName),
             new("Department", model.RelevantDepartment),
             new("Version", model.VersionNumber),
@@ -332,23 +321,24 @@ public class AdminController : Controller
             int newId = ((OracleDecimal)insertedIdParam.Value).ToInt32();
 
             // Step 2: Insert attachments
-            //for word files
-            if (!string.IsNullOrEmpty(wordPath))
+            // For word files
+            if (!string.IsNullOrEmpty(wordPath) && model.WordAttachment != null)
             {
-                var insertPdfSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) VALUES (:id, 'PDF', :path, :original)";
-                await _db.ExecuteNonQueryAsync(insertPdfSql,
-                new OracleParameter("id", newId),
-                new OracleParameter("path", pdfPath),
-                new OracleParameter("original", model.PdfAttachment.FileName));
-            }
-            //for pdf files
-            if (!string.IsNullOrEmpty(pdfPath))
-            {
-                var insertWordSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) VALUES (:id, 'WORD', :path, :original)";
+                var insertWordSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, :fileType, :path)";
                 await _db.ExecuteNonQueryAsync(insertWordSql,
-                new OracleParameter("id", newId),
-                new OracleParameter("path", wordPath),
-                new OracleParameter("original", model.WordAttachment.FileName));
+                    new OracleParameter("id", newId),
+                    new OracleParameter("fileType", "docx"),
+                    new OracleParameter("path", wordPath));
+            }
+            
+            // For pdf files
+            if (!string.IsNullOrEmpty(pdfPath) && model.PdfAttachment != null)
+            {
+                var insertPdfSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH) VALUES (:id, :fileType, :path)";
+                await _db.ExecuteNonQueryAsync(insertPdfSql,
+                    new OracleParameter("id", newId),
+                    new OracleParameter("fileType", "pdf"),
+                    new OracleParameter("path", pdfPath));
             }
 
             TempData["SuccessMessage"] = "Record and attachments saved.";
