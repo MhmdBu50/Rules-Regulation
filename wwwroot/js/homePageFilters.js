@@ -13,6 +13,7 @@ function applyHomePageFilters() {
     const dateSort = document.querySelector('input[name="dateOption"]:checked')?.value || '';
     const fromDate = document.getElementById('fromDate')?.value || '';
     const toDate = document.getElementById('toDate')?.value || '';
+    const searchTerm = document.getElementById('searchInput')?.value || '';
 
     // Build query parameters
     const params = new URLSearchParams();
@@ -23,6 +24,7 @@ function applyHomePageFilters() {
     if (dateSort) params.append('dateSort', dateSort);
     if (fromDate) params.append('fromDate', fromDate);
     if (toDate) params.append('toDate', toDate);
+    if (searchTerm) params.append('search', searchTerm);
 
     // Reload page with filters
     window.location.href = '/Home/homePage?' + params.toString();
