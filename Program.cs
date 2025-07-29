@@ -20,7 +20,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.RequestCultureProviders.Add(new CookieRequestCultureProvider());
     options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());
 });
-
+// builder.Services.AddSingleton<DatabaseConnection>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<OracleDbService>(provider =>
 {
