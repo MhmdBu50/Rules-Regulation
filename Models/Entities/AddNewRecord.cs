@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace RulesRegulation.Models.Entities
 {
     public class AddNewRecord
@@ -10,7 +12,9 @@ namespace RulesRegulation.Models.Entities
         public string ApprovingEntity { get; set; }
         public DateTime ApprovingDate { get; set; }
 
+        [NotMapped]
         public IFormFile WordAttachment { get; set; }
+        [NotMapped]
         public IFormFile PdfAttachment { get; set; }
 
         public string Description { get; set; }
@@ -20,6 +24,7 @@ namespace RulesRegulation.Models.Entities
         public string Notes { get; set; }
     
         public ICollection<Attachment> Attachments { get; set; }
+        public ICollection<SavedRecord> SavedRecords { get; set; }
 
     }
 }

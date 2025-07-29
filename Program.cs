@@ -1,6 +1,8 @@
 using RulesRegulation.Data;
 using RulesRegulation.Services;
 using Microsoft.AspNetCore.Localization;
+using RulesRegulation.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +32,12 @@ builder.Services.AddScoped<OracleDbService>(provider =>
         throw new InvalidOperationException("Connection string 'OracleConnection' not found.");
     return new OracleDbService(connectionString);
 });
+var oracleConnectionString = builder.Configuration.GetConnectionString("OracleConnection");
+if (string.IsNullOrWhiteSpace(oracleConnectionString))
+    throw new InvalidOperationException("Connection string 'OracleConnection' not found.");
 
+builder.Services.AddDbContext<RRdbContext>(options =>
+    options.UseOracle(oracleConnectionString));
 builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
 builder.Services.AddSession();
 
