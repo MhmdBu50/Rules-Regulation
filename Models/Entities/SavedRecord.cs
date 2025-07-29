@@ -7,9 +7,8 @@ namespace RulesRegulation.Models
     [Table("SAVED_RECORDS")]
     public class SavedRecord
     {
-        [Key]
         [Column("SAVED_ID")]
-        public int SavedId { get; set; }
+        public string SavedId { get; set; } = Guid.NewGuid().ToString();
 
         [Column("RECORD_ID")]
         public int RecordId { get; set; }
@@ -22,7 +21,6 @@ namespace RulesRegulation.Models
 
         [ForeignKey("RecordId")]
         public AddNewRecord Record { get; set; }
-
 
         [ForeignKey("UserId")]
         public Users User { get; set; }
