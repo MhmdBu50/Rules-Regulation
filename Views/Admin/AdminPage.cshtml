@@ -470,8 +470,17 @@ there's also many filtering options to find the policy and other adminstrative s
                                                             <td colspan="2">
                                                                 <label class="fw-bold">Responsible
                                                                     Department</label>
-                                                                <input type="text" name="department" class="form-control"
-                                                                    value="@record.Department" readonly disabled>
+                                                                <select name="department" class="form-select" disabled>
+                                                                    <option value="@record.Department" selected>@record.Department</option>
+                                                                    <option value="Reg and Admission">Reg and Admission</option>
+                                                                    <option value="CCSIT">CCSIT</option>
+                                                                    <option value="Communication and tech">Communication and tech</option>
+                                                                    <option value="Hospital">Hospital</option>
+                                                                    <option value="Library">Library</option>
+                                                                    <option value="Students Affairs">Students Affairs</option>
+                                                                    <option value="Preparetory">Preparetory</option>
+                                                                    <option value="Academic Affairs">Academic Affairs</option>
+                                                                </select>
                                                             </td>
                                                         </tr>
                                                         <tr>
