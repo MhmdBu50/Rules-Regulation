@@ -212,12 +212,12 @@ there's also many filtering options to find the policy and other adminstrative s
                         <th class="col-3 d-none d-md-table-cell padding-between-search-filter">
                             <div class="col flex-nowrap align-items-center">
                                 <div class="search-container d-flex align-items-center" id="section-search">
-                                    <select class="search poppins-regular flex-grow-1 small-font-size" type="text"
+                                    <select id="adminSectionFilter" class="search poppins-regular flex-grow-1 small-font-size" type="text"
                                         placeholder="Section" style="color: #ABB7C2; border: none;">
-                                        <option value="" selected disabled>Section</option>
-                                        <option>Student</option>
-                                        <option>Members</option>
-                                        <option>Enrolled Program</option>
+                                        <option value="all">All Sections</option>
+                                        <option value="students">Students</option>
+                                        <option value="members">Members</option>
+                                        <option value="enrolled-programs">Enrolled Programs</option>
                                     </select>
                                 </div>
                             </div>
@@ -226,12 +226,12 @@ there's also many filtering options to find the policy and other adminstrative s
                         <th class="col-3 d-none d-md-table-cell padding-between-search-filter">
                             <div class="col flex-nowrap align-items-center">
                                 <div class="search-container d-flex align-items-center px-2" id="document-search">
-                                    <select class="search poppins-regular flex-grow-1 small-font-size"
+                                    <select id="adminDocumentFilter" class="search poppins-regular flex-grow-1 small-font-size"
                                         style="color: #ABB7C2; border: none;">
-                                        <option value="" selected disabled>Document type</option>
-                                        <option>Regulations</option>
-                                        <option>Guidelines</option>
-                                        <option>Enrolled Program</option>
+                                        <option value="all">All Documents</option>
+                                        <option value="regulation">Regulation</option>
+                                        <option value="guidelines">Guidelines</option>
+                                        <option value="policy">Policy</option>
                                     </select>
                                 </div>
                             </div>
@@ -284,10 +284,10 @@ there's also many filtering options to find the policy and other adminstrative s
                     <div class="d-flex align-items-center p-0 flex-grow-1" style="margin-bottom: 10px;">
                         <div class="search-container d-flex align-items-center w-100" id="section-document-search-2">
                             <select class="search poppins-regular flex-grow-1" style="color: #ABB7C2;">
-                                <option value="" selected disabled>Section</option>
-                                <option>Student</option>
-                                <option>Members</option>
-                                <option>Enrolled Program</option>
+                                <option value="all">All Sections</option>
+                                <option value="students">Students</option>
+                                <option value="members">Members</option>
+                                <option value="enrolled-programs">Enrolled Programs</option>
                             </select>
                         </div>
                     </div>
@@ -296,10 +296,10 @@ there's also many filtering options to find the policy and other adminstrative s
                     <div class="d-flex align-items-center p-0 flex-grow-1" style="margin-bottom: 10px;">
                         <div class="search-container d-flex align-items-center w-100" id="section-document-search-2">
                             <select class="search poppins-regular flex-grow-1" style="color: #ABB7C2;">
-                                <option value="" selected disabled>Document type</option>
-                                <option>Regulations</option>
-                                <option>Guidelines</option>
-                                <option>Enrolled Program</option>
+                                <option value="all">All Documents</option>
+                                <option value="regulation">Regulation</option>
+                                <option value="guidelines">Guidelines</option>
+                                <option value="policy">Policy</option>
                             </select>
                         </div>
                     </div>
@@ -380,7 +380,7 @@ there's also many filtering options to find the policy and other adminstrative s
                             var headingId = "heading" + itemNumber;
                             var collapseId = "collapse" + itemNumber;
                             <!-- Accordion Item 1 -->
-                            <div class="accordion-item position-relative">
+                            <div class="accordion-item position-relative" data-section="@(record.Sections ?? "")" data-document-type="@(record.DocumentType ?? "")">
                                 <!-- Checkbox positioned outside accordion button -->
                                 <div class="position-absolute field-padding" style="left: 20px; top: 50%; transform: translateY(-50%); z-index: 10;">
                                     <input type="checkbox" class="record-checkbox" data-record-id="@record.Id" onclick="handleRecordCheckbox()" />

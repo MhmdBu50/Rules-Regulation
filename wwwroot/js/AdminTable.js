@@ -504,3 +504,164 @@ async function handleFormSubmit(event, recordId) {
 
   return false; // Prevent default submission
 }
+
+// Admin Page Search and Filter Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('AdminTable.js: DOM loaded, initializing filters...');
+    
+    const sectionFilter = document.getElementById('adminSectionFilter');
+    const documentFilter = document.getElementById('adminDocumentFilter');
+    
+    console.log('Section filter found:', sectionFilter);
+    console.log('Document filter found:', documentFilter);
+    
+    if (sectionFilter && documentFilter) {
+        console.log('Both filters found, adding event listeners...');
+        
+        // Add event listeners for filter changes
+        sectionFilter.addEventListener('change', function() {
+            console.log('Section filter changed to:', sectionFilter.value);
+            applyAdminFilters();
+        });
+        
+        documentFilter.addEventListener('change', function() {
+            console.log('Document filter changed to:', documentFilter.value);
+            applyAdminFilters();
+        });
+        
+        // Set default values and apply initial filter
+        sectionFilter.value = 'all';
+        documentFilter.value = 'all';
+        
+        console.log('Filters initialized successfully');
+    } else {
+        console.error('Could not find filter elements!');
+    }
+});
+
+function applyAdminFilters() {
+    console.log('applyAdminFilters called');
+    
+    const sectionFilter = document.getElementById('adminSectionFilter');
+    const documentFilter = document.getElementById('adminDocumentFilter');
+    const accordionItems = document.querySelectorAll('#regulationAccordion .accordion-item');
+    
+    console.log('Section filter element:', sectionFilter);
+    console.log('Document filter element:', documentFilter);
+    console.log('Accordion items found:', accordionItems.length);
+    
+    if (!sectionFilter || !documentFilter) {
+        console.error('Filter elements not found!');
+        return;
+    }
+    
+    const selectedSection = sectionFilter.value.toLowerCase();
+    const selectedDocument = documentFilter.value.toLowerCase();
+    
+    console.log('Selected section:', selectedSection);
+    console.log('Selected document:', selectedDocument);
+    
+    let visibleCount = 0;
+    
+    accordionItems.forEach((item, index) => {
+        const itemSection = item.getAttribute('data-section') || '';
+        const itemDocumentType = item.getAttribute('data-document-type') || '';
+        
+        console.log(`Item ${index}:`, {
+            section: itemSection,
+            documentType: itemDocumentType
+        });
+        
+        let shouldShow = true;
+        
+        // Filter by section
+        if (selectedSection !== 'all') {
+            const sectionMatch = checkSectionMatch(itemSection.toLowerCase(), selectedSection);
+            console.log(`Section match for item ${index}:`, sectionMatch);
+            if (!sectionMatch) {
+                shouldShow = false;
+            }
+        }
+        
+        // Filter by document type
+        if (selectedDocument !== 'all' && shouldShow) {
+            const documentMatch = checkDocumentTypeMatch(itemDocumentType.toLowerCase(), selectedDocument);
+            console.log(`Document match for item ${index}:`, documentMatch);
+            if (!documentMatch) {
+                shouldShow = false;
+            }
+        }
+        
+        console.log(`Item ${index} shouldShow:`, shouldShow);
+        
+        if (shouldShow) {
+            item.style.display = 'block';
+            visibleCount++;
+        } else {
+            item.style.display = 'none';
+        }
+    });
+    
+    console.log('Visible count:', visibleCount);
+    
+    // Update any count displays or empty state messages
+    updateFilterResults(visibleCount);
+}
+
+function checkSectionMatch(itemSection, selectedSection) {
+    switch (selectedSection) {
+        case 'students':
+            return itemSection.includes('student') || itemSection.includes('طالب');
+        case 'members':
+            return itemSection.includes('member') || itemSection.includes('عضو') || itemSection.includes('موظف');
+        case 'enrolled-programs':
+            return itemSection.includes('program') || itemSection.includes('برنامج') || itemSection.includes('enrolled');
+        default:
+            return true;
+    }
+}
+
+function checkDocumentTypeMatch(itemDocumentType, selectedDocument) {
+    switch (selectedDocument) {
+        case 'regulation':
+            return itemDocumentType.includes('regulation') || itemDocumentType.includes('تنظيم') || itemDocumentType.includes('لائحة');
+        case 'guidelines':
+            return itemDocumentType.includes('guideline') || itemDocumentType.includes('دليل') || itemDocumentType.includes('إرشاد');
+        case 'policy':
+            return itemDocumentType.includes('policy') || itemDocumentType.includes('سياسة') || itemDocumentType.includes('نظام');
+        default:
+            return true;
+    }
+}
+
+function updateFilterResults(visibleCount) {
+    // Optional: Add a results counter or empty state message
+    const accordion = document.getElementById('regulationAccordion');
+    if (!accordion) return;
+    
+    // Remove any existing result messages
+    const existingMessage = accordion.parentElement.querySelector('.filter-results-message');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+    
+    // Show message if no results
+    if (visibleCount === 0) {
+        const noResultsMessage = document.createElement('div');
+        noResultsMessage.className = 'filter-results-message alert alert-info text-center mt-3';
+        noResultsMessage.innerHTML = '<i class="fas fa-search"></i> No records match the selected filters.';
+        accordion.parentElement.appendChild(noResultsMessage);
+    }
+}
+
+// Reset filters function (can be called from UI buttons)
+function resetAdminFilters() {
+    const sectionFilter = document.getElementById('adminSectionFilter');
+    const documentFilter = document.getElementById('adminDocumentFilter');
+    
+    if (sectionFilter && documentFilter) {
+        sectionFilter.value = 'all';
+        documentFilter.value = 'all';
+        applyAdminFilters();
+    }
+}
