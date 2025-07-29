@@ -16,7 +16,6 @@ there's a navigation bar and after that the rules and regualtions appears   -->
         <link rel="stylesheet" href="~/css/_RecordDetails.css">
         <link rel="stylesheet" href="~/css/_rtl_styles.css" />
 
-
 }
 
 @section Scripts{
@@ -82,7 +81,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
                             </svg>                        </button>
                     </div>
                     <!-- Admin button (visible only for permited users) -->
-                    <button class="adminButton ms-2 px-3 py-1 d-none d-lg-flex" onclick="location.href='@Url.Action("AdminPage", "Admin")'">view as Admin
+                    <button class="adminButton ms-2 me-2 px-3 py-1 d-none d-lg-flex" onclick="location.href='@Url.Action("AdminPage", "Admin")'">view as Admin
                     </button>
                 </div>
 
@@ -178,7 +177,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
 
         <!--Nav-bar Home button-->
         <div>
-            <button class="bar-button" id="homeButton" data-id="homeButton" style="background-color: #2B334F; border: none;" onclick="alter(this); location.href='@Url.Action("homePage", "Home")'">
+            <button class="bar-button" id="homeButton" data-id="homeButton" style="background-color: #2B334F; border: none;" onclick="navigateToHome(this)">
                 <div class="nav-icons svg-container">
                 
                 </div>
@@ -191,7 +190,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
 
         <!--Nav-bar Students guides & templates button-->
         <div>
-            <button class="bar-button" id="studentGuides" data-id="studentGuides" style="background-color:#01514F;" onclick="alter(this); showallRecords()">
+            <button class="bar-button" id="studentGuides" data-id="studentGuides" style="background-color:#01514F;" onclick="navigateToStudentGuides(this)">
                 <div class="nav-icons svg-container">
                     
                 </div>
@@ -199,12 +198,12 @@ there's a navigation bar and after that the rules and regualtions appears   -->
                     <label class="poppins-regular">Student guides & templates</label>
                 </div>
             </button>
-
+            
         </div>
 
         <!--Student rules & regulations button-->
         <div>
-            <button class="bar-button" id="studentRulesRegulations" data-id="studentRulesRegulations" style="background-color: #4D7160;" onclick="alter(this); showallRecords()">
+            <button class="bar-button" id="studentRulesRegulations" data-id="studentRulesRegulations" style="background-color: #4D7160;" onclick="navigateToStudentRules(this)">
                 <div class="nav-icons svg-container">
                     
                 </div>
@@ -217,23 +216,21 @@ there's a navigation bar and after that the rules and regualtions appears   -->
         </div>
 
         <!--Employees' rules & regulations button-->
-        <div>
-            <button class="bar-button" data-id="employeeRule"  style="background-color: #4F1C34;" onclick="alter(this); showallRecords()">
-                <div class="nav-icons svg-container">
-                    
-                </div>
-
-                <div class="nav-label">
-                    <label class="poppins-regular">Employees’ rules & regulations</label>
-                </div>
-            </button>
-
-
+<div>
+    <button class="bar-button" id="employeeRule" data-id="employeeRule" style="background-color: #4F1C34;" onclick="alter(this); location.href='@Url.Action("homePage", "Home", new { sections = "Members" })'">
+        <div class="nav-icons svg-container">
+            <!-- Optional icon here -->
         </div>
+        <div class="nav-label">
+            <label class="poppins-regular">Employees’ rules & regulations</label>
+        </div>
+    </button>
+</div>
+
 
         <!--Academic rules & regulations button-->
         <div>
-            <button class="bar-button" data-id="academicRulesRegulations" style="background-color: #94331C;" onclick="alter(this); showallRecords()">
+            <button class="bar-button" data-id="academicRulesRegulations" style="background-color: #94331C;" onclick="navigateToAcademicRules(this)">
                 <div class="nav-icons svg-container">
                     
                 </div>
