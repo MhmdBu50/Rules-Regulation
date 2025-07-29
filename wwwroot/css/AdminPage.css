@@ -2,6 +2,58 @@ body {
   background-color: #eae0ca;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
+
+/* File Upload Styles */
+.attachment-upload-btn {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+  transition: all 0.3s ease;
+}
+
+.attachment-upload-btn:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+  transform: scale(1.05);
+}
+
+.attachment-delete-btn {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+  transition: all 0.3s ease;
+}
+
+.attachment-delete-btn:hover {
+  background-color: #f5c6cb;
+  border-color: #f1b0b7;
+  transform: scale(1.05);
+}
+
+.attachment-display {
+  background-color: #f8f9fa;
+}
+
+.attachment-display:disabled {
+  background-color: #e9ecef;
+  color: #6c757d;
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-group-text img {
+  width: 20px;
+  height: 20px;
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  background-color: #e9ecef;
+  opacity: 1;
+  color: #6c757d;
+}
 /* Dashboard Styles */
 
 .dashboard-container {
