@@ -680,7 +680,7 @@ public async Task<IActionResult> ViewPdf(int id)
 
             if (success)
             {
-                TempData["SuccessMessage"] = "Record updated successfully!";
+                TempData["SuccessMessage"] = $"Record #{recordId} has been updated successfully!";
             }
             else
             {
@@ -767,6 +767,76 @@ public async Task<IActionResult> ViewPdf(int id)
         }
 
         return RedirectToAction("AdminPage");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateAttachment(int recordId, string fileType, IFormFile file)
+    {
+        try
+        {
+            _logger.LogInformation($"UpdateAttachment called for recordId: {recordId}, fileType: {fileType}, fileName: {file?.FileName}");
+            
+            if (file == null || file.Length == 0)
+            {
+                return Json(new { success = false, message = "No file selected." });
+            }
+
+            // Validate file type
+            var allowedExtensions = fileType.ToLower() == "word" 
+                ? new[] { ".doc", ".docx" } 
+                : new[] { ".pdf" };
+            
+            var fileExtension = Path.GetExtension(file.FileName).ToLower();
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                return Json(new { success = false, message = $"Only {string.Join(", ", allowedExtensions)} files are allowed for {fileType} type." });
+            }
+
+            // Create uploads directory if it doesn't exist
+            var uploadsPath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+            if (!Directory.Exists(uploadsPath))
+            {
+                Directory.CreateDirectory(uploadsPath);
+            }
+
+            // Generate unique filename
+            var fileName = $"{recordId}_{fileType}_{Guid.NewGuid()}{fileExtension}";
+            var filePath = Path.Combine(uploadsPath, fileName);
+
+            // Save file
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            // Update database with original filename
+            var relativePath = $"uploads/{fileName}";
+            bool success = _oracleDbService.UpdateAttachment(recordId, fileType, relativePath, file.FileName);
+
+            if (success)
+            {
+                return Json(new { 
+                    success = true, 
+                    message = "File updated successfully.", 
+                    fileName = file.FileName 
+                });
+            }
+            else
+            {
+                // Delete the uploaded file if database update fails
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+                return Json(new { success = false, message = "Failed to update file in database." });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating attachment for record {RecordId}", recordId);
+            return Json(new { success = false, message = "An error occurred while updating the file." });
+        }
     }
 
 
