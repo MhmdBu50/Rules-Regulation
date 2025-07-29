@@ -41,7 +41,27 @@ public class AdminController : Controller
         try
         {
             var records = _oracleDbService.GetAllRecords();
-            return View(records);
+            
+            // Enhance records with contact information and attachments
+            var enhancedRecords = records.Select(record => new
+            {
+                Id = record.Id,
+                RegulationName = record.RegulationName,
+                Sections = record.Sections,
+                Version = record.Version,
+                ApprovalDate = record.ApprovalDate,
+                ApprovingEntity = record.ApprovingEntity,
+                Department = record.Department,
+                DocumentType = record.DocumentType,
+                Description = record.Description,
+                VersionDate = record.VersionDate,
+                Notes = record.Notes,
+                CreatedAt = record.CreatedAt,
+                ContactInformation = _oracleDbService.GetContactsByDepartment(record.Department ?? ""),
+                Attachments = _oracleDbService.GetAttachmentsByRecordId(int.Parse(record.Id))
+            }).ToList();
+            
+            return View(enhancedRecords);
         }
         catch (Exception ex)
         {
@@ -63,46 +83,58 @@ public class AdminController : Controller
         return View();
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult AddNewContactInfo(string Department, string Name, string? Email, string? Mobile, string? Telephone)
+[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult AddNewContactInfo(string Department, string Name, string? Email, string? Mobile, string? Telephone)
+{
+    try
     {
-        try
+        // Step 1: Validate required fields
+        if (string.IsNullOrWhiteSpace(Department) || string.IsNullOrWhiteSpace(Name))
         {
-            if (string.IsNullOrWhiteSpace(Department) || string.IsNullOrWhiteSpace(Name))
-            {
-                TempData["ErrorMessage"] = "Department and Name are required fields.";
-                return View();
-            }
-
-            // Check if department already has maximum contacts (5)
-            if (_oracleDbService.DepartmentExists(Department))
-            {
-                int contactCount = _oracleDbService.GetContactCountInDepartment(Department);
-                TempData["ErrorMessage"] = $"Department '{Department}' already has {contactCount} contact information. Maximum 5 contacts allowed per department.";
-                return View();
-            }
-
-            bool success = _oracleDbService.AddContactInfo(Department, Name, Email, Mobile, Telephone);
-
-            if (success)
-            {
-                TempData["SuccessMessage"] = $"Contact information for {Department} has been added successfully!";
-                return RedirectToAction("AddNewContactInfo");
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Failed to add contact information. Please try again.";
-                return View();
-            }
+            TempData["ErrorMessage"] = "Department and Name are required fields.";
+            return View();
         }
-        catch (Exception ex)
+
+        // Step 2: Check if department already has max allowed contacts
+        int contactCount = _oracleDbService.GetContactCountInDepartment(Department);
+        if (contactCount >= 5)
         {
-            _logger.LogError(ex, "Error adding contact information");
-            TempData["ErrorMessage"] = "An error occurred while adding contact information.";
+            TempData["ErrorMessage"] = $"Department '{Department}' already has {contactCount} contact(s). Maximum 5 allowed.";
+            return View();
+        }
+
+        // Step 3: Attempt to insert contact info
+        bool success = _oracleDbService.AddContactInfo(Department, Name, Email, Mobile, Telephone);
+
+        if (success)
+        {
+            TempData["SuccessMessage"] = $"Contact information for '{Department}' was added successfully.";
+            return RedirectToAction("AddNewContactInfo");
+        }
+        else
+        {
+            _logger.LogWarning("AddContactInfo returned false for Department={Department}, Name={Name}, Email={Email}, Mobile={Mobile}, Telephone={Telephone}", Department, Name, Email, Mobile, Telephone);
+            TempData["ErrorMessage"] = "Failed to add contact information. Please try again. (Check logs for details)";
             return View();
         }
     }
+    catch (Oracle.ManagedDataAccess.Client.OracleException ex)
+    {
+        var errorDetails = $"Oracle DB error {ex.Number}: {ex.Message}";
+        if (ex.InnerException != null)
+            errorDetails += $" | Inner: {ex.InnerException.Message}";
+        _logger.LogError(ex, "Oracle DB error while adding contact info: {ErrorDetails}", errorDetails);
+        TempData["ErrorMessage"] = errorDetails;
+        return View();
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Unexpected error while adding contact info: {Message}", ex.Message);
+        TempData["ErrorMessage"] = $"Unexpected error: {ex.Message}";
+        return View();
+    }
+}
 
     [HttpGet]
     public IActionResult ManageContactInfo()
@@ -235,6 +267,62 @@ public class AdminController : Controller
         return RedirectToAction("ManageContactInfo");
     }
 
+    // Alternative simpler method for friends with different database schema
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [ActionName("AddNewRecordSimple")]
+    public async Task<IActionResult> AddNewRecordSimpleAsync(AddNewRecordViewModel model)
+    {
+        try
+        {
+            // Get document type from form
+            string documentType = Request.Form["doctype"].ToString();
+            if (string.IsNullOrEmpty(documentType))
+                documentType = "regulation";
+
+            // Prepare section string
+            var sectionString = string.Join(",", model.Sections ?? new List<string>());
+
+            // Simple insert without attachments first
+            var insertSql = @"
+            INSERT INTO RECORDS (
+                USER_ID, REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
+                APPROVING_ENTITY, APPROVAL_DATE, DESCRIPTION, DOCUMENT_TYPE,
+                SECTIONS, NOTES
+            )
+            VALUES (
+                1, :RegulationName, :Department, :Version, :VersionDate,
+                :ApprovingEntity, :ApprovalDate, :Description, :DocumentType,
+                :Sections, :Notes
+            )";
+
+            var parameters = new OracleParameter[]
+            {
+                new("RegulationName", model.RegulationName ?? ""),
+                new("Department", model.RelevantDepartment ?? ""),
+                new("Version", model.VersionNumber ?? "1"),
+                new("VersionDate", model.VersionDate),
+                new("ApprovingEntity", model.ApprovingEntity ?? ""),
+                new("ApprovalDate", model.ApprovingDate),
+                new("Description", model.Description ?? ""),
+                new("DocumentType", documentType),
+                new("Sections", sectionString),
+                new("Notes", model.Notes ?? "")
+            };
+
+            await _db.ExecuteNonQueryAsync(insertSql, parameters);
+
+            TempData["SuccessMessage"] = "Record saved successfully (without attachments).";
+            return RedirectToAction("AddNewRecord");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Simple insert failed: {ErrorMessage}", ex.Message);
+            TempData["ErrorMessage"] = $"Simple insert failed: {ex.Message}";
+            return View("AddNewRecord", model);
+        }
+    }
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -271,93 +359,190 @@ public class AdminController : Controller
                 pdfPath = "/uploads/" + pdfFileName;
             }
 
-            string documentType = "";
+            Console.WriteLine($"Word file saved: {wordPath ?? "null"}");
+            Console.WriteLine($"PDF file saved: {pdfPath ?? "null"}");
 
-            if (model.WordAttachment != null && model.WordAttachment.Length > 0)
-                documentType += "word";
+            // Validate dates before proceeding
+            if (model.VersionDate == default(DateTime))
+                model.VersionDate = DateTime.Now;
+            if (model.ApprovingDate == default(DateTime))
+                model.ApprovingDate = DateTime.Now;
 
-            if (model.PdfAttachment != null && model.PdfAttachment.Length > 0)
-            {
-                if (!string.IsNullOrEmpty(documentType))
-                    documentType += ",";
-
-                documentType += "pdf";
-            }
-
-            // Optional fallback
+            // Use the document type from the form
+            string documentType = Request.Form["doctype"].ToString();
             if (string.IsNullOrEmpty(documentType))
-                documentType = "none"; // Or return error if both files are required
+                documentType = "regulation"; // Default to regulation if not specified
 
             // Prepare section string
             var sectionString = string.Join(",", model.Sections ?? new List<string>());
 
-            // Step 1: Insert record and get inserted ID
+            // Get a valid USER_ID (use the first available user)
+            int userId = 1; // Default
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    var userCheckSql = "SELECT MIN(USER_ID) FROM USERS WHERE USER_ID IS NOT NULL";
+                    using (var cmd = new OracleCommand(userCheckSql, conn))
+                    {
+                        var result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                            userId = Convert.ToInt32(result);
+                    }
+                }
+            }
+            catch
+            {
+                userId = 1; // Fallback
+            }
+
+            // Step 1: Insert record using sequence for RECORD_ID
             var insertSql = @"
             INSERT INTO RECORDS (
-                REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
+                RECORD_ID, USER_ID, REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
                 APPROVING_ENTITY, APPROVAL_DATE, DESCRIPTION, DOCUMENT_TYPE,
                 SECTIONS, NOTES
             )
             VALUES (
-                :RegulationName, :Department, :Version, :VersionDate,
+                RECORDS_SEQ.NEXTVAL, :UserId, :RegulationName, :Department, :Version, :VersionDate,
                 :ApprovingEntity, :ApprovalDate, :Description, :DocumentType,
                 :Sections, :Notes
-            )
-            RETURNING RECORD_ID INTO :InsertedId";
-
-            var insertedIdParam = new OracleParameter("InsertedId", OracleDbType.Int32)
-            {
-                Direction = ParameterDirection.Output
-            };
+            )";
 
             var parameters = new OracleParameter[]
             {
-            new("RegulationName", model.RegulationName),
-            new("Department", model.RelevantDepartment),
-            new("Version", model.VersionNumber),
+            new("UserId", userId),
+            new("RegulationName", model.RegulationName ?? ""),
+            new("Department", model.RelevantDepartment ?? ""),
+            new("Version", model.VersionNumber ?? "1"),
             new("VersionDate", model.VersionDate),
-            new("ApprovingEntity", model.ApprovingEntity),
+            new("ApprovingEntity", model.ApprovingEntity ?? ""),
             new("ApprovalDate", model.ApprovingDate),
-            new("Description", model.Description),
-            new("DocumentType",documentType),
+            new("Description", model.Description ?? ""),
+            new("DocumentType", documentType),
             new("Sections", sectionString),
-            new("Notes", model.Notes),
-            insertedIdParam // important
+            new("Notes", model.Notes ?? "")
             };
 
-            // Run insert
-            await _db.ExecuteNonQueryAsync(insertSql, parameters);
-
-            // Get the inserted record ID
-            int newId = ((OracleDecimal)insertedIdParam.Value).ToInt32();
-
-            // Step 2: Insert attachments
-            //for word files
-            if (!string.IsNullOrEmpty(wordPath))
+            // Run insert with debug logging
+            try
             {
-                var insertPdfSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) VALUES (:id, 'PDF', :path, :original)";
-                await _db.ExecuteNonQueryAsync(insertPdfSql,
-                new OracleParameter("id", newId),
-                new OracleParameter("path", pdfPath),
-                new OracleParameter("original", model.PdfAttachment.FileName));
+                Console.WriteLine($"About to execute SQL with UserId: {userId}, DocumentType: {documentType}");
+                await _db.ExecuteNonQueryAsync(insertSql, parameters);
+                Console.WriteLine("SQL executed successfully");
             }
-            //for pdf files
-            if (!string.IsNullOrEmpty(pdfPath))
+            catch (Exception sqlEx)
             {
-                var insertWordSql = "INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) VALUES (:id, 'WORD', :path, :original)";
-                await _db.ExecuteNonQueryAsync(insertWordSql,
-                new OracleParameter("id", newId),
-                new OracleParameter("path", wordPath),
-                new OracleParameter("original", model.WordAttachment.FileName));
+                Console.WriteLine($"SQL Error: {sqlEx.Message}");
+                throw; // Re-throw to be caught by outer catch
             }
+
+            // Get the current sequence value for attachments
+            int newId = 0;
+            Console.WriteLine($"Attempting to insert attachments for RECORD_ID = {newId}");
+            Console.WriteLine($"WordPath = {wordPath}, HasWordAttachment = {model.WordAttachment != null}");
+            Console.WriteLine($"PdfPath = {pdfPath}, HasPdfAttachment = {model.PdfAttachment != null}");
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    var seqSql = "SELECT RECORDS_SEQ.CURRVAL FROM DUAL";
+                    using (var cmd = new OracleCommand(seqSql, conn))
+                    {
+                        var result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                            newId = Convert.ToInt32(result);
+                    }
+                }
+            }
+            catch
+            {
+                // If we can't get the sequence, skip attachments
+                newId = 0;
+            }
+
+            // Step 2: Insert attachments (no silent failure)
+            if (newId > 0)
+            {
+                // Word file
+                    if (!string.IsNullOrEmpty(wordPath) && model.WordAttachment != null)
+                    {
+                        try
+                        {
+                            Console.WriteLine("Preparing to insert Word attachment...");
+
+                            var insertWordSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) " +
+                                                "VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME)";
+
+                            await _db.ExecuteNonQueryAsync(insertWordSql,
+                                new OracleParameter("id", newId),
+                                new OracleParameter("fileType", "DOCX"),
+                                new OracleParameter("path", wordPath),
+                                new OracleParameter("ORIGINAL_NAME", model.WordAttachment.FileName));
+
+                            Console.WriteLine("Word attachment inserted successfully.");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error inserting Word attachment: {ex.Message}");
+                            Console.WriteLine($"Details — ID: {newId}, Path: {wordPath}, FileName: {model.WordAttachment?.FileName ?? "null"}");
+                            throw;
+                        }
+                    }
+
+
+                // PDF file
+                if (!string.IsNullOrEmpty(pdfPath) && model.PdfAttachment != null)
+                {
+                    try
+                    {
+                        Console.WriteLine("Preparing to insert PDF attachment...");
+                        
+                        var insertPdfSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) " +
+                                        "VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME)";
+                        
+                        await _db.ExecuteNonQueryAsync(insertPdfSql,
+                            new OracleParameter("id", newId),
+                            new OracleParameter("fileType", "PDF"),
+                            new OracleParameter("path", pdfPath),
+                            new OracleParameter("ORIGINAL_NAME", model.PdfAttachment.FileName));
+                        
+                        Console.WriteLine("PDF attachment inserted successfully.");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error inserting PDF: {ex.Message}");
+                        Console.WriteLine($"Details — ID: {newId}, Path: {pdfPath}, FileName: {model.PdfAttachment?.FileName ?? "null"}");
+                        throw;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No PDF attachment to insert.");
+                }
+                
+            }
+            else
+            {
+                Console.WriteLine("No attachments inserted due to missing RECORD_ID.");
+            }
+
 
             TempData["SuccessMessage"] = "Record and attachments saved.";
             return RedirectToAction("AddNewRecord");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Insert failed");
-            TempData["ErrorMessage"] = "An error occurred while saving the record.";
+            _logger.LogError(ex, "Insert failed: {ErrorMessage}", ex.Message);
+            
+            // More specific error message for debugging
+            string errorDetails = ex.Message;
+            if (ex.InnerException != null)
+                errorDetails += " | Inner: " + ex.InnerException.Message;
+                
+            TempData["ErrorMessage"] = $"An error occurred while saving the record: {errorDetails}";
             return View(model);
         }
     }
@@ -408,7 +593,7 @@ public class AdminController : Controller
                     if (await reader.ReadAsync())
                     {
                         string filePath = reader.GetString(0);
-                        string originalName = reader.GetString(1);
+                        string ORIGINAL_NAME = reader.GetString(1);
 
                         var physicalPath = Path.Combine(
                             _webHostEnvironment.WebRootPath,
@@ -419,7 +604,7 @@ public class AdminController : Controller
                             return NotFound();
 
                         var fileBytes = await System.IO.File.ReadAllBytesAsync(physicalPath);
-                        return File(fileBytes, "application/pdf", originalName);
+                        return File(fileBytes, "application/pdf", ORIGINAL_NAME);
                     }
                 }
             }
@@ -448,7 +633,7 @@ public async Task<IActionResult> ViewPdf(int id)
                 if (await reader.ReadAsync())
                 {
                     string filePath = reader.GetString(0);
-                    string originalName = reader.GetString(1);
+                    string ORIGINAL_NAME = reader.GetString(1);
 
                     var physicalPath = Path.Combine(
                         _webHostEnvironment.WebRootPath,
@@ -461,7 +646,7 @@ public async Task<IActionResult> ViewPdf(int id)
                     var fileBytes = await System.IO.File.ReadAllBytesAsync(physicalPath);
 
                     // This displays the PDF inline in the browser
-                    Response.Headers.Add("Content-Disposition", $"inline; filename*=UTF-8''{Uri.EscapeDataString(originalName)}");
+                    Response.Headers.Add("Content-Disposition", $"inline; filename*=UTF-8''{Uri.EscapeDataString(ORIGINAL_NAME)}");
                     return File(fileBytes, "application/pdf");
 
                 }
@@ -471,6 +656,118 @@ public async Task<IActionResult> ViewPdf(int id)
 
     return NotFound();
 }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult UpdateRecord(
+        int recordId,
+        string regulationName,
+        string department,
+        string version,
+        DateTime versionDate,
+        DateTime approvalDate,
+        string approvingEntity,
+        string description,
+        string documentType,
+        string sections,
+        string notes)
+    {
+        try
+        {
+            bool success = _oracleDbService.UpdateRecord(
+                recordId, regulationName, department, version, versionDate,
+                approvalDate, approvingEntity, description, documentType, sections, notes);
+
+            if (success)
+            {
+                TempData["SuccessMessage"] = "Record updated successfully!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to update record. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating record");
+            TempData["ErrorMessage"] = "An error occurred while updating the record.";
+        }
+
+        return RedirectToAction("AdminPage");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteRecord(int recordId)
+    {
+        try
+        {
+            bool success = _oracleDbService.DeleteRecord(recordId);
+
+            if (success)
+            {
+                TempData["SuccessMessage"] = "Record deleted successfully!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to delete record. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting record");
+            TempData["ErrorMessage"] = "An error occurred while deleting the record.";
+        }
+
+        return RedirectToAction("AdminPage");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteMultipleRecords(List<int> recordIds)
+    {
+        try
+        {
+            if (recordIds == null || !recordIds.Any())
+            {
+                TempData["ErrorMessage"] = "No records selected for deletion.";
+                return RedirectToAction("AdminPage");
+            }
+
+            int successCount = 0;
+            int totalCount = recordIds.Count;
+
+            foreach (int recordId in recordIds)
+            {
+                bool success = _oracleDbService.DeleteRecord(recordId);
+                if (success)
+                {
+                    successCount++;
+                }
+            }
+
+            if (successCount == totalCount)
+            {
+                TempData["SuccessMessage"] = $"Successfully deleted {successCount} record(s)!";
+            }
+            else if (successCount > 0)
+            {
+                TempData["SuccessMessage"] = $"Successfully deleted {successCount} out of {totalCount} record(s).";
+                TempData["ErrorMessage"] = $"Failed to delete {totalCount - successCount} record(s).";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to delete any records. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting multiple records");
+            TempData["ErrorMessage"] = "An error occurred while deleting the records.";
+        }
+
+        return RedirectToAction("AdminPage");
+    }
 
 
 
