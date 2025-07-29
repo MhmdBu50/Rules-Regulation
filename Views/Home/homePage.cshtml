@@ -27,6 +27,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
     <script src="@Url.Content("~/js/moblieMenu.js")"></script>
     <script src="@Url.Content("~/js/recordDetailsModal.js")"></script>
     <script src="@Url.Content("~/js/homePageFilters.js")"></script>
+    <script src="@Url.Content("~/js/savedFunctions.js")"></script>
     <script src="@Url.Content("~/js/searchFunctionality.js")"></script>
 }
 
@@ -190,7 +191,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
 
         <!--Nav-bar Students guides & templates button-->
         <div>
-            <button class="bar-button" id="studentGuides" data-id="studentGuides" style="background-color:#01514F;" onclick="alter(this)">
+            <button class="bar-button" id="studentGuides" data-id="studentGuides" style="background-color:#01514F;" onclick="alter(this); showallRecords()">
                 <div class="nav-icons svg-container">
                     
                 </div>
@@ -203,7 +204,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
 
         <!--Student rules & regulations button-->
         <div>
-            <button class="bar-button" id="studentRulesRegulations" data-id="studentRulesRegulations" style="background-color: #4D7160;" onclick="alter(this)">
+            <button class="bar-button" id="studentRulesRegulations" data-id="studentRulesRegulations" style="background-color: #4D7160;" onclick="alter(this); showallRecords()">
                 <div class="nav-icons svg-container">
                     
                 </div>
@@ -217,7 +218,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
 
         <!--Employees' rules & regulations button-->
         <div>
-            <button class="bar-button" data-id="employeeRule"  style="background-color: #4F1C34;" onclick="alter(this)">
+            <button class="bar-button" data-id="employeeRule"  style="background-color: #4F1C34;" onclick="alter(this); showallRecords()">
                 <div class="nav-icons svg-container">
                     
                 </div>
@@ -232,7 +233,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
 
         <!--Academic rules & regulations button-->
         <div>
-            <button class="bar-button" data-id="academicRulesRegulations" style="background-color: #94331C;" onclick="alter(this)">
+            <button class="bar-button" data-id="academicRulesRegulations" style="background-color: #94331C;" onclick="alter(this); showallRecords()">
                 <div class="nav-icons svg-container">
                     
                 </div>
@@ -247,7 +248,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
 
         <!--Saved rules & regulations button-->
         <div>
-            <button class="bar-button" id="SavedRulesRegulations" data-id="SavedRulesRegulations" style="background-color: #2F3E5F;" onclick="alter(this)">
+            <button class="bar-button" id="SavedRulesRegulations" data-id="SavedRulesRegulations" style="background-color: #2F3E5F;" onclick="alter(this); filterSavedRecords()">
                 <div class="nav-icons svg-container">
                     
                 </div>
@@ -263,7 +264,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
 
         <!--History button-->
         <div>
-            <button class="bar-button" id="historyButton" data-id="historyButton" onclick="alter(this)" style="background-color: #0F1734; font-size: 1.5em;" >
+            <button class="bar-button" id="historyButton" data-id="historyButton" onclick="alter(this); showallRecords()" style="background-color: #0F1734; font-size: 1.5em;" >
                 <div class="nav-icons svg-container">
                     
                 </div>
@@ -291,7 +292,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
                     <!-- Dynamic card -->
                     <div class="col-auto medium-card">
                         <div class="card document-card">
-                            <div class="bookmark" onclick="toggleBookmark(this)"></div>
+                            <div class="bookmark" data-record-id="@record.Id" onclick="toggleBookmark(this)"></div>
 
                             <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
                             </div>

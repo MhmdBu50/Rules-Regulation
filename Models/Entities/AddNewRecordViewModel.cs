@@ -1,5 +1,6 @@
 public class AddNewRecordViewModel
 {
+    public int RecordId { get; set; } 
     public string RegulationName { get; set; }
     public string RelevantDepartment { get; set; }
     public string VersionNumber { get; set; }

@@ -45,3 +45,11 @@ body.rtl .sidebar {
     margin-right: 0;
     margin-left: 20px; 
 }
+body.rtl {
+    overflow-x: hidden;
+}
+
+body.rtl .filter-section {
+    margin-right: 0 !important;
+    margin-left: auto !important;
+}
