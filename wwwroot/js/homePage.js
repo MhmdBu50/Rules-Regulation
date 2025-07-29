@@ -216,3 +216,39 @@ function ViewPdf(id) {
     window.open(`/admin/ViewPdf/${id}`, '_blank');
 }
 
+// Navigation Functions for Navigation Bar Buttons
+function navigateToHome(buttonElement) {
+    // Call alter function for visual feedback
+    alter(buttonElement);
+    // Navigate to home page without any filters (show all records)
+    window.location.href = '/Home/homePage';
+}
+
+function navigateToStudentGuides(buttonElement) {
+    // Call alter function for visual feedback
+    alter(buttonElement);
+    // Navigate with Students section and Guidelines type filter
+    window.location.href = '/Home/homePage?sections=Students&documentTypes=Guidelines';
+}
+
+function navigateToStudentRules(buttonElement) {
+    // Call alter function for visual feedback
+    alter(buttonElement);
+    // Navigate with Students section and Regulation,Policy types filter
+    window.location.href = '/Home/homePage?sections=Students&documentTypes=Regulation,Policy';
+}
+
+function navigateToEmployeeRules(buttonElement) {
+    // Call alter function for visual feedback
+    alter(buttonElement);
+    // Navigate with Members section and Regulation,Policy types filter
+    window.location.href = '/Home/homePage?sections=Members&documentTypes=Regulation,Policy';
+}
+
+function navigateToAcademicRules(buttonElement) {
+    // Call alter function for visual feedback
+    alter(buttonElement);
+    // Navigate with Enrolled Programs section and Regulation,Policy types filter
+    window.location.href = '/Home/homePage?sections=Enrolled Programs&documentTypes=Regulation,Policy';
+}
+
