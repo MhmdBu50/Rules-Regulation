@@ -90,23 +90,30 @@ namespace RulesRegulation.Models
                 entity.Property(e => e.UpdatedAt).HasColumnName("UPDATED_AT");
             });
             modelBuilder.Entity<SavedRecord>(entity =>
-             {
-                 entity.ToTable("SAVED_RECORDS");
+            {
+                entity.ToTable("SAVED_RECORDS");
 
-                 // Composite key — each user can only save a record once
-                 entity.HasKey(e => new { e.UserId, e.RecordId }).HasName("PK_SAVED_RECORDS");
+                // 🔐 Composite primary key: (USER_ID, RECORD_ID)
+                entity.HasKey(e => new { e.UserId, e.RecordId }).HasName("PK_SAVED_RECORDS");
 
-                 entity.Property(e => e.UserId).HasColumnName("USER_ID");
-                 entity.Property(e => e.RecordId).HasColumnName("RECORD_ID");
-                 entity.Property(e => e.SavedTimestamp).HasColumnName("SAVED_TIMESTAMP");
-                 entity.Property(e => e.SavedId).HasColumnName("SAVED_ID");
+                // 🔁 Property to column mappings
+                entity.Property(e => e.UserId).HasColumnName("USER_ID");
+                entity.Property(e => e.RecordId).HasColumnName("RECORD_ID");
+                entity.Property(e => e.SavedTimestamp).HasColumnName("SAVED_TIMESTAMP");
+                entity.Property(e => e.SavedId).HasColumnName("SAVED_ID");
 
-                 // FK: SavedRecord.RecordId → AddNewRecord.Id
-                 entity.HasOne(e => e.Record)
-                     .WithMany(r => r.SavedRecords)
-                     .HasForeignKey(e => e.RecordId)
-                     .HasConstraintName("FK_SAVED_RECORDS_RECORDS");
-             });
+                // 🔗 Foreign key to AddNewRecord
+                entity.HasOne(e => e.Record)
+                    .WithMany(r => r.SavedRecords)
+                    .HasForeignKey(e => e.RecordId)
+                    .HasConstraintName("FK_SAVED_RECORDS_RECORDS");
+
+                // 🔗 Foreign key to Users (optional)
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .HasConstraintName("FK_SAVED_RECORDS_USERS");
+            });
         }
     }
 }

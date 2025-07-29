@@ -29,14 +29,8 @@ public IActionResult Toggle([FromBody] SaveRequest request)
         return Ok(new { removed = true });
     }
 
-    int nextSavedId = (_context.SavedRecords
-        .Where(s => s.UserId == userId)
-        .Select(s => (int?)s.SavedId)
-        .Max() ?? 0) + 1;
-
     var newRecord = new SavedRecord
     {
-        SavedId = nextSavedId,
         UserId = userId,
         RecordId = request.RecordId,
         SavedTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
