@@ -10,6 +10,9 @@ namespace RulesRegulation.Models
         public DbSet<ContactInformation> ContactInformations { get; set; }
         public DbSet<AddNewRecord> AddNewRecords { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<Users> Users { get; set; }
+        public DbSet<SavedRecord> SavedRecords { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -71,7 +74,46 @@ namespace RulesRegulation.Models
                 .WithMany(r => r.Attachments)
                 .HasForeignKey(a => a.AddNewRecordId)
                 .OnDelete(DeleteBehavior.Cascade);
-                    });
+            });
+            modelBuilder.Entity<Users>(entity =>
+            {
+                entity.ToTable("USERS"); // Match your Oracle table name
+
+                entity.HasKey(e => e.UserId).HasName("PK_USERS");
+
+                entity.Property(e => e.UserId).HasColumnName("USER_ID");
+                entity.Property(e => e.Name).HasColumnName("NAME");
+                entity.Property(e => e.Email).HasColumnName("EMAIL");
+                entity.Property(e => e.PhoneNumber).HasColumnName("PHONE_NUMBER");
+                entity.Property(e => e.Password).HasColumnName("PASSWORD");
+                entity.Property(e => e.CreatedAt).HasColumnName("CREATED_AT");
+                entity.Property(e => e.UpdatedAt).HasColumnName("UPDATED_AT");
+            });
+            modelBuilder.Entity<SavedRecord>(entity =>
+            {
+                entity.ToTable("SAVED_RECORDS");
+
+                // 🔐 Composite primary key: (USER_ID, RECORD_ID)
+                entity.HasKey(e => new { e.UserId, e.RecordId }).HasName("PK_SAVED_RECORDS");
+
+                // 🔁 Property to column mappings
+                entity.Property(e => e.UserId).HasColumnName("USER_ID");
+                entity.Property(e => e.RecordId).HasColumnName("RECORD_ID");
+                entity.Property(e => e.SavedTimestamp).HasColumnName("SAVED_TIMESTAMP");
+                entity.Property(e => e.SavedId).HasColumnName("SAVED_ID");
+
+                // 🔗 Foreign key to AddNewRecord
+                entity.HasOne(e => e.Record)
+                    .WithMany(r => r.SavedRecords)
+                    .HasForeignKey(e => e.RecordId)
+                    .HasConstraintName("FK_SAVED_RECORDS_RECORDS");
+
+                // 🔗 Foreign key to Users (optional)
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .HasConstraintName("FK_SAVED_RECORDS_USERS");
+            });
         }
     }
 }

@@ -1,3 +1,52 @@
+// Navigation bar button handlers
+function navigateToHome(btn) {
+    alter(btn);
+    clearFilters();
+}
+
+function navigateToStudentGuides(btn) {
+    alter(btn);
+    document.getElementById('studentsFilter').checked = true;
+    document.getElementById('membersFilter').checked = false;
+    document.getElementById('enrolledFilter').checked = false;
+    document.getElementById('guidelinesFilter').checked = true;
+    document.getElementById('regulationsFilter').checked = false;
+    document.getElementById('policiesFilter').checked = false;
+    applyFilters();
+}
+
+function navigateToStudentRules(btn) {
+    alter(btn);
+    document.getElementById('studentsFilter').checked = true;
+    document.getElementById('membersFilter').checked = false;
+    document.getElementById('enrolledFilter').checked = false;
+    document.getElementById('guidelinesFilter').checked = false;
+    document.getElementById('regulationsFilter').checked = true;
+    document.getElementById('policiesFilter').checked = true;
+    applyFilters();
+}
+
+function navigateToEmployeeRules(btn) {
+    alter(btn);
+    document.getElementById('studentsFilter').checked = false;
+    document.getElementById('membersFilter').checked = true;
+    document.getElementById('enrolledFilter').checked = false;
+    document.getElementById('guidelinesFilter').checked = true;
+    document.getElementById('regulationsFilter').checked = true;
+    document.getElementById('policiesFilter').checked = true;
+    applyFilters();
+}
+
+function navigateToAcademicRules(btn) {
+    alter(btn);
+    document.getElementById('studentsFilter').checked = false;
+    document.getElementById('membersFilter').checked = false;
+    document.getElementById('enrolledFilter').checked = true;
+    document.getElementById('guidelinesFilter').checked = true;
+    document.getElementById('regulationsFilter').checked = true;
+    document.getElementById('policiesFilter').checked = true;
+    applyFilters();
+}
 /**
  * Home Page Filters JavaScript Module
  * Contains all functionality for filtering records on the home page

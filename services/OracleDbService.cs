@@ -211,7 +211,7 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    string query = @"SELECT r.*, a.FILE_PATH, a.FILE_TYPE 
+                    string query = @"SELECT r.*, a.FILE_PATH, a.FILE_TYPE, a.ORIGINAL_NAME 
                         FROM RECORDS r 
                         LEFT JOIN ATTACHMENTS a ON r.RECORD_ID = a.RECORD_ID 
                         WHERE r.RECORD_ID = :recordId";
@@ -253,12 +253,16 @@ namespace RulesRegulation.Services
                                 if (reader["FILE_PATH"] != DBNull.Value)
                                 {
                                     var filePath = reader["FILE_PATH"]?.ToString();
+                                    var originalName = reader["ORIGINAL_NAME"]?.ToString() ?? "";
                                     var fileName = !string.IsNullOrEmpty(filePath) ? Path.GetFileName(filePath) : "";
+                                    
+                                    // Use ORIGINAL_NAME if available, otherwise fall back to filename from path
+                                    var displayName = !string.IsNullOrEmpty(originalName) ? originalName : fileName;
 
                                     attachments.Add(new
                                     {
                                         FileName = fileName,
-                                        OriginalFileName = fileName, // For now, same as filename
+                                        OriginalFileName = displayName,
                                         FileType = reader["FILE_TYPE"]?.ToString()?.ToLower()
                                     });
                                 }
@@ -897,7 +901,7 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    string query = @"SELECT ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, UPLOAD_DATE 
+                    string query = @"SELECT ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME, UPLOAD_DATE 
                                    FROM ATTACHMENTS 
                                    WHERE RECORD_ID = :recordId";
 
@@ -909,7 +913,11 @@ namespace RulesRegulation.Services
                             while (reader.Read())
                             {
                                 var filePath = reader["FILE_PATH"]?.ToString() ?? "";
+                                var originalName = reader["ORIGINAL_NAME"]?.ToString() ?? "";
                                 var fileName = !string.IsNullOrEmpty(filePath) ? Path.GetFileName(filePath) : "";
+                                
+                                // Use ORIGINAL_NAME if available, otherwise fall back to filename from path
+                                var displayName = !string.IsNullOrEmpty(originalName) ? originalName : fileName;
                                 
                                 attachments.Add(new
                                 {
@@ -918,7 +926,7 @@ namespace RulesRegulation.Services
                                     FileType = reader["FILE_TYPE"]?.ToString(),
                                     FilePath = filePath,
                                     FileName = fileName,
-                                    OriginalName = fileName, // Using filename as original name since ORIGINAL_NAME column doesn't exist
+                                    OriginalName = displayName,
                                     UploadDate = reader["UPLOAD_DATE"] != DBNull.Value ?
                                         Convert.ToDateTime(reader["UPLOAD_DATE"]).ToString("yyyy-MM-dd") : ""
                                 });
@@ -933,6 +941,137 @@ namespace RulesRegulation.Services
                 Console.WriteLine($"Error getting attachments for record {recordId}: {ex.Message}");
             }
             return attachments;
+        }
+
+        // Method to update attachment file path and original name
+        public bool UpdateAttachment(int recordId, string fileType, string newFilePath, string originalFileName)
+        {
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+
+                    // Map file types for database lookup
+                    string dbFileType = fileType.ToLower() == "word" ? "word" : fileType.ToLower();
+                    
+                    // Check if attachment exists (check both 'word' and 'docx' for word files)
+                    string checkQuery;
+                    if (fileType.ToLower() == "word")
+                    {
+                        checkQuery = @"SELECT COUNT(*) FROM ATTACHMENTS 
+                                     WHERE RECORD_ID = :recordId AND (UPPER(FILE_TYPE) = 'WORD' OR UPPER(FILE_TYPE) = 'DOCX')";
+                    }
+                    else
+                    {
+                        checkQuery = @"SELECT COUNT(*) FROM ATTACHMENTS 
+                                     WHERE RECORD_ID = :recordId AND UPPER(FILE_TYPE) = UPPER(:fileType)";
+                    }
+                    
+                    using (var checkCmd = new OracleCommand(checkQuery, conn))
+                    {
+                        checkCmd.Parameters.Add(":recordId", recordId);
+                        if (fileType.ToLower() != "word")
+                        {
+                            checkCmd.Parameters.Add(":fileType", dbFileType);
+                        }
+                        
+                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+                        
+                        if (count > 0)
+                        {
+                            // Update existing attachment
+                            string updateQuery;
+                            if (fileType.ToLower() == "word")
+                            {
+                                updateQuery = @"UPDATE ATTACHMENTS 
+                                              SET FILE_PATH = :filePath, ORIGINAL_NAME = :originalName, UPLOAD_DATE = SYSTIMESTAMP 
+                                              WHERE RECORD_ID = :recordId AND (UPPER(FILE_TYPE) = 'WORD' OR UPPER(FILE_TYPE) = 'DOCX')";
+                            }
+                            else
+                            {
+                                updateQuery = @"UPDATE ATTACHMENTS 
+                                              SET FILE_PATH = :filePath, ORIGINAL_NAME = :originalName, UPLOAD_DATE = SYSTIMESTAMP 
+                                              WHERE RECORD_ID = :recordId AND UPPER(FILE_TYPE) = UPPER(:fileType)";
+                            }
+                            
+                            using (var updateCmd = new OracleCommand(updateQuery, conn))
+                            {
+                                updateCmd.Parameters.Add(":filePath", newFilePath);
+                                updateCmd.Parameters.Add(":originalName", originalFileName);
+                                updateCmd.Parameters.Add(":recordId", recordId);
+                                if (fileType.ToLower() != "word")
+                                {
+                                    updateCmd.Parameters.Add(":fileType", dbFileType);
+                                }
+                                
+                                return updateCmd.ExecuteNonQuery() > 0;
+                            }
+                        }
+                        else
+                        {
+                            // Insert new attachment
+                            string insertQuery = @"INSERT INTO ATTACHMENTS (RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME, UPLOAD_DATE)
+                                                 VALUES (:recordId, :fileType, :filePath, :originalName, SYSTIMESTAMP)";
+                            
+                            using (var insertCmd = new OracleCommand(insertQuery, conn))
+                            {
+                                insertCmd.Parameters.Add(":recordId", recordId);
+                                insertCmd.Parameters.Add(":fileType", dbFileType);
+                                insertCmd.Parameters.Add(":filePath", newFilePath);
+                                insertCmd.Parameters.Add(":originalName", originalFileName);
+                                
+                                return insertCmd.ExecuteNonQuery() > 0;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating attachment: {ex.Message}");
+                return false;
+            }
+        }
+
+        // Method to delete attachment
+        public bool DeleteAttachment(int recordId, string fileType)
+        {
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    
+                    string deleteQuery;
+                    if (fileType.ToLower() == "word")
+                    {
+                        deleteQuery = @"DELETE FROM ATTACHMENTS 
+                                      WHERE RECORD_ID = :recordId AND (UPPER(FILE_TYPE) = 'WORD' OR UPPER(FILE_TYPE) = 'DOCX')";
+                    }
+                    else
+                    {
+                        deleteQuery = @"DELETE FROM ATTACHMENTS 
+                                      WHERE RECORD_ID = :recordId AND UPPER(FILE_TYPE) = UPPER(:fileType)";
+                    }
+                    
+                    using (var cmd = new OracleCommand(deleteQuery, conn))
+                    {
+                        cmd.Parameters.Add(":recordId", recordId);
+                        if (fileType.ToLower() != "word")
+                        {
+                            cmd.Parameters.Add(":fileType", fileType);
+                        }
+                        
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting attachment: {ex.Message}");
+                return false;
+            }
         }
 
     }
