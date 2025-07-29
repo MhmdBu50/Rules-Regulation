@@ -726,11 +726,14 @@ there's also many filtering options to find the policy and other adminstrative s
 
                                                         <tr>
                                                             <td>
-                                                                <label class="form-label fw-bold">Attach word
-                                                                    file</label>
+                                                                <label class="form-label fw-bold">Attach word file</label>
+                                                                @{
+                                                                    var wordAttachment = ((IEnumerable<dynamic>)record.Attachments)?.FirstOrDefault(a => a.FileType?.ToString()?.ToLower() == "word" || a.FileType?.ToString()?.ToLower() == "docx");
+                                                                }
                                                                 <div class="input-group mb-2">
-                                                                    <input type="text" class="form-control" value=""
-                                                                        readonly>
+                                                                    <input type="text" class="form-control" 
+                                                                           value="@(wordAttachment?.OriginalName ?? "")" 
+                                                                           readonly>
                                                                     <span class="input-group-text">
                                                                         <i class="bi bi-paperclip">
                                                                             <img src="~/svgs/admin/upload-file.svg"
@@ -740,11 +743,14 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <label class="form-label fw-bold">Attach PDF
-                                                                    file</label>
+                                                                <label class="form-label fw-bold">Attach PDF file</label>
+                                                                @{
+                                                                    var pdfAttachment = ((IEnumerable<dynamic>)record.Attachments)?.FirstOrDefault(a => a.FileType?.ToString()?.ToLower() == "pdf");
+                                                                }
                                                                 <div class="input-group mb-2">
-                                                                    <input type="text" class="form-control" value=""
-                                                                        readonly>
+                                                                    <input type="text" class="form-control" 
+                                                                           value="@(pdfAttachment?.OriginalName ?? "")" 
+                                                                           readonly>
                                                                     <span class="input-group-text">
                                                                         <i class="bi bi-paperclip">
                                                                             <img src="~/svgs/admin/upload-file.svg"

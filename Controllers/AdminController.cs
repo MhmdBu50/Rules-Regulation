@@ -42,7 +42,7 @@ public class AdminController : Controller
         {
             var records = _oracleDbService.GetAllRecords();
             
-            // Enhance records with contact information
+            // Enhance records with contact information and attachments
             var enhancedRecords = records.Select(record => new
             {
                 Id = record.Id,
@@ -57,7 +57,8 @@ public class AdminController : Controller
                 VersionDate = record.VersionDate,
                 Notes = record.Notes,
                 CreatedAt = record.CreatedAt,
-                ContactInformation = _oracleDbService.GetContactsByDepartment(record.Department ?? "")
+                ContactInformation = _oracleDbService.GetContactsByDepartment(record.Department ?? ""),
+                Attachments = _oracleDbService.GetAttachmentsByRecordId(int.Parse(record.Id))
             }).ToList();
             
             return View(enhancedRecords);
