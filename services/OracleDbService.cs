@@ -889,5 +889,51 @@ namespace RulesRegulation.Services
             }
         }
 
+        public List<dynamic> GetAttachmentsByRecordId(int recordId)
+        {
+            var attachments = new List<dynamic>();
+            try
+            {
+                using (var conn = new OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    string query = @"SELECT ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, UPLOAD_DATE 
+                                   FROM ATTACHMENTS 
+                                   WHERE RECORD_ID = :recordId";
+
+                    using (var cmd = new OracleCommand(query, conn))
+                    {
+                        cmd.Parameters.Add(":recordId", recordId);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var filePath = reader["FILE_PATH"]?.ToString() ?? "";
+                                var fileName = !string.IsNullOrEmpty(filePath) ? Path.GetFileName(filePath) : "";
+                                
+                                attachments.Add(new
+                                {
+                                    Id = reader["ATTACHMENT_ID"]?.ToString(),
+                                    RecordId = reader["RECORD_ID"]?.ToString(),
+                                    FileType = reader["FILE_TYPE"]?.ToString(),
+                                    FilePath = filePath,
+                                    FileName = fileName,
+                                    OriginalName = fileName, // Using filename as original name since ORIGINAL_NAME column doesn't exist
+                                    UploadDate = reader["UPLOAD_DATE"] != DBNull.Value ?
+                                        Convert.ToDateTime(reader["UPLOAD_DATE"]).ToString("yyyy-MM-dd") : ""
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log error but don't throw, return empty list
+                Console.WriteLine($"Error getting attachments for record {recordId}: {ex.Message}");
+            }
+            return attachments;
+        }
+
     }
 }
