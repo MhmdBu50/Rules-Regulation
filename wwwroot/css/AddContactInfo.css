@@ -145,6 +145,7 @@ tr {
   vertical-align: middle;
   font-size: 0.92rem;
   border-top: 1px solid #e7e7e7;
+  height: 100%;
 }
 
 .table tbody tr:hover {

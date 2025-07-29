@@ -505,6 +505,100 @@ async function handleFormSubmit(event, recordId) {
   return false; // Prevent default submission
 }
 
+// =============================================
+// SEARCH FUNCTIONALITY
+// =============================================
+
+// Search functionality
+function performSearch(searchTerm) {
+  // Sync both search inputs
+  document.getElementById("desktopSearchInput").value = searchTerm;
+  document.getElementById("mobileSearchInput").value = searchTerm;
+
+  const accordionItems = document.querySelectorAll(
+    "#regulationAccordion .accordion-item"
+  );
+  const searchTermLower = searchTerm.toLowerCase().trim();
+
+  let visibleCount = 0;
+
+  accordionItems.forEach(function (item) {
+    const recordId =
+      item.querySelector(".record-checkbox")?.getAttribute("data-record-id") ||
+      "";
+    const regulationNameElement = item.querySelector(".Regulation-Manual-size");
+    const regulationName = regulationNameElement
+      ? regulationNameElement.textContent.toLowerCase()
+      : "";
+
+    // Search in both ID and Regulation Name
+    const matchesId = recordId.includes(searchTermLower);
+    const matchesName = regulationName.includes(searchTermLower);
+
+    if (searchTermLower === "" || matchesId || matchesName) {
+      item.style.display = "block";
+      visibleCount++;
+    } else {
+      item.style.display = "none";
+    }
+  });
+
+  // Show/hide "no results" message
+  showNoResultsMessage(visibleCount === 0 && searchTermLower !== "");
+}
+
+function showNoResultsMessage(show) {
+  let noResultsDiv = document.getElementById("noSearchResults");
+
+  if (show) {
+    if (!noResultsDiv) {
+      noResultsDiv = document.createElement("div");
+      noResultsDiv.id = "noSearchResults";
+      noResultsDiv.className = "alert alert-info text-center mt-4";
+      noResultsDiv.innerHTML = `
+                <h5>No results found</h5>
+                <p>No records match your search criteria. Try adjusting your search terms.</p>
+                <button class="btn btn-secondary" onclick="clearSearch()">
+                    <i class="fas fa-times me-2"></i>Clear Search
+                </button>
+            `;
+
+      const accordionContainer = document.getElementById("regulationAccordion");
+      if (accordionContainer) {
+        accordionContainer.parentNode.appendChild(noResultsDiv);
+      }
+    }
+    noResultsDiv.style.display = "block";
+  } else {
+    if (noResultsDiv) {
+      noResultsDiv.style.display = "none";
+    }
+  }
+}
+
+function clearSearch() {
+  document.getElementById("desktopSearchInput").value = "";
+  document.getElementById("mobileSearchInput").value = "";
+  performSearch("");
+}
+
+// Add search button click functionality
+document.addEventListener("DOMContentLoaded", function () {
+  // Add click event to search buttons
+  const searchButtons = document.querySelectorAll(".search-and-filter-buttons");
+  searchButtons.forEach((button) => {
+    if (button.querySelector(".search-icon")) {
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        const searchInput = this.parentNode.querySelector('input[type="text"]');
+        if (searchInput) {
+          searchInput.focus();
+        }
+      });
+    }
+  });
+});
+
 // Admin Page Search and Filter Functionality
 document.addEventListener('DOMContentLoaded', function() {
     console.log('AdminTable.js: DOM loaded, initializing filters...');

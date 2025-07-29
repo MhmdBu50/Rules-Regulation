@@ -202,9 +202,10 @@ there's also many filtering options to find the policy and other adminstrative s
                                         <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon"
                                             width="44" height="44" />
                                     </button>
-                                    <input class="search poppins-regular flex-grow-1 small-font-size" type="text"
+                                    <input id="desktopSearchInput" class="search poppins-regular flex-grow-1 small-font-size" type="text"
                                         placeholder="Search by Name/ID..."
-                                        style="color: #ABB7C2; background: transparent; border: none;">
+                                        style="color: #ABB7C2; background: transparent; border: none;"
+                                        oninput="performSearch(this.value)">
                                 </div>
                             </div>
                         </th>
@@ -265,8 +266,9 @@ there's also many filtering options to find the policy and other adminstrative s
                             <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon" width="44"
                                 height="44" />
                         </button>
-                        <input class="search poppins-regular flex-grow-1" type="text" placeholder="Search by Name/ID..."
-                            style="color: #ABB7C2; border: none; background: transparent;">
+                        <input id="mobileSearchInput" class="search poppins-regular flex-grow-1" type="text" placeholder="Search by Name/ID..."
+                            style="color: #ABB7C2; border: none; background: transparent;"
+                            oninput="performSearch(this.value)">
                     </div>
 
                     <!-- Delete Button (Fixed width) -->
