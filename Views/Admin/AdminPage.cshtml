@@ -13,220 +13,7 @@ there's also many filtering options to find the policy and other adminstrative s
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="~/js/StatisticsInAdmin.js"></script>
-
-    <script>
-        function showAdminRecordDetails(recordId) {
-            const detailsContainer = document.getElementById('adminDetails' + recordId);
-
-            // Check if details are already loaded
-            if (detailsContainer.innerHTML.includes('record-full-details')) {
-                return; // Already loaded
-            }
-
-            // Show loading spinner
-            detailsContainer.innerHTML = `
-                                                                                                <div class="text-center">
-                                                                                                    <div class="spinner-border spinner-border-sm" role="status">
-                                                                                                        <span class="visually-hidden">Loading...</span>
-                                                                                                    <p class="mt-2">Loading record details...</p>
-                                                                                                </div>
-                                                                                            `;
-
-            // Make AJAX call to get record details
-            fetch('/Admin/GetRecordDetails?id=' + recordId)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to load record details');
-                    }
-                    return response.text();
-                })
-                .then(html => {
-                    detailsContainer.innerHTML = html;
-                })
-                .catch(error => {
-                    console.error('Error loading record details:', error);
-                    detailsContainer.innerHTML = `
-                                                                                                        <div class="alert alert-danger">
-                                                                                                            <i class="fas fa-exclamation-triangle me-2"></i>
-                                                                                                            Failed to load record details. Please try again.
-                                                                                                        </div>
-                                                                                                    `;
-                });
-        }
-
-        function toggleEditMode(recordId) {
-            console.log('Toggle edit mode called for record ID:', recordId);
-            
-            const form = document.getElementById('recordForm_' + recordId);
-            if (!form) {
-                console.error('Form not found for record ID:', recordId);
-                return;
-            }
-            
-            console.log('Form found:', form);
-            
-            const inputs = form.querySelectorAll('input:not([type="hidden"]):not(.contact-input), textarea:not(.contact-input), select:not(.contact-input)');
-            const editBtn = form.querySelector('.edit-btn');
-            const saveBtn = form.querySelector('.save-btn');
-            const cancelBtn = form.querySelector('.cancel-btn');
-
-            console.log('Found inputs:', inputs.length);
-            console.log('Edit button:', editBtn);
-            console.log('Save button:', saveBtn);
-            console.log('Cancel button:', cancelBtn);
-
-            const isCurrentlyEditing = editBtn.style.display === 'none';
-            console.log('Is currently editing:', isCurrentlyEditing);
-
-            // Toggle readonly and disabled state
-            inputs.forEach((input, index) => {
-                console.log('Processing input', index, ':', input);
-                if (isCurrentlyEditing) {
-                    // Switch to view mode
-                    input.readOnly = true;
-                    input.disabled = true;
-                } else {
-                    // Switch to edit mode
-                    input.readOnly = false;
-                    input.disabled = false;
-                }
-            });
-
-            // Toggle button visibility
-            if (isCurrentlyEditing) {
-                // Currently in edit mode, switching to view mode
-                editBtn.style.display = 'inline-block';
-                saveBtn.style.display = 'none';
-                cancelBtn.style.display = 'none';
-                
-                // Reset form to original values if canceling
-                location.reload(); // Simple solution to reset form
-            } else {
-                // Currently in view mode, switching to edit mode
-                editBtn.style.display = 'none';
-                saveBtn.style.display = 'inline-block';
-                cancelBtn.style.display = 'inline-block';
-            }
-            
-            console.log('Toggle edit mode completed');
-        }
-
-        function cancelEdit(recordId) {
-            toggleEditMode(recordId);
-        }
-
-        function deleteRecord(recordId) {
-            if (confirm('Are you sure you want to delete this record? This action cannot be undone.')) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '@Url.Action("DeleteRecord", "Admin")';
-                
-                const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
-                const tokenInput = document.createElement('input');
-                tokenInput.type = 'hidden';
-                tokenInput.name = '__RequestVerificationToken';
-                tokenInput.value = token;
-                
-                const recordIdInput = document.createElement('input');
-                recordIdInput.type = 'hidden';
-                recordIdInput.name = 'recordId';
-                recordIdInput.value = recordId;
-                
-                form.appendChild(tokenInput);
-                form.appendChild(recordIdInput);
-                document.body.appendChild(form);
-                form.submit();
-            }
-        }
-
-        // Checkbox functionality
-        function toggleAllCheckboxes() {
-            const masterCheckbox = document.getElementById('masterCheckbox');
-            const recordCheckboxes = document.querySelectorAll('.record-checkbox');
-            
-            recordCheckboxes.forEach(checkbox => {
-                checkbox.checked = masterCheckbox.checked;
-            });
-            
-            console.log('Master checkbox toggled. All checkboxes set to:', masterCheckbox.checked);
-        }
-
-        function handleRecordCheckbox() {
-            const masterCheckbox = document.getElementById('masterCheckbox');
-            const recordCheckboxes = document.querySelectorAll('.record-checkbox');
-            
-            // Check if all record checkboxes are checked
-            const allChecked = Array.from(recordCheckboxes).every(checkbox => checkbox.checked);
-            
-            // Check if no record checkboxes are checked
-            const noneChecked = Array.from(recordCheckboxes).every(checkbox => !checkbox.checked);
-            
-            if (allChecked) {
-                masterCheckbox.checked = true;
-                masterCheckbox.indeterminate = false;
-            } else if (noneChecked) {
-                masterCheckbox.checked = false;
-                masterCheckbox.indeterminate = false;
-            } else {
-                masterCheckbox.checked = false;
-                masterCheckbox.indeterminate = true;
-            }
-            
-            console.log('Record checkbox changed. Master checkbox state updated.');
-        }
-
-        // Function to get selected record IDs
-        function getSelectedRecordIds() {
-            const selectedCheckboxes = document.querySelectorAll('.record-checkbox:checked');
-            const selectedIds = Array.from(selectedCheckboxes).map(checkbox => 
-                checkbox.getAttribute('data-record-id')
-            );
-            
-            console.log('Selected record IDs:', selectedIds);
-            return selectedIds;
-        }
-
-        // Function to delete selected records
-        function deleteSelectedRecords() {
-            const selectedIds = getSelectedRecordIds();
-            
-            if (selectedIds.length === 0) {
-                alert('Please select at least one record to delete.');
-                return;
-            }
-            
-            const confirmMessage = selectedIds.length === 1 
-                ? 'Are you sure you want to delete this record? This action cannot be undone.'
-                : `Are you sure you want to delete ${selectedIds.length} records? This action cannot be undone.`;
-                
-            if (confirm(confirmMessage)) {
-                // Create form for multiple deletion
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '@Url.Action("DeleteMultipleRecords", "Admin")';
-                
-                // Add anti-forgery token
-                const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
-                const tokenInput = document.createElement('input');
-                tokenInput.type = 'hidden';
-                tokenInput.name = '__RequestVerificationToken';
-                tokenInput.value = token;
-                form.appendChild(tokenInput);
-                
-                // Add selected record IDs
-                selectedIds.forEach(id => {
-                    const idInput = document.createElement('input');
-                    idInput.type = 'hidden';
-                    idInput.name = 'recordIds';
-                    idInput.value = id;
-                    form.appendChild(idInput);
-                });
-                
-                document.body.appendChild(form);
-                form.submit();
-            }
-        }
-    </script>
+    <script src="~/js/AdminTable.js"></script>
 }
 
 <!-- This is the header section of the admin page -->
@@ -625,7 +412,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                 data-bs-parent="#regulationAccordion">
                                 <!-- content of accordion -->
                                 <div class="accordion-body">
-                                    <form id="recordForm_@record.Id" method="post" action="@Url.Action("UpdateRecord", "Admin")">
+                                    <form id="recordForm_@record.Id" method="post" action="@Url.Action("UpdateRecord", "Admin")" onsubmit="return handleFormSubmit(event, @record.Id)">
                                         @Html.AntiForgeryToken()
                                         <input type="hidden" name="recordId" value="@record.Id" />
                                         
@@ -726,30 +513,47 @@ there's also many filtering options to find the policy and other adminstrative s
 
                                                         <tr>
                                                             <td>
-                                                                <label class="form-label fw-bold">Attach word
-                                                                    file</label>
+                                                                <label class="form-label fw-bold">Attach word file</label>
+                                                                @{
+                                                                    var wordAttachment = ((IEnumerable<dynamic>)record.Attachments)?.FirstOrDefault(a => a.FileType?.ToString()?.ToLower() == "word" || a.FileType?.ToString()?.ToLower() == "docx");
+                                                                }
                                                                 <div class="input-group mb-2">
-                                                                    <input type="text" class="form-control" value=""
-                                                                        readonly>
-                                                                    <span class="input-group-text">
+                                                                    <input type="text" class="form-control attachment-display" 
+                                                                           id="wordDisplay_@record.Id"
+                                                                           value="@(wordAttachment?.OriginalName ?? "")" 
+                                                                           readonly disabled>
+                                                                    <input type="file" id="wordFile_@record.Id" class="d-none" accept=".doc,.docx" 
+                                                                           onchange="handleFileSelection(@record.Id, 'word', this)" disabled>
+                                                                    <span class="input-group-text attachment-upload-btn" 
+                                                                          id="wordUploadBtn_@record.Id"
+                                                                          style="cursor: not-allowed; opacity: 0.6;" 
+                                                                          title="Click Edit to enable file upload">
                                                                         <i class="bi bi-paperclip">
-                                                                            <img src="~/svgs/admin/upload-file.svg"
-                                                                                alt="upload-file" />
+                                                                            <img src="~/svgs/admin/upload-file.svg" alt="upload-file" />
                                                                         </i>
                                                                     </span>
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <label class="form-label fw-bold">Attach PDF
-                                                                    file</label>
+                                                                <label class="form-label fw-bold">Attach PDF file</label>
+                                                                @{
+                                                                    var pdfAttachment = ((IEnumerable<dynamic>)record.Attachments)?.FirstOrDefault(a => a.FileType?.ToString()?.ToLower() == "pdf");
+                                                                }
                                                                 <div class="input-group mb-2">
-                                                                    <input type="text" class="form-control" value=""
-                                                                        readonly>
-                                                                    <span class="input-group-text">
+                                                                    <input type="text" class="form-control attachment-display" 
+                                                                           id="pdfDisplay_@record.Id"
+                                                                           value="@(pdfAttachment?.OriginalName ?? "")" 
+                                                                           readonly disabled>
+                                                                    <input type="file" id="pdfFile_@record.Id" class="d-none" accept=".pdf" 
+                                                                           onchange="handleFileSelection(@record.Id, 'pdf', this)" disabled>
+                                                                    <span class="input-group-text attachment-upload-btn" 
+                                                                          id="pdfUploadBtn_@record.Id"
+                                                                          style="cursor: not-allowed; opacity: 0.6;" 
+                                                                          title="Click Edit to enable file upload">
                                                                         <i class="bi bi-paperclip">
-                                                                            <img src="~/svgs/admin/upload-file.svg"
-                                                                                alt="upload-file" />
-                                                                        </i></span>
+                                                                            <img src="~/svgs/admin/upload-file.svg" alt="upload-file" />
+                                                                        </i>
+                                                                    </span>
                                                                 </div>
                                                             </td>
                                                         </tr>
