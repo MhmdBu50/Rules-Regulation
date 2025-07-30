@@ -56,7 +56,7 @@ body.rtl .filter-section {
 body.rtl .container,
 body.rtl .row,
 body.rtl .d-flex {
-    direction: rtl;
+    direction: ltr;
     text-align: right;
 }
 
