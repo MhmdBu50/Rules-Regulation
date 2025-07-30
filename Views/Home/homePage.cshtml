@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="~/css/HomePage-docCard.css">
         <link rel="stylesheet" href="~/css/_RecordDetails.css">
         <link rel="stylesheet" href="~/css/_rtl_styles.css" />
+        <link rel="stylesheet" href="~/css/multi-select-dropdown.css" />
 
 }
 
@@ -22,6 +23,7 @@
     <script src="@Url.Content("~/js/HomePage.js")"></script>
     <script src="@Url.Content("~/js/moblieMenu.js")"></script>
     <script src="@Url.Content("~/js/recordDetailsModal.js")"></script>
+    <script src="@Url.Content("~/js/multi-select-dropdown.js")"></script>
     <script src="@Url.Content("~/js/homePageFilters.js")"></script>
     <script src="@Url.Content("~/js/savedFunctions.js")"></script>
     <script src="@Url.Content("~/js/searchFunctionality.js")"></script>
@@ -154,20 +156,26 @@ margin-top: 10px;">
         </div>
 
         <div class="filter-column">
-            <h3 id="filter-responsible-entity-heading">Department</h3>
-      
-       <select class="form-select" id="departmentFilter">
-                <option value="">All Departments</option>
-                <option value="Reg and Admission">Reg and Admission</option>
-                <option value="CCSIT">CCSIT</option>
-                <option value="Communication and tech">Communication and tech</option>
-               
-  <option value="Hospital">Hospital</option>
-                <option value="Library">Library</option>
-                <option value="Students Affairs">Students Affairs</option>
-                <option value="Preparetory">Preparetory</option>
-                <option value="Academic Affairs">Academic Affairs</option>
-            </select>
+            <h3>Department</h3>
+            <div class="multi-select-dropdown-container">
+                <div class="multi-select-dropdown">
+                    <div class="multi-select-button" id="departmentMultiSelectButton">
+                        Select Departments <span class="caret">▼</span>
+                    </div>
+                    <div class="multi-select-dropdown-content" id="departmentDropdownContent">
+                        <label><input type="checkbox" class="form-check-input department-option" value=""> All Departments</label>
+                        <label><input type="checkbox" class="form-check-input department-option" value="Reg and Admission"> Reg and Admission</label>
+                        <label><input type="checkbox" class="form-check-input department-option" value="CCSIT"> CCSIT</label>
+                        <label><input type="checkbox" class="form-check-input department-option" value="Communication and tech"> Communication and tech</label>
+                        <label><input type="checkbox" class="form-check-input department-option" value="Hospital"> Hospital</label>
+                        <label><input type="checkbox" class="form-check-input department-option" value="Library"> Library</label>
+                        <label><input type="checkbox" class="form-check-input department-option" value="Students Affairs"> Students Affairs</label>
+                        <label><input type="checkbox" class="form-check-input department-option" value="Preparetory"> Preparetory</label>
+                        <label><input type="checkbox" class="form-check-input department-option" value="Academic Affairs"> Academic Affairs</label>
+                    </div>
+                </div>
+                <input type="hidden" id="departmentFilter" value="">
+            </div>
         </div>
 
       
@@ -301,7 +309,11 @@ showallRecords()" style="background-color: #0F1734; font-size: 1.5em;" >
   {
                 @foreach (var record in Model)
                 {
-                    <div class="col-auto medium-card">
+                    <div class="col-auto medium-card" 
+                         data-department="@record.Department" 
+                         data-section="@record.Sections" 
+                         data-type="@record.DocumentType" 
+                         data-version-date="@record.VersionDate">
                   
        <div class="card document-card">
                             <div class="bookmark" data-record-id="@record.Id" onclick="toggleBookmark(this)"></div>
@@ -310,6 +322,8 @@ showallRecords()" style="background-color: #0F1734; font-size: 1.5em;" >
                            
  </div>
                             <h2 class="card-title">@record.RegulationName</h2>
+                            
+                            <p class="card-text d-none">@record.RegulationName @record.Description</p>
 
                             <div class="info-footer">
       
