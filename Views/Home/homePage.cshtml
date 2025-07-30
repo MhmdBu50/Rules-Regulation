@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/HomePage.css">
     <link rel="stylesheet" href="~/css/HomePage-docCard.css">
-        <link rel="stylesheet" href="~/css/_RecordDetails.css">
-        <link rel="stylesheet" href="~/css/_rtl_Styles.css" />
-        <link rel="stylesheet" href="~/css/multi-select-dropdown.css" />
+    <link rel="stylesheet" href="~/css/_RecordDetails.css">
+    <link rel="stylesheet" href="~/css/_rtl_Styles.css" />
+    <link rel="stylesheet" href="~/css/multi-select-dropdown.css" />
 
 }
 
-@section Scripts{
+@section Scripts {
     <script src="@Url.Content("https://cdn.jsdelivr.net/npm/fitty@2.3.6/dist/fitty.min.js")"></script>
     <script src="@Url.Content("~/js/card-animations.js")"></script>
     <script src="@Url.Content("~/lib/bootstrap/dist/js/bootstrap.js")"></script>
@@ -29,415 +29,435 @@
     <script src="@Url.Content("~/js/searchFunctionality.js")"></script>
 }
 
-    <header class="menu">
-    
-    <div class="container-fluid h-100 bootstrap-wrapper">
-            <div class="row align-items-center h-100 g-0">
-                <div class="col-auto">
-                    <div class="d-flex align-items-center">
-                 
-        <button id="burgerBtn" class="navbar-toggler d-lg-none me-2" style="margin-left: 15px;"
-type="button">
-                            <img src="~/svgs/navigation/hamburger-menu.svg" alt="Menu" width="36" height="36" />
-                        </button>
+<header class="menu">
 
-                        <div class="language-switcher-container">
-        <button id="language-toggle" class="language-toggle-btn">
-            <svg class="desktop-logo logo" width="33" height="33" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20.0002 39.1668C17.3807 39.1668 14.905 38.6637 12.5731 37.6575C10.2411 36.6512 8.20468 35.2776 6.4637 33.5366C4.72273 31.7957 3.34912 29.7592 2.34287 27.4272C1.33662 25.0953 0.833496 22.6196 0.833496 20.0002C0.833496 17.3488 1.33662 14.8651 2.34287 
+    <div class="container-fluid h-100 bootstrap-wrapper">
+        <div class="row align-items-center h-100 g-0">
+            <div class="col-auto">
+                <div class="d-flex align-items-center">
+
+                    <button id="burgerBtn" class="navbar-toggler d-lg-none me-2" style="margin-left: 15px;"
+                        type="button">
+                        <img src="~/svgs/navigation/hamburger-menu.svg" alt="Menu" width="36" height="36" />
+                    </button>
+
+                    <div class="language-switcher-container">
+                        <button id="language-toggle" class="language-toggle-btn">
+                            <svg class="desktop-logo logo" width="33" height="33" viewBox="0 0 40 40" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20.0002 39.1668C17.3807 39.1668 14.905 38.6637 12.5731 37.6575C10.2411 36.6512 8.20468 35.2776 6.4637 33.5366C4.72273 31.7957 3.34912 29.7592 2.34287 27.4272C1.33662 25.0953 0.833496 22.6196 0.833496 20.0002C0.833496 17.3488 1.33662 14.8651 2.34287 
 12.5491C3.34912 10.2331 4.72273 8.20468 6.4637 6.4637C8.20468 4.72273 10.2411 3.34912 12.5731 2.34287C14.905 1.33662 17.3807 0.833496 20.0002 0.833496C22.6516 0.833496 25.1352 1.33662 27.4512 2.34287C29.7672 3.34912 31.7957 4.72273 33.5366 6.4637C35.2776 8.20468 36.6512 10.2331 37.6575 12.5491C38.6637 14.8651 39.1668 17.3488 39.1668 20.0002C39.1668 22.6196 38.6637 25.0953 37.6575 27.4272C36.6512 29.7592 35.2776 31.7957 33.5366 33.5366C31.7957 35.2776 29.7672 36.6512 27.4512 37.6575C25.1352 38.6637 22.6516 39.1668 20.0002 39.1668ZM20.0002 35.2377C20.8307 34.0877 21.5495 32.8897 22.1564 31.6439C22.7634 30.3981 23.2585 29.0724 23.6418 27.6668H16.3585C16.7418 29.0724 17.237 30.3981 17.8439 31.6439C18.4509 32.8897 19.1696 34.0877 20.0002 35.2377ZM15.0168 34.471C14.4418 33.4168 13.9387 32.3227 13.5075 31.1887C13.0762 30.0547 12.7168 28.8807 12.4293 27.6668H6.77516C7.70155 29.2641 8.85954 30.6536 10.2491 31.8356C11.6387 33.0175 13.2279 33.896 15.0168 34.471ZM24.9835 34.471C26.7724 33.896 
 28.3616 33.0175 29.7512 31.8356C31.1408 30.6536 32.2988 29.2641 33.2252 27.6668H27.571C27.2835 28.8807 26.9241 30.0547 26.4929 31.1887C26.0616 32.3227 25.5585 33.4168 24.9835 34.471ZM5.146 23.8335H11.6627C11.5668 23.1946 11.495 22.5637 11.447 21.9408C11.3991 21.3179 11.3752 20.671 11.3752 20.0002C11.3752 19.3293 11.3991 18.6825 11.447 18.0595C11.495 17.4366 11.5668 16.8057 11.6627 16.1668H5.146C4.98627 16.8057 4.86648 17.4366 4.78662 18.0595C4.70676 18.6825 4.66683 19.3293 4.66683 20.0002C4.66683 20.671 4.70676 21.3179 4.78662 21.9408C4.86648 22.5637 4.98627 23.1946 5.146 23.8335ZM15.496 23.8335H24.5043C24.6002 23.1946 24.672 22.5637 24.72 21.9408C24.7679 21.3179 24.7918 20.671 24.7918 20.0002C24.7918 19.3293 24.7679 18.6825 24.72 18.0595C24.672 17.4366 24.6002 16.8057 24.5043 16.1668H15.496C15.4002 16.8057 15.3283 17.4366 15.2804 18.0595C15.2325 18.6825 15.2085 19.3293 15.2085 20.0002C15.2085 20.671 15.2325 21.3179 15.2804 21.9408C15.3283 22.5637 15.4002 23.1946 15.496 
 23.8335ZM28.3377 23.8335H34.8543C35.0141 23.1946 35.1338 22.5637 35.2137 21.9408C35.2936 21.3179 35.3335 20.671 35.3335 20.0002C35.3335 19.3293 35.2936 18.6825 35.2137 18.0595C35.1338 17.4366 35.0141 16.8057 34.8543 16.1668H28.3377C28.4335 16.8057 28.5054 17.4366 28.5533 18.0595C28.6012 18.6825 28.6252 19.3293 28.6252 20.0002C28.6252 20.671 28.6012 21.3179 28.5533 21.9408C28.5054 22.5637 28.4335 23.1946 28.3377 23.8335ZM27.571 12.3335H33.2252C32.2988 10.7363 31.1408 9.34669 29.7512 8.16475C28.3616 6.9828 26.7724 6.10433 24.9835 5.52933C25.5585 6.5835 26.0616 7.67759 26.4929 8.81162C26.9241 9.94565 27.2835 11.1196 27.571 12.3335ZM16.3585 12.3335H23.6418C23.2585 10.9279 22.7634 9.60225 22.1564 8.35641C21.5495 7.11058 20.8307 5.91266 20.0002 4.76266C19.1696 5.91266 18.4509 7.11058 17.8439 8.35641C17.237 9.60225 16.7418 10.9279 16.3585 12.3335ZM6.77516 12.3335H12.4293C12.7168 11.1196 13.0762 9.94565 13.5075 8.81162C13.9387 7.67759 14.4418 6.5835 15.0168 5.52933C13.2279 6.10433 11.6387 6.9828 10.2491 8.16475C8.85954 
 9.34669 7.70155 10.7363 6.77516 12.3335Z" fill="#CFEFFF"></path>
-            </svg>
-        </button>
-        </div>
+                            </svg>
+                        </button>
                     </div>
                 </div>
+            </div>
 
-                <div class="col d-flex flex-nowrap align-items-center">
-                    <div class="search-container d-flex align-items-center px-2 position-relative">
-                        <button class="search-and-filter-buttons">
-                            <svg class="search-icon" width="44" height="44" viewBox="0 0 44 44" fill="none">
-    
-                             <path
-                                    d="M21 29C25.4183 29 29 25.4183 29 21C29 16.5817 25.4183 13 21 13C16.5817 13 13 16.5817 13 21C13 25.4183 16.5817 29 21 29Z"
-               
-                     stroke="#ABB7C2" stroke-width="2" />
-                                <path d="M31.0002 31L26.7002 26.7" stroke="#ABB7C2" stroke-width="2" />
-                            </svg>           
-             </button>
-                        <input class="search poppins-regular flex-grow-1" type="text" placeholder="Search ..." id="searchInput">
-                        <button class="search-clear-btn d-none" id="searchClearBtn" type="button" style="position: absolute;
+            <div class="col d-flex flex-nowrap align-items-center">
+                <div class="search-container d-flex align-items-center px-2 position-relative">
+                    <button class="search-and-filter-buttons">
+                        <svg class="search-icon" width="44" height="44" viewBox="0 0 44 44" fill="none">
+
+                            <path
+                                d="M21 29C25.4183 29 29 25.4183 29 21C29 16.5817 25.4183 13 21 13C16.5817 13 13 16.5817 13 21C13 25.4183 16.5817 29 21 29Z"
+                                stroke="#ABB7C2" stroke-width="2" />
+                            <path d="M31.0002 31L26.7002 26.7" stroke="#ABB7C2" stroke-width="2" />
+                        </svg>
+                    </button>
+                    <input class="search poppins-regular flex-grow-1" type="text" placeholder="Search ..."
+                        id="searchInput">
+                    <button class="search-clear-btn d-none" id="searchClearBtn" type="button" style="position: absolute;
 right: 60px; z-index: 10; background: none; border: none; color: #ABB7C2; font-size: 18px; padding: 0; width: 20px; height: 20px; display: flex;
 align-items: center; justify-content: center;">
-                            ×
-                        </button>
-                        <button class="search-and-filter-buttons" id="filter-button">
-                   
-          <svg id="filter" width="44" height="44" viewBox="0 0 44 44">
-                                <path d="M31 14H24" stroke="#ABB7C2" stroke-width="2" />
-                                <path d="M20 14H13" stroke="#ABB7C2" stroke-width="2" />
-          
-                       <path d="M31 22H22" stroke="#ABB7C2" stroke-width="2" />
-                                <path d="M18 22H13" stroke="#ABB7C2" stroke-width="2" />
-                                <path d="M31 30H26" stroke="#ABB7C2" 
-stroke-width="2" />
-                                <path d="M22 30H13" stroke="#ABB7C2" stroke-width="2" />
-                                <path d="M24 12V16" stroke="#ABB7C2" stroke-width="2" />
-                         
-        <path d="M18 20V24" stroke="#ABB7C2" stroke-width="2" />
-                                <path d="M26 28V32" stroke="#ABB7C2" stroke-width="2" />
-                            </svg>                       
- </button>
-                    </div>
-                    <button class="adminButton ms-2 me-2 px-3 py-1 d-none d-lg-flex" onclick="location.href='@Url.Action("AdminPage", "Admin")'" id="admin-view-button">view as Admin
-                    
- </button>
+                        ×
+                    </button>
+                    <button class="search-and-filter-buttons" id="filter-button">
+
+                        <svg id="filter" width="44" height="44" viewBox="0 0 44 44">
+                            <path d="M31 14H24" stroke="#ABB7C2" stroke-width="2" />
+                            <path d="M20 14H13" stroke="#ABB7C2" stroke-width="2" />
+
+                            <path d="M31 22H22" stroke="#ABB7C2" stroke-width="2" />
+                            <path d="M18 22H13" stroke="#ABB7C2" stroke-width="2" />
+                            <path d="M31 30H26" stroke="#ABB7C2" stroke-width="2" />
+                            <path d="M22 30H13" stroke="#ABB7C2" stroke-width="2" />
+                            <path d="M24 12V16" stroke="#ABB7C2" stroke-width="2" />
+
+                            <path d="M18 20V24" stroke="#ABB7C2" stroke-width="2" />
+                            <path d="M26 28V32" stroke="#ABB7C2" stroke-width="2" />
+                        </svg>
+                    </button>
                 </div>
+                <button class="adminButton ms-2 me-2 px-3 py-1 d-none d-lg-flex"
+                    onclick="location.href='@Url.Action("AdminPage", "Admin")'" id="admin-view-button">view as Admin
 
-                <div class="col-auto flex-nowrap">
-                    <div>
-                        
- <img class="profile-icon d-none d-xl-block" src="~/imgs/B&W IAU Logo (Horizontal).png"
-                            alt="IAU Logo">
+                </button>
+            </div>
 
-                        <img class="profile-icon iau-logo d-sm-block d-xl-none" src="~/imgs/B&W IAU Logo.png"
-                            alt="IAU Logo">
-                    </div>
+            <div class="col-auto flex-nowrap">
+                <div>
+
+                    <img class="profile-icon d-none d-xl-block" src="~/imgs/B&W IAU Logo (Horizontal).png"
+                        alt="IAU Logo">
+
+                    <img class="profile-icon iau-logo d-sm-block d-xl-none" src="~/imgs/B&W IAU Logo.png"
+                        alt="IAU Logo">
                 </div>
-        
-     </div>
+            </div>
+
         </div>
+    </div>
 
-        </header>
-    @await Html.PartialAsync("_moblieMenu")
-    
+</header>
+@await Html.PartialAsync("_moblieMenu")
 
-    <div id="filter-panel" class="filter-panel poppins-regular d-none">
-        <div class="filter-column">
-            <h3 id="filter-sections-heading">Sections</h3>
-            <label><input type="checkbox" class="form-check-input" id="studentsFilter" value="Students"> <span id="filter-students">Students</span></label>
-            <label><input type="checkbox" class="form-check-input" id="membersFilter" value="Members"> <span id="filter-members">Members</span></label>
-            <label><input type="checkbox" class="form-check-input" id="enrolledFilter" value="Enrolled Programs"> <span id="filter-enrolled-programs">Enrolled Programs</span></label>
-        </div>
 
-        <div class="filter-column">
-            <h3 id="filter-alphabetical-heading">Alphabetical filter</h3>
-            <label><input type="radio" name="alpha" class="form-check-input" id="azFilter" value="A-Z"> <span id="filter-az">A-Z</span></label>
-            <label><input type="radio" name="alpha" class="form-check-input" 
-id="zaFilter" value="Z-A"> <span id="filter-za">Z-A</span></label>
-        </div>
+<div id="filter-panel" class="filter-panel poppins-regular d-none">
+    <div class="filter-column">
+        <h3 id="filter-sections-heading">Sections</h3>
+        <label><input type="checkbox" class="form-check-input" id="studentsFilter" value="Students"> <span
+                id="filter-students">Students</span></label>
+        <label><input type="checkbox" class="form-check-input" id="membersFilter" value="Members"> <span
+                id="filter-members">Members</span></label>
+        <label><input type="checkbox" class="form-check-input" id="enrolledFilter" value="Enrolled Programs"> <span
+                id="filter-enrolled-programs">Enrolled Programs</span></label>
+    </div>
 
-        <div class="filter-column">
-            <h3 id="filter-issue-date-heading">Issue Date</h3>
+    <div class="filter-column">
+        <h3 id="filter-alphabetical-heading">Alphabetical filter</h3>
+        <label><input type="radio" name="alpha" class="form-check-input" id="azFilter" value="A-Z"> <span
+                id="filter-az">A-Z</span></label>
+        <label><input type="radio" name="alpha" class="form-check-input" id="zaFilter" value="Z-A"> <span
+                id="filter-za">Z-A</span></label>
+    </div>
 
-            <label><input type="radio" name="dateOption" value="newest" class="form-check-input">
-                <span id="filter-newest-oldest">Newest-Oldest</span></label><br>
-            <label><input type="radio" name="dateOption" value="oldest" class="form-check-input">
-                <span id="filter-oldest-newest">Oldest-Newest</span></label><br>
+    <div class="filter-column">
+        <h3 id="filter-issue-date-heading">Issue Date</h3>
 
-    
-         <label><input type="radio" name="dateOption" id="specifyRange" value="range" class="form-check-input">
-                <span id="filter-specify-range">Specify Range:</span></label><br>
+        <label><input type="radio" name="dateOption" value="newest" class="form-check-input">
+            <span id="filter-newest-oldest">Newest-Oldest</span></label><br>
+        <label><input type="radio" name="dateOption" value="oldest" class="form-check-input">
+            <span id="filter-oldest-newest">Oldest-Newest</span></label><br>
 
-            <div id="dateRangeFields" style="display: none;
+
+        <label><input type="radio" name="dateOption" id="specifyRange" value="range" class="form-check-input">
+            <span id="filter-specify-range">Specify Range:</span></label><br>
+
+        <div id="dateRangeFields" style="display: none;
 margin-top: 10px;">
-                <div>
-                    <label for="fromDate" id="filter-from-label">From:</label>
-                    <input class="form-control" type="date" id="fromDate">
-                </div>
-                <div>
-       
-             <label for="toDate" id="filter-to-label">To:</label>
-                    <input class="form-control" type="date" id="toDate">
-                </div>
+            <div>
+                <label for="fromDate" id="filter-from-label">From:</label>
+                <input class="form-control" type="date" id="fromDate">
             </div>
-        </div>
+            <div>
 
-        <div class="filter-column">
-            <h3>Department</h3>
-            <div class="multi-select-dropdown-container">
-                <div class="multi-select-dropdown">
-                    <div class="multi-select-button" id="departmentMultiSelectButton">
-                        Select Departments <span class="caret">▼</span>
-                    </div>
-                    <div class="multi-select-dropdown-content" id="departmentDropdownContent">
-                        <label><input type="checkbox" class="form-check-input department-option" value=""> All Departments</label>
-                        <label><input type="checkbox" class="form-check-input department-option" value="Reg and Admission"> Reg and Admission</label>
-                        <label><input type="checkbox" class="form-check-input department-option" value="CCSIT"> CCSIT</label>
-                        <label><input type="checkbox" class="form-check-input department-option" value="Communication and tech"> Communication and tech</label>
-                        <label><input type="checkbox" class="form-check-input department-option" value="Hospital"> Hospital</label>
-                        <label><input type="checkbox" class="form-check-input department-option" value="Library"> Library</label>
-                        <label><input type="checkbox" class="form-check-input department-option" value="Students Affairs"> Students Affairs</label>
-                        <label><input type="checkbox" class="form-check-input department-option" value="Preparetory"> Preparetory</label>
-                        <label><input type="checkbox" class="form-check-input department-option" value="Academic Affairs"> Academic Affairs</label>
-                    </div>
-                </div>
-                <input type="hidden" id="departmentFilter" value="">
-            </div>
-        </div>
-
-      
-   <div class="filter-column">
-            <h3 id="filter-type-heading">Type</h3>
-            <label><input type="checkbox" class="form-check-input" id="regulationsFilter" value="Regulation"> <span id="filter-regulations">Regulations</span></label>
-            <label><input type="checkbox" class="form-check-input" id="guidelinesFilter" value="Guidelines"> <span id="filter-guidelines">Guidelines</span></label>
-            <label><input type="checkbox" class="form-check-input" id="policiesFilter" value="Policies"> <span id="filter-policies">Policies</span></label>
-            <div style="margin-top: 15px;
-display: flex;">
-                <button type="button" class="apply-btn" onclick="applyFilters()" id="filter-apply-btn">Apply</button>
-                <button type="button" class="apply-btn" onclick="clearFilters()" style="background-color: #6c757d;
-margin-left: 10px;">Clear</button>
+                <label for="toDate" id="filter-to-label">To:</label>
+                <input class="form-control" type="date" id="toDate">
             </div>
         </div>
     </div>
 
-    <div class="navigation-bar d-none d-lg-flex">
-
-        <div>
-            <button class="bar-button" id="homeButton" data-id="homeButton" style="background-color: #2B334F;
-border: none;" onclick="navigateToHome(this)">
-                <div class="nav-icons svg-container">
-                
+    <div class="filter-column">
+        <h3>Department</h3>
+        <div class="multi-select-dropdown-container">
+            <div class="multi-select-dropdown">
+                <div class="multi-select-button" id="departmentMultiSelectButton">
+                    Select Departments <span class="caret">▼</span>
                 </div>
-                <div style="display: flex;align-items: center;margin: 5px;">
-                    <label class="poppins-regular" id="nav-home-label">Home</label>
-       
-         </div> 
-            </button>
-
-        </div>
-
-        <div>
-            <button class="bar-button" id="studentGuides" data-id="studentGuides" style="background-color:#01514F;" onclick="navigateToStudentGuides(this)">
-                <div class="nav-icons svg-container">
-             
-        
+                <div class="multi-select-dropdown-content" id="departmentDropdownContent">
+                    <label><input type="checkbox" class="form-check-input department-option" value=""> All
+                        Departments</label>
+                    <label><input type="checkbox" class="form-check-input department-option" value="Reg and Admission">
+                        Reg and Admission</label>
+                    <label><input type="checkbox" class="form-check-input department-option" value="CCSIT">
+                        CCSIT</label>
+                    <label><input type="checkbox" class="form-check-input department-option"
+                            value="Communication and tech"> Communication and tech</label>
+                    <label><input type="checkbox" class="form-check-input department-option" value="Hospital">
+                        Hospital</label>
+                    <label><input type="checkbox" class="form-check-input department-option" value="Library">
+                        Library</label>
+                    <label><input type="checkbox" class="form-check-input department-option" value="Students Affairs">
+                        Students Affairs</label>
+                    <label><input type="checkbox" class="form-check-input department-option" value="Preparetory">
+                        Preparetory</label>
+                    <label><input type="checkbox" class="form-check-input department-option" value="Academic Affairs">
+                        Academic Affairs</label>
                 </div>
-                <div class="nav-label">
-                    <label class="poppins-regular" id="nav-student-guides-label">Student guides & templates</label>
-                </div>
-            </button>
-        
-    
-        </div>
-
-        <div>
-            <button class="bar-button" id="studentRulesRegulations" data-id="studentRulesRegulations" style="background-color: #4D7160;" onclick="navigateToStudentRules(this)">
-                <div class="nav-icons svg-container">
-                    
-            
-     </div>
-
-                <div class="nav-label">
-                    <label class="poppins-regular" id="nav-student-rules-label">Student rules & regulations</label>
-                </div>
-            </button>
-
-        </div>
-
-        <div>
-    <button class="bar-button" id="employeeRule" 
-data-id="employeeRule" style="background-color: #4F1C34;" onclick="alter(this); navigateToEmployeeRules(this)">
-        <div class="nav-icons svg-container">
             </div>
-        <div class="nav-label">
-            <label class="poppins-regular" id="nav-employee-rules-label">Employees’ rules & regulations</label>
+            <input type="hidden" id="departmentFilter" value="">
         </div>
-    </button>
+    </div>
+
+
+    <div class="filter-column">
+        <h3 id="filter-type-heading">Type</h3>
+        <label><input type="checkbox" class="form-check-input" id="regulationsFilter" value="Regulation"> <span
+                id="filter-regulations">Regulations</span></label>
+        <label><input type="checkbox" class="form-check-input" id="guidelinesFilter" value="Guidelines"> <span
+                id="filter-guidelines">Guidelines</span></label>
+        <label><input type="checkbox" class="form-check-input" id="policiesFilter" value="Policies"> <span
+                id="filter-policies">Policies</span></label>
+        <div style="margin-top: 15px;
+display: flex;">
+            <button type="button" class="apply-btn" onclick="applyFilters()" id="filter-apply-btn">Apply</button>
+            <button type="button" class="apply-btn" onclick="clearFilters()" style="background-color: #6c757d;
+margin-left: 10px;">Clear</button>
+        </div>
+    </div>
+</div>
+
+<div class="navigation-bar d-none d-lg-flex">
+
+    <div>
+        <button class="bar-button" id="homeButton" data-id="homeButton" style="background-color: #2B334F;
+border: none;" onclick="navigateToHome(this)">
+            <div class="nav-icons svg-container">
+
+            </div>
+            <div style="display: flex;align-items: center;margin: 5px;">
+                <label class="poppins-regular" id="nav-home-label">Home</label>
+
+            </div>
+        </button>
+
+    </div>
+
+    <div>
+        <button class="bar-button" id="studentGuides" data-id="studentGuides" style="background-color:#01514F;"
+            onclick="navigateToStudentGuides(this)">
+            <div class="nav-icons svg-container">
+
+
+            </div>
+            <div class="nav-label">
+                <label class="poppins-regular" id="nav-student-guides-label">Student guides & templates</label>
+            </div>
+        </button>
+
+
+    </div>
+
+    <div>
+        <button class="bar-button" id="studentRulesRegulations" data-id="studentRulesRegulations"
+            style="background-color: #4D7160;" onclick="navigateToStudentRules(this)">
+            <div class="nav-icons svg-container">
+
+
+            </div>
+
+            <div class="nav-label">
+                <label class="poppins-regular" id="nav-student-rules-label">Student rules & regulations</label>
+            </div>
+        </button>
+
+    </div>
+
+    <div>
+        <button class="bar-button" id="employeeRule" data-id="employeeRule" style="background-color: #4F1C34;"
+            onclick="alter(this); navigateToEmployeeRules(this)">
+            <div class="nav-icons svg-container">
+            </div>
+            <div class="nav-label">
+                <label class="poppins-regular" id="nav-employee-rules-label">Employees’ rules & regulations</label>
+            </div>
+        </button>
+    </div>
+
+
+    <div>
+        <button class="bar-button" data-id="academicRulesRegulations" style="background-color: #94331C;"
+            onclick="navigateToAcademicRules(this)">
+            <div class="nav-icons svg-container">
+
+            </div>
+
+            <div class="nav-label">
+
+                <label class="poppins-regular" id="nav-academic-rules-label">Academic rules & regulations</label>
+            </div>
+        </button>
+
+
+    </div>
+
+    <div>
+        <button class="bar-button" id="SavedRulesRegulations" data-id="SavedRulesRegulations"
+            style="background-color: #2F3E5F;" onclick="alter(this); navigateToSaved(this)">
+            <div class="nav-icons svg-container">
+
+            </div>
+
+            <div class="nav-label">
+                <label class="poppins-regular" id="nav-saved-rules-label">Saved rules & regulations</label>
+
+            </div>
+        </button>
+
+
+
+    </div>
+
+    <div>
+        <button class="bar-button" id="historyButton" data-id="historyButton" onclick="alter(this)"
+            style="background-color: #0F1734; font-size: 1.5em;">
+            <div class="nav-icons svg-container">
+
+            </div>
+
+            <div class="nav-label">
+                <label class="poppins-regular" style="word-break: keep-all;" id="nav-history-label">History</label>
+
+            </div>
+        </button>
+
+
+    </div>
+
 </div>
 
 
-        <div>
-            <button class="bar-button" data-id="academicRulesRegulations" style="background-color: #94331C;" onclick="navigateToAcademicRules(this)">
-                <div class="nav-icons svg-container">
-                    
-                </div>
 
-                <div class="nav-label">
-          
-           <label class="poppins-regular" id="nav-academic-rules-label">Academic rules & regulations</label>
-                </div>
-            </button>
+<div class="container-fluid">
+    <div class="row justify-content-center g-lg-4 g-md-3 g-sm-2 g-1" style="margin: 0px 40px;">
 
+        @if (Model != null && Model.Any())
 
-        </div>
-
-        <div>
-            <button class="bar-button" id="SavedRulesRegulations" data-id="SavedRulesRegulations" style="background-color: #2F3E5F;" onclick="alter(this); navigateToSaved(this)">
-                <div class="nav-icons svg-container">
-                    
-                </div>
-
-                <div class="nav-label">
-                    <label class="poppins-regular" id="nav-saved-rules-label">Saved rules & regulations</label>
-     
-            </div>
-            </button>
-
-
-
-        </div>
-
-        <div>
-            <button class="bar-button" id="historyButton" data-id="historyButton" onclick="alter(this)" style="background-color: #0F1734; font-size: 1.5em;" >
-                <div class="nav-icons svg-container">
-                    
-                </div>
-
-                <div class="nav-label">
-                    <label class="poppins-regular" style="word-break: keep-all;" id="nav-history-label">History</label>
- 
-               </div>
-            </button>
-
-
-        </div>
-
-    </div>
-
-
-
-    <div class="container-fluid">
-        <div class="row justify-content-center g-lg-4 g-md-3 g-sm-2 g-1" style="margin: 0px 40px;">
-
-            @if (Model != null && Model.Any())
-           
-  {
-                @foreach (var record in Model)
-                {
-                    <!-- Dynamic card -->
-                    <div class="col-auto medium-card">
-                        <div class="card document-card"
-                            data-title="@record.RegulationName"
-                            data-department="@record.Department"
-                            data-section="@(record.Sections != null ? string.Join(",", record.Sections) : "")"                            
-                            data-type="@record.DocumentType"
-                            data-version-date="@record.VersionDate">
-                            <div class="bookmark" data-record-id="@record.Id" onclick="toggleBookmark(this)"></div>
-
-                            <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
-                           
- </div>
-                            <h2 class="card-title">@record.RegulationName</h2>
-                            
-                            <p class="card-text d-none">@record.RegulationName @record.Description</p>
-
-                            <div class="info-footer">
-      
-                           <div class="action-buttons">
-                                    <button class="action-btn" onclick="DownloadPdf(@record.Id)" title="Download">
-                                  
-       <i class="fas fa-download">
-                                            <img src="~/svgs/cards/download-icon.svg" alt="Download" width="31" height="34" />
-                                        </i>
-   
-                                  </button>
-                                    <button class="action-btn" onclick="showRecordDetailsModal(@record.Id)" title="Information">
-                            
-             <i class="fas fa-info">
-                                            <img src="~/svgs/cards/info-icon.svg" alt="Information" class="info-icon" width="31" height="33" />
-                                    
-     </i>
-                                    </button>
-                                    <button class="action-btn" onclick="ViewPdf(@record.Id)" title="Read">
-                     
-                    <img src="~/svgs/cards/book-icon.svg" alt="Book" width="32" height="34" />
-                                    </button>
-                                    <button class="action-btn" onclick="handleAction('chat')" id="card-chat-icon" 
-title="Chat">
-                                        <i class="fas fa-comments">
-                                            <img src="~/svgs/cards/chat-icon.svg" alt="Chat" width="32" height="34" />
-         
-                                 </i>
-                                    </button>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                }
-            }
- 
-            else
+        {
+            @foreach (var record in Model)
             {
-                <div class="col-12 text-center">
-                    <div class="card">
-               
-         <div class="card-body">
-                            <h3 id="no-records-heading">No records found</h3>
-                            <p id="no-records-message">There are currently no rules and regulations available.</p>
+                <!-- Dynamic card -->
+                <div class="col-auto medium-card">
+                    <div class="card document-card" data-title="@record.RegulationName" data-department="@record.Department"
+                        data-section="@(record.Sections != null ? string.Join(",", record.Sections) : "")"
+                        data-type="@record.DocumentType" data-version-date="@record.VersionDate">
+                        <div class="bookmark" data-record-id="@record.Id" onclick="toggleBookmark(this)"></div>
+
+                        <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
+
                         </div>
- 
+                        <h2 class="card-title">@record.RegulationName</h2>
+
+                        <p class="card-text d-none">@record.RegulationName @record.Description</p>
+
+                        <div class="info-footer">
+
+                            <div class="action-buttons">
+                                <button class="action-btn" onclick="DownloadPdf(@record.Id)" title="Download">
+
+                                    <i class="fas fa-download">
+                                        <img src="~/svgs/cards/download-icon.svg" alt="Download" width="31" height="34" />
+                                    </i>
+
+                                </button>
+                                <button class="action-btn" onclick="showRecordDetailsModal(@record.Id)" title="Information">
+
+                                    <i class="fas fa-info">
+                                        <img src="~/svgs/cards/info-icon.svg" alt="Information" class="info-icon" width="31"
+                                            height="33" />
+
+                                    </i>
+                                </button>
+                                <button class="action-btn" onclick="ViewPdf(@record.Id)" title="Read">
+
+                                    <img src="~/svgs/cards/book-icon.svg" alt="Book" width="32" height="34" />
+                                </button>
+                                <button class="action-btn" onclick="handleAction('chat')" id="card-chat-icon" title="Chat">
+                                    <i class="fas fa-comments">
+                                        <img src="~/svgs/cards/chat-icon.svg" alt="Chat" width="32" height="34" />
+
+                                    </i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             }
+        }
 
+        else
+        {
+            <div class="col-12 text-center">
+                <div class="card">
+
+                    <div class="card-body">
+                        <h3 id="no-records-heading">No records found</h3>
+                        <p id="no-records-message">There are currently no rules and regulations available.</p>
+                    </div>
+
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+<div class="chatbot-container">
+    <div class="chat-icon" id="chat-icon">
+        <img src="~/svgs/chatbot/chatbot-large.svg" width="80" height="80" />
+
+    </div>
+
+    <div class="chat-box" id="chat-box">
+        <div class="chat-header">
+            <div class="chat-title">
+                <img src="~/svgs/chatbot/chatbot-header.svg" width="24" height="24" />
+                <span id="chatbot-name">Chat with Mr. Kabsa</span>
+
+            </div>
+            <button class="chat-close" id="chat-close">
+                <img src="~/svgs/chatbot/close-icon.svg" width="24" height="24" />
+            </button>
+        </div>
+
+        <div class="chat-messages" id="chat-messages">
+
+            <div class="message bot-message" id="chatbot-initial-message">Hi, how can I help you today?</div>
+        </div>
+
+        <div class="chat-input">
+            <input type="text" id="message-input" placeholder="Type your message...">
+            <button id="send-button">
+
+                <img src="~/svgs/chatbot/send-icon.svg" width="24" height="24" />
+            </button>
         </div>
     </div>
- 
-    <div class="chatbot-container">
-        <div class="chat-icon" id="chat-icon">
-            <img src="~/svgs/chatbot/chatbot-large.svg" width="80" height="80" />
-  
-       </div>
+</div>
 
-        <div class="chat-box" id="chat-box">
-            <div class="chat-header">
-                <div class="chat-title">
-                    <img src="~/svgs/chatbot/chatbot-header.svg" width="24" height="24" />
-                    <span id="chatbot-name">Chat with Mr. Kabsa</span>
-       
-         </div>
-                <button class="chat-close" id="chat-close">
-                    <img src="~/svgs/chatbot/close-icon.svg" width="24" height="24" />
+<div class="modal fade" id="recordDetailsModal" tabindex="-1" aria-labelledby="recordDetailsModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title-regulation-details">
+                    Regulation Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
+                    <img src="~/svgs/cards/close.svg" width="24" height="24" />
                 </button>
             </div>
+            <div class="modal-body">
+                <div id="modalRecordDetails">
 
-            <div class="chat-messages" id="chat-messages">
-       
-         <div class="message bot-message" id="chatbot-initial-message">Hi, how can I help you today?</div>
+                    <div class="spinner-container">
+                        <div class="spinner-border" role="status">
+
+                            <span class="visually-hidden" id="modal-loading-spinner-text">Loading...</span>
+                        </div>
+                        <p class="mt-3" id="modal-loading-message">Loading record details...</p>
+                    </div>
+
+
+                </div>
             </div>
 
-            <div class="chat-input">
-                <input type="text" id="message-input" placeholder="Type your message...">
-                <button id="send-button">
-                    
- <img src="~/svgs/chatbot/send-icon.svg" width="24" height="24" />
-                </button>
-            </div>
+
         </div>
     </div>
-
-<div class="modal fade" id="recordDetailsModal" tabindex="-1" aria-labelledby="recordDetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-            
-     <div class="modal-header">
-                    <h5 class="modal-title" id="modal-title-regulation-details">
-                        Regulation Details
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-    
-                     <img src="~/svgs/cards/close.svg" width="24" height="24" />
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div id="modalRecordDetails">
-  
-                       <div class="spinner-container">
-                            <div class="spinner-border" role="status">
-                   
-              <span class="visually-hidden" id="modal-loading-spinner-text">Loading...</span>
-                            </div>
-                            <p class="mt-3" id="modal-loading-message">Loading record details...</p>
-                        </div>
-   
-                     
-                        </div>
-                </div>
-
-            
- </div>
-        </div>
-    </div>
+</div>
