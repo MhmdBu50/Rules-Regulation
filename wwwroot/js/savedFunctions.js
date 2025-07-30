@@ -5,7 +5,7 @@ function showAllRecords() {
         card.style.display = "block";
     });
 
-    showToast("📚 Showing all records");
+    showToast("Showing all records");
 }
 
 // 2️⃣ Global: Filter Saved Records
@@ -29,10 +29,10 @@ function filterSavedRecords() {
             }
         });
 
-        showToast("🔖 Showing only saved records");
+        showToast("Showing only saved records");
     })
     .catch(() => {
-        alert("⚠️ Could not load saved records.");
+        alert(" Could not load saved records.");
     });
 }
 
