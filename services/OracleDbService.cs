@@ -795,10 +795,10 @@ namespace RulesRegulation.Services
                         }
                     }
 
-                    // Add date range filter using VERSION_DATE instead of APPROVAL_DATE
+                    // Add date range filter
                     if (!string.IsNullOrEmpty(fromDate) && DateTime.TryParse(fromDate, out var fromDateTime))
                     {
-                        queryBuilder.Append(" AND (VERSION_DATE >= :fromDate OR (VERSION_DATE IS NULL AND CREATED_AT >= :fromDateAlt))");
+                        queryBuilder.Append(" AND (APPROVAL_DATE >= :fromDate OR (APPROVAL_DATE IS NULL AND CREATED_AT >= :fromDateAlt))");
                         parameters.Add(new OracleParameter(":fromDate", fromDateTime));
                         parameters.Add(new OracleParameter(":fromDateAlt", fromDateTime));
                     }
@@ -807,7 +807,7 @@ namespace RulesRegulation.Services
                     {
                         // Add one day to include the full end date
                         var endDate = toDateTime.AddDays(1);
-                        queryBuilder.Append(" AND (VERSION_DATE < :toDate OR (VERSION_DATE IS NULL AND CREATED_AT < :toDateAlt))");
+                        queryBuilder.Append(" AND (APPROVAL_DATE < :toDate OR (APPROVAL_DATE IS NULL AND CREATED_AT < :toDateAlt))");
                         parameters.Add(new OracleParameter(":toDate", endDate));
                         parameters.Add(new OracleParameter(":toDateAlt", endDate));
                     }
@@ -823,11 +823,11 @@ namespace RulesRegulation.Services
                     else if (!string.IsNullOrEmpty(dateSort))
                     {
                         if (dateSort == "newest" || dateSort == "Newest-Oldest")
-                            queryBuilder.Append(" ORDER BY VERSION_DATE DESC NULLS LAST");
+                            queryBuilder.Append(" ORDER BY APPROVAL_DATE DESC NULLS LAST");
                         else if (dateSort == "oldest" || dateSort == "Oldest-Newest")
-                            queryBuilder.Append(" ORDER BY VERSION_DATE ASC NULLS LAST");
+                            queryBuilder.Append(" ORDER BY APPROVAL_DATE ASC NULLS LAST");
                         else if (dateSort == "range")
-                            queryBuilder.Append(" ORDER BY VERSION_DATE DESC NULLS LAST");
+                            queryBuilder.Append(" ORDER BY APPROVAL_DATE DESC NULLS LAST");
                         else
                             queryBuilder.Append(" ORDER BY CREATED_AT DESC NULLS LAST");
                     }
