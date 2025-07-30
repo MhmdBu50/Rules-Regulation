@@ -1,55 +1,91 @@
+body.rtl .language-switcher-container {
+    right: auto;
+    left: 15px;
+}
+
 .language-toggle-btn {
     background: none;
     border: none;
-    font-size: 24px; 
+    font-size: 24px;
     cursor: pointer;
-    color: #333; 
+    color: #333;
     padding: 5px;
-    z-index: 1000; 
-    Display: flex;
+    display: flex;
     align-items: center;
     justify-content: center;
 }
 
+.language-toggle-btn svg {
+    width: 33px;
+    height: 33px;
+    display: inline-block;
+    fill: #CFEFFF;
+}
 
+/* RTL base settings */
 body.rtl {
-    direction: rtl; 
-    text-align: right; 
+    direction: rtl;
+    text-align: right;
+    overflow-x: hidden;
 }
 
-
-body.rtl .language-toggle-btn {
-    left: auto; 
-    right: 15px; 
-}
-
-/* --- IMPORTANT: General RTL layout adjustments --- */
-/* You will need to add more rules here based on your existing site's layout. */
-/* If you have elements that are 'float: left', they should become 'float: right' */
-/* If you have 'margin-left', it might need to become 'margin-right' in RTL */
-/* If you use Flexbox, often just 'direction: rtl' on the container is enough */
-
-/* Example: If you have a .navbar-nav that typically floats left */
-
+/* Navbar fixes */
 .navbar-nav {
-    float: left; 
+    float: left;
 }
 body.rtl .navbar-nav {
     float: right;
 }
 
+/* Sidebar RTL fix */
 .sidebar {
     margin-right: 20px;
 }
 body.rtl .sidebar {
     margin-right: 0;
-    margin-left: 20px; 
-}
-body.rtl {
-    overflow-x: hidden;
+    margin-left: 20px;
 }
 
+/* Filter section fix */
 body.rtl .filter-section {
     margin-right: 0 !important;
     margin-left: auto !important;
+}
+
+/* Generic layout alignment fixes */
+body.rtl .container,
+body.rtl .row,
+body.rtl .d-flex {
+    direction: rtl;
+    text-align: right;
+}
+
+body.rtl .d-flex {
+    flex-direction: row-reverse;
+}
+
+/* Cards, content boxes */
+body.rtl .card,
+body.rtl .content-box {
+    text-align: right;
+}
+
+/* Forms, search bar */
+body.rtl .search-bar,
+body.rtl input,
+body.rtl select,
+body.rtl textarea {
+    text-align: right;
+}
+
+/* Button text */
+body.rtl .btn,
+body.rtl button {
+    text-align: center;
+}
+
+body.rtl header,
+body.rtl .header {
+    direction: ltr !important;
+    text-align: left !important;
 }

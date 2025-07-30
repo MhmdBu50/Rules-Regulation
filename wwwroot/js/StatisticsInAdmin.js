@@ -2,7 +2,6 @@
     // src="js/bootstrap.bundle.min.js"
     // src="https://cdn.jsdelivr.net/npm/chart.js"
 
-    // Instead, in a .js file, you do not include <script> tags or src attributes.
     // To use Chart.js in your .js file, make sure Chart.js is loaded in your HTML before this script runs.
     // Example in your HTML file:
     // <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
