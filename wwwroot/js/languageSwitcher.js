@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Home page elements
             "admin-view-button": "عرض كمسؤول",
-            "searchInput": "ابحث ...",
+            "searchInput": "... ابحث",
 
             // Filter Section
             "filter-sections-heading": "الأقسام",
