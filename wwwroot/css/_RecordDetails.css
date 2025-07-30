@@ -95,21 +95,22 @@
         }
         
         #recordDetailsModal .btn-close {
-            position: absolute;
-            right: 26px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            color: white;
-            font-size: 1rem;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 1;
+        position: absolute;
+        inset-inline-end: 26px; /* acts as 'right' in LTR and 'left' in RTL */
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        color: white;
+        font-size: 1rem;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
         }
+
         
         #recordDetailsModal .btn-close:hover {
             background: rgba(255, 255, 255, 0.3);

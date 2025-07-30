@@ -59,6 +59,20 @@ body {
   box-shadow: 0 0 0 2px rgba(64, 156, 255, 0.4); /* Optional glow */
 }
 
+.searchClearBtn{
+  inset-inline-end: 60px;
+  z-index: 10; 
+  background: none;
+  border: none;
+  color: #ABB7C2;
+  font-size: 20px;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .search-and-filter-buttons {
   background-color: transparent;
   border: none;
