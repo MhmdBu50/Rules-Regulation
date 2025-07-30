@@ -717,11 +717,20 @@ namespace RulesRegulation.Services
 
                     var parameters = new List<OracleParameter>();
 
-                    // Add department filter
+                    // Add department filter (now supporting multiple departments)
                     if (!string.IsNullOrEmpty(department))
                     {
-                        queryBuilder.Append(" AND UPPER(DEPARTMENT) = UPPER(:department)");
-                        parameters.Add(new OracleParameter(":department", department));
+                        var departmentList = department.Split(',').Select(d => d.Trim()).Where(d => !string.IsNullOrEmpty(d)).ToList();
+                        if (departmentList.Any())
+                        {
+                            var departmentConditions = new List<string>();
+                            for (int i = 0; i < departmentList.Count; i++)
+                            {
+                                departmentConditions.Add($"UPPER(DEPARTMENT) = UPPER(:department{i})");
+                                parameters.Add(new OracleParameter($":department{i}", departmentList[i]));
+                            }
+                            queryBuilder.Append($" AND ({string.Join(" OR ", departmentConditions)})");
+                        }
                     }
 
                     // Add sections filter
