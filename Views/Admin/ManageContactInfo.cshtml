@@ -26,11 +26,16 @@
       <img class="header-logo mx-auto d-block" src="~/imgs/IAU Logo (Horizontal).png" alt="IAU Logo">
     </div>
 
-    <!-- Main Header -->
-    <div class="main-header">
-      <h1>Manage Contact Information</h1>
-      <p class="subtitle">View and manage all contact information</p>
-    </div>
+<div class="main-header ">
+  <div class="container text-center">
+    <h1 class="display-5 fw-semibold mb-2">Manage Contact Information</h1>
+    <p class="subtitle text-white-50 mb-4">View and manage all contact information</p>
+    <button onclick="location.href='@Url.Action("AddNewContactInfo", "Admin")'" class="btn btn-outline-light btn-lg">
+      <i class="bi bi-plus-circle me-2"></i> Add Contact Info
+    </button>
+  </div>
+</div>
+
 
     @if (TempData["SuccessMessage"] != null)
     {
@@ -62,7 +67,7 @@
                             <th>Email</th>
                             <th>Mobile</th>
                             <th>Telephone</th>
-                            <th class="text-end">Actions</th> <!-- 🔁 Align Actions to right -->
+                            <th class="text-center">Actions</th> <!-- 🔁 Align Actions to center -->
                         </tr>
                     </thead>
                     <tbody>
@@ -101,15 +106,18 @@
                                         <span class="text-muted">-</span>
                                     }
                                 </td>
-                                <td data-label="Actions" class="action-buttons text-end"> <!-- 🔁 Apply action buttons style -->
-                                    <a href="@Url.Action("EditContactInfo", new { id = contact.ContactId })" 
-                                       class="btn btn-sm btn-primary me-2" title="Edit">
-                                        <img src="@Url.Content("~/svgs/admin/upload-file.svg")" width="16" height="16" alt="Edit">
-                                    </a>
+                                <td data-label="Actions" class="action-buttons d-flex align-items-center justify-content-center"> <!-- 🔁 Apply action buttons style -->
+                                    <button type="button"
+                                            class="btn btn-sm btn-primary me-2"
+                                            title="Edit"
+                                            style="padding:0; border:none; background:none;"
+                                            onclick="location.href='@Url.Action("EditContactInfo", new { id = contact.ContactId })'">
+                                        <img src="@Url.Content("~/svgs/admin/Edit-Contact-info.svg")" width="29" height="29" alt="Edit" style="display:inline;">
+                                    </button>
                                     <button type="button" class="btn btn-sm btn-danger" 
                                             onclick="confirmDelete(@contact.ContactId, '@contact.Name', '@contact.Department')" 
-                                            title="Delete">
-                                        <img src="@Url.Content("~/svgs/admin/Delete-Button.svg")" width="16" height="16" alt="Delete">
+                                            title="Delete" style="padding:0; border:none; background:none;">
+                                        <img src="@Url.Content("~/svgs/admin/Delete-Contact-info.svg")" width="28" height="29" alt="Delete" style="display:inline;">
                                     </button>
                                 </td>
                             </tr>
