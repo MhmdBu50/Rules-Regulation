@@ -222,9 +222,9 @@ there's also many filtering options to find the policy and other adminstrative s
                                     <select id="adminSectionFilter" class="search poppins-regular flex-grow-1 small-font-size" type="text"
                                         placeholder="Section" style="color: #ABB7C2; border: none;" onchange="filterBySection(this.value)">
                                         <option value="all">All Sections</option>
-                                        <option value="Students">Students</option>
-                                        <option value="Members">Members</option>
-                                        <option value="Enrolled Programs">Enrolled Programs</option>
+                                        <option value="students">Students</option>
+                                        <option value="members">Members</option>
+                                        <option value="enrolled-programs">Enrolled Programs</option>
                                     </select>
                                 </div>
                             </div>
@@ -236,9 +236,9 @@ there's also many filtering options to find the policy and other adminstrative s
                                     <select id="adminDocumentFilter" class="search poppins-regular flex-grow-1 small-font-size"
                                         style="color: #ABB7C2; border: none;" onchange="filterByDocumentType(this.value)">
                                         <option value="all">All Documents</option>
-                                        <option value="Regulation">Regulations</option>
-                                        <option value="Guidelines">Guidelines</option>
-                                        <option value="Policies">Policies</option>
+                                        <option value="regulation">Regulations</option>
+                                        <option value="guidelines">Guidelines</option>
+                                        <option value="policy">Policies</option>
                                     </select>
                                 </div>
                             </div>
@@ -299,9 +299,9 @@ there's also many filtering options to find the policy and other adminstrative s
                         <div class="search-container d-flex align-items-center w-100" id="section-document-search-2">
                             <select id="mobileSectionFilter" class="search poppins-regular flex-grow-1" style="color: #ABB7C2;" onchange="filterBySection(this.value)">
                                 <option value="all">All Sections</option>
-                                <option value="Students">Students</option>
-                                <option value="Members">Members</option>
-                                <option value="Enrolled Programs">Enrolled Programs</option>
+                                <option value="students">Students</option>
+                                <option value="members">Members</option>
+                                <option value="enrolled-programs">Enrolled Programs</option>
                             </select>
                         </div>
                     </div>
@@ -311,9 +311,9 @@ there's also many filtering options to find the policy and other adminstrative s
                         <div class="search-container d-flex align-items-center w-100" id="section-document-search-2">
                             <select id="mobileDocumentFilter" class="search poppins-regular flex-grow-1" style="color: #ABB7C2;" onchange="filterByDocumentType(this.value)">
                                 <option value="all">All Documents</option>
-                                <option value="Regulation">Regulations</option>
-                                <option value="Guidelines">Guidelines</option>
-                                <option value="Policies">Policies</option>
+                                <option value="regulation">Regulations</option>
+                                <option value="guidelines">Guidelines</option>
+                                <option value="policy">Policies</option>
                             </select>
                         </div>
                     </div>
@@ -537,18 +537,18 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                     Type</label>
                                                                 <select name="documentType" class="form-select mb-2" disabled>
                                                                     <option value="@record.DocumentType" selected>@record.DocumentType</option>
-                                                                    <option value="Regulation">Regulations</option>
-                                                                    <option value="Guidelines">Guidelines</option>
-                                                                    <option value="Policies">Policies</option>
+                                                                    <option value="regulation">Regulations</option>
+                                                                    <option value="guidelines">Guidelines</option>
+                                                                    <option value="policy">Policies</option>
                                                                 </select>
                                                             </td>
                                                             <td>
                                                                 <label class="form-label fw-bold">Section</label>
                                                                 <select name="sections" class="form-select mb-2" disabled>
                                                                     <option value="@record.Sections" selected>@record.Sections</option>
-                                                                    <option value="Students">Students</option>
+                                                                    <option value="Student">Student</option>
                                                                     <option value="Members">Members</option>
-                                                                    <option value="Enrolled Programs">Enrolled Programs</option>
+                                                                    <option value="Enrolled Program">Enrolled Program</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
