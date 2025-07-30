@@ -1,14 +1,4 @@
-// 1️⃣ Global: Show All Records
-function showAllRecords() {
-    const allCards = document.querySelectorAll(".medium-card");
-    allCards.forEach(card => {
-        card.style.display = "block";
-    });
-
-    showToast("Showing all records");
-}
-
-// 2️⃣ Global: Filter Saved Records
+// Global: Filter Saved Records
 function filterSavedRecords() {
     fetch('/Saved/ListIds', {
         method: 'GET',
@@ -16,18 +6,27 @@ function filterSavedRecords() {
     })
     .then(res => res.json())
     .then(savedIds => {
-        const allCards = document.querySelectorAll(".medium-card");
+        // Store saved IDs globally for use by applyFilters()
+        window.savedRecordIds = savedIds;
+        window.showOnlySaved = true;
+        
+        // Let the main filter function handle the display logic
+        if (typeof applyFilters === 'function') {
+            applyFilters();
+        } else {
+            // Fallback if applyFilters doesn't exist
+            const allCards = document.querySelectorAll(".medium-card");
+            allCards.forEach(card => {
+                const bookmark = card.querySelector(".bookmark");
+                const recordId = parseInt(bookmark.getAttribute("data-record-id"));
 
-        allCards.forEach(card => {
-            const bookmark = card.querySelector(".bookmark");
-            const recordId = parseInt(bookmark.getAttribute("data-record-id"));
-
-            if (savedIds.includes(recordId)) {
-                card.style.display = "block";
-            } else {
-                card.style.display = "none";
-            }
-        });
+                if (savedIds.includes(recordId)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
 
         showToast("Showing only saved records");
     })
@@ -36,7 +35,7 @@ function filterSavedRecords() {
     });
 }
 
-// 3️⃣ Global: Toggle Bookmark
+// Global: Toggle Bookmark
 function toggleBookmark(elem) {
     const recordId = parseInt(elem.getAttribute("data-record-id"));
 
@@ -77,7 +76,7 @@ function toggleBookmark(elem) {
     });
 }
 
-// 4️⃣ DOM READY: Highlight saved bookmarks
+// DOM READY: Highlight saved bookmarks
 document.addEventListener("DOMContentLoaded", function () {
     fetch('/Saved/ListIds', {
         method: 'GET',
@@ -98,10 +97,5 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch(() => {
         console.error("⚠️ Failed to load saved bookmarks.");
-    });
-
-    // ✅ Attach showAllRecords to all nav buttons
-    document.querySelectorAll(".bar-button").forEach(btn => {
-        btn.addEventListener("click", showAllRecords);
     });
 });

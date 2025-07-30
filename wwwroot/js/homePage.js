@@ -216,39 +216,93 @@ function ViewPdf(id) {
     window.open(`/admin/ViewPdf/${id}`, '_blank');
 }
 
-// Navigation Functions for Navigation Bar Buttons
+// ==================== Navigation Bar Button Handlers ====================
+
+// Home button: resets all filters
 function navigateToHome(buttonElement) {
-    // Call alter function for visual feedback
-    alter(buttonElement);
-    // Navigate to home page without any filters (show all records)
-    window.location.href = '/Home/homePage';
+    alter(buttonElement);     // Call alter function for visual feedback
+    resetCardDisplay();       // Unhide any hidden cards from previous filter
+    clearFilters();           // Clears all filters and shows all records dynamically
 }
 
+// Student Guides button: sets filters and applies
 function navigateToStudentGuides(buttonElement) {
-    // Call alter function for visual feedback
-    alter(buttonElement);
-    // Navigate with Students section and Guidelines type filter
-    window.location.href = '/Home/homePage?sections=Students&documentTypes=Guidelines';
+    alter(buttonElement);     // Call alter function for visual feedback
+    resetCardDisplay();       // Unhide hidden cards before applying filters
+
+    // Apply Students section and Guidelines type filters dynamically
+    setFilters({
+        sections: ['Students'],
+        types: ['Guidelines']
+    });
 }
 
+// Student Rules button: Students section + Regulation & Policy types
 function navigateToStudentRules(buttonElement) {
-    // Call alter function for visual feedback
-    alter(buttonElement);
-    // Navigate with Students section and Regulation,Policy types filter
-    window.location.href = '/Home/homePage?sections=Students&documentTypes=Regulation,Policy';
+    alter(buttonElement);     // Call alter function for visual feedback
+    resetCardDisplay();       // Unhide hidden cards before applying filters
+
+    // Apply filters: Students section, Regulation + Policy document types
+    setFilters({
+        sections: ['Students'],
+        types: ['Regulation', 'Policy']
+    });
 }
 
+// Employee Rules button: Members section + Regulation & Policy types
 function navigateToEmployeeRules(buttonElement) {
-    // Call alter function for visual feedback
-    alter(buttonElement);
-    // Navigate with Members section and Regulation,Policy types filter
-    window.location.href = '/Home/homePage?sections=Members&documentTypes=Regulation,Policy';
+    alter(buttonElement);     // Call alter function for visual feedback
+    resetCardDisplay();       // Unhide hidden cards before applying filters
+
+    // Apply filters: Members section, Regulation + Policy document types
+    setFilters({
+        sections: ['Members'],
+        types: ['Regulation', 'Policy']
+    });
 }
 
+// Academic Rules button: Enrolled Programs section + Regulation & Policy types
 function navigateToAcademicRules(buttonElement) {
-    // Call alter function for visual feedback
-    alter(buttonElement);
-    // Navigate with Enrolled Programs section and Regulation,Policy types filter
-    window.location.href = '/Home/homePage?sections=Enrolled Programs&documentTypes=Regulation,Policy';
+    alter(buttonElement);     // Call alter function for visual feedback
+    resetCardDisplay();       // Unhide hidden cards before applying filters
+
+    // Apply filters: Enrolled Programs section, Regulation + Policy document types
+    setFilters({
+        sections: ['Enrolled Programs'],
+        types: ['Regulation', 'Policy']
+    });
 }
 
+// ==================== Set Filters Helper ====================
+
+function setFilters({ sections = [], types = [] }) {
+    console.log("✅ setFilters triggered");
+    // Clear everything first
+    clearFilters();
+
+    // Then apply new filters
+    sections.forEach(section => {
+        if (section === 'Students') document.getElementById('studentsFilter').checked = true;
+        if (section === 'Members') document.getElementById('membersFilter').checked = true;
+        if (section === 'Enrolled Programs') document.getElementById('enrolledFilter').checked = true;
+    });
+
+    types.forEach(type => {
+        if (type === 'Regulation') document.getElementById('regulationsFilter').checked = true;
+        if (type === 'Guidelines') document.getElementById('guidelinesFilter').checked = true;
+        if (type === 'Policy' || type === 'Policies') {
+            document.getElementById('policiesFilter').checked = true;
+        }
+    });
+
+    applyFilters(); // Apply everything after setup
+}
+
+// ==================== Reset Card Visibility Helper ====================
+
+function resetCardDisplay() {
+    // Show all cards before applying new filters
+    document.querySelectorAll('.medium-card').forEach(card => {
+        card.style.display = 'block';
+    });
+}

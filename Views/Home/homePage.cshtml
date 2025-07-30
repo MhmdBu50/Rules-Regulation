@@ -166,8 +166,8 @@ there's a navigation bar and after that the rules and regualtions appears   -->
             <label><input type="checkbox" class="form-check-input" id="guidelinesFilter" value="Guidelines"> Guidelines</label>
             <label><input type="checkbox" class="form-check-input" id="policiesFilter" value="Policies"> Policies</label>
             <div style="margin-top: 15px;">
-                <button class="apply-btn" onclick="applyFilters()">Apply</button>
-                <button class="apply-btn" onclick="clearFilters()" style="background-color: #6c757d; margin-left: 10px;">Clear</button>
+                <button type="button" class="apply-btn" onclick="applyFilters()">Apply</button>
+                <button type="button" class="apply-btn" onclick="clearFilters()" style="background-color: #6c757d; margin-left: 10px;">Clear</button>
             </div>
         </div>
     </div>
@@ -217,7 +217,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
 
         <!--Employees' rules & regulations button-->
 <div>
-    <button class="bar-button" id="employeeRule" data-id="employeeRule" style="background-color: #4F1C34;" onclick="alter(this); location.href='@Url.Action("homePage", "Home", new { sections = "Members" })'">
+    <button class="bar-button" id="employeeRule" data-id="employeeRule" style="background-color: #4F1C34;" onclick="alter(this); navigateToEmployeeRules(this)">
         <div class="nav-icons svg-container">
             <!-- Optional icon here -->
         </div>
@@ -245,7 +245,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
 
         <!--Saved rules & regulations button-->
         <div>
-            <button class="bar-button" id="SavedRulesRegulations" data-id="SavedRulesRegulations" style="background-color: #2F3E5F;" onclick="alter(this); filterSavedRecords()">
+            <button class="bar-button" id="SavedRulesRegulations" data-id="SavedRulesRegulations" style="background-color: #2F3E5F;" onclick="alter(this); navigateToSaved(this)">
                 <div class="nav-icons svg-container">
                     
                 </div>
@@ -261,7 +261,7 @@ there's a navigation bar and after that the rules and regualtions appears   -->
 
         <!--History button-->
         <div>
-            <button class="bar-button" id="historyButton" data-id="historyButton" onclick="alter(this); showallRecords()" style="background-color: #0F1734; font-size: 1.5em;" >
+            <button class="bar-button" id="historyButton" data-id="historyButton" onclick="alter(this)" style="background-color: #0F1734; font-size: 1.5em;" >
                 <div class="nav-icons svg-container">
                     
                 </div>
@@ -288,7 +288,12 @@ there's a navigation bar and after that the rules and regualtions appears   -->
                 {
                     <!-- Dynamic card -->
                     <div class="col-auto medium-card">
-                        <div class="card document-card">
+                        <div class="card document-card"
+                            data-title="@record.RegulationName"
+                            data-department="@record.Department"
+                            data-section="@(record.Sections != null ? string.Join(",", record.Sections) : "")"                            
+                            data-type="@record.DocumentType"
+                            data-date="@record.ApprovalDate">
                             <div class="bookmark" data-record-id="@record.Id" onclick="toggleBookmark(this)"></div>
 
                             <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
