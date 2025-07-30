@@ -108,11 +108,11 @@ public class AdminController : Controller
             _logger.LogInformation($"Error message found: {TempData["ErrorMessage"]}");
         }
 
-       try
+        try
         {
             // Get all records from the database using Oracle service
             var records = _oracleDbService.GetAllRecords();
-
+            
             // Enhance records with additional information for the admin dashboard
             // This creates an anonymous object with all record data plus contact info and attachments
             var enhancedRecords = records.Select(record => new
@@ -122,32 +122,19 @@ public class AdminController : Controller
                 RegulationName = record.RegulationName,
                 Sections = record.Sections,
                 Version = record.Version,
-
-                // ✅ Safely cast before using ToString with format
-                ApprovalDate = record.ApprovalDate is DateTime ad
-                    ? ad.ToString("yyyy-MM-dd")
-                    : null,
-
+                ApprovalDate = record.ApprovalDate,
                 ApprovingEntity = record.ApprovingEntity,
                 Department = record.Department,
                 DocumentType = record.DocumentType,
                 Description = record.Description,
-
-                VersionDate = record.VersionDate is DateTime vd
-                    ? vd.ToString("yyyy-MM-dd")
-                    : null,
-
+                VersionDate = record.VersionDate,
                 Notes = record.Notes,
-
-                CreatedAt = record.CreatedAt is DateTime cd
-                    ? cd.ToString("yyyy-MM-dd HH:mm:ss")
-                    : null,
-
+                CreatedAt = record.CreatedAt,
                 // Additional enhanced information
                 ContactInformation = _oracleDbService.GetContactsByDepartment(record.Department ?? ""),
                 Attachments = _oracleDbService.GetAttachmentsByRecordId(int.Parse(record.Id))
             }).ToList();
-
+            
             return View(enhancedRecords);
         }
         catch (Exception ex)
