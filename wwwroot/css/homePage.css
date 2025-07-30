@@ -8,6 +8,7 @@
             font-style: normal;
             font-size: calc(0.75rem + .6vw);
             /*line-height: 36px;*/
+            text-align: start;
          }
 
         .sideNav{
