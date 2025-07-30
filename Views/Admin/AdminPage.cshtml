@@ -414,16 +414,26 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         @record.Id
                                                     </th>
                                                     <th
-                                                        class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size field-padding">
+                                                        class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size field-padding" 
+                                                        style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                                        title="@record.RegulationName">
                                                         @record.RegulationName</th>
-                                                    <th class="col-1 d-none d-md-table-cell field-padding">
+                                                    <th class="col-1 d-none d-md-table-cell field-padding" 
+                                                        style="max-width: 111px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                                        title="@record.Sections">
                                                         @record.Sections</th>
-                                                    <th class="col-2 d-none d-md-table-cell field-padding">
+                                                    <th class="col-2 d-none d-md-table-cell field-padding" 
+                                                        style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                                        title="@record.Version">
                                                         @record.Version
                                                     </th>
-                                                    <th class="col-2 d-none d-lg-table-cell field-padding">
+                                                    <th class="col-2 d-none d-lg-table-cell field-padding" 
+                                                        style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                                        title="@record.ApprovalDate">
                                                         @record.ApprovalDate</th>
-                                                    <th class="col-3 d-none d-lg-table-cell field-padding">IAU
+                                                    <th class="col-3 d-none d-lg-table-cell field-padding" 
+                                                        style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                                        title="IAU @record.ApprovingEntity">IAU
                                                         @record.ApprovingEntity</th>
                                                 </tr>
                                             </thead>
