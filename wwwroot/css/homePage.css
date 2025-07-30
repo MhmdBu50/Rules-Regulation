@@ -168,7 +168,6 @@
         }
 
         .nav-label label {
-        text-align: left;
         white-space: normal !important;   /* allow wrapping */
         overflow-wrap: break-word;        /* wrap mid-word if needed */
         font-size: clamp(16px, 0.7em + 0.6vw, 1.2rem); /* responsive font size. for some reason makeing 1.26 into 1.2 fixes some bug in chrome */
