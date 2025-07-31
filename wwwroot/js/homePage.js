@@ -208,21 +208,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //redirect to PDF download page
 function DownloadPdf(id) {
-    // Record the download action in history
-    recordAction(id, 'download');
-    window.location.href = `/admin/DownloadPdf/${id}`;
+    // Record the download action in history and wait for it to complete
+    recordAction(id, 'download')
+        .then(() => {
+            // Only redirect after history is recorded
+            window.location.href = `/admin/DownloadPdf/${id}`;
+        })
+        .catch(error => {
+            console.error('Failed to record download history, but continuing with download:', error);
+            // Even if history fails, still allow download
+            window.location.href = `/admin/DownloadPdf/${id}`;
+        });
 }
 
 // Example: open PDF in a new tab
 function ViewPdf(id) {
     // Record the view action in history
-    recordAction(id, 'view');
-    window.open(`/admin/ViewPdf/${id}`, '_blank');
+    recordAction(id, 'view')
+        .then(() => {
+            // Open PDF after history is recorded
+            window.open(`/admin/ViewPdf/${id}`, '_blank');
+        })
+        .catch(error => {
+            console.error('Failed to record view history, but continuing with view:', error);
+            // Even if history fails, still allow viewing
+            window.open(`/admin/ViewPdf/${id}`, '_blank');
+        });
 }
 
 // Function to record user actions in history
 function recordAction(recordId, action) {
-    fetch('/History/RecordAction', {
+    return fetch('/History/RecordAction', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -236,12 +252,15 @@ function recordAction(recordId, action) {
     .then(data => {
         if (data.success) {
             console.log(`${action} action recorded for record ${recordId}`);
+            return data;
         } else {
             console.error('Failed to record action');
+            throw new Error('Failed to record action');
         }
     })
     .catch(error => {
         console.error('Error recording action:', error);
+        throw error;
     });
 }
 
