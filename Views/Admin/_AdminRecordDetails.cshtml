@@ -170,8 +170,41 @@
     }
     
     function downloadAllAttachments(recordId) {
-        // Implement bulk download functionality
-        window.open('/Admin/DownloadAllAttachments?id=' + recordId, '_blank');
+        // Record the download action in history
+        recordDownloadAction(recordId)
+            .then(() => {
+                // Open download after history is recorded
+                window.open('/Admin/DownloadAllAttachments?id=' + recordId, '_blank');
+            })
+            .catch(error => {
+                console.error('Failed to record download history, but continuing with download:', error);
+                // Even if history fails, still allow download
+                window.open('/Admin/DownloadAllAttachments?id=' + recordId, '_blank');
+            });
+    }
+    
+    // Helper function to record download action
+    function recordDownloadAction(recordId) {
+        return fetch('/History/RecordAction', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                recordId: recordId,
+                action: 'download'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log(`Download action recorded for record ${recordId}`);
+                return data;
+            } else {
+                console.error('Failed to record download action');
+                throw new Error('Failed to record download action');
+            }
+        });
     }
     
     function replaceAttachments(recordId) {
