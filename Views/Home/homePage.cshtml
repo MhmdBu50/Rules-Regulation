@@ -42,7 +42,7 @@
                         <img src="~/svgs/navigation/hamburger-menu.svg" alt="Menu" width="36" height="36" />
                     </button>
 
-                    <div class="language-switcher-container">
+                    <div class="language-switcher-container d-none d-lg-block">
                         <button id="language-toggle" class="language-toggle-btn">
                             <svg class="desktop-logo logo" width="33" height="33" viewBox="0 0 40 40" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -339,8 +339,17 @@ border: none;" onclick="navigateToHome(this)">
                         <div class="bookmark" data-record-id="@record.Id" onclick="toggleBookmark(this)"></div>
 
                         <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
-
-                        </div>
+                             <div class="pdf-thumbnail-container"></div>
+                                    <div class="thumbnail-loading" id="loading-@record.Id">
+                                        <div class="spinner"></div>
+                                    </div>
+                                    <img class="pdf-thumbnail" 
+                                    id="thumbnail-@record.Id"
+                                    data-record-id="@record.Id"
+                                    style="display:none;" 
+                                    alt="PDF Thumbnail"/>
+                                </div>
+                            
                         <h2 class="card-title">@record.RegulationName</h2>
 
                         <p class="card-text d-none">@record.RegulationName @record.Description</p>
