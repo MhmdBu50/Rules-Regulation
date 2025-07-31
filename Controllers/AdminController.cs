@@ -1138,8 +1138,8 @@ public async Task<IActionResult> ViewPdf(int id)
 
             if (success)
             {
-                // Deletion successful: set success message
-                TempData["SuccessMessage"] = "Record deleted successfully!";
+                // Deletion successful: set success message with record ID
+                TempData["SuccessMessage"] = $"Record #{recordId} deleted successfully!";
             }
             else
             {
@@ -1195,6 +1195,8 @@ public async Task<IActionResult> ViewPdf(int id)
             // Track deletion results
             int successCount = 0;
             int totalCount = recordIds.Count;
+            List<int> successfulDeletes = new List<int>();
+            List<int> failedDeletes = new List<int>();
 
             // Attempt to delete each record individually
             foreach (int recordId in recordIds)
@@ -1203,6 +1205,11 @@ public async Task<IActionResult> ViewPdf(int id)
                 if (success)
                 {
                     successCount++;
+                    successfulDeletes.Add(recordId);
+                }
+                else
+                {
+                    failedDeletes.Add(recordId);
                 }
             }
 
@@ -1210,18 +1217,25 @@ public async Task<IActionResult> ViewPdf(int id)
             if (successCount == totalCount)
             {
                 // All deletions successful
-                TempData["SuccessMessage"] = $"Successfully deleted {successCount} record(s)!";
+                if (totalCount == 1)
+                {
+                    TempData["SuccessMessage"] = $"Record #{successfulDeletes[0]} deleted successfully!";
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = $"Successfully deleted {successCount} records: #{string.Join(", #", successfulDeletes)}";
+                }
             }
             else if (successCount > 0)
             {
                 // Partial success: some deletions failed
-                TempData["SuccessMessage"] = $"Successfully deleted {successCount} out of {totalCount} record(s).";
-                TempData["ErrorMessage"] = $"Failed to delete {totalCount - successCount} record(s).";
+                TempData["SuccessMessage"] = $"Successfully deleted {successCount} records: #{string.Join(", #", successfulDeletes)}";
+                TempData["ErrorMessage"] = $"Failed to delete {totalCount - successCount} records: #{string.Join(", #", failedDeletes)}";
             }
             else
             {
                 // All deletions failed
-                TempData["ErrorMessage"] = "Failed to delete any records. Please try again.";
+                TempData["ErrorMessage"] = $"Failed to delete records: #{string.Join(", #", failedDeletes)}. Please try again.";
             }
         }
         catch (Exception ex)
