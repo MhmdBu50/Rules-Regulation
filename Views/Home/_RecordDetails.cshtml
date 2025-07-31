@@ -53,27 +53,21 @@
                     }
                 </div>
             </div>
-            
+
             <div class="detail-card">
                 <div class="detail-label">
                     <i class="fas fa-code-branch"></i> Version Number
                 </div>
                 <div class="detail-value">@Model.Version</div>
             </div>
-            
+
             <div class="detail-card">
                 <div class="detail-label">
                     <i class="fas fa-calendar-alt"></i> Version Date
                 </div>
                 <div class="detail-value">@Model.VersionDate</div>
             </div>
-            
-            <div class="detail-card">
-                <div class="detail-label">
-                    <i class="fas fa-book"></i> Sections
-                </div>
-                <div class="detail-value">@Model.Sections</div>
-            </div>
+
         </div>
 
         <!-- Approval section with distinct styling -->
@@ -131,21 +125,24 @@
                                     @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
                                     {
                                         <div class="contact-method">
-                                            <i class="fas fa-envelope"> <img src="~/svgs/cards/email-icon.svg" width="20px" height="20px"> </i>
+                                            <i class="fas fa-envelope"> <img src="~/svgs/cards/email-icon.svg" width="20px"
+                                                    height="20px"> </i>
                                             <a href="mailto:@contact.Email">@contact.Email</a>
                                         </div>
                                     }
                                     @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
                                     {
                                         <div class="contact-method">
-                                            <i class="fas fa-phone-alt"> <img src="~/svgs/cards/telephone.svg" width="20px" height="20px"> </i>
+                                            <i class="fas fa-phone-alt"> <img src="~/svgs/cards/telephone.svg" width="20px"
+                                                    height="20px"> </i>
                                             <a href="tel:@contact.Telephone">@contact.Telephone</a>
                                         </div>
                                     }
                                     @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
                                     {
                                         <div class="contact-method">
-                                            <i class="fas fa-mobile-alt"> <img src="~/svgs/cards/phone.svg" width="20px" height="20px"> </i>
+                                            <i class="fas fa-mobile-alt"> <img src="~/svgs/cards/phone.svg" width="20px"
+                                                    height="20px"> </i>
                                             <a href="tel:@contact.Mobile">@contact.Mobile</a>
                                         </div>
                                     }
@@ -157,7 +154,7 @@
             </div>
         }
     </div>
-                        @* an optional close button for the modal (might be used - will be decided later)
+    @* an optional close button for the modal (might be used - will be decided later)
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
                             <i class="fas fa-times me-1"></i> Close
                         </button> 
@@ -167,7 +164,7 @@
 
 <script>
     // Add subtle animations to cards on load
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const cards = document.querySelectorAll('.detail-card, .approval-item, .contact-card');
         cards.forEach((card, index) => {
             card.style.animationDelay = `${index * 0.1}s`;
