@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RulesRegulation.Models;
 using System.Linq;
+using System.Security.Claims;
 
 public class AccountController : Controller
 {
@@ -23,22 +26,32 @@ public class AccountController : Controller
 
     // POST: Login Form Submission
     [HttpPost]
-public IActionResult LoginPage(string Name, string password)
-{
-    var user = _dbContext.Users.FirstOrDefault(u => u.Name == Name && u.Password == password);
-
-    if (user != null)
+    public async Task<IActionResult> LoginPage(string Name, string password)
     {
-        // ✅ SET SESSION HERE
-        HttpContext.Session.SetInt32("UserId", user.UserId);
+        var user = _dbContext.Users.FirstOrDefault(u => u.Name == Name && u.Password == password);
 
-        // Redirect to homepage or dashboard
-        return RedirectToAction("HomePage", "Home");
+        if (user != null)
+        {
+            // ✅ Save UserId to session
+            HttpContext.Session.SetInt32("UserId", user.UserId);
+
+            // ✅ Set up claims
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            return RedirectToAction("HomePage", "Home");
+        }
+
+        ModelState.AddModelError("", "Invalid username or password");
+        return View("~/Views/Account/LoginPage.cshtml");
     }
-
-    // If login failed
-    ModelState.AddModelError("", "Invalid username or password");
-    return View("~/Views/Account/LoginPage.cshtml");
-}
 }
 

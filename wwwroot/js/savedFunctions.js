@@ -39,11 +39,15 @@ function filterSavedRecords() {
 function toggleBookmark(elem) {
     const recordId = parseInt(elem.getAttribute("data-record-id"));
 
+    
+    const token = document.querySelector('meta[name="RequestVerificationToken"]')?.content;
+
     fetch('/Saved/Toggle', {
         method: 'POST',
         credentials: 'include',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': token 
         },
         body: JSON.stringify({ recordId })
     })
