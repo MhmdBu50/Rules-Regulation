@@ -46,12 +46,12 @@ public class HomeController : Controller
         return View("~/Views/Account/LoginPage.cshtml");
     }
 
-    public IActionResult homePage(string? department, string? sections, string? documentTypes, 
+    public IActionResult homePage(string? department, string? sections, string? documentTypes,
         string? alphabetical, string? dateSort, string? fromDate, string? toDate)
     {
         try
         {
-            var records = _oracleDbService.GetFilteredRecords(department, sections, documentTypes, 
+            var records = _oracleDbService.GetFilteredRecords(department, sections, documentTypes,
                 alphabetical, dateSort, fromDate, toDate);
             return View(records);
         }
@@ -60,6 +60,36 @@ public class HomeController : Controller
             _logger.LogError(ex, "Error loading records for homepage");
             // Return empty list if there's an error
             return View(new List<dynamic>());
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAttachmentId(int recordId)
+    {
+        try
+        {
+            string query = @"
+                SELECT ID FROM ATTACHMENTS 
+                WHERE ADDNEWRECORDID = :recordId 
+                AND (UPPER(FILETYPE) LIKE '%PDF%' OR UPPER(FILEPATH) LIKE '%.PDF')
+                ORDER BY UPLOADDATE DESC
+                FETCH FIRST 1 ROWS ONLY";
+
+            var parameter = DatabaseConnection.CreateParameter(":recordId", recordId);
+            var dataTable = await _db.ExecuteQueryAsync(query, parameter);
+
+            if (dataTable.Rows.Count > 0)
+            {
+                var attachmentId = Convert.ToInt32(dataTable.Rows[0]["ID"]);
+                return Json(new { success = true, attachmentId = attachmentId });
+            }
+
+            return Json(new { success = false, message = "No PDF attachment found" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting attachment ID for record: {RecordId}", recordId);
+            return Json(new { success = false, message = "Error retrieving attachment" });
         }
     }
 
@@ -93,6 +123,7 @@ public class HomeController : Controller
             return View("Error500");
         }
     }
+    
 
  
 

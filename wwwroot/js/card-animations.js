@@ -71,6 +71,101 @@ function openPDFPreview() {
     }, 1000);
 }
 
+function loadAllThumbnails() {
+    console.log('loadAllThumbnails() called');
+    const thumbnails = document.querySelectorAll('.pdf-thumbnail');
+    console.log('Found thumbnails:', thumbnails.length);
+    
+    if (thumbnails.length === 0) {
+        console.warn('No elements with class "pdf-thumbnail" found!');
+        return;
+    }
+    
+    thumbnails.forEach((thumbnail, index) => {
+        const recordId = thumbnail.dataset.recordId;
+        const loadingElement = document.getElementById(`loading-${recordId}`);
+        
+        console.log(`Processing thumbnail ${index + 1}:`, {
+            recordId: recordId,
+            hasLoadingElement: !!loadingElement,
+            thumbnailElement: thumbnail
+        });
+        
+        if (!recordId) {
+            console.warn('No record ID found for thumbnail', thumbnail);
+            return;
+        }
+        
+        console.log(`Fetching attachment ID for record: ${recordId}`);
+        
+        // First get the attachment ID for this record
+        fetch(`/Home/GetAttachmentId?recordId=${recordId}`)
+            .then(response => {
+                console.log(`Response status for record ${recordId}:`, response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(`Attachment data for record ${recordId}:`, data);
+                
+                if (data.success && data.attachmentId) {
+                    const thumbnailUrl = `/api/pdf/thumbnail/${data.attachmentId}`;
+                    console.log(`Loading thumbnail from: ${thumbnailUrl}`);
+                    
+                    // Load thumbnail using attachment ID
+                    thumbnail.src = thumbnailUrl;
+                    
+                    thumbnail.onload = function() {
+                        console.log(`Thumbnail loaded successfully for record ${recordId}`);
+                        if (loadingElement) {
+                            loadingElement.style.display = 'none';
+                        }
+                        thumbnail.style.display = 'block';
+                        thumbnail.style.opacity = '1';
+                    };
+                    
+                    thumbnail.onerror = function() {
+                        console.error(`Failed to load thumbnail for record ${recordId} from ${thumbnailUrl}`);
+                        if (loadingElement) {
+                            loadingElement.innerHTML = '<i class="fas fa-file-pdf" style="font-size: 48px; color: #ccc;"></i>';
+                            loadingElement.title = 'PDF thumbnail unavailable';
+                        }
+                    };
+                } else {
+                    console.info(`No PDF attachment found for record ${recordId}:`, data);
+                    if (loadingElement) {
+                        loadingElement.innerHTML = '<i class="fas fa-file" style="font-size: 48px; color: #ccc;"></i>';
+                        loadingElement.title = 'No PDF available';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error loading thumbnail for record', recordId, ':', error);
+                if (loadingElement) {
+                    loadingElement.innerHTML = '<i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #dc3545;"></i>';
+                    loadingElement.title = 'Error loading thumbnail';
+                }
+            });
+    });
+}
+
+// NEW FUNCTION: Retry loading a specific thumbnail
+function retryThumbnail(recordId) {
+    const thumbnail = document.getElementById(`thumbnail-${recordId}`);
+    const loadingElement = document.getElementById(`loading-${recordId}`);
+    
+    if (thumbnail && loadingElement) {
+        loadingElement.style.display = 'flex';
+        loadingElement.innerHTML = '<div class="spinner"></div>';
+        thumbnail.style.display = 'none';
+        
+        // Retry the load process
+        loadAllThumbnails();
+    }
+}
+
 function showToast(message) {
     // Create a simple toast notification
     const toast = document.createElement('div');
@@ -140,8 +235,17 @@ document.addEventListener('touchstart', function() {}, {passive: true});
 
 // Initialize card scale on load
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing...');
+    
+    // Initialize card scale
     updateCardScale();
-});
+    
+    // Load thumbnails after a short delay to ensure DOM is fully ready
+    setTimeout(() => {loadAllThumbnails()});
+    }, 100);
+// document.addEventListener('DOMContentLoaded', function() {
+//     updateCardScale();
+// },);
 
 // Update scale on window resize
 window.addEventListener('resize', updateCardScale);
