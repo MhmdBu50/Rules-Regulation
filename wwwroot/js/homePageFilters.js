@@ -3,6 +3,7 @@
 // Home button: resets all filters
 function navigateToHome(btn) {
     alter(btn);
+    showMainRecords(); // Exit history view
     window.showOnlySaved = false; // Clear saved filter
     window.savedRecordIds = null; // Clear saved IDs
     clearFilters(); // Clears all filters and shows all cards
@@ -11,6 +12,7 @@ function navigateToHome(btn) {
 // Student Guides button: sets filters and applies
 function navigateToStudentGuides(btn) {
     alter(btn);
+    showMainRecords(); // Exit history view
     window.showOnlySaved = false; // Clear saved filter
     window.savedRecordIds = null; // Clear saved IDs
     
@@ -26,6 +28,7 @@ function navigateToStudentGuides(btn) {
 // Student Rules button: students + regulations + policies
 function navigateToStudentRules(btn) {
     alter(btn);
+    showMainRecords(); // Exit history view
     window.showOnlySaved = false; // Clear saved filter
     window.savedRecordIds = null; // Clear saved IDs
     
@@ -41,6 +44,7 @@ function navigateToStudentRules(btn) {
 // Employee Rules button: members + all types
 function navigateToEmployeeRules(btn) {
     alter(btn);
+    showMainRecords(); // Exit history view
     window.showOnlySaved = false; // Clear saved filter
     window.savedRecordIds = null; // Clear saved IDs
     
@@ -56,6 +60,7 @@ function navigateToEmployeeRules(btn) {
 // Academic Rules button: enrolled + all types
 function navigateToAcademicRules(btn) {
     alter(btn);
+    showMainRecords(); // Exit history view
     window.showOnlySaved = false; // Clear saved filter
     window.savedRecordIds = null; // Clear saved IDs
     
@@ -71,6 +76,7 @@ function navigateToAcademicRules(btn) {
 // Saved button: only bookmarked records
 function navigateToSaved(btn) {
     alter(btn); // Visual feedback like other nav buttons
+    showMainRecords(); // Exit history view
     clearFilters(); // Clear all filters visually
     filterSavedRecords(); // Then only show saved bookmarked cards
 }

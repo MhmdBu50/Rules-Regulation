@@ -197,7 +197,7 @@ margin-top: 10px;">
                 id="filter-regulations">Regulations</span></label>
         <label><input type="checkbox" class="form-check-input" id="guidelinesFilter" value="Guidelines"> <span
                 id="filter-guidelines">Guidelines</span></label>
-        <label><input type="checkbox" class="form-check-input" id="policiesFilter" value="Policies"> <span
+        <label><input type="checkbox" class="form-check-input" id="policiesFilter" value="policy"> <span
                 id="filter-policies">Policies</span></label>
         <div style="margin-top: 15px;
 display: flex;">
@@ -299,12 +299,11 @@ border: none;" onclick="navigateToHome(this)">
 
     </div>
 
-    <div>
-        <button class="bar-button" id="historyButton" data-id="historyButton" onclick="alter(this)"
-            style="background-color: #0F1734; font-size: 1.5em;">
-            <div class="nav-icons svg-container">
-
-            </div>
+        <div>
+            <button class="bar-button" id="historyButton" data-id="historyButton" onclick="alter(this); navigateToHistory()" style="background-color: #0F1734; font-size: 1.5em;" >
+                <div class="nav-icons svg-container">
+                    
+                </div>
 
             <div class="nav-label">
                 <label class="poppins-regular" style="word-break: keep-all;" id="nav-history-label">History</label>

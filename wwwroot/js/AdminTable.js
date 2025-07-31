@@ -984,3 +984,5 @@ function clearDocumentTypeFilter() {
 
   applyAdminFilters();
 }
+
+//gg
