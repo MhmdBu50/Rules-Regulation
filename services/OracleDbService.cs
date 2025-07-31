@@ -181,7 +181,7 @@ namespace RulesRegulation.Services
                                 Sections = reader["SECTIONS"]?.ToString(),
                                 Version = reader["VERSION"]?.ToString(),
                                 ApprovalDate = reader["APPROVAL_DATE"] != DBNull.Value ?
-                                    Convert.ToDateTime(reader["APPROVAL_DATE"]).ToString("yyyy-MM-dd") : "",
+                                Convert.ToDateTime(reader["APPROVAL_DATE"]).ToString("yyyy-MM-dd") : "",
                                 ApprovingEntity = reader["APPROVING_ENTITY"]?.ToString(),
                                 Department = reader["DEPARTMENT"]?.ToString(),
                                 DocumentType = reader["DOCUMENT_TYPE"]?.ToString(),

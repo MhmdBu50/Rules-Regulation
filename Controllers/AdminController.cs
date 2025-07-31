@@ -75,6 +75,66 @@ public class AdminController : Controller
         // Store web hosting environment for file operations
         _webHostEnvironment = webHostEnvironment;
     }
+
+    /**
+     * GetDashboardStats - API endpoint for dashboard statistics and chart data
+     * Returns: JSON object with total policies, most viewed, donut chart, and bar chart data
+     */
+    [HttpGet]
+    public JsonResult GetDashboardStats()
+    {
+        // Example queries - replace with real DB queries
+        int totalPolicies = _oracleDbService.GetAllRecords().Count();
+
+        // Query USER_HISTORY for most viewed record
+        string mostViewedName = "N/A";
+        int mostViewedViews = 0;
+        using (var conn = new Oracle.ManagedDataAccess.Client.OracleConnection(_connectionString))
+        {
+            conn.Open();
+            string sql = @"SELECT r.REGULATION_NAME, COUNT(*) AS views
+                           FROM USER_HISTORY h
+                           LEFT JOIN RECORDS r ON h.RECORD_ID = r.RECORD_ID
+                           WHERE h.ACTION = 'view'
+                           GROUP BY r.REGULATION_NAME
+                           ORDER BY views DESC";
+            using (var cmd = new Oracle.ManagedDataAccess.Client.OracleCommand(sql, conn))
+            using (var reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    mostViewedName = reader["REGULATION_NAME"]?.ToString() ?? "N/A";
+                    mostViewedViews = Convert.ToInt32(reader["views"] ?? 0);
+                }
+            }
+        }
+        var mostViewedPolicy = new { name = mostViewedName, views = mostViewedViews };
+
+        // Donut chart data (static for now)
+        var donutData = new[] {
+            new { label = "Academic rules", value = 40 },
+            new { label = "Employment rules & regulations", value = 30 },
+            new { label = "Student rules & regulations", value = 25 },
+            new { label = "Student rules & regulations", value = 15 }
+        };
+
+        // Bar chart data (static)
+        var barData = new[] {
+            new { month = "March", visits = 180 },
+            new { month = "April", visits = 150 },
+            new { month = "May", visits = 220 },
+            new { month = "June", visits = 180 },
+            new { month = "July", visits = 320 },
+            new { month = "August", visits = 200 }
+        };
+
+        return Json(new {
+            totalPolicies,
+            mostViewed = mostViewedPolicy,
+            donutData,
+            barData
+        });
+    }
     
     /**
      * AdminPage - Main administrative dashboard displaying all records
@@ -680,39 +740,53 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? E
 
             // Step 7: Insert record into RECORDS table using sequence for RECORD_ID
             var insertSql = @"
-            INSERT INTO RECORDS (
-                RECORD_ID, USER_ID, REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
-                APPROVING_ENTITY, APPROVAL_DATE, DESCRIPTION, DOCUMENT_TYPE,
-                SECTIONS, NOTES
-            )
-            VALUES (
-                RECORDS_SEQ.NEXTVAL, :UserId, :RegulationName, :Department, :Version, :VersionDate,
-                :ApprovingEntity, :ApprovalDate, :Description, :DocumentType,
-                :Sections, :Notes
-            )";
+            DECLARE
+                newId NUMBER;
+            BEGIN
+                INSERT INTO RECORDS (
+                    RECORD_ID, USER_ID, REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
+                    APPROVING_ENTITY, APPROVAL_DATE, DESCRIPTION, DOCUMENT_TYPE,
+                    SECTIONS, NOTES
+                )
+                VALUES (
+                    RECORDS_SEQ.NEXTVAL, :UserId, :RegulationName, :Department, :Version, :VersionDate,
+                    :ApprovingEntity, :ApprovalDate, :Description, :DocumentType,
+                    :Sections, :Notes
+                )
+                RETURNING RECORD_ID INTO :NewRecordId;
+            END;";
 
             // Prepare parameters for SQL execution with proper data types
-            var parameters = new OracleParameter[]
+            var parameters = new List<OracleParameter>
             {
-            new("UserId", userId),
-            new("RegulationName", model.RegulationName ?? ""),
-            new("Department", model.RelevantDepartment ?? ""),
-            new("Version", model.VersionNumber ?? "1"),
-            new("VersionDate", model.VersionDate),
-            new("ApprovingEntity", model.ApprovingEntity ?? ""),
-            new("ApprovalDate", model.ApprovingDate),
-            new("Description", model.Description ?? ""),
-            new("DocumentType", documentType),
-            new("Sections", sectionString),
-            new("Notes", model.Notes ?? "")
+                new("UserId", userId),
+                new("RegulationName", model.RegulationName ?? ""),
+                new("Department", model.RelevantDepartment ?? ""),
+                new("Version", model.VersionNumber ?? "1"),
+                new("VersionDate", model.VersionDate),
+                new("ApprovingEntity", model.ApprovingEntity ?? ""),
+                new("ApprovalDate", model.ApprovingDate),
+                new("Description", model.Description ?? ""),
+                new("DocumentType", documentType),
+                new("Sections", sectionString),
+                new("Notes", model.Notes ?? "")
             };
 
+            // Output param for getting the new ID
+            var outputIdParam = new OracleParameter("NewRecordId", OracleDbType.Int32)
+            {
+                Direction = ParameterDirection.Output
+            };
+            parameters.Add(outputIdParam);
+
             // Execute SQL insert with debug logging
+            int newId = 0;
             try
             {
                 Console.WriteLine($"About to execute SQL with UserId: {userId}, DocumentType: {documentType}");
-                await _db.ExecuteNonQueryAsync(insertSql, parameters);
-                Console.WriteLine("SQL executed successfully");
+                await _db.ExecuteNonQueryAsync(insertSql, parameters.ToArray());
+                newId = ((OracleDecimal)outputIdParam.Value).ToInt32();
+                Console.WriteLine("SQL executed successfully with new RECORD_ID: " + newId);
             }
             catch (Exception sqlEx)
             {
@@ -720,64 +794,41 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? E
                 throw; // Re-throw to be caught by outer catch block
             }
 
-            // Step 8: Get the current sequence value for file attachment processing
-            int newId = 0;
+            // Step 8: Insert file attachments (no silent failure - all errors are logged)
             Console.WriteLine($"Attempting to insert attachments for RECORD_ID = {newId}");
             Console.WriteLine($"WordPath = {wordPath}, HasWordAttachment = {model.WordAttachment != null}");
             Console.WriteLine($"PdfPath = {pdfPath}, HasPdfAttachment = {model.PdfAttachment != null}");
-            try
-            {
-                // Retrieve the current sequence value (the ID of the record just inserted)
-                using (var conn = new OracleConnection(_connectionString))
-                {
-                    conn.Open();
-                    var seqSql = "SELECT RECORDS_SEQ.CURRVAL FROM DUAL";
-                    using (var cmd = new OracleCommand(seqSql, conn))
-                    {
-                        var result = cmd.ExecuteScalar();
-                        if (result != null && result != DBNull.Value)
-                            newId = Convert.ToInt32(result);
-                    }
-                }
-            }
-            catch
-            {
-                // If we can't get the sequence, skip file attachments
-                newId = 0;
-            }
 
-            // Step 9: Insert file attachments (no silent failure - all errors are logged)
             if (newId > 0)
             {
                 // Insert Word file attachment if present
-                    if (!string.IsNullOrEmpty(wordPath) && model.WordAttachment != null)
+                if (!string.IsNullOrEmpty(wordPath) && model.WordAttachment != null)
+                {
+                    try
                     {
-                        try
-                        {
-                            Console.WriteLine("Preparing to insert Word attachment...");
+                        Console.WriteLine("Preparing to insert Word attachment...");
 
-                            // SQL to insert Word attachment metadata
-                            var insertWordSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) " +
-                                                "VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME)";
+                        // SQL to insert Word attachment metadata
+                        var insertWordSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) " +
+                                            "VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME)";
 
-                            // Execute attachment insert with proper parameters
-                            await _db.ExecuteNonQueryAsync(insertWordSql,
-                                new OracleParameter("id", newId),
-                                new OracleParameter("fileType", "DOCX"),
-                                new OracleParameter("path", wordPath),
-                                new OracleParameter("ORIGINAL_NAME", model.WordAttachment.FileName));
+                        // Execute attachment insert with proper parameters
+                        await _db.ExecuteNonQueryAsync(insertWordSql,
+                            new OracleParameter("id", newId),
+                            new OracleParameter("fileType", "DOCX"),
+                            new OracleParameter("path", wordPath),
+                            new OracleParameter("ORIGINAL_NAME", model.WordAttachment.FileName));
 
-                            Console.WriteLine("Word attachment inserted successfully.");
-                        }
-                        catch (Exception ex)
-                        {
-                            // Log detailed error information for Word attachment insertion
-                            Console.WriteLine($"Error inserting Word attachment: {ex.Message}");
-                            Console.WriteLine($"Details — ID: {newId}, Path: {wordPath}, FileName: {model.WordAttachment?.FileName ?? "null"}");
-                            throw; // Re-throw to be handled by outer catch
-                        }
+                        Console.WriteLine("Word attachment inserted successfully.");
                     }
-
+                    catch (Exception ex)
+                    {
+                        // Log detailed error information for Word attachment insertion
+                        Console.WriteLine($"Error inserting Word attachment: {ex.Message}");
+                        Console.WriteLine($"Details — ID: {newId}, Path: {wordPath}, FileName: {model.WordAttachment?.FileName ?? "null"}");
+                        throw; // Re-throw to be handled by outer catch
+                    }
+                }
 
                 // Insert PDF file attachment if present
                 if (!string.IsNullOrEmpty(pdfPath) && model.PdfAttachment != null)
@@ -785,18 +836,18 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? E
                     try
                     {
                         Console.WriteLine("Preparing to insert PDF attachment...");
-                        
+
                         // SQL to insert PDF attachment metadata
                         var insertPdfSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) " +
                                         "VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME)";
-                        
+
                         // Execute attachment insert with proper parameters
                         await _db.ExecuteNonQueryAsync(insertPdfSql,
                             new OracleParameter("id", newId),
                             new OracleParameter("fileType", "PDF"),
                             new OracleParameter("path", pdfPath),
                             new OracleParameter("ORIGINAL_NAME", model.PdfAttachment.FileName));
-                        
+
                         Console.WriteLine("PDF attachment inserted successfully.");
                     }
                     catch (Exception ex)
@@ -811,7 +862,6 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? E
                 {
                     Console.WriteLine("No PDF attachment to insert.");
                 }
-                
             }
             else
             {
@@ -826,12 +876,12 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? E
         {
             // Handle any errors during the entire record creation process
             _logger.LogError(ex, "Insert failed: {ErrorMessage}", ex.Message);
-            
+
             // More specific error message for debugging including inner exception details
             string errorDetails = ex.Message;
             if (ex.InnerException != null)
                 errorDetails += " | Inner: " + ex.InnerException.Message;
-                
+
             TempData["ErrorMessage"] = $"An error occurred while saving the record: {errorDetails}";
             return View(model);
         }
@@ -1138,8 +1188,8 @@ public async Task<IActionResult> ViewPdf(int id)
 
             if (success)
             {
-                // Deletion successful: set success message
-                TempData["SuccessMessage"] = "Record deleted successfully!";
+                // Deletion successful: set success message with record ID
+                TempData["SuccessMessage"] = $"Record #{recordId} deleted successfully!";
             }
             else
             {
@@ -1195,6 +1245,8 @@ public async Task<IActionResult> ViewPdf(int id)
             // Track deletion results
             int successCount = 0;
             int totalCount = recordIds.Count;
+            List<int> successfulDeletes = new List<int>();
+            List<int> failedDeletes = new List<int>();
 
             // Attempt to delete each record individually
             foreach (int recordId in recordIds)
@@ -1203,6 +1255,11 @@ public async Task<IActionResult> ViewPdf(int id)
                 if (success)
                 {
                     successCount++;
+                    successfulDeletes.Add(recordId);
+                }
+                else
+                {
+                    failedDeletes.Add(recordId);
                 }
             }
 
@@ -1210,18 +1267,25 @@ public async Task<IActionResult> ViewPdf(int id)
             if (successCount == totalCount)
             {
                 // All deletions successful
-                TempData["SuccessMessage"] = $"Successfully deleted {successCount} record(s)!";
+                if (totalCount == 1)
+                {
+                    TempData["SuccessMessage"] = $"Record #{successfulDeletes[0]} deleted successfully!";
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = $"Successfully deleted {successCount} records: #{string.Join(", #", successfulDeletes)}";
+                }
             }
             else if (successCount > 0)
             {
                 // Partial success: some deletions failed
-                TempData["SuccessMessage"] = $"Successfully deleted {successCount} out of {totalCount} record(s).";
-                TempData["ErrorMessage"] = $"Failed to delete {totalCount - successCount} record(s).";
+                TempData["SuccessMessage"] = $"Successfully deleted {successCount} records: #{string.Join(", #", successfulDeletes)}";
+                TempData["ErrorMessage"] = $"Failed to delete {totalCount - successCount} records: #{string.Join(", #", failedDeletes)}";
             }
             else
             {
                 // All deletions failed
-                TempData["ErrorMessage"] = "Failed to delete any records. Please try again.";
+                TempData["ErrorMessage"] = $"Failed to delete records: #{string.Join(", #", failedDeletes)}. Please try again.";
             }
         }
         catch (Exception ex)

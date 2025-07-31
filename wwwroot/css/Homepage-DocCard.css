@@ -156,7 +156,7 @@
         .card-title:hover {
             white-space: normal;
             overflow: visible;
-            padding-bottom: 0px;
+            padding-bottom: 1px;
             max-height: 10em; /*should be enough for 4-5 lines */
         }
         

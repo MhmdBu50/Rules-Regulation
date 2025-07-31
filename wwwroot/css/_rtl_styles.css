@@ -11,7 +11,6 @@ body.rtl .language-switcher-container {
     color: #333;
     padding: 5px;
     display: flex;
-    align-items: center;
     justify-content: center;
 }
 
@@ -75,17 +74,25 @@ body.rtl .search-bar,
 body.rtl input,
 body.rtl select,
 body.rtl textarea {
-    text-align: right;
+    text-align: right !important;
 }
 
 /* Button text */
 body.rtl .btn,
 body.rtl button {
-    text-align: center;
+    text-align: right !important;
 }
 
 body.rtl header,
 body.rtl .header {
     direction: ltr !important;
+    text-align: left !important;
+}
+/* Forms, search bar */
+body.ltr .search-bar,
+body.ltr input,
+body.ltr select,
+body.ltr textarea
+body.ltr label {
     text-align: left !important;
 }

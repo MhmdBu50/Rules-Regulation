@@ -297,8 +297,35 @@ tr {
     color: white;
     padding: 20px;
     text-align: center;
-    margin: 0 100px 30px 100px;
+    margin: 0 5vw 3vh 5vw;
 }
+
+.main-header {
+  background: #0F1734;
+  color: white;
+  padding: 30px 20px;
+  margin: 0 auto 30px auto;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.main-header h1 {
+  font-weight: 600;
+}
+
+.main-header .btn {
+  transition: all 0.3s ease;
+}
+
+.main-header .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(255, 255, 255, 0.2);
+}
+
+.subtitle {
+  font-size: 1.1rem;
+}
+
 
 .AddContactInfo .form-wrapper {
     border-radius: 10px;
