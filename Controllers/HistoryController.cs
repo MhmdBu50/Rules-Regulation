@@ -17,9 +17,9 @@ namespace RulesRegulation.Controllers
         {
             try
             {
-                string query = @"SELECT h.ID, h.USER_ID, h.RECORD_ID, h.ACTION, h.ACTION_DATE, r.RECORD_NAME
+                string query = @"SELECT h.ID, h.USER_ID, h.RECORD_ID, h.ACTION, h.ACTION_DATE, r.REGULATION_NAME
                                FROM USER_HISTORY h
-                               LEFT JOIN RECORDS r ON h.RECORD_ID = r.ID
+                               LEFT JOIN RECORDS r ON h.RECORD_ID = r.RECORD_ID
                                ORDER BY h.ACTION_DATE DESC";
                 
                 var historyData = _dbService.GetData(query);
@@ -32,7 +32,7 @@ namespace RulesRegulation.Controllers
                         Id = Convert.ToInt32(row["ID"]),
                         UserId = row["USER_ID"]?.ToString(),
                         RecordId = Convert.ToInt32(row["RECORD_ID"]),
-                        RecordName = row["RECORD_NAME"]?.ToString() ?? "Unknown Record",
+                        RecordName = row["REGULATION_NAME"]?.ToString() ?? "Unknown Record",
                         Action = row["ACTION"]?.ToString(),
                         ActionDate = row["ACTION_DATE"]
                     });
