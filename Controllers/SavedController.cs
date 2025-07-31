@@ -32,18 +32,10 @@ public IActionResult Toggle([FromBody] SaveRequest request)
         return Ok(new { removed = true });
     }
 
-    // ✅ 3. Generate next SavedId (stored as string)
-    int nextSavedId = _context.SavedRecords
-    .Where(s => s.UserId == userId)
-    .AsEnumerable() 
-    .Select(s => int.TryParse(s.SavedId, out var id) ? id : 0)
-    .DefaultIfEmpty(0)
-    .Max() + 1;
-
-    // ✅ 4. Save new record
+    // ✅ 3. Save new record with UUID as SavedId
     var newRecord = new SavedRecord
     {
-        SavedId = nextSavedId.ToString(),
+        SavedId = Guid.NewGuid().ToString(),
         UserId = userId,
         RecordId = request.RecordId,
         SavedTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
