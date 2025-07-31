@@ -75,6 +75,66 @@ public class AdminController : Controller
         // Store web hosting environment for file operations
         _webHostEnvironment = webHostEnvironment;
     }
+
+    /**
+     * GetDashboardStats - API endpoint for dashboard statistics and chart data
+     * Returns: JSON object with total policies, most viewed, donut chart, and bar chart data
+     */
+    [HttpGet]
+    public JsonResult GetDashboardStats()
+    {
+        // Example queries - replace with real DB queries
+        int totalPolicies = _oracleDbService.GetAllRecords().Count();
+
+        // Query USER_HISTORY for most viewed record
+        string mostViewedName = "N/A";
+        int mostViewedViews = 0;
+        using (var conn = new Oracle.ManagedDataAccess.Client.OracleConnection(_connectionString))
+        {
+            conn.Open();
+            string sql = @"SELECT r.REGULATION_NAME, COUNT(*) AS views
+                           FROM USER_HISTORY h
+                           LEFT JOIN RECORDS r ON h.RECORD_ID = r.RECORD_ID
+                           WHERE h.ACTION = 'view'
+                           GROUP BY r.REGULATION_NAME
+                           ORDER BY views DESC";
+            using (var cmd = new Oracle.ManagedDataAccess.Client.OracleCommand(sql, conn))
+            using (var reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    mostViewedName = reader["REGULATION_NAME"]?.ToString() ?? "N/A";
+                    mostViewedViews = Convert.ToInt32(reader["views"] ?? 0);
+                }
+            }
+        }
+        var mostViewedPolicy = new { name = mostViewedName, views = mostViewedViews };
+
+        // Donut chart data (static for now)
+        var donutData = new[] {
+            new { label = "Academic rules", value = 40 },
+            new { label = "Employment rules & regulations", value = 30 },
+            new { label = "Student rules & regulations", value = 25 },
+            new { label = "Student rules & regulations", value = 15 }
+        };
+
+        // Bar chart data (static)
+        var barData = new[] {
+            new { month = "March", visits = 180 },
+            new { month = "April", visits = 150 },
+            new { month = "May", visits = 220 },
+            new { month = "June", visits = 180 },
+            new { month = "July", visits = 320 },
+            new { month = "August", visits = 200 }
+        };
+
+        return Json(new {
+            totalPolicies,
+            mostViewed = mostViewedPolicy,
+            donutData,
+            barData
+        });
+    }
     
     /**
      * AdminPage - Main administrative dashboard displaying all records

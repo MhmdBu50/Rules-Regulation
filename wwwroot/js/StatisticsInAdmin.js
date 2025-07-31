@@ -8,20 +8,32 @@
     // <script src="js/bootstrap.bundle.min.js"></script>
     // <script src="js/StatisticsInAdmin.js"></script>
     // Initialize charts when page loads
-        document.addEventListener('DOMContentLoaded', function () {
-            initializeCharts();
-        });
 
-        function initializeCharts() {
+document.addEventListener('DOMContentLoaded', function () {
+    fetch('/Admin/GetDashboardStats')
+        .then(res => res.json())
+        .then(stats => {
+            // Update stat cards (adjust selectors as needed)
+            const totalPoliciesElem = document.querySelector('.stats-card-blue .number');
+            if (totalPoliciesElem) totalPoliciesElem.textContent = stats.totalPolicies;
+
+            const mostViewedSubtitle = document.querySelector('.stats-card-green .subtitle');
+            if (mostViewedSubtitle) mostViewedSubtitle.textContent = stats.mostViewed.name;
+            const mostViewedText = document.querySelector('.stats-card-green .viewed-text');
+            if (mostViewedText) mostViewedText.textContent = `Viewed: ${stats.mostViewed.views} times`;
+
             // Donut Chart
+            const donutLabels = stats.donutData.map(d => d.label);
+            const donutValues = stats.donutData.map(d => d.value);
+            const donutColors = ['#8B4513', '#2E8B57', '#4682B4', '#DAA520'];
             const ctx = document.getElementById('chartCanvas').getContext('2d');
             new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Academic rules', 'Employment rules & regulations', 'Student rules & regulations', 'Student rules & regulations'],
+                    labels: donutLabels,
                     datasets: [{
-                        data: [40, 30, 25, 15],
-                        backgroundColor: ['#8B4513', '#2E8B57', '#4682B4', '#DAA520'],
+                        data: donutValues,
+                        backgroundColor: donutColors,
                         borderWidth: 2,
                         borderColor: '#ffffff'
                     }]
@@ -39,13 +51,15 @@
             });
 
             // Bar Chart
+            const barLabels = stats.barData.map(d => d.month);
+            const barValues = stats.barData.map(d => d.visits);
             const barCtx = document.getElementById('barChartCanvas').getContext('2d');
             new Chart(barCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['March', 'April', 'May', 'June', 'July', 'August'],
+                    labels: barLabels,
                     datasets: [{
-                        data: [180, 150, 220, 180, 320, 200],
+                        data: barValues,
                         backgroundColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA726', '#AB47BC', '#26C6DA'],
                         borderRadius: 4,
                         borderSkipped: false,
@@ -97,7 +111,8 @@
                     }
                 }
             });
-        }
+        });
+});
 
         // Button functions
         function viewReport() {
