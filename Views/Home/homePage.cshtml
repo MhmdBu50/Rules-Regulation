@@ -1,5 +1,4 @@
 @model List<dynamic>
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 
 @{
     ViewData["Title"] = "Home Page";
@@ -29,7 +28,7 @@
     <script src="@Url.Content("~/js/savedFunctions.js")"></script>
     <script src="@Url.Content("~/js/searchFunctionality.js")"></script>
 }
-<meta name="RequestVerificationToken" content="@Antiforgery.GetAndStoreTokens(Context).RequestToken" />
+
 <header class="menu">
 
     <div class="container-fluid h-100 bootstrap-wrapper">
@@ -42,7 +41,7 @@
                         <img src="~/svgs/navigation/hamburger-menu.svg" alt="Menu" width="36" height="36" />
                     </button>
 
-                    <div class="language-switcher-container d-none d-lg-block">
+                    <div class="language-switcher-container">
                         <button id="language-toggle" class="language-toggle-btn">
                             <svg class="desktop-logo logo" width="33" height="33" viewBox="0 0 40 40" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -90,14 +89,10 @@
                         </svg>
                     </button>
                 </div>
-                @if (User.Identity != null && User.Identity.Name == "admin")
-                {
                 <button class="adminButton ms-2 me-2 px-3 py-1 d-none d-lg-flex"
-                    onclick="location.href='@Url.Action("AdminPage", "Admin")'" 
-                    id="admin-view-button">
-                    view as Admin
+                    onclick="location.href='@Url.Action("AdminPage", "Admin")'" id="admin-view-button">view as Admin
+
                 </button>
-                }
             </div>
 
             <div class="col-auto flex-nowrap">
@@ -339,17 +334,8 @@ border: none;" onclick="navigateToHome(this)">
                         <div class="bookmark" data-record-id="@record.Id" onclick="toggleBookmark(this)"></div>
 
                         <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
-                             <div class="pdf-thumbnail-container"></div>
-                                    <div class="thumbnail-loading" id="loading-@record.Id">
-                                        <div class="spinner"></div>
-                                    </div>
-                                    <img class="pdf-thumbnail" 
-                                    id="thumbnail-@record.Id"
-                                    data-record-id="@record.Id"
-                                    style="display:none;" 
-                                    alt="PDF Thumbnail"/>
-                                </div>
-                            
+
+                        </div>
                         <h2 class="card-title">@record.RegulationName</h2>
 
                         <p class="card-text d-none">@record.RegulationName @record.Description</p>
