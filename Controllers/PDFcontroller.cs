@@ -91,37 +91,36 @@ namespace Rules_Regulation.Controllers
         }
 
         private async Task<AttachmentModel?> GetAttachmentByIdAsync(int id)
+{
+    try
+    {
+        string query = @"
+            SELECT ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, UPLOAD_DATE 
+            FROM ATTACHMENTS 
+            WHERE ATTACHMENT_ID = :id";
+
+        var parameter = DatabaseConnection.CreateParameter(":id", id);
+        var dataTable = await _context.ExecuteQueryAsync(query, parameter);
+
+        if (dataTable.Rows.Count == 0)
+            return null;
+
+        var row = dataTable.Rows[0];
+        return new AttachmentModel
         {
-            try
-            {
-                string query = @"
-                    SELECT ID, ADDNEWRECORDID, FILETYPE, FILEPATH, UPLOADDATE 
-                    FROM ATTACHMENT 
-                    WHERE ID = :id";
-
-                var parameter = DatabaseConnection.CreateParameter(":id", id);
-                var dataTable = await _context.ExecuteQueryAsync(query, parameter);
-
-                if (dataTable.Rows.Count == 0)
-                    return null;
-
-                var row = dataTable.Rows[0];
-                return new AttachmentModel
-                {
-                    ID = Convert.ToInt32(row["ID"]),
-                    AddnewrecordID = Convert.ToInt32(row["ADDNEWRECORDID"]),
-                    FileType = row["FILETYPE"]?.ToString(),
-                    FilePath = row["FILEPATH"]?.ToString(),
-                    UploadDate = Convert.ToDateTime(row["UPLOADDATE"])
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger?.LogError(ex, $"Error fetching attachment with ID {id}");
-                return null;
-            }
-        }
-
+            ID = Convert.ToInt32(row["ATTACHMENT_ID"]),
+            AddnewrecordID = Convert.ToInt32(row["RECORD_ID"]),
+            FileType = row["FILE_TYPE"]?.ToString(),
+            FilePath = row["FILE_PATH"]?.ToString(),
+            UploadDate = Convert.ToDateTime(row["UPLOAD_DATE"])
+        };
+    }
+    catch (Exception ex)
+    {
+        _logger?.LogError(ex, $"Error fetching attachment with ID {id}");
+        return null;
+    }
+}
 private async Task<byte[]> GeneratePdfThumbnailAsync(string filePath)
 {
     try

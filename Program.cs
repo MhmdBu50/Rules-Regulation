@@ -61,6 +61,15 @@ builder.Services.AddScoped<OracleDbService>(provider =>
     return new OracleDbService(connectionString);
 });
 
+builder.Services.AddScoped<DatabaseConnection>(provider =>
+{
+    var config = provider.GetRequiredService<IConfiguration>();
+    var connectionString = config.GetConnectionString("OracleConnection");
+    if (string.IsNullOrWhiteSpace(connectionString))
+        throw new InvalidOperationException("Connection string 'OracleConnection' not found.");
+    return new DatabaseConnection(connectionString);
+});
+
 var app = builder.Build();
 
 //  Middleware pipeline
