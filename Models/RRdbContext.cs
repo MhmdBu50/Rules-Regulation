@@ -88,6 +88,7 @@ namespace RulesRegulation.Models
                 entity.Property(e => e.Password).HasColumnName("PASSWORD");
                 entity.Property(e => e.CreatedAt).HasColumnName("CREATED_AT");
                 entity.Property(e => e.UpdatedAt).HasColumnName("UPDATED_AT");
+                entity.Property(e => e.Role).HasColumnName("ROLE"); // Add missing Role mapping
             });
             modelBuilder.Entity<SavedRecord>(entity =>
             {

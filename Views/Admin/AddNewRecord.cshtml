@@ -54,9 +54,17 @@
         @Html.AntiForgeryToken()
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="regulationName">Regulation/Manual Name</label>
+            <label for="regulationName">Regulation/Manual Name (English)</label>
             <input type="text" class="form-control" id="regulationName" name="regulationName" required>
           </div>
+          <div class="col-md-6">
+            <label for="regulationNameAr">Regulation/Manual Name (Arabic)</label>
+            <input type="text" class="form-control" id="regulationNameAr" name="regulationNameAr" dir="rtl" lang="ar" required>
+            <div id="regulationNameArError" class="text-danger mt-1" style="display: none;"></div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
           <div class="col-md-6">
             <label for="relevantDepartment">Relevant Department</label>
             <select class="form-select" id="relevantDepartment" name="relevantDepartment" required>
@@ -88,9 +96,16 @@
           </div>
         </div>
 
-        <div class="mb-3">
-          <label for="ApprovingEntity">Approving Entity</label>
-          <input type="text" class="form-control" id="ApprovingEntity" name="ApprovingEntity" required>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="ApprovingEntity">Approving Entity (English)</label>
+            <input type="text" class="form-control" id="ApprovingEntity" name="ApprovingEntity" required>
+          </div>
+          <div class="col-md-6">
+            <label for="ApprovingEntityAr">Approving Entity (Arabic)</label>
+            <input type="text" class="form-control" id="ApprovingEntityAr" name="ApprovingEntityAr" dir="rtl" lang="ar" required>
+            <div id="approvingEntityArError" class="text-danger mt-1" style="display: none;"></div>
+          </div>
         </div>
 
         <div class="row mb-3">
@@ -104,9 +119,16 @@
           </div>
         </div>
 
-        <div class="mb-3">
-          <label for="Description">Brief Description</label>
-          <textarea class="form-control" id="Description" name="Description" rows="3"></textarea>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="Description">Brief Description (English)</label>
+            <textarea class="form-control" id="Description" name="Description" rows="3"></textarea>
+          </div>
+          <div class="col-md-6">
+            <label for="DescriptionAr">Brief Description (Arabic)</label>
+            <textarea class="form-control" id="DescriptionAr" name="DescriptionAr" rows="3" dir="rtl" lang="ar"></textarea>
+            <div id="descriptionArError" class="text-danger mt-1" style="display: none;"></div>
+          </div>
         </div>
 
         <div class="row mb-4">
@@ -135,9 +157,16 @@
           </div>
         </div>
 
-        <div class="mb-5">
-          <label for="notes">Notes</label>
-          <input type="text" class="form-control" id="notes" name="notes">
+        <div class="row mb-5">
+          <div class="col-md-6">
+            <label for="notes">Notes (English)</label>
+            <input type="text" class="form-control" id="notes" name="notes">
+          </div>
+          <div class="col-md-6">
+            <label for="notesAr">Notes (Arabic)</label>
+            <input type="text" class="form-control" id="notesAr" name="notesAr" dir="rtl" lang="ar">
+            <div id="notesArError" class="text-danger mt-1" style="display: none;"></div>
+          </div>
         </div>
 
         <div class="text-center">
