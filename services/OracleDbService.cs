@@ -4,6 +4,10 @@ using Oracle.ManagedDataAccess.Client;
 
 namespace RulesRegulation.Services
 {
+    /// <summary>
+    /// Oracle Database Service with Arabic field validation support
+    /// Includes client-side validation JavaScript generation for faster user feedback
+    /// </summary>
     public class OracleDbService
     {
         private readonly string _connectionString;
@@ -31,8 +35,8 @@ namespace RulesRegulation.Services
             }
         }
 
-        // Method to add contact information
-        public bool AddContactInfo(string department, string name, string? email, string? mobile, string? telephone)
+        // Method to add contact information (new version with Arabic support)
+        public bool AddContactInfo(string department, string name, string? nameAr, string? email, string? mobile, string? telephone)
         {
             try
             {
@@ -42,14 +46,15 @@ namespace RulesRegulation.Services
                     int contactId = GetNextContactId(); // 🔹 Fetch the next ID from the sequence
 
                     string query = @"INSERT INTO CONTACT_INFORMATION 
-                                    (CONTACT_ID, DEPARTMENT, NAME, EMAIL, MOBILE, TELEPHONE) 
-                                    VALUES (:contactId, :department, :name, :email, :mobile, :telephone)";
+                                    (CONTACT_ID, DEPARTMENT, NAME, NAME_AR, EMAIL, MOBILE, TELEPHONE) 
+                                    VALUES (:contactId, :department, :name, :nameAr, :email, :mobile, :telephone)";
                                     
                     using (var cmd = new OracleCommand(query, conn))
                     {
                         cmd.Parameters.Add(":contactId", contactId);
                         cmd.Parameters.Add(":department", department);
                         cmd.Parameters.Add(":name", name);
+                        cmd.Parameters.Add(":nameAr", nameAr ?? (object)DBNull.Value);
                         cmd.Parameters.Add(":email", email ?? (object)DBNull.Value);
                         cmd.Parameters.Add(":mobile", mobile ?? (object)DBNull.Value);
                         cmd.Parameters.Add(":telephone", telephone ?? (object)DBNull.Value);
@@ -60,7 +65,7 @@ namespace RulesRegulation.Services
             }
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
-                Console.WriteLine($"[OracleException] AddContactInfo failed. Department: {department}, Name: {name}, Email: {email}, Mobile: {mobile}, Telephone: {telephone}");
+                Console.WriteLine($"[OracleException] AddContactInfo failed. Department: {department}, Name: {name}, NameAr: {nameAr}, Email: {email}, Mobile: {mobile}, Telephone: {telephone}");
                 Console.WriteLine($"Oracle Error {ex.Number}: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 if (ex.InnerException != null)
                     Console.WriteLine($"InnerException: {ex.InnerException.Message}");
@@ -68,12 +73,18 @@ namespace RulesRegulation.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[Exception] AddContactInfo failed. Department: {department}, Name: {name}, Email: {email}, Mobile: {mobile}, Telephone: {telephone}");
+                Console.WriteLine($"[Exception] AddContactInfo failed. Department: {department}, Name: {name}, NameAr: {nameAr}, Email: {email}, Mobile: {mobile}, Telephone: {telephone}");
                 Console.WriteLine($"Exception: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 if (ex.InnerException != null)
                     Console.WriteLine($"InnerException: {ex.InnerException.Message}");
                 throw;
             }
+        }
+
+        // Method to add contact information (legacy version for backward compatibility)
+        public bool AddContactInfo(string department, string name, string? email, string? mobile, string? telephone)
+        {
+            return AddContactInfo(department, name, null, email, mobile, telephone);
         }
 
         // Method to check if department already has maximum contacts (5)
@@ -164,8 +175,9 @@ namespace RulesRegulation.Services
                 {
                     conn.Open();
                     string query = @"SELECT 
-                        RECORD_ID, REGULATION_NAME, SECTIONS, VERSION, APPROVAL_DATE, APPROVING_ENTITY,
-                        DEPARTMENT, DOCUMENT_TYPE, DESCRIPTION, VERSION_DATE, NOTES, CREATED_AT
+                        RECORD_ID, REGULATION_NAME, REGULATION_NAME_AR, SECTIONS, VERSION, APPROVAL_DATE, 
+                        APPROVING_ENTITY, APPROVING_ENTITY_AR, DEPARTMENT, DOCUMENT_TYPE, DESCRIPTION, 
+                        DESCRIPTION_AR, VERSION_DATE, NOTES, NOTES_AR, CREATED_AT
                         FROM RECORDS 
                         ORDER BY CREATED_AT DESC";
 
@@ -178,17 +190,21 @@ namespace RulesRegulation.Services
                             {
                                 Id = reader["RECORD_ID"]?.ToString(),
                                 RegulationName = reader["REGULATION_NAME"]?.ToString(),
+                                RegulationNameAr = reader["REGULATION_NAME_AR"]?.ToString(),
                                 Sections = reader["SECTIONS"]?.ToString(),
                                 Version = reader["VERSION"]?.ToString(),
                                 ApprovalDate = reader["APPROVAL_DATE"] != DBNull.Value ?
                                 Convert.ToDateTime(reader["APPROVAL_DATE"]).ToString("yyyy-MM-dd") : "",
                                 ApprovingEntity = reader["APPROVING_ENTITY"]?.ToString(),
+                                ApprovingEntityAr = reader["APPROVING_ENTITY_AR"]?.ToString(),
                                 Department = reader["DEPARTMENT"]?.ToString(),
                                 DocumentType = reader["DOCUMENT_TYPE"]?.ToString(),
                                 Description = reader["DESCRIPTION"]?.ToString(),
+                                DescriptionAr = reader["DESCRIPTION_AR"]?.ToString(),
                                 VersionDate = reader["VERSION_DATE"] != DBNull.Value ?
                                     Convert.ToDateTime(reader["VERSION_DATE"]).ToString("yyyy-MM-dd") : "",
                                 Notes = reader["NOTES"]?.ToString(),
+                                NotesAr = reader["NOTES_AR"]?.ToString(),
                                 CreatedAt = reader["CREATED_AT"] != DBNull.Value ?
                                     Convert.ToDateTime(reader["CREATED_AT"]).ToString("yyyy-MM-dd") : ""
                             });
@@ -517,7 +533,7 @@ namespace RulesRegulation.Services
                 {
                     conn.Open();
 
-                    string query = @"SELECT CONTACT_ID, DEPARTMENT, NAME, EMAIL, MOBILE, TELEPHONE 
+                    string query = @"SELECT CONTACT_ID, DEPARTMENT, NAME, NAME_AR, EMAIL, MOBILE, TELEPHONE 
                                     FROM CONTACT_INFORMATION 
                                     ORDER BY DEPARTMENT, NAME";
 
@@ -533,6 +549,7 @@ namespace RulesRegulation.Services
                                     ContactId = reader.GetInt32("CONTACT_ID"),
                                     Department = reader.GetString("DEPARTMENT"),
                                     Name = reader.GetString("NAME"),
+                                    NameAr = reader.IsDBNull(reader.GetOrdinal("NAME_AR")) ? null : reader.GetString("NAME_AR"),
                                     Email = reader.IsDBNull(reader.GetOrdinal("EMAIL")) ? null : reader.GetString("EMAIL"),
                                     Mobile = reader.IsDBNull(reader.GetOrdinal("MOBILE")) ? null : reader.GetString("MOBILE"),
                                     Telephone = reader.IsDBNull(reader.GetOrdinal("TELEPHONE")) ? null : reader.GetString("TELEPHONE")
@@ -664,7 +681,7 @@ namespace RulesRegulation.Services
                 {
                     conn.Open();
 
-                    string query = @"SELECT CONTACT_ID, DEPARTMENT, NAME, EMAIL, MOBILE, TELEPHONE 
+                    string query = @"SELECT CONTACT_ID, DEPARTMENT, NAME, NAME_AR, EMAIL, MOBILE, TELEPHONE 
                                     FROM CONTACT_INFORMATION 
                                     WHERE UPPER(DEPARTMENT) = UPPER(:department)
                                     ORDER BY NAME";
@@ -682,6 +699,7 @@ namespace RulesRegulation.Services
                                     ContactId = reader.GetInt32("CONTACT_ID"),
                                     Department = reader.GetString("DEPARTMENT"),
                                     Name = reader.GetString("NAME"),
+                                    NameAr = reader.IsDBNull(reader.GetOrdinal("NAME_AR")) ? null : reader.GetString("NAME_AR"),
                                     Email = reader.IsDBNull(reader.GetOrdinal("EMAIL")) ? null : reader.GetString("EMAIL"),
                                     Mobile = reader.IsDBNull(reader.GetOrdinal("MOBILE")) ? null : reader.GetString("MOBILE"),
                                     Telephone = reader.IsDBNull(reader.GetOrdinal("TELEPHONE")) ? null : reader.GetString("TELEPHONE")
@@ -1072,6 +1090,233 @@ namespace RulesRegulation.Services
                 Console.WriteLine($"Error deleting attachment: {ex.Message}");
                 return false;
             }
+        }
+
+        // =====================================================
+        // ARABIC VALIDATION METHODS FOR FRONTEND INTEGRATION
+        // =====================================================
+
+        /// <summary>
+        /// Validates Arabic text on the server side
+        /// </summary>
+        /// <param name="text">Text to validate</param>
+        /// <returns>True if text is valid Arabic or empty, false otherwise</returns>
+        public static bool IsValidArabicText(string? text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return true; // Empty text is considered valid
+
+            // Enhanced Arabic regex pattern that includes:
+            // - Arabic letters (U+0600-U+06FF)
+            // - Spaces
+            // - Arabic punctuation marks
+            var arabicPattern = new System.Text.RegularExpressions.Regex(@"^[\u0600-\u06FF\s\u060C\u061B\u061F\u0640]*$");
+            return arabicPattern.IsMatch(text);
+        }
+
+        /// <summary>
+        /// Validates multiple Arabic fields and returns validation results
+        /// </summary>
+        /// <param name="arabicFields">Dictionary of field names and their values</param>
+        /// <returns>Dictionary of field names and validation results</returns>
+        public static Dictionary<string, bool> ValidateArabicFields(Dictionary<string, string?> arabicFields)
+        {
+            var results = new Dictionary<string, bool>();
+            
+            foreach (var field in arabicFields)
+            {
+                results[field.Key] = IsValidArabicText(field.Value);
+            }
+            
+            return results;
+        }
+
+        /// <summary>
+        /// Generates JavaScript validation code for Arabic fields
+        /// Can be used in Razor views to provide instant client-side validation
+        /// </summary>
+        /// <param name="fieldIds">Array of HTML element IDs that need Arabic validation</param>
+        /// <returns>JavaScript code as string</returns>
+        public static string GenerateArabicValidationScript(params string[] fieldIds)
+        {
+            var script = @"
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Enhanced Arabic validation pattern
+    const arabicPattern = /^[\u0600-\u06FF\s\u060C\u061B\u061F\u0640]*$/;
+    
+    // Real-time Arabic validation function
+    function validateArabicFieldRealTime(input, errorElementId) {
+        const errorElement = document.getElementById(errorElementId);
+        const isValid = !input.value.trim() || arabicPattern.test(input.value);
+        
+        if (!isValid) {
+            errorElement.textContent = 'This field must contain only Arabic text.';
+            errorElement.style.display = 'block';
+            errorElement.style.color = '#dc3545';
+            input.style.borderColor = '#dc3545';
+            return false;
+        } else {
+            errorElement.textContent = '';
+            errorElement.style.display = 'none';
+            input.style.borderColor = '#28a745';
+            return true;
+        }
+    }
+    
+    // Batch validation function for form submission
+    function validateAllArabicFields() {
+        let allValid = true;
+        const arabicFields = [" + string.Join(", ", fieldIds.Select(id => $"'{id}'")) + @"];
+        
+        arabicFields.forEach(function(fieldId) {
+            const field = document.getElementById(fieldId);
+            const errorElement = document.getElementById(fieldId + 'Error');
+            
+            if (field && errorElement) {
+                if (!validateArabicFieldRealTime(field, fieldId + 'Error')) {
+                    allValid = false;
+                }
+            }
+        });
+        
+        return allValid;
+    }
+    
+    // Attach real-time validation to each Arabic field";
+
+            foreach (var fieldId in fieldIds)
+            {
+                script += $@"
+    const {fieldId}Field = document.getElementById('{fieldId}');
+    if ({fieldId}Field) {{
+        {fieldId}Field.addEventListener('input', function() {{
+            validateArabicFieldRealTime(this, '{fieldId}Error');
+        }});
+        
+        {fieldId}Field.addEventListener('blur', function() {{
+            validateArabicFieldRealTime(this, '{fieldId}Error');
+        }});
+    }}";
+            }
+
+            script += @"
+    
+    // Form submission validation
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            if (!validateAllArabicFields()) {
+                e.preventDefault();
+                alert('Please ensure all Arabic fields contain only Arabic text before submitting.');
+                
+                // Focus on first invalid field
+                const arabicFields = [" + string.Join(", ", fieldIds.Select(id => $"'{id}'")) + @"];
+                for (let fieldId of arabicFields) {
+                    const field = document.getElementById(fieldId);
+                    const errorElement = document.getElementById(fieldId + 'Error');
+                    if (field && errorElement && errorElement.textContent) {
+                        field.focus();
+                        break;
+                    }
+                }
+            }
+        });
+    }
+    
+    // Add visual feedback styles
+    const style = document.createElement('style');
+    style.textContent = `
+        .arabic-field-valid { border-color: #28a745 !important; }
+        .arabic-field-invalid { border-color: #dc3545 !important; }
+        .arabic-error { color: #dc3545; font-size: 0.875rem; margin-top: 0.25rem; }
+    `;
+    document.head.appendChild(style);
+});
+</script>";
+
+            return script;
+        }
+
+        /// <summary>
+        /// Generates HTML error elements for Arabic fields
+        /// </summary>
+        /// <param name="fieldIds">Array of field IDs that need error display elements</param>
+        /// <returns>HTML code as string</returns>
+        public static string GenerateArabicErrorElements(params string[] fieldIds)
+        {
+            var html = "";
+            foreach (var fieldId in fieldIds)
+            {
+                html += $@"<div id=""{fieldId}Error"" class=""arabic-error"" style=""display: none;""></div>" + Environment.NewLine;
+            }
+            return html;
+        }
+
+        /// <summary>
+        /// Quick validation for AddNewRecord Arabic fields
+        /// </summary>
+        public static Dictionary<string, bool> ValidateAddNewRecordArabicFields(
+            string? regulationNameAr, 
+            string? approvingEntityAr, 
+            string? descriptionAr, 
+            string? notesAr)
+        {
+            var fields = new Dictionary<string, string?>
+            {
+                ["regulationNameAr"] = regulationNameAr,
+                ["approvingEntityAr"] = approvingEntityAr,
+                ["descriptionAr"] = descriptionAr,
+                ["notesAr"] = notesAr
+            };
+            
+            return ValidateArabicFields(fields);
+        }
+
+        /// <summary>
+        /// Quick validation for AddNewContactInfo Arabic fields
+        /// </summary>
+        public static Dictionary<string, bool> ValidateAddNewContactInfoArabicFields(string? nameAr)
+        {
+            var fields = new Dictionary<string, string?>
+            {
+                ["nameAr"] = nameAr
+            };
+            
+            return ValidateArabicFields(fields);
+        }
+
+        /// <summary>
+        /// Generates complete validation package for AddNewRecord form
+        /// </summary>
+        public static string GetAddNewRecordValidationPackage()
+        {
+            var script = GenerateArabicValidationScript(
+                "regulationNameAr", 
+                "approvingEntityAr", 
+                "descriptionAr", 
+                "notesAr"
+            );
+            
+            var errorElements = GenerateArabicErrorElements(
+                "regulationNameAr", 
+                "approvingEntityAr", 
+                "descriptionAr", 
+                "notesAr"
+            );
+            
+            return script + Environment.NewLine + "<!-- Error Elements -->" + Environment.NewLine + errorElements;
+        }
+
+        /// <summary>
+        /// Generates complete validation package for AddNewContactInfo form
+        /// </summary>
+        public static string GetAddNewContactInfoValidationPackage()
+        {
+            var script = GenerateArabicValidationScript("nameAr");
+            var errorElements = GenerateArabicErrorElements("nameAr");
+            
+            return script + Environment.NewLine + "<!-- Error Elements -->" + Environment.NewLine + errorElements;
         }
 
     }

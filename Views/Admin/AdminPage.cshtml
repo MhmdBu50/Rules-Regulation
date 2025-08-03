@@ -443,17 +443,33 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         <tr>
                                                             <td colspan="3">
                                                                 <label class="form-label fw-bold">Regulation/ Manual
-                                                                    name</label>
+                                                                    name (English)</label>
                                                                 <textarea name="regulationName" class="form-control" rows="2"
                                                             readonly disabled>@record.RegulationName</textarea>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3">
+                                                                <label class="form-label fw-bold">Regulation/ Manual
+                                                                    name (Arabic)</label>
+                                                                <textarea name="regulationNameAr" class="form-control" rows="2" dir="rtl"
+                                                            readonly disabled>@(record.RegulationNameAr ?? "")</textarea>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3">
                                                                 <label class="form-label fw-bold">Brief
-                                                                    Description</label>
+                                                                    Description (English)</label>
                                                                 <textarea name="description" class="form-control" rows="4"
                                                             readonly disabled>@record.Description</textarea>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <label class="form-label fw-bold">Brief
+                                                                    Description (Arabic)</label>
+                                                                <textarea name="descriptionAr" class="form-control" rows="4" dir="rtl"
+                                                            readonly disabled>@(record.DescriptionAr ?? "")</textarea>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -480,9 +496,16 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold">Approving Entity</label>
+                                                                <label class="form-label fw-bold">Approving Entity (English)</label>
                                                                 <input type="text" name="approvingEntity" class="form-control"
                                                                     value="@record.ApprovingEntity" readonly disabled>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <label class="form-label fw-bold">Approving Entity (Arabic)</label>
+                                                                <input type="text" name="approvingEntityAr" class="form-control" dir="rtl"
+                                                                    value="@(record.ApprovingEntityAr ?? "")" readonly disabled>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -504,9 +527,16 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold">Note</label>
+                                                                <label class="form-label fw-bold">Note (English)</label>
                                                                 <input type="text" name="notes" class="form-control mb-2"
                                                                     value="@record.Notes" readonly disabled>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <label class="form-label fw-bold">Note (Arabic)</label>
+                                                                <input type="text" name="notesAr" class="form-control mb-2" dir="rtl"
+                                                                    value="@(record.NotesAr ?? "")" readonly disabled>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -588,11 +618,17 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                     @foreach (var contact in record.ContactInformation)
                                                                     {
                                                                         <div class="mb-3 p-3 border rounded">
-                                                                            <div class="mb-3">
-                                                                                <label class="form-label mb-0">Name
-                                                                                    </label>
-                                                                                <input type="text" class="form-control contact-input"
-                                                                                    value="@contact.Name" readonly>
+                                                                            <div class="row mb-3">
+                                                                                <div class="col-md-6">
+                                                                                    <label class="form-label mb-0">Name (English)</label>
+                                                                                    <input type="text" class="form-control contact-input"
+                                                                                        value="@contact.Name" readonly>
+                                                                                </div>
+                                                                                <div class="col-md-6">
+                                                                                    <label class="form-label mb-0">Name (Arabic)</label>
+                                                                                    <input type="text" class="form-control contact-input" dir="rtl"
+                                                                                        value="@(contact.NameAr ?? "")" readonly>
+                                                                                </div>
                                                                             </div>
                                                                             @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
                                                                             {

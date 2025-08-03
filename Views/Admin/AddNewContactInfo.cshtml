@@ -8,48 +8,7 @@
 <!--test branch-->
 @section Scripts {
   <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const nameInput = document.getElementById('Name');
-      const mobileInput = document.getElementById('Mobile');
-      const telephoneInput = document.getElementById('Telephone');
-
-      // Arabic name validation
-      if (nameInput) {
-        nameInput.addEventListener('input', function () {
-          const arabicPattern = /^[\u0600-\u06FF\s]*$/;
-          const error = document.getElementById('nameError');
-          if (error) {
-            if (this.value && !arabicPattern.test(this.value)) {
-              error.textContent = "Name must be in Arabic.";
-            } else {
-              error.textContent = "";
-            }
-          }
-        });
-      }
-
-      // Mobile number formatting (9 digits max)
-      if (mobileInput) {
-        mobileInput.addEventListener('input', function () {
-          this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);
-        });
-      }
-
-      // Telephone number formatting (numbers only)
-      if (telephoneInput) {
-        telephoneInput.addEventListener('input', function () {
-          this.value = this.value.replace(/[^0-9]/g, '');
-        });
-      }
-    });
-
-    function confirmCancel() {
-      if (confirm("Are you sure you want to cancel? All unsaved changes will be lost.")) {
-        document.querySelector('form').reset();
-      }
-    }
-  </script>
+  <script src="~/js/addnewcontactinfo.js"></script>
 }
 
 <div class="AddContactInfo">
@@ -109,10 +68,17 @@
           </select>
         </div>
 
-        <div class="mb-5">
-          <label for="Name">Name of Responsible Person (Arabic)</label>
-          <input type="text" class="form-control" id="Name" name="Name" lang="ar" dir="rtl" required>
-          <div id="nameError" class="text-danger mt-1"></div>
+        <div class="row mb-5">
+          <div class="col-md-6">
+            <label for="Name">Name of Responsible Person (English)</label>
+            <input type="text" class="form-control" id="Name" name="Name" required>
+            <div id="nameError" class="text-danger mt-1"></div>
+          </div>
+          <div class="col-md-6">
+            <label for="NameAr">Name of Responsible Person (Arabic)</label>
+            <input type="text" class="form-control" id="NameAr" name="NameAr" lang="ar" dir="rtl" required>
+            <div id="nameArError" class="text-danger mt-1"></div>
+          </div>
         </div>
 
         <div class="mb-5">

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RulesRegulation.Models;
 using RulesRegulation.Services;
 using RulesRegulation.Data;
+using RulesRegulation.Helpers;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
 using Oracle.ManagedDataAccess.Types;
@@ -180,15 +181,19 @@ public class AdminController : Controller
                 // Basic record information
                 Id = record.Id,
                 RegulationName = record.RegulationName,
+                RegulationNameAr = record.RegulationNameAr,
                 Sections = record.Sections,
                 Version = record.Version,
                 ApprovalDate = record.ApprovalDate,
                 ApprovingEntity = record.ApprovingEntity,
+                ApprovingEntityAr = record.ApprovingEntityAr,
                 Department = record.Department,
                 DocumentType = record.DocumentType,
                 Description = record.Description,
+                DescriptionAr = record.DescriptionAr,
                 VersionDate = record.VersionDate,
                 Notes = record.Notes,
+                NotesAr = record.NotesAr,
                 CreatedAt = record.CreatedAt,
                 // Additional enhanced information
                 ContactInformation = _oracleDbService.GetContactsByDepartment(record.Department ?? ""),
@@ -254,18 +259,27 @@ public class AdminController : Controller
 
 [HttpPost]
 [ValidateAntiForgeryToken]
-public IActionResult AddNewContactInfo(string Department, string Name, string? Email, string? Mobile, string? Telephone)
+public IActionResult AddNewContactInfo(string Department, string Name, string? NameAr, string? Email, string? Mobile, string? Telephone)
 {
     try
     {
         // Step 1: Validate required fields - Department and Name are mandatory
         if (string.IsNullOrWhiteSpace(Department) || string.IsNullOrWhiteSpace(Name))
         {
-            TempData["ErrorMessage"] = "Department and Name are required fields.";
+            TempData["ErrorMessage"] = "Department and Name (English) are required fields.";
             return View();
         }
 
-        // Step 2: Check if department already has maximum allowed contacts (5 per department)
+        // Step 2: Fast Arabic validation using OracleDbService methods
+        var arabicValidationResults = OracleDbService.ValidateAddNewContactInfoArabicFields(NameAr);
+        
+        if (!arabicValidationResults["nameAr"])
+        {
+            TempData["ErrorMessage"] = "Name (Arabic) contains invalid Arabic characters. Please use only Arabic text.";
+            return View();
+        }
+
+        // Step 3: Check if department already has maximum allowed contacts (5 per department)
         int contactCount = _oracleDbService.GetContactCountInDepartment(Department);
         if (contactCount >= 5)
         {
@@ -273,8 +287,8 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? E
             return View();
         }
 
-        // Step 3: Attempt to insert contact information into database
-        bool success = _oracleDbService.AddContactInfo(Department, Name, Email, Mobile, Telephone);
+        // Step 4: Attempt to insert contact information into database
+        bool success = _oracleDbService.AddContactInfo(Department, Name, NameAr, Email, Mobile, Telephone);
 
         if (success)
         {
@@ -285,7 +299,7 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? E
         else
         {
             // Database operation failed: Log warning and show error message
-            _logger.LogWarning("AddContactInfo returned false for Department={Department}, Name={Name}, Email={Email}, Mobile={Mobile}, Telephone={Telephone}", Department, Name, Email, Mobile, Telephone);
+            _logger.LogWarning("AddContactInfo returned false for Department={Department}, Name={Name}, NameAr={NameAr}, Email={Email}, Mobile={Mobile}, Telephone={Telephone}", Department, Name, NameAr, Email, Mobile, Telephone);
             TempData["ErrorMessage"] = "Failed to add contact information. Please try again. (Check logs for details)";
             return View();
         }
@@ -663,7 +677,39 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? E
 
         try
         {
-            // Step 1: Setup file upload directory
+            // Step 1: Fast Arabic validation using OracleDbService methods
+            var arabicValidationResults = OracleDbService.ValidateAddNewRecordArabicFields(
+                model.RegulationNameAr, 
+                model.ApprovingEntityAr, 
+                model.DescriptionAr, 
+                model.NotesAr
+            );
+            
+            var arabicValidationErrors = new List<string>();
+            
+            foreach (var validation in arabicValidationResults)
+            {
+                if (!validation.Value)
+                {
+                    var fieldName = validation.Key switch
+                    {
+                        "regulationNameAr" => "Regulation Name (Arabic)",
+                        "approvingEntityAr" => "Approving Entity (Arabic)",
+                        "descriptionAr" => "Description (Arabic)",
+                        "notesAr" => "Notes (Arabic)",
+                        _ => validation.Key
+                    };
+                    arabicValidationErrors.Add($"{fieldName} contains invalid Arabic characters");
+                }
+            }
+            
+            if (arabicValidationErrors.Any())
+            {
+                TempData["ErrorMessage"] = "Arabic validation failed: " + string.Join("; ", arabicValidationErrors);
+                return View(model);
+            }
+
+            // Step 2: Setup file upload directory
             // Create uploads directory in wwwroot if it doesn't exist
             string uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
             if (!Directory.Exists(uploadsPath))
@@ -744,14 +790,14 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? E
                 newId NUMBER;
             BEGIN
                 INSERT INTO RECORDS (
-                    RECORD_ID, USER_ID, REGULATION_NAME, DEPARTMENT, VERSION, VERSION_DATE,
-                    APPROVING_ENTITY, APPROVAL_DATE, DESCRIPTION, DOCUMENT_TYPE,
-                    SECTIONS, NOTES
+                    RECORD_ID, USER_ID, REGULATION_NAME, REGULATION_NAME_AR, DEPARTMENT, VERSION, VERSION_DATE,
+                    APPROVING_ENTITY, APPROVING_ENTITY_AR, APPROVAL_DATE, DESCRIPTION, DESCRIPTION_AR, 
+                    DOCUMENT_TYPE, SECTIONS, NOTES, NOTES_AR
                 )
                 VALUES (
-                    RECORDS_SEQ.NEXTVAL, :UserId, :RegulationName, :Department, :Version, :VersionDate,
-                    :ApprovingEntity, :ApprovalDate, :Description, :DocumentType,
-                    :Sections, :Notes
+                    RECORDS_SEQ.NEXTVAL, :UserId, :RegulationName, :RegulationNameAr, :Department, :Version, :VersionDate,
+                    :ApprovingEntity, :ApprovingEntityAr, :ApprovalDate, :Description, :DescriptionAr,
+                    :DocumentType, :Sections, :Notes, :NotesAr
                 )
                 RETURNING RECORD_ID INTO :NewRecordId;
             END;";
@@ -761,15 +807,19 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? E
             {
                 new("UserId", userId),
                 new("RegulationName", model.RegulationName ?? ""),
+                new("RegulationNameAr", model.RegulationNameAr ?? ""),
                 new("Department", model.RelevantDepartment ?? ""),
                 new("Version", model.VersionNumber ?? "1"),
                 new("VersionDate", model.VersionDate),
                 new("ApprovingEntity", model.ApprovingEntity ?? ""),
+                new("ApprovingEntityAr", model.ApprovingEntityAr ?? ""),
                 new("ApprovalDate", model.ApprovingDate),
                 new("Description", model.Description ?? ""),
+                new("DescriptionAr", model.DescriptionAr ?? ""),
                 new("DocumentType", documentType),
                 new("Sections", sectionString),
-                new("Notes", model.Notes ?? "")
+                new("Notes", model.Notes ?? ""),
+                new("NotesAr", model.NotesAr ?? "")
             };
 
             // Output param for getting the new ID

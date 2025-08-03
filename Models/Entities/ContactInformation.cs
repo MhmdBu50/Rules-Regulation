@@ -20,6 +20,10 @@ namespace RulesRegulation.Models.Entities
         [MaxLength(200)]
         public string Name { get; set; } = string.Empty;
 
+        [Column("NAME_AR")]
+        [MaxLength(200)]
+        public string? NameAr { get; set; }
+
         [Column("EMAIL")]
         [MaxLength(200)]
         public string? Email { get; set; }
