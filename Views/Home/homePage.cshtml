@@ -29,6 +29,8 @@
     <script src="@Url.Content("~/js/searchFunctionality.js")"></script>
 }
 
+
+
 <header class="menu">
 
     <div class="container-fluid h-100 bootstrap-wrapper">
@@ -114,15 +116,7 @@
 
 
 <div id="filter-panel" class="filter-panel poppins-regular d-none">
-    <div class="filter-column">
-        <h3 id="filter-sections-heading">Sections</h3>
-        <label><input type="checkbox" class="form-check-input" id="studentsFilter" value="Students"> <span
-                id="filter-students">Students</span></label>
-        <label><input type="checkbox" class="form-check-input" id="membersFilter" value="Members"> <span
-                id="filter-members">Members</span></label>
-        <label><input type="checkbox" class="form-check-input" id="enrolledFilter" value="Enrolled Programs"> <span
-                id="filter-enrolled-programs">Enrolled Programs</span></label>
-    </div>
+
 
     <div class="filter-column">
         <h3 id="filter-alphabetical-heading">Alphabetical filter</h3>
@@ -193,12 +187,24 @@ margin-top: 10px;">
 
     <div class="filter-column">
         <h3 id="filter-type-heading">Type</h3>
-        <label><input type="checkbox" class="form-check-input" id="regulationsFilter" value="Regulation"> <span
-                id="filter-regulations">Regulations</span></label>
-        <label><input type="checkbox" class="form-check-input" id="guidelinesFilter" value="Guidelines"> <span
-                id="filter-guidelines">Guidelines</span></label>
-        <label><input type="checkbox" class="form-check-input" id="policiesFilter" value="policy"> <span
-                id="filter-policies">Policies</span></label>
+
+
+        <label><input type="checkbox" class="form-check-input" id="regulationsFilter"
+                value="Student guides & templates"> <span id="nav-student-guides-label">Student guides &
+                templates</span></label>
+
+        <label><input type="checkbox" class="form-check-input" id="guidelinesFilter"
+                value="Student rules & regulations"> <span id="nav-student-rules-label">Student rules &
+                regulations</span></label>
+
+        <label><input type="checkbox" class="form-check-input" id="policiesFilter"
+                value="Employees’ rules & regulations"> <span id="nav-employee-rules-label">Employees’ rules &
+                regulations</span></label>
+
+        <label><input type="checkbox" class="form-check-input" id="academicFilter" value="Academic rules & regulations">
+            <span id="nav-academic-rules-label">Academic rules & regulations</span></label>
+
+
         <div style="margin-top: 15px;
 display: flex;">
             <button type="button" class="apply-btn" onclick="applyFilters()" id="filter-apply-btn">Apply</button>
@@ -299,11 +305,12 @@ border: none;" onclick="navigateToHome(this)">
 
     </div>
 
-        <div>
-            <button class="bar-button" id="historyButton" data-id="historyButton" onclick="alter(this); navigateToHistory()" style="background-color: #0F1734; font-size: 1.5em;" >
-                <div class="nav-icons svg-container">
-                    
-                </div>
+    <div>
+        <button class="bar-button" id="historyButton" data-id="historyButton" onclick="alter(this); navigateToHistory()"
+            style="background-color: #0F1734; font-size: 1.5em;">
+            <div class="nav-icons svg-container">
+
+            </div>
 
             <div class="nav-label">
                 <label class="poppins-regular" style="word-break: keep-all;" id="nav-history-label">History</label>

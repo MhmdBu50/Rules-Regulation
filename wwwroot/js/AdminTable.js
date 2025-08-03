@@ -524,6 +524,15 @@ function performSearch(searchTerm) {
   );
   const searchTermLower = searchTerm.toLowerCase().trim();
 
+  // Get current filter settings
+  const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
+  const mobileDocumentFilter = document.getElementById("mobileDocumentFilter");
+  const selectedDocumentType = desktopDocumentFilter
+    ? desktopDocumentFilter.value
+    : mobileDocumentFilter
+    ? mobileDocumentFilter.value
+    : "all";
+
   let visibleCount = 0;
 
   accordionItems.forEach(function (item) {
@@ -535,11 +544,21 @@ function performSearch(searchTerm) {
       ? regulationNameElement.textContent.toLowerCase()
       : "";
 
+    // Get document type for filtering
+    const recordDocumentType = item.getAttribute("data-document-type") || "";
+
     // Search in both ID and Regulation Name
     const matchesId = recordId.includes(searchTermLower);
     const matchesName = regulationName.includes(searchTermLower);
+    const matchesSearch = searchTermLower === "" || matchesId || matchesName;
 
-    if (searchTermLower === "" || matchesId || matchesName) {
+    // Check document type filter
+    const matchesFilter =
+      selectedDocumentType === "all" ||
+      recordDocumentType === selectedDocumentType;
+
+    // Show only if both search and filter criteria match
+    if (matchesSearch && matchesFilter) {
       item.style.display = "block";
       visibleCount++;
     } else {
@@ -548,7 +567,11 @@ function performSearch(searchTerm) {
   });
 
   // Show/hide "no results" message
-  showUnifiedNoResultsMessage(visibleCount === 0 && searchTermLower !== "");
+  const hasActiveSearch = searchTermLower !== "";
+  const hasActiveFilters = selectedDocumentType !== "all";
+  showUnifiedNoResultsMessage(
+    visibleCount === 0 && (hasActiveSearch || hasActiveFilters)
+  );
 }
 
 // =============================================
@@ -642,15 +665,11 @@ function hasActiveSearchTerm() {
 
 // Helper function to check if there are active filter selections
 function hasActiveFilterSelection() {
-  const sectionFilter = document.getElementById("adminSectionFilter");
-  const documentFilter = document.getElementById("adminDocumentFilter");
-  const mobileSectionFilter = document.getElementById("mobileSectionFilter");
+  const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
   const mobileDocumentFilter = document.getElementById("mobileDocumentFilter");
 
   return (
-    (sectionFilter && sectionFilter.value !== "all") ||
-    (documentFilter && documentFilter.value !== "all") ||
-    (mobileSectionFilter && mobileSectionFilter.value !== "all") ||
+    (desktopDocumentFilter && desktopDocumentFilter.value !== "all") ||
     (mobileDocumentFilter && mobileDocumentFilter.value !== "all")
   );
 }
@@ -663,14 +682,13 @@ function showNoResultsMessage(show) {
 function clearSearch() {
   document.getElementById("desktopSearchInput").value = "";
   document.getElementById("mobileSearchInput").value = "";
-  performSearch("");
 
   // Hide clear buttons
   toggleClearButton("desktop");
   toggleClearButton("mobile");
 
-  // Hide unified message
-  hideUnifiedNoResultsMessage();
+  // Reapply filters (this will handle both search and document type filtering)
+  applyAdminFilters();
 }
 
 // =============================================
@@ -705,7 +723,7 @@ function clearSearchInput(type) {
     clearBtn.style.display = "none";
   }
 
-  // Sync both inputs and perform search
+  // Sync both inputs
   if (type === "desktop") {
     const mobileInput = document.getElementById("mobileSearchInput");
     const mobileClearBtn = document.getElementById("mobileClearBtn");
@@ -718,7 +736,8 @@ function clearSearchInput(type) {
     if (desktopClearBtn) desktopClearBtn.style.display = "none";
   }
 
-  performSearch("");
+  // Reapply filters (this handles both search and document type filtering)
+  applyAdminFilters();
 }
 
 // Add search button click functionality
@@ -738,104 +757,102 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// Admin Page Search and Filter Functionality
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("AdminTable.js: DOM loaded, initializing filters...");
+// =============================================
+// COMBINED SEARCH AND FILTER FUNCTIONALITY
+// =============================================
 
-  const sectionFilter = document.getElementById("adminSectionFilter");
-  const documentFilter = document.getElementById("adminDocumentFilter");
+// Update search and apply filters
+function updateSearchAndFilter(searchTerm, type) {
+  // Update clear button visibility
+  toggleClearButton(type);
 
-  console.log("Section filter found:", sectionFilter);
-  console.log("Document filter found:", documentFilter);
+  // Apply combined search and filter
+  applyAdminFilters();
+}
 
-  if (sectionFilter && documentFilter) {
-    console.log("Both filters found, adding event listeners...");
+// =============================================
+// DOCUMENT TYPE FILTER FUNCTIONALITY
+// =============================================
 
-    // Add event listeners for filter changes
-    sectionFilter.addEventListener("change", function () {
-      console.log("Section filter changed to:", sectionFilter.value);
-      applyAdminFilters();
-    });
-
-    documentFilter.addEventListener("change", function () {
-      console.log("Document filter changed to:", documentFilter.value);
-      applyAdminFilters();
-    });
-
-    // Set default values and apply initial filter
-    sectionFilter.value = "all";
-    documentFilter.value = "all";
-
-    console.log("Filters initialized successfully");
-  } else {
-    console.error("Could not find filter elements!");
-  }
-});
-
+// Apply admin filters based on document type
 function applyAdminFilters() {
-  console.log("applyAdminFilters called");
+  console.log("Applying admin filters...");
 
-  const sectionFilter = document.getElementById("adminSectionFilter");
-  const documentFilter = document.getElementById("adminDocumentFilter");
+  // Get filter values from both desktop and mobile dropdowns
+  const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
+  const mobileDocumentFilter = document.getElementById("mobileDocumentFilter");
+
+  // Use desktop filter as primary, fallback to mobile
+  const selectedDocumentType = desktopDocumentFilter
+    ? desktopDocumentFilter.value
+    : mobileDocumentFilter
+    ? mobileDocumentFilter.value
+    : "all";
+
+  // Get current search term
+  const desktopSearchInput = document.getElementById("desktopSearchInput");
+  const mobileSearchInput = document.getElementById("mobileSearchInput");
+  const searchTerm = desktopSearchInput
+    ? desktopSearchInput.value.toLowerCase().trim()
+    : mobileSearchInput
+    ? mobileSearchInput.value.toLowerCase().trim()
+    : "";
+
+  console.log("Selected document type:", selectedDocumentType);
+  console.log("Search term:", searchTerm);
+
+  // Sync both dropdowns
+  if (desktopDocumentFilter && mobileDocumentFilter) {
+    desktopDocumentFilter.value = selectedDocumentType;
+    mobileDocumentFilter.value = selectedDocumentType;
+  }
+
+  // Sync both search inputs
+  if (desktopSearchInput && mobileSearchInput) {
+    desktopSearchInput.value = searchTerm;
+    mobileSearchInput.value = searchTerm;
+  }
+
   const accordionItems = document.querySelectorAll(
     "#regulationAccordion .accordion-item"
   );
-
-  console.log("Section filter element:", sectionFilter);
-  console.log("Document filter element:", documentFilter);
-  console.log("Accordion items found:", accordionItems.length);
-
-  if (!sectionFilter || !documentFilter) {
-    console.error("Filter elements not found!");
-    return;
-  }
-
-  const selectedSection = sectionFilter.value.toLowerCase();
-  const selectedDocument = documentFilter.value.toLowerCase();
-
-  console.log("Selected section:", selectedSection);
-  console.log("Selected document:", selectedDocument);
-
   let visibleCount = 0;
 
-  accordionItems.forEach((item, index) => {
-    const itemSection = item.getAttribute("data-section") || "";
-    const itemDocumentType = item.getAttribute("data-document-type") || "";
+  accordionItems.forEach(function (item) {
+    const recordDocumentType = item.getAttribute("data-document-type") || "";
 
-    console.log(`Item ${index}:`, {
-      section: itemSection,
-      documentType: itemDocumentType,
-    });
+    // Get record info for search
+    const recordId =
+      item.querySelector(".record-checkbox")?.getAttribute("data-record-id") ||
+      "";
+    const regulationNameElement = item.querySelector(".Regulation-Manual-size");
+    const regulationName = regulationNameElement
+      ? regulationNameElement.textContent.toLowerCase()
+      : "";
 
-    let shouldShow = true;
+    // Check search criteria
+    const matchesId = recordId.includes(searchTerm);
+    const matchesName = regulationName.includes(searchTerm);
+    const matchesSearch = searchTerm === "" || matchesId || matchesName;
 
-    // Filter by section
-    if (selectedSection !== "all") {
-      const sectionMatch = checkSectionMatch(
-        itemSection.toLowerCase(),
-        selectedSection
-      );
-      console.log(`Section match for item ${index}:`, sectionMatch);
-      if (!sectionMatch) {
-        shouldShow = false;
-      }
-    }
+    // Check document type filter
+    const matchesFilter =
+      selectedDocumentType === "all" ||
+      recordDocumentType === selectedDocumentType;
 
-    // Filter by document type
-    if (selectedDocument !== "all" && shouldShow) {
-      const documentMatch = checkDocumentTypeMatch(
-        itemDocumentType.toLowerCase(),
-        selectedDocument
-      );
-      console.log(`Document match for item ${index}:`, documentMatch);
-      if (!documentMatch) {
-        shouldShow = false;
-      }
-    }
+    console.log(
+      "Record:",
+      recordId,
+      "DocumentType:",
+      recordDocumentType,
+      "MatchesSearch:",
+      matchesSearch,
+      "MatchesFilter:",
+      matchesFilter
+    );
 
-    console.log(`Item ${index} shouldShow:`, shouldShow);
-
-    if (shouldShow) {
+    // Show item if both search and filter criteria match
+    if (matchesSearch && matchesFilter) {
       item.style.display = "block";
       visibleCount++;
     } else {
@@ -843,146 +860,66 @@ function applyAdminFilters() {
     }
   });
 
-  console.log("Visible count:", visibleCount);
+  console.log("Visible records after filtering:", visibleCount);
 
-  // Update any count displays or empty state messages
-  updateFilterResults(visibleCount);
-}
+  // Show/hide no results message
+  const hasActiveFilters = selectedDocumentType !== "all";
+  const hasActiveSearch = searchTerm !== "";
 
-function checkSectionMatch(itemSection, selectedSection) {
-  switch (selectedSection) {
-    case "students":
-      return itemSection.includes("student") || itemSection.includes("طالب");
-    case "members":
-      return (
-        itemSection.includes("member") ||
-        itemSection.includes("عضو") ||
-        itemSection.includes("موظف")
-      );
-    case "enrolled-programs":
-      return (
-        itemSection.includes("program") ||
-        itemSection.includes("برنامج") ||
-        itemSection.includes("enrolled")
-      );
-    default:
-      return true;
-  }
-}
-
-function checkDocumentTypeMatch(itemDocumentType, selectedDocument) {
-  switch (selectedDocument) {
-    case "regulation":
-      return (
-        itemDocumentType.includes("regulation") ||
-        itemDocumentType.includes("تنظيم") ||
-        itemDocumentType.includes("لائحة")
-      );
-    case "guidelines":
-      return (
-        itemDocumentType.includes("guideline") ||
-        itemDocumentType.includes("دليل") ||
-        itemDocumentType.includes("إرشاد")
-      );
-    case "policy":
-      return (
-        itemDocumentType.includes("policy") ||
-        itemDocumentType.includes("سياسة") ||
-        itemDocumentType.includes("نظام")
-      );
-    default:
-      return true;
-  }
-}
-
-function updateFilterResults(visibleCount) {
-  // Use the unified message function instead of creating separate filter message
-  if (visibleCount === 0) {
+  if (visibleCount === 0 && (hasActiveFilters || hasActiveSearch)) {
     showUnifiedNoResultsMessage(true);
   } else {
-    hideUnifiedNoResultsMessage();
+    showUnifiedNoResultsMessage(false);
   }
 }
 
-// Reset filters function (can be called from UI buttons)
+// Reset admin filters
 function resetAdminFilters() {
-  const sectionFilter = document.getElementById("adminSectionFilter");
-  const documentFilter = document.getElementById("adminDocumentFilter");
-  const mobileSectionFilter = document.getElementById("mobileSectionFilter");
+  console.log("Resetting admin filters...");
+
+  // Reset dropdowns
+  const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
   const mobileDocumentFilter = document.getElementById("mobileDocumentFilter");
 
-  // Reset all dropdowns to "all"
-  if (sectionFilter) sectionFilter.value = "all";
-  if (documentFilter) documentFilter.value = "all";
-  if (mobileSectionFilter) mobileSectionFilter.value = "all";
+  if (desktopDocumentFilter) desktopDocumentFilter.value = "all";
   if (mobileDocumentFilter) mobileDocumentFilter.value = "all";
-
-  // Clear search inputs
-  const desktopSearchInput = document.getElementById("desktopSearchInput");
-  const mobileSearchInput = document.getElementById("mobileSearchInput");
-  if (desktopSearchInput) desktopSearchInput.value = "";
-  if (mobileSearchInput) mobileSearchInput.value = "";
 
   // Apply filters to show all records
   applyAdminFilters();
 
-  // Also clear search results if any
-  performSearch("");
-
-  // Hide unified message
-  hideUnifiedNoResultsMessage();
+  // Clear search if active
+  clearSearch();
 }
 
-// =============================================
-// MOBILE-COMPATIBLE WRAPPER FUNCTIONS
-// =============================================
+// Admin Page Search and Filter Functionality
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("AdminTable.js: DOM loaded, initializing filters...");
 
-// Filter by Section using existing applyAdminFilters
-function filterBySection(section) {
-  // Sync both section dropdowns
-  const desktopFilter = document.getElementById("adminSectionFilter");
-  const mobileFilter = document.getElementById("mobileSectionFilter");
+  const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
+  const mobileDocumentFilter = document.getElementById("mobileDocumentFilter");
 
-  if (desktopFilter) desktopFilter.value = section;
-  if (mobileFilter) mobileFilter.value = section;
+  console.log("Desktop document filter found:", desktopDocumentFilter);
+  console.log("Mobile document filter found:", mobileDocumentFilter);
 
-  // Use existing applyAdminFilters function
-  applyAdminFilters();
-}
+  // Add event listeners for desktop document filter
+  if (desktopDocumentFilter) {
+    desktopDocumentFilter.addEventListener("change", function () {
+      console.log("Desktop document filter changed to:", this.value);
+      applyAdminFilters();
+    });
+  }
 
-// Filter by Document Type using existing applyAdminFilters
-function filterByDocumentType(documentType) {
-  // Sync both document type dropdowns
-  const desktopFilter = document.getElementById("adminDocumentFilter");
-  const mobileFilter = document.getElementById("mobileDocumentFilter");
+  // Add event listeners for mobile document filter
+  if (mobileDocumentFilter) {
+    mobileDocumentFilter.addEventListener("change", function () {
+      console.log("Mobile document filter changed to:", this.value);
+      applyAdminFilters();
+    });
+  }
 
-  if (desktopFilter) desktopFilter.value = documentType;
-  if (mobileFilter) mobileFilter.value = documentType;
+  // Set default values
+  if (desktopDocumentFilter) desktopDocumentFilter.value = "all";
+  if (mobileDocumentFilter) mobileDocumentFilter.value = "all";
 
-  // Use existing applyAdminFilters function
-  applyAdminFilters();
-}
-
-// Clear section filter
-function clearSectionFilter() {
-  const desktopFilter = document.getElementById("adminSectionFilter");
-  const mobileFilter = document.getElementById("mobileSectionFilter");
-
-  if (desktopFilter) desktopFilter.value = "all";
-  if (mobileFilter) mobileFilter.value = "all";
-
-  applyAdminFilters();
-}
-
-// Clear document type filter
-function clearDocumentTypeFilter() {
-  const desktopFilter = document.getElementById("adminDocumentFilter");
-  const mobileFilter = document.getElementById("mobileDocumentFilter");
-
-  if (desktopFilter) desktopFilter.value = "all";
-  if (mobileFilter) mobileFilter.value = "all";
-
-  applyAdminFilters();
-}
-
-//gg
+  console.log("Document filters initialized successfully");
+});
