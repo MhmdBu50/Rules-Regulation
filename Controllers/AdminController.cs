@@ -129,11 +129,25 @@ public class AdminController : Controller
                     using (var cmd = new Oracle.ManagedDataAccess.Client.OracleCommand(sql, conn))
                     using (var reader = cmd.ExecuteReader())
                     {
+                        int totalRecords = 0;
+                        var tempStats = new List<(string DocumentType, int Count)>();
+
                         while (reader.Read())
                         {
                             string documentType = reader["DOCUMENT_TYPE"]?.ToString() ?? "Unknown";
                             int count = Convert.ToInt32(reader["Count"]);
-                            donutData.Add(new { label = documentType, value = count });
+                            tempStats.Add((documentType, count));
+                            totalRecords += count;
+                        }
+
+                        // Calculate percentages
+                        foreach (var stat in tempStats)
+                        {
+                            donutData.Add(new { 
+                                label = stat.DocumentType, 
+                                value = stat.Count, 
+                                percentage = Math.Round((double)stat.Count / totalRecords * 100, 1)
+                            });
                         }
                     }
                 }
@@ -144,10 +158,10 @@ public class AdminController : Controller
                 // Provide default data if database fails
                 donutData = new List<object>
                 {
-                    new { label = "Academic rules", value = 5 },
-                    new { label = "Student rules & regulations", value = 3 },
-                    new { label = "Employees' rules & regulations", value = 2 },
-                    new { label = "Student guides & templates", value = 1 }
+                    new { label = "Academic rules", value = 5, percentage = 45.5 },
+                    new { label = "Student rules & regulations", value = 3, percentage = 27.3 },
+                    new { label = "Employees' rules & regulations", value = 2, percentage = 18.2 },
+                    new { label = "Student guides & templates", value = 1, percentage = 9.1 }
                 };
             }
 
@@ -178,10 +192,10 @@ public class AdminController : Controller
                 totalPolicies = 0,
                 mostViewed = new { name = "N/A", views = 0 },
                 donutData = new[] {
-                    new { label = "Academic rules", value = 5 },
-                    new { label = "Student rules & regulations", value = 3 },
-                    new { label = "Employees' rules & regulations", value = 2 },
-                    new { label = "Student guides & templates", value = 1 }
+                    new { label = "Academic rules", value = 5, percentage = 45.5 },
+                    new { label = "Student rules & regulations", value = 3, percentage = 27.3 },
+                    new { label = "Employees' rules & regulations", value = 2, percentage = 18.2 },
+                    new { label = "Student guides & templates", value = 1, percentage = 9.1 }
                 },
                 barData = new[] {
                     new { month = "March", visits = 180 },
