@@ -83,32 +83,49 @@ document.addEventListener('DOMContentLoaded', function () {
                     
                     console.log('Donut chart created successfully');
                     
-                    // Update legend
+                    // Update legend with bottom layout and count in parentheses
                     const legendContainer = document.querySelector('.legend-container');
                     if (legendContainer) {
                         legendContainer.innerHTML = '';
+                        
+                        // Create a flex container for horizontal layout
+                        legendContainer.style.display = 'flex';
+                        legendContainer.style.flexWrap = 'wrap';
+                        legendContainer.style.justifyContent = 'center';
+                        legendContainer.style.alignItems = 'center';
+                        legendContainer.style.gap = '15px';
+                        legendContainer.style.marginTop = '20px';
+                        
                         stats.donutData.forEach((item, index) => {
                             const legendItem = document.createElement('div');
                             legendItem.classList.add('legend-item');
+                            legendItem.style.display = 'flex';
+                            legendItem.style.alignItems = 'center';
+                            legendItem.style.gap = '8px';
+                            legendItem.style.fontSize = '14px';
 
                             const legendColor = document.createElement('div');
                             legendColor.classList.add('legend-color');
                             legendColor.style.backgroundColor = donutColors[index % donutColors.length];
+                            legendColor.style.width = '16px';
+                            legendColor.style.height = '16px';
+                            legendColor.style.borderRadius = '50%';
+                            legendColor.style.flexShrink = '0';
 
-                            const legendText = document.createElement('span');
-                            legendText.classList.add('legend-text');
-                            legendText.textContent = item.label;
-
-                            const legendPercentage = document.createElement('span');
-                            legendPercentage.classList.add('legend-percentage');
-                            legendPercentage.textContent = `${item.percentage}%`;
+                            const legendLabel = document.createElement('span');
+                            legendLabel.classList.add('legend-text');
+                            legendLabel.style.color = '#333';
+                            legendLabel.style.fontWeight = '500';
+                            
+                            // Format: "Category name" + percentage + (count)
+                            const value = item.value || item.count || 0;
+                            legendLabel.textContent = `${item.label} ${item.percentage}% (${value})`;
 
                             legendItem.appendChild(legendColor);
-                            legendItem.appendChild(legendText);
-                            legendItem.appendChild(legendPercentage);
+                            legendItem.appendChild(legendLabel);
                             legendContainer.appendChild(legendItem);
                         });
-                        console.log('Legend updated successfully');
+                        console.log('Legend updated successfully with bottom layout');
                     }
                 } else {
                     console.error('Chart canvas element not found');
@@ -168,25 +185,32 @@ document.addEventListener('DOMContentLoaded', function () {
                                 const legendContainer = document.querySelector('.legend-container');
                                 if (legendContainer) {
                                     legendContainer.innerHTML = '';
+                                    // Set legend container to horizontal layout at bottom
+                                    legendContainer.style.display = 'flex';
+                                    legendContainer.style.flexWrap = 'wrap';
+                                    legendContainer.style.justifyContent = 'center';
+                                    legendContainer.style.marginTop = '10px';
+                                    legendContainer.style.gap = '15px';
+                                    
                                     donutData.forEach((item, index) => {
                                         const legendItem = document.createElement('div');
-                                        legendItem.classList.add('legend-item');
+                                        legendItem.style.display = 'flex';
+                                        legendItem.style.alignItems = 'center';
+                                        legendItem.style.gap = '5px';
+                                        legendItem.style.fontSize = '12px';
 
                                         const legendColor = document.createElement('div');
-                                        legendColor.classList.add('legend-color');
+                                        legendColor.style.width = '12px';
+                                        legendColor.style.height = '12px';
                                         legendColor.style.backgroundColor = donutColors[index % donutColors.length];
+                                        legendColor.style.borderRadius = '2px';
 
                                         const legendText = document.createElement('span');
-                                        legendText.classList.add('legend-text');
-                                        legendText.textContent = item.label;
-
-                                        const legendPercentage = document.createElement('span');
-                                        legendPercentage.classList.add('legend-percentage');
-                                        legendPercentage.textContent = `${item.percentage}%`;
+                                        legendText.style.fontWeight = '500';
+                                        legendText.textContent = `${item.label} ${item.percentage}% (${item.count})`;
 
                                         legendItem.appendChild(legendColor);
                                         legendItem.appendChild(legendText);
-                                        legendItem.appendChild(legendPercentage);
                                         legendContainer.appendChild(legendItem);
                                     });
                                     console.log('Fallback legend updated successfully');
