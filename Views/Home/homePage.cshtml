@@ -118,16 +118,6 @@
 
 <div id="filter-panel" class="filter-panel poppins-regular d-none">
     <div class="filter-column">
-        <h3 id="filter-sections-heading">Sections</h3>
-        <label><input type="checkbox" class="form-check-input" id="studentsFilter" value="Students"> <span
-                id="filter-students">Students</span></label>
-        <label><input type="checkbox" class="form-check-input" id="membersFilter" value="Members"> <span
-                id="filter-members">Members</span></label>
-        <label><input type="checkbox" class="form-check-input" id="enrolledFilter" value="Enrolled Programs"> <span
-                id="filter-enrolled-programs">Enrolled Programs</span></label>
-    </div>
-
-    <div class="filter-column">
         <h3 id="filter-alphabetical-heading">Alphabetical filter</h3>
         <label><input type="radio" name="alpha" class="form-check-input" id="azFilter" value="A-Z"> <span
                 id="filter-az">A-Z</span></label>
@@ -196,12 +186,24 @@ margin-top: 10px;">
 
     <div class="filter-column">
         <h3 id="filter-type-heading">Type</h3>
-        <label><input type="checkbox" class="form-check-input" id="regulationsFilter" value="Regulation"> <span
-                id="filter-regulations">Regulations</span></label>
-        <label><input type="checkbox" class="form-check-input" id="guidelinesFilter" value="Guidelines"> <span
-                id="filter-guidelines">Guidelines</span></label>
-        <label><input type="checkbox" class="form-check-input" id="policiesFilter" value="policy"> <span
-                id="filter-policies">Policies</span></label>
+
+
+        <label><input type="checkbox" class="form-check-input" id="regulationsFilter"
+                value="Student guides & templates"> <span id="nav-student-guides-label">Student guides &
+                templates</span></label>
+
+        <label><input type="checkbox" class="form-check-input" id="guidelinesFilter"
+                value="Student rules & regulations"> <span id="nav-student-rules-label">Student rules &
+                regulations</span></label>
+
+        <label><input type="checkbox" class="form-check-input" id="policiesFilter"
+                value="Employees’ rules & regulations"> <span id="nav-employee-rules-label">Employees’ rules &
+                regulations</span></label>
+
+        <label><input type="checkbox" class="form-check-input" id="academicFilter" value="Academic rules & regulations">
+            <span id="nav-academic-rules-label"></span></label>
+
+
         <div style="margin-top: 15px;
 display: flex;">
             <button type="button" class="apply-btn" onclick="applyFilters()" id="filter-apply-btn">Apply</button>
@@ -220,7 +222,7 @@ border: none;" onclick="navigateToHome(this)">
 
             </div>
             <div style="display: flex;align-items: center;margin: 5px;">
-                <label class="poppins-regular" id="nav-home-label">Home</label>
+                <label class="poppins-regular" id="nav-home-label"></label>
 
             </div>
         </button>
@@ -235,7 +237,7 @@ border: none;" onclick="navigateToHome(this)">
 
             </div>
             <div class="nav-label">
-                <label class="poppins-regular" id="nav-student-guides-label">Student guides & templates</label>
+                <label class="poppins-regular" id="nav-student-guides-label1">Student guides & templates</label>
             </div>
         </button>
 
@@ -251,7 +253,7 @@ border: none;" onclick="navigateToHome(this)">
             </div>
 
             <div class="nav-label">
-                <label class="poppins-regular" id="nav-student-rules-label">Student rules & regulations</label>
+                <label class="poppins-regular" id="nav-student-rules-label1">Student rules & regulations</label>
             </div>
         </button>
 
@@ -263,7 +265,7 @@ border: none;" onclick="navigateToHome(this)">
             <div class="nav-icons svg-container">
             </div>
             <div class="nav-label">
-                <label class="poppins-regular" id="nav-employee-rules-label">Employees’ rules & regulations</label>
+                <label class="poppins-regular" id="nav-employee-rules-label1">Employees’ rules & regulations</label>
             </div>
         </button>
     </div>
@@ -278,7 +280,7 @@ border: none;" onclick="navigateToHome(this)">
 
             <div class="nav-label">
 
-                <label class="poppins-regular" id="nav-academic-rules-label">Academic rules & regulations</label>
+                <label class="poppins-regular" id="nav-academic-rules-label1">Academic rules & regulations</label>
             </div>
         </button>
 

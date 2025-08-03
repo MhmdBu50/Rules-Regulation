@@ -43,7 +43,7 @@ there's also many filtering options to find the policy and other adminstrative s
             <!-- Middle Section - Exit Admin view -->
             <div class="col flex-nowrap align-items-center">
                 <div class=" d-flex align-items-center  justify-content-center" style="postion: absolute;">
-                    <button class="exit-admin-btn " onclick="location.href='@Url.Action("homePage", "Home")'">
+                    <button class="exit-admin-btn" id="admin-exit-view-button" onclick="location.href='@Url.Action("homePage", "Home")'">
                         Exit Admin view
                     </button>
                 </div>
@@ -147,40 +147,40 @@ there's also many filtering options to find the policy and other adminstrative s
                     <!-- Cards Section -->
                     <div class="sidebar-cards">
                         <!-- Total Records Card -->
-                        <div id="admin-stats-total-policies" class="stats-card stats-card-blue">
-                            <h6>Total Records</h6>
+                        <div class="stats-card stats-card-blue">
+                            <h6 id="admin-stats-total-policies">Total Records</h6>
                             <div class="number">30</div>
                         </div>
 
                         <!-- Most Viewed Card -->
-                        <div id="admin-stats-most-viewed" class="stats-card stats-card-green">
+                        <div  class="stats-card stats-card-green">
                             <h6>Most Viewed</h6>
                             <div class="subtitle">Student Code of Conduct</div>
-                            <div id="admin-stats-viewed-times" class="viewed-text">Viewed: 785 times</div>
+                            <div class="viewed-text">Viewed: 785 times</div>
                         </div>
                     </div>
 
                     <!-- Buttons Section -->
                     <div class="sidebar-buttons">
                         <!-- View Report Button -->
-                        <button class="btn-custom btn-primary-custom" onclick="viewReport()">
+                        <button class="btn-custom btn-primary-custom" id="admin-button-view-report" onclick="viewReport()">
                             View Report
                         </button>
 
                         <!-- Add New Record Button -->
-                        <button class="btn-custom btn-dark-custom"
+                        <button class="btn-custom btn-dark-custom" id="admin-button-add-new-record"
                             onclick="location.href='@Url.Action("AddNewRecord", "Admin")'">
                             add new record
                         </button>
 
                         <!-- Export Data Button -->
-                        <button class="btn-custom btn-dark-custom" onclick="exportData()">
+                        <button class="btn-custom btn-dark-custom" id="admin-button-export-data" onclick="exportData()">
                             Export Data
                         </button>
 
                        
 
-                        <button class="btn-custom btn-success-custom"
+                        <button class="btn-custom btn-success-custom" id="admin-button-manage-contact-info"
                             onclick="location.href='@Url.Action("ManageContactInfo", "Admin")'">
                             Manage Contact Info
                         </button>
@@ -211,7 +211,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                     <input id="desktopSearchInput" class="search poppins-regular flex-grow-1 small-font-size" type="text"
                                         placeholder="Search by Name/ID..."
                                         style="color: #ABB7C2; background: transparent; border: none; padding-right: 30px;"
-                                        oninput="updateSearchAndFilter(this.value, 'desktop')">>
+                                        oninput="updateSearchAndFilter(this.value, 'desktop')">
                                     <button id="desktopClearBtn" class="position-absolute" 
                                         style="right: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ABB7C2; font-size: 18px; cursor: pointer; display: none;"
                                         onclick="clearSearchInput('desktop')"
@@ -228,11 +228,11 @@ there's also many filtering options to find the policy and other adminstrative s
                                 <div class="search-container d-flex align-items-center px-2" id="document-search">
                                     <select id="adminDocumentFilter" class="search poppins-regular flex-grow-1 small-font-size"
                                         style="color: #ABB7C2; border: none;">
-                                        <option value="all">All Documents</option>
-                                        <option value="Student guides & templates">Student guides & templates</option>
-                                        <option value="Student rules & regulations">Student rules & regulations</option>
-                                        <option value="Employees’ rules & regulations">Employees’ rules & regulations</option>
-                                        <option value="Academic rules & regulations">Academic rules & regulations</option>
+                                        <option value="all" id ="admin-document-filter-all">All Documents</option>
+                                        <option value="Student guides & templates" id = "admin-chart-legend-student-guides2">Student guides & templates</option>
+                                        <option value="Student rules & regulations" id = "admin-chart-legend-student-rules2">Student rules & regulations</option>
+                                        <option value="Employees’ rules & regulations" id = "admin-chart-legend-employment-rules2">Employees’ rules & regulations</option>
+                                        <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules2">Academic rules & regulations</option>
                                     </select>
                                 </div>
                             </div>
@@ -293,11 +293,11 @@ there's also many filtering options to find the policy and other adminstrative s
                     <div class="d-flex align-items-center p-0 flex-grow-1" style="margin-bottom: 10px;">
                         <div class="search-container d-flex align-items-center w-100" id="section-document-search-2">
                             <select id="mobileDocumentFilter" class="search poppins-regular flex-grow-1" style="color: #ABB7C2;">
-                                <option value="all">All Documents</option>
-                                <option value="Student guides & templates">Student guides & templates</option>
-                                <option value="Student rules & regulations">Student rules & regulations</option>
-                                <option value="Employees’ rules & regulations">Employees’ rules & regulations</option>
-                                <option value="Academic rules & regulations">Academic rules & regulations</option>
+                                <option value="all" id ="admin-document-filter-all1">All Documents</option>
+                                <option value="Student guides & templates" id = "admin-chart-legend-student-guides1">Student guides & templates</option>
+                                <option value="Student rules & regulations" id = "admin-chart-legend-student-rules1">Student rules & regulations</option>
+                                <option value="Employees’ rules & regulations" id = "admin-chart-legend-employment-rules1">Employees’ rules & regulations</option>
+                                <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules1">Academic rules & regulations</option>
                             </select>
                         </div>
                     </div>
@@ -327,18 +327,18 @@ there's also many filtering options to find the policy and other adminstrative s
                                     <th class="custom-col field-padding"></th>
                                         <!-- Space -->
                                     </th>
-                                    <th class="custom-col field-padding">
+                                    <th class="custom-col field-padding" id="admin-table-header-id">
                                         ID
                                     </th>
                                     <th
-                                        class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size  field-padding">
+                                        class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size  field-padding" id="admin-table-header-regulation-name">
                                         Regulation/ Manual name</th>
                                     <th class="col-2 d-none d-md-table-cell field-padding">Document Type</th>
-                                    <th class="col-2 d-none d-md-table-cell field-padding">Version Number
+                                    <th class="col-2 d-none d-md-table-cell field-padding" id="admin-table-header-version-number">Version Number
                                     </th>
-                                    <th class="col-2 d-none d-lg-table-cell field-padding">Approving Date
+                                    <th class="col-2 d-none d-lg-table-cell field-padding" id="admin-table-header-approving-date">Approving Date
                                     </th>
-                                    <th class="col-3 d-none d-lg-table-cell field-padding">Responsible
+                                    <th class="col-3 d-none d-lg-table-cell field-padding" id="admin-table-header-responsible-entity">Responsible
                                         Entity</th>
                                 </tr>
                             </thead>
@@ -442,7 +442,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                     <table class="table table-borderless mb-0">
                                                         <tr>
                                                             <td colspan="3">
-                                                                <label class="form-label fw-bold">Regulation/ Manual
+                                                                <label class="form-label fw-bold" id="admin-table-form-regulation-name-label">Regulation/ Manual
                                                                     name (English)</label>
                                                                 <textarea name="regulationName" class="form-control" rows="2"
                                                             readonly disabled>@record.RegulationName</textarea>
@@ -458,7 +458,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3">
-                                                                <label class="form-label fw-bold">Brief
+                                                                <label class="form-label fw-bold" id="admin-table-form-brief-description-label">Brief
                                                                     Description (English)</label>
                                                                 <textarea name="description" class="form-control" rows="4"
                                                             readonly disabled>@record.Description</textarea>
@@ -474,13 +474,13 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td class="col-12 col-sm-4">
-                                                                <label class="form-label fw-bold">Approving
+                                                                <label class="form-label fw-bold" id="admin-table-form-approving-date-label">Approving
                                                                     Date</label>
                                                                 <input type="date" name="approvalDate" class="form-control mb-2" value="@record.ApprovalDate"
                                                                     readonly disabled>
                                                             </td>
                                                             <td class="col-12 col-sm-4">
-                                                                <label class="form-label fw-bold">Version Date</label>
+                                                                <label class="form-label fw-bold" id="admin-table-form-version-date-label">Version Date</label>
                                                                 <input type="date" name="versionDate" class="form-control mb-2" value="@record.VersionDate"
                                                                     readonly disabled>
                                                             </td>
@@ -488,7 +488,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold">Version
+                                                                <label class="form-label fw-bold" id="admin-table-form-version-number-label">Version
                                                                     Number</label>
                                                                 <input type="text" name="version" class="form-control mb-2" value="@record.Version"
                                                                     readonly disabled>
@@ -496,7 +496,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold">Approving Entity (English)</label>
+                                                                <label class="form-label fw-bold" id= "admin-table-form-approving-entity-label">Approving Entity (English)</label>
                                                                 <input type="text" name="approvingEntity" class="form-control"
                                                                     value="@record.ApprovingEntity" readonly disabled>
                                                             </td>
@@ -510,7 +510,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="fw-bold">Responsible
+                                                                <label class="fw-bold" id="admin-table-form-responsible-department-label">Responsible
                                                                     Department</label>
                                                                 <select name="department" class="form-select" disabled>
                                                                     <option value="@record.Department" selected>@record.Department</option>
@@ -527,7 +527,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold">Note (English)</label>
+                                                                <label class="form-label fw-bold" id="admin-table-form-note-label">Note (English)</label>
                                                                 <input type="text" name="notes" class="form-control mb-2"
                                                                     value="@record.Notes" readonly disabled>
                                                             </td>
@@ -549,21 +549,21 @@ there's also many filtering options to find the policy and other adminstrative s
                                                     <table class="table table-borderless mb-0">
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold">Document
+                                                                <label class="form-label fw-bold" id="admin-table-form-document-type-label">Document
                                                                     Type</label>
                                                                 <select name="documentType" class="form-select mb-2" disabled>
                                                                     <option value="@record.DocumentType" selected>@record.DocumentType</option>
-                                                                    <option value="Student guides & templates">Student guides & templates</option>
-                                                                    <option value="Student rules & regulations">Student rules & regulations</option>
-                                                                    <option value="Employees’ rules & regulations">Employees’ rules & regulations</option>
-                                                                    <option value="Academic rules & regulations">Academic rules & regulations</option>
+                                                                    <option value="Student guides & templates" id= "admin-chart-legend-student-guides3">Student guides & templates</option>
+                                                                    <option value="Student rules & regulations" id="admin-chart-legend-student-rules3">Student rules & regulations</option>
+                                                                    <option value="Employees’ rules & regulations" id="admin-chart-legend-employment-rules3">Employees’ rules & regulations</option>
+                                                                    <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules3">Academic rules & regulations</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
 
                                                         <tr>
                                                             <td>
-                                                                <label class="form-label fw-bold">Attach word file</label>
+                                                                <label class="form-label fw-bold" id="admin-table-form-attach-word-label">Attach word file</label>
                                                                 @{
                                                                     var wordAttachment = ((IEnumerable<dynamic>)record.Attachments)?.FirstOrDefault(a => a.FileType?.ToString()?.ToLower() == "word" || a.FileType?.ToString()?.ToLower() == "docx");
                                                                 }
@@ -585,7 +585,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <label class="form-label fw-bold">Attach PDF file</label>
+                                                                <label class="form-label fw-bold" id="admin-table-form-attach-pdf-label">Attach PDF file</label>
                                                                 @{
                                                                     var pdfAttachment = ((IEnumerable<dynamic>)record.Attachments)?.FirstOrDefault(a => a.FileType?.ToString()?.ToLower() == "pdf");
                                                                 }
@@ -609,7 +609,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold">Responsible
+                                                                <label class="form-label fw-bold" id="admin-table-form-responsible-contact-label">Responsible
                                                                     Department
                                                                     contact
                                                                     information:</label>
@@ -629,30 +629,28 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                                     <input type="text" class="form-control contact-input" dir="rtl"
                                                                                         value="@(contact.NameAr ?? "")" readonly>
                                                                                 </div>
-                                                                            </div>
+                                                                            </div>  
                                                                             @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
                                                                             {
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label mb-0">E-mail</label>
-                                                                                    <input type="email" class="form-control contact-input"
+                                                                                    <label class="form-label mb-0" id="admin-table-form-contact-email-label" dir="rtl">البريد الإلكتروني</label>
+                                                                                    <input type="email" class="form-control contact-input" dir="rtl"
                                                                                         value="@contact.Email" readonly>
                                                                                 </div>
                                                                             }
                                                                             @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
                                                                             {
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label mb-0">Telephone
-                                                                                        number</label>
-                                                                                    <input type="text" class="form-control contact-input" value="@contact.Telephone"
+                                                                                    <label class="form-label mb-0" id= "admin-table-form-contact-telephone-label" dir="rtl">رقم الهاتف</label>
+                                                                                    <input type="text" class="form-control contact-input" value="@contact.Telephone" dir="rtl"
                                                                                         readonly>
                                                                                 </div>
                                                                             }
                                                                             @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
                                                                             {
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label mb-0">Mobile
-                                                                                        number</label>
-                                                                                    <input type="text" class="form-control contact-input" value="@contact.Mobile"
+                                                                                    <label class="form-label mb-0" id = "admin-table-form-contact-mobile-label" dir="rtl">رقم الجوال</label>
+                                                                                    <input type="text" class="form-control contact-input" value="@contact.Mobile" dir="rtl"
                                                                                         readonly>
                                                                                 </div>
                                                                             }
@@ -662,7 +660,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                 else
                                                                 {
                                                                     <div class="mb-3">
-                                                                        <p class="text-muted">No contact information available for this department.</p>
+                                                                        <p class="text-muted" id="admin-table-form-no-contact-info" dir="rtl">لا توجد معلومات اتصال متاحة لهذا القسم.</p>
                                                                     </div>
                                                                 }
                                                             </td>
@@ -676,10 +674,10 @@ there's also many filtering options to find the policy and other adminstrative s
                                         <div class="row mt-3">
                                             <div class="col-12">
                                                 <div class="d-flex flex-wrap justify-content-end gap-2">
-                                                    <button type="button" class="btn btn-danger" onclick="deleteRecord(@record.Id)">Delete</button>
-                                                    <button type="button" class="btn btn-secondary edit-btn" onclick="toggleEditMode(@record.Id)">Edit</button>
-                                                    <button type="submit" class="btn btn-success save-btn" style="display: none;">Save</button>
-                                                    <button type="button" class="btn btn-outline-secondary cancel-btn" style="display: none;" onclick="cancelEdit(@record.Id)">Cancel</button>
+                                                    <button type="button" class="btn btn-danger" id="admin-table-delete-button" onclick="deleteRecord(@record.Id)">حذف</button>
+                                                    <button type="button" class="btn btn-secondary edit-btn" id="admin-table-edit-button" onclick="toggleEditMode(@record.Id)">تعديل</button>
+                                                    <button type="submit" class="btn btn-success save-btn" id="admin-table-save-button" style="display: none;">حفظ</button>
+                                                    <button type="button" class="btn btn-outline-secondary cancel-btn" id="admin-table-cancel-button" style="display: none;" onclick="cancelEdit(@record.Id)">إلغاء</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -695,10 +693,10 @@ there's also many filtering options to find the policy and other adminstrative s
                 {
                     <!-- No records message for admin -->
                     <div class="alert alert-info text-center">
-                        <h4>No records found</h4>
-                        <p>There are currently no rules and regulations in the database.</p>
+                        <h4 id= "admin-no-records-heading" dir="rtl">لم يتم العثور على سجلات</h4>
+                        <p id= "admin-no-records-message" dir="rtl">لا توجد حالياً قوانين ولوائح في قاعدة البيانات.</p>
                         <a href="@Url.Action("AddNewRecord", "Admin")" class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i>Add New Record
+                            <i class="fas fa-plus me-2" id= "admin-add-new-record-button"></i>
                         </a>
                     </div>
                 }
