@@ -450,14 +450,6 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3">
-                                                                <label class="form-label fw-bold">Regulation/ Manual
-                                                                    name (Arabic)</label>
-                                                                <textarea name="regulationNameAr" class="form-control" rows="2" dir="rtl"
-                                                            readonly disabled>@(record.RegulationNameAr ?? "")</textarea>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="3">
                                                                 <label class="form-label fw-bold" id="admin-table-form-brief-description-label">Brief
                                                                     Description (English)</label>
                                                                 <textarea name="description" class="form-control" rows="4"
@@ -465,11 +457,17 @@ there's also many filtering options to find the policy and other adminstrative s
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td colspan="3">
-                                                                <label class="form-label fw-bold">Brief
-                                                                    Description (Arabic)</label>
-                                                                <textarea name="descriptionAr" class="form-control" rows="4" dir="rtl"
-                                                            readonly disabled>@(record.DescriptionAr ?? "")</textarea>
+                                                            <td colspan="2">
+                                                                <label class="form-label fw-bold" id= "admin-table-form-approving-entity-label">Approving Entity (English)</label>
+                                                                <input type="text" name="approvingEntity" class="form-control"
+                                                                    value="@record.ApprovingEntity" readonly disabled>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <label class="form-label fw-bold" id="admin-table-form-note-label">Note (English)</label>
+                                                                <input type="text" name="notes" class="form-control mb-2"
+                                                                    value="@record.Notes" readonly disabled>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -493,20 +491,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                 <input type="text" name="version" class="form-control mb-2" value="@record.Version"
                                                                     readonly disabled>
                                                             </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="2">
-                                                                <label class="form-label fw-bold" id= "admin-table-form-approving-entity-label">Approving Entity (English)</label>
-                                                                <input type="text" name="approvingEntity" class="form-control"
-                                                                    value="@record.ApprovingEntity" readonly disabled>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="2">
-                                                                <label class="form-label fw-bold">Approving Entity (Arabic)</label>
-                                                                <input type="text" name="approvingEntityAr" class="form-control" dir="rtl"
-                                                                    value="@(record.ApprovingEntityAr ?? "")" readonly disabled>
-                                                            </td>
+                                                            
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
@@ -525,11 +510,37 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                 </select>
                                                             </td>
                                                         </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <!------------------------------------------------ right side of the accordion menu inside------------------------------------------------------>
+                                            <div class="col-lg-6 col-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-borderless mb-0">
+                                                        
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <label class="form-label fw-bold">Regulation/ Manual
+                                                                    name (Arabic)</label>
+                                                                <textarea name="regulationNameAr" class="form-control" rows="2" dir="rtl"
+                                                            readonly disabled>@(record.RegulationNameAr ?? "")</textarea>
+                                                            </td>
+                                                        </tr>
+                                                        
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <label class="form-label fw-bold">Brief
+                                                                    Description (Arabic)</label>
+                                                                <textarea name="descriptionAr" class="form-control" rows="4" dir="rtl"
+                                                            readonly disabled>@(record.DescriptionAr ?? "")</textarea>
+                                                            </td>
+                                                        </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold" id="admin-table-form-note-label">Note (English)</label>
-                                                                <input type="text" name="notes" class="form-control mb-2"
-                                                                    value="@record.Notes" readonly disabled>
+                                                                <label class="form-label fw-bold">Approving Entity (Arabic)</label>
+                                                                <input type="text" name="approvingEntityAr" class="form-control" dir="rtl"
+                                                                    value="@(record.ApprovingEntityAr ?? "")" readonly disabled>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -539,14 +550,6 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                     value="@(record.NotesAr ?? "")" readonly disabled>
                                                             </td>
                                                         </tr>
-                                                    </table>
-                                                </div>
-                                            </div>
-
-                                            <!-- right side of the accordion menu inside-->
-                                            <div class="col-lg-6 col-12">
-                                                <div class="table-responsive">
-                                                    <table class="table table-borderless mb-0">
                                                         <tr>
                                                             <td colspan="2">
                                                                 <label class="form-label fw-bold" id="admin-table-form-document-type-label">Document
@@ -607,66 +610,75 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                 </div>
                                                             </td>
                                                         </tr>
-                                                        <tr>
-                                                            <td colspan="2">
-                                                                <label class="form-label fw-bold" id="admin-table-form-responsible-contact-label">Responsible
-                                                                    Department
-                                                                    contact
-                                                                    information:</label>
-                                                                @if (record.ContactInformation != null && ((IEnumerable<dynamic>)record.ContactInformation).Any())
-                                                                {
-                                                                    @foreach (var contact in record.ContactInformation)
-                                                                    {
-                                                                        <div class="mb-3 p-3 border rounded">
-                                                                            <div class="row mb-3">
-                                                                                <div class="col-md-6">
-                                                                                    <label class="form-label mb-0">Name (English)</label>
-                                                                                    <input type="text" class="form-control contact-input"
-                                                                                        value="@contact.Name" readonly>
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <label class="form-label mb-0">Name (Arabic)</label>
-                                                                                    <input type="text" class="form-control contact-input" dir="rtl"
-                                                                                        value="@(contact.NameAr ?? "")" readonly>
-                                                                                </div>
-                                                                            </div>  
-                                                                            @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
-                                                                            {
-                                                                                <div class="mb-3">
-                                                                                    <label class="form-label mb-0" id="admin-table-form-contact-email-label" dir="rtl">البريد الإلكتروني</label>
-                                                                                    <input type="email" class="form-control contact-input" dir="rtl"
-                                                                                        value="@contact.Email" readonly>
-                                                                                </div>
-                                                                            }
-                                                                            @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
-                                                                            {
-                                                                                <div class="mb-3">
-                                                                                    <label class="form-label mb-0" id= "admin-table-form-contact-telephone-label" dir="rtl">رقم الهاتف</label>
-                                                                                    <input type="text" class="form-control contact-input" value="@contact.Telephone" dir="rtl"
-                                                                                        readonly>
-                                                                                </div>
-                                                                            }
-                                                                            @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
-                                                                            {
-                                                                                <div class="mb-3">
-                                                                                    <label class="form-label mb-0" id = "admin-table-form-contact-mobile-label" dir="rtl">رقم الجوال</label>
-                                                                                    <input type="text" class="form-control contact-input" value="@contact.Mobile" dir="rtl"
-                                                                                        readonly>
-                                                                                </div>
-                                                                            }
-                                                                        </div>
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    <div class="mb-3">
-                                                                        <p class="text-muted" id="admin-table-form-no-contact-info" dir="rtl">لا توجد معلومات اتصال متاحة لهذا القسم.</p>
-                                                                    </div>
-                                                                }
-                                                            </td>
-                                                        </tr>
+                                                        
                                                     </table>
                                                 </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Contact Information Section - Full Width -->
+                                        <div class="row mt-4">
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold" id="admin-table-form-responsible-contact-label">Responsible Department contact information:</label>
+                                                @if (record.ContactInformation != null && ((IEnumerable<dynamic>)record.ContactInformation).Any())
+                                                {
+                                                    <div class="row">
+                                                        @foreach (var contact in record.ContactInformation)
+                                                        {
+                                                            <div class="col-12 col-md-12 col-lg-6 col-xl-4 mb-3">
+                                                                <div class="p-3 border rounded h-100">
+                                                                    <div class="mb-2">
+                                                                        <label class="form-label mb-0">Name (English)</label>
+                                                                        <input type="text" class="form-control contact-input"
+                                                                            value="@contact.Name" readonly>
+                                                                    </div>
+                                                                    <div class="mb-2">
+                                                                        <label class="form-label mb-0">Name (Arabic)</label>
+                                                                        <input type="text" class="form-control contact-input" dir="rtl"
+                                                                            value="@(contact.NameAr ?? "")" readonly>
+                                                                    </div>
+                                                                    @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
+                                                                    {
+                                                                        <div class="mb-2">
+                                                                            <label class="form-label mb-0" id="admin-table-form-contact-email-label">Email</label>
+                                                                            <input type="email" class="form-control contact-input"
+                                                                                value="@contact.Email" readonly>
+                                                                        </div>
+                                                                    }  
+                                                                    @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()) || !string.IsNullOrEmpty(contact.Mobile?.ToString()))
+                                                                    {
+                                                                        <div class="mb-2">
+                                                                            <div class="row">
+                                                                                @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
+                                                                                {
+                                                                                    <div class="col-6">
+                                                                                        <label class="form-label mb-0" id= "admin-table-form-contact-telephone-label">Telephone number</label>
+                                                                                        <input type="text" class="form-control contact-input" value="@contact.Telephone"
+                                                                                            readonly>
+                                                                                    </div>
+                                                                                }
+                                                                                @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
+                                                                                {
+                                                                                    <div class="col-6">
+                                                                                        <label class="form-label mb-0" id = "admin-table-form-contact-mobile-label">Mobile number</label>
+                                                                                        <input type="text" class="form-control contact-input" value="@contact.Mobile"
+                                                                                            readonly>
+                                                                                    </div>
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="mb-3">
+                                                        <p class="text-muted" id="admin-table-form-no-contact-info" dir="rtl">لا توجد معلومات اتصال متاحة لهذا القسم.</p>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
 
