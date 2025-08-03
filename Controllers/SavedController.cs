@@ -16,9 +16,12 @@ public class SavedController : Controller
    [HttpPost("Toggle")]
 public IActionResult Toggle([FromBody] SaveRequest request)
 {
+    // ✅ 1. Ensure session contains UserId
     int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-    if (userId == 0) return Unauthorized();
+    if (userId == 0)
+        return Unauthorized(); // User not logged in or session expired
 
+    // ✅ 2. Check if record already saved
     var existing = _context.SavedRecords
         .FirstOrDefault(s => s.UserId == userId && s.RecordId == request.RecordId);
 
@@ -29,8 +32,10 @@ public IActionResult Toggle([FromBody] SaveRequest request)
         return Ok(new { removed = true });
     }
 
+    // ✅ 3. Save new record with UUID as SavedId
     var newRecord = new SavedRecord
     {
+        SavedId = Guid.NewGuid().ToString(),
         UserId = userId,
         RecordId = request.RecordId,
         SavedTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")

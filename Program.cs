@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +62,12 @@ builder.Services.AddScoped<OracleDbService>(provider =>
     return new OracleDbService(connectionString);
 });
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/LoginPage"; 
+    });
+
 builder.Services.AddScoped<DatabaseConnection>(provider =>
 {
     var config = provider.GetRequiredService<IConfiguration>();
@@ -91,6 +98,7 @@ app.MapStaticAssets();
 app.UseRequestLocalization();
 app.UseRouting();
 app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -289,10 +289,6 @@
 
         /* Mobile responsive height control for col-auto divs */
         @media (max-width: 645px) {
-            .medium-card {
-                flex: 1 1 auto; /* Allow flexibility */
-            }
-            
             .document-card {
                 height: auto !important;
                 min-height: 280px; /* Better proportion for mobile */

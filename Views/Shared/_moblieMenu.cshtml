@@ -1,10 +1,16 @@
     @section styles{
         <link rel="stylesheet" href="~/css/homePage.css">
     }
+
+    @section scripts{
+        <script src="@Url.Content("~/js/homePage.js")"></script>
+        <script src="@Url.Content("~/js/mobileMenu.js")"></script>
+        <script src="@Url.Content("~/js/savedFunctions.js")"></script>
+    }
     <div id="sideNavBar" class="custom-sidebar sideNav text-white">
         <div>
             <!--home button mobile-->
-            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); location.href='@Url.Action("homePage", "Home")'" style="background-color: #2B334F; "> 
+            <a  class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); location.href='@Url.Action("homePage", "Home")'" style="background-color: #2B334F; "> 
                 <div style="display: flex; align-items: center; gap: 5px;">
                 <svg width="16" height="16" viewBox="0 0 53 53" fill="currentColor" style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -14,16 +20,19 @@
                 </div>
             </a>
 
-            <a href="#"  class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="AdminViewM" style="background-color: #A6832C; ">
+            @if (User.Identity != null && User.Identity.Name == "admin")
+            {
+            <a class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); location.href='@Url.Action("AdminPage", "Admin")'" data-id="AdminViewM" style="background-color: #A6832C; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <div class="svg-container" >
     
                     </div>
                     <span> view as Admin </span>
                 </div>
-            </a>   
+            </a>
+            }   
 
-            <a href="#"  class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="studentGuidesM" style="background-color: #01514F; ">
+            <a  class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); navigateToStudentGuides(this)" data-id="studentGuidesM" style="background-color: #01514F; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <div class="svg-container" >
     
@@ -31,7 +40,7 @@
                     <span> Student Guides & Templates </span>
                 </div>
             </a>    
-            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="studentRulesRegulationsM" style="background-color: #4D7160; ">
+            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); navigateToStudentRules(this)" data-id="studentRulesRegulationsM" style="background-color: #4D7160; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <div class="svg-container">
 
@@ -39,7 +48,7 @@
                     <span>Student Rules & Regulations</span>
                 </div>
             </a>
-            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="employeeRuleM" style="background-color: #4F1C34; ">
+            <a class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); navigateToEmployeeRules(this)" data-id="employeeRuleM" style="background-color: #4F1C34; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <div>
                         <div class="svg-container">
@@ -49,7 +58,7 @@
                 <span>Employees’ Rules & Regulations</span>
                 </div>
             </a>
-            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="academicRulesRegulationsM" style="background-color: #94331C; ">
+            <a class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); navigateToAcademicRules(this)" data-id="academicRulesRegulationsM" style="background-color: #94331C; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <div class="svg-container">
                     
@@ -57,7 +66,7 @@
                     <span>Academic Rules & Regulations</span>
                 </div>
             </a>
-            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="SavedRulesRegulationsM" style="background-color: #2F3E5F; ">
+            <a class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); navigateToSaved(this)" data-id="SavedRulesRegulationsM" style="background-color: #2F3E5F; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <div class="svg-container">
             
@@ -65,7 +74,7 @@
                     <span>Saved Rules & Regulations</span>
                 </div>
             </a>
-            <a href="#" class="text-white d-block py-2 mobile-menu-section" onclick="alter(this)" data-id="historyM" style="background-color: #0F1734; ">
+            <a class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); navigateToHistory(this)" data-id="historyM" style="background-color: #0F1734; ">
                 <div style="display: flex; align-items: center; gap: 5px;">
                     
                     <svg width="20" height="20" viewBox="0 0 53 49" fill="none" xmlns="http://www.w3.org/2000/svg">
