@@ -20,7 +20,7 @@
                 </div>
             </a>
 
-            @if (User.Identity != null && User.Identity.Name == "admin")
+            @if (User.IsInRole("admin") || User.IsInRole("Admin"))
             {
             <a class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); location.href='@Url.Action("AdminPage", "Admin")'" data-id="AdminViewM" style="background-color: #A6832C; ">
                 <div style="display: flex; align-items: center; gap: 5px;">

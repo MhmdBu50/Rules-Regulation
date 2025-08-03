@@ -8,6 +8,7 @@ using Oracle.ManagedDataAccess.Client;
 using System.Data;
 using Oracle.ManagedDataAccess.Types;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RulesRegulation.Controllers;
 
@@ -27,6 +28,7 @@ namespace RulesRegulation.Controllers;
  * - OracleDbService: Custom service for Oracle database operations
  * - DatabaseConnection: Direct database connection for complex operations
  */
+[Authorize(Roles = "Admin")]
 public class AdminController : Controller
 {
     // Logger instance for tracking operations and debugging
