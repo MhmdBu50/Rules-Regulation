@@ -631,35 +631,28 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                                     <input type="text" class="form-control contact-input" dir="rtl"
                                                                                         value="@(contact.NameAr ?? "")" readonly>
                                                                                 </div>
-                                                                            <div class="mb-3">
-                                                                                <label class="form-label mb-0" id="admin-table-form-contact-name-label">Name
-                                                                                    </label>
-                                                                                <input type="text" class="form-control contact-input"
-                                                                                    value="@contact.Name" readonly>
-                                                                            </div>
+                                                                            </div>  
                                                                             @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
                                                                             {
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label mb-0" id="admin-table-form-contact-email-label">E-mail</label>
-                                                                                    <input type="email" class="form-control contact-input"
+                                                                                    <label class="form-label mb-0" id="admin-table-form-contact-email-label" dir="rtl">البريد الإلكتروني</label>
+                                                                                    <input type="email" class="form-control contact-input" dir="rtl"
                                                                                         value="@contact.Email" readonly>
                                                                                 </div>
                                                                             }
                                                                             @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
                                                                             {
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label mb-0" id= "admin-table-form-contact-telephone-label">Telephone
-                                                                                        number</label>
-                                                                                    <input type="text" class="form-control contact-input" value="@contact.Telephone"
+                                                                                    <label class="form-label mb-0" id= "admin-table-form-contact-telephone-label" dir="rtl">رقم الهاتف</label>
+                                                                                    <input type="text" class="form-control contact-input" value="@contact.Telephone" dir="rtl"
                                                                                         readonly>
                                                                                 </div>
                                                                             }
                                                                             @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
                                                                             {
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label mb-0" id = "admin-table-form-contact-mobile-label">Mobile
-                                                                                        number</label>
-                                                                                    <input type="text" class="form-control contact-input" value="@contact.Mobile"
+                                                                                    <label class="form-label mb-0" id = "admin-table-form-contact-mobile-label" dir="rtl">رقم الجوال</label>
+                                                                                    <input type="text" class="form-control contact-input" value="@contact.Mobile" dir="rtl"
                                                                                         readonly>
                                                                                 </div>
                                                                             }
@@ -669,7 +662,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                 else
                                                                 {
                                                                     <div class="mb-3">
-                                                                        <p class="text-muted" id="admin-table-form-no-contact-info">No contact information available for this department.</p>
+                                                                        <p class="text-muted" id="admin-table-form-no-contact-info" dir="rtl">لا توجد معلومات اتصال متاحة لهذا القسم.</p>
                                                                     </div>
                                                                 }
                                                             </td>
@@ -683,10 +676,10 @@ there's also many filtering options to find the policy and other adminstrative s
                                         <div class="row mt-3">
                                             <div class="col-12">
                                                 <div class="d-flex flex-wrap justify-content-end gap-2">
-                                                    <button type="button" class="btn btn-danger" id="admin-table-delete-button" onclick="deleteRecord(@record.Id)">Delete</button>
-                                                    <button type="button" class="btn btn-secondary edit-btn" id="admin-table-edit-button" onclick="toggleEditMode(@record.Id)">Edit</button>
-                                                    <button type="submit" class="btn btn-success save-btn" id="admin-table-save-button" style="display: none;">Save</button>
-                                                    <button type="button" class="btn btn-outline-secondary cancel-btn" id="admin-table-cancel-button" style="display: none;" onclick="cancelEdit(@record.Id)">Cancel</button>
+                                                    <button type="button" class="btn btn-danger" id="admin-table-delete-button" onclick="deleteRecord(@record.Id)">حذف</button>
+                                                    <button type="button" class="btn btn-secondary edit-btn" id="admin-table-edit-button" onclick="toggleEditMode(@record.Id)">تعديل</button>
+                                                    <button type="submit" class="btn btn-success save-btn" id="admin-table-save-button" style="display: none;">حفظ</button>
+                                                    <button type="button" class="btn btn-outline-secondary cancel-btn" id="admin-table-cancel-button" style="display: none;" onclick="cancelEdit(@record.Id)">إلغاء</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -702,10 +695,10 @@ there's also many filtering options to find the policy and other adminstrative s
                 {
                     <!-- No records message for admin -->
                     <div class="alert alert-info text-center">
-                        <h4 id= "admin-no-records-heading">No records found</h4>
-                        <p id= "admin-no-records-message">There are currently no rules and regulations in the database.</p>
+                        <h4 id= "admin-no-records-heading" dir="rtl">لم يتم العثور على سجلات</h4>
+                        <p id= "admin-no-records-message" dir="rtl">لا توجد حالياً قوانين ولوائح في قاعدة البيانات.</p>
                         <a href="@Url.Action("AddNewRecord", "Admin")" class="btn btn-primary">
-                            <i class="fas fa-plus me-2" id= "admin-add-new-record-button"></i>Add New Record
+                            <i class="fas fa-plus me-2" id= "admin-add-new-record-button"></i>إضافة سجل جديد
                         </a>
                     </div>
                 }
