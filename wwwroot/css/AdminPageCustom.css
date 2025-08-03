@@ -1,0 +1,119 @@
+/* Admin Page Custom Styles - Moved from inline styles */
+
+/* Header Exit Button Container */
+.exit-admin-container {
+    position: absolute;
+}
+
+/* Legend Colors for Chart */
+.legend-color-academic {
+    background-color: #8B4513 !important;
+}
+
+.legend-color-employment {
+    background-color: #2E8B57 !important;
+}
+
+.legend-color-student-rules {
+    background-color: #4682B4 !important;
+}
+
+.legend-color-student-guides {
+    background-color: #DAA520 !important;
+}
+
+/* Search Input Styles */
+.search-input-desktop {
+    color: #ABB7C2;
+    background: transparent;
+    border: none;
+    padding-right: 30px;
+}
+
+.clear-search-btn {
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #ABB7C2;
+    font-size: 18px;
+    cursor: pointer;
+    display: none;
+}
+
+.filter-select {
+    color: #ABB7C2;
+    border: none;
+}
+
+/* Mobile Search Section */
+.mobile-search-wrapper {
+    background-color: #2f3e5f;
+    border-radius: 12px;
+}
+
+.mobile-search-row {
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.mobile-search-container {
+    border: 2px solid whitesmoke;
+    border-radius: 8px;
+}
+
+.mobile-search-input {
+    color: #ABB7C2;
+    border: none;
+    background: transparent;
+    padding-right: 30px;
+}
+
+.mobile-dropdown-container {
+    margin-bottom: 10px;
+}
+
+.mobile-filter-select {
+    color: #ABB7C2;
+}
+
+/* Accordion Button Positioning */
+.accordion-checkbox-container {
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+.accordion-button-padded {
+    padding-left: 50px;
+}
+
+/* Table Cell Overflow Handling */
+.table-cell-overflow {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.table-cell-overflow-medium {
+    max-width: 111px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.table-cell-overflow-large {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* File Upload Button Styles */
+.attachment-upload-btn-disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}

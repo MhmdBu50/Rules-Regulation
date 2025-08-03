@@ -89,56 +89,168 @@ public class AdminController : Controller
         // Example queries - replace with real DB queries
         int totalPolicies = _oracleDbService.GetAllRecords().Count();
 
-        // Query USER_HISTORY for most viewed record
-        string mostViewedName = "N/A";
-        int mostViewedViews = 0;
+            // Query USER_HISTORY for most viewed record
+            string mostViewedName = "N/A";
+            int mostViewedViews = 0;
+                using (var conn = new Oracle.ManagedDataAccess.Client.OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT r.REGULATION_NAME, COUNT(*) AS views
+                                   FROM USER_HISTORY h
+                                   LEFT JOIN RECORDS r ON h.RECORD_ID = r.RECORD_ID
+                                   WHERE h.ACTION = 'view'
+                                   GROUP BY r.REGULATION_NAME
+                                   ORDER BY views DESC";
+                    using (var cmd = new Oracle.ManagedDataAccess.Client.OracleCommand(sql, conn))
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            mostViewedName = reader["REGULATION_NAME"]?.ToString() ?? "N/A";
+                            mostViewedViews = Convert.ToInt32(reader["views"] ?? 0);
+                        }
+                    }
+                }
+            var mostViewedPolicy = new { name = mostViewedName, views = mostViewedViews };
+
+            // Fetch dynamic donut chart data from the database
+            var donutData = new List<object>();
+            try
+            {
+                using (var conn = new Oracle.ManagedDataAccess.Client.OracleConnection(_connectionString))
+                {
+                    conn.Open();
+                    string sql = @"SELECT DOCUMENT_TYPE, COUNT(*) AS Count
+                                   FROM RECORDS
+                                   GROUP BY DOCUMENT_TYPE";
+
+                    using (var cmd = new Oracle.ManagedDataAccess.Client.OracleCommand(sql, conn))
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string documentType = reader["DOCUMENT_TYPE"]?.ToString() ?? "Unknown";
+                            int count = Convert.ToInt32(reader["Count"]);
+                            donutData.Add(new { label = documentType, value = count });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting donut chart data");
+                // Provide default data if database fails
+                donutData = new List<object>
+                {
+                    new { label = "Academic rules", value = 5 },
+                    new { label = "Student rules & regulations", value = 3 },
+                    new { label = "Employees' rules & regulations", value = 2 },
+                    new { label = "Student guides & templates", value = 1 }
+                };
+            }
+
+            // Bar chart data (static)
+            var barData = new[] {
+                new { month = "March", visits = 180 },
+                new { month = "April", visits = 150 },
+                new { month = "May", visits = 220 },
+                new { month = "June", visits = 180 },
+                new { month = "July", visits = 320 },
+                new { month = "August", visits = 200 }
+            };
+
+            _logger.LogInformation($"Dashboard stats: totalPolicies={totalPolicies}, mostViewed={mostViewedName}({mostViewedViews}), donutData count={donutData.Count}");
+
+            return Json(new {
+                totalPolicies,
+                mostViewed = mostViewedPolicy,
+                donutData,
+                barData
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in GetDashboardStats");
+            // Return default values to prevent frontend errors
+            return Json(new {
+                totalPolicies = 0,
+                mostViewed = new { name = "N/A", views = 0 },
+                donutData = new[] {
+                    new { label = "Academic rules", value = 5 },
+                    new { label = "Student rules & regulations", value = 3 },
+                    new { label = "Employees' rules & regulations", value = 2 },
+                    new { label = "Student guides & templates", value = 1 }
+                },
+                barData = new[] {
+                    new { month = "March", visits = 180 },
+                    new { month = "April", visits = 150 },
+                    new { month = "May", visits = 220 },
+                    new { month = "June", visits = 180 },
+                    new { month = "July", visits = 320 },
+                    new { month = "August", visits = 200 }
+                }
+            });
+        }
+    }
+    
+    /**
+     * TestStats - Simple test endpoint to verify API is working
+     */
+    [HttpGet]
+    public JsonResult TestStats()
+    {
+        return Json(new {
+            totalPolicies = 42,
+            mostViewed = new { name = "Test Policy", views = 123 },
+            message = "API is working"
+        });
+    }
+
+    /**
+     * GetDocumentTypeStats - API endpoint to fetch document type statistics for the pie chart
+     * Returns: JSON object with document type counts and percentages
+     */
+    [HttpGet]
+    public JsonResult GetDocumentTypeStats()
+    {
+        var documentTypeStats = new List<object>();
+
         using (var conn = new Oracle.ManagedDataAccess.Client.OracleConnection(_connectionString))
         {
             conn.Open();
-            string sql = @"SELECT r.REGULATION_NAME, COUNT(*) AS views
-                           FROM USER_HISTORY h
-                           LEFT JOIN RECORDS r ON h.RECORD_ID = r.RECORD_ID
-                           WHERE h.ACTION = 'view'
-                           GROUP BY r.REGULATION_NAME
-                           ORDER BY views DESC";
+            string sql = @"SELECT DOCUMENT_TYPE, COUNT(*) AS Count
+                           FROM RECORDS
+                           GROUP BY DOCUMENT_TYPE";
+
             using (var cmd = new Oracle.ManagedDataAccess.Client.OracleCommand(sql, conn))
             using (var reader = cmd.ExecuteReader())
             {
-                if (reader.Read())
+                int totalRecords = 0;
+                var tempStats = new List<(string DocumentType, int Count)>();
+
+                while (reader.Read())
                 {
-                    mostViewedName = reader["REGULATION_NAME"]?.ToString() ?? "N/A";
-                    mostViewedViews = Convert.ToInt32(reader["views"] ?? 0);
+                    string documentType = reader["DOCUMENT_TYPE"]?.ToString() ?? "Unknown";
+                    int count = Convert.ToInt32(reader["Count"]);
+                    tempStats.Add((documentType, count));
+                    totalRecords += count;
+                }
+
+                foreach (var stat in tempStats)
+                {
+                    documentTypeStats.Add(new
+                    {
+                        label = stat.DocumentType,
+                        count = stat.Count,
+                        percentage = Math.Round((double)stat.Count / totalRecords * 100, 2)
+                    });
                 }
             }
         }
-        var mostViewedPolicy = new { name = mostViewedName, views = mostViewedViews };
 
-        // Donut chart data (static for now)
-        var donutData = new[] {
-            new { label = "Academic rules", value = 40 },
-            new { label = "Employment rules & regulations", value = 30 },
-            new { label = "Student rules & regulations", value = 25 },
-            new { label = "Student rules & regulations", value = 15 }
-        };
-
-        // Bar chart data (static)
-        var barData = new[] {
-            new { month = "March", visits = 180 },
-            new { month = "April", visits = 150 },
-            new { month = "May", visits = 220 },
-            new { month = "June", visits = 180 },
-            new { month = "July", visits = 320 },
-            new { month = "August", visits = 200 }
-        };
-
-        return Json(new {
-            totalPolicies,
-            mostViewed = mostViewedPolicy,
-            donutData,
-            barData
-        });
+        return Json(documentTypeStats);
     }
-    
+
     /**
      * AdminPage - Main administrative dashboard displaying all records
      * 
@@ -1463,5 +1575,4 @@ public async Task<IActionResult> ViewPdf(int id)
             return Json(new { success = false, message = "An error occurred while updating the file." });
         }
     }
-
 } // End of AdminController class
