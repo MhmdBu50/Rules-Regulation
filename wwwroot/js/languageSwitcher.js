@@ -90,6 +90,14 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-chart-legend-employment-rules1": "Employment rules & regulations",
         "admin-chart-legend-student-rules1": "Student rules & regulations",
         "admin-chart-legend-student-guides1": "Student guides & templates", // Added based on typical content
+         "admin-chart-legend-academic-rules2": "Academic rules",
+        "admin-chart-legend-employment-rules2": "Employment rules & regulations",
+        "admin-chart-legend-student-rules2": "Student rules & regulations",
+        "admin-chart-legend-student-guides2": "Student guides & templates",
+         "admin-chart-legend-academic-rules3": "Academic rules",
+        "admin-chart-legend-employment-rules3": "Employment rules & regulations",
+        "admin-chart-legend-student-rules3": "Student rules & regulations",
+        "admin-chart-legend-student-guides3": "Student guides & templates",
         "admin-chart-title-visits": "Website visits over the past 6 months",
         "admin-stats-total-policies": "Total Policies", // Placeholder for dynamic number
         "admin-button-view-report": "View Report",
@@ -193,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Chatbot Section
             "chatbot-name": "الدردشة مع السيد كبسة",
             "chatbot-initial-message": "مرحباً، كيف يمكنني مساعدتك اليوم؟",
-            "message-input": "اكتب رسالتك...",
+            "message-input": "...اكتب رسالتك",
 
             // Modal elements
             "modal-title-regulation-details": "تفاصيل اللائحة",
@@ -227,6 +235,14 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-chart-legend-employment-rules1": "قواعد وأنظمة التوظيف",
         "admin-chart-legend-student-rules1": "قواعد وأنظمة الطلاب",
         "admin-chart-legend-student-guides1": "أدلة وقوالب الطلاب",
+        "admin-chart-legend-academic-rules2": "قواعد أكاديمية",
+        "admin-chart-legend-employment-rules2": "قواعد وأنظمة التوظيف",
+        "admin-chart-legend-student-rules2": "قواعد وأنظمة الطلاب",
+        "admin-chart-legend-student-guides2": "أدلة وقوالب الطلاب",
+        "admin-chart-legend-academic-rules3": "قواعد أكاديمية",
+        "admin-chart-legend-employment-rules3": "قواعد وأنظمة التوظيف",
+        "admin-chart-legend-student-rules3": "قواعد وأنظمة الطلاب",
+        "admin-chart-legend-student-guides3": "أدلة وقوالب الطلاب",
         "admin-chart-title-visits": "زيارات الموقع خلال الستة أشهر الماضية",
         "admin-stats-total-policies": "إجمالي السياسات",
         "admin-button-view-report": "عرض التقرير",

@@ -229,10 +229,10 @@ there's also many filtering options to find the policy and other adminstrative s
                                     <select id="adminDocumentFilter" class="search poppins-regular flex-grow-1 small-font-size"
                                         style="color: #ABB7C2; border: none;">
                                         <option value="all" id ="admin-document-filter-all">All Documents</option>
-                                        <option value="Student guides & templates" id = "admin-chart-legend-student-guides">Student guides & templates</option>
-                                        <option value="Student rules & regulations" id = "admin-chart-legend-student-rules">Student rules & regulations</option>
-                                        <option value="Employees’ rules & regulations" id = "admin-chart-legend-employment-rules">Employees’ rules & regulations</option>
-                                        <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules">Academic rules & regulations</option>
+                                        <option value="Student guides & templates" id = "admin-chart-legend-student-guides2">Student guides & templates</option>
+                                        <option value="Student rules & regulations" id = "admin-chart-legend-student-rules2">Student rules & regulations</option>
+                                        <option value="Employees’ rules & regulations" id = "admin-chart-legend-employment-rules2">Employees’ rules & regulations</option>
+                                        <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules2">Academic rules & regulations</option>
                                     </select>
                                 </div>
                             </div>
@@ -555,10 +555,10 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                     Type</label>
                                                                 <select name="documentType" class="form-select mb-2" disabled>
                                                                     <option value="@record.DocumentType" selected>@record.DocumentType</option>
-                                                                    <option value="Student guides & templates">Student guides & templates</option>
-                                                                    <option value="Student rules & regulations">Student rules & regulations</option>
-                                                                    <option value="Employees’ rules & regulations">Employees’ rules & regulations</option>
-                                                                    <option value="Academic rules & regulations">Academic rules & regulations</option>
+                                                                    <option value="Student guides & templates" id= "admin-chart-legend-student-guides3">Student guides & templates</option>
+                                                                    <option value="Student rules & regulations" id="admin-chart-legend-student-rules3">Student rules & regulations</option>
+                                                                    <option value="Employees’ rules & regulations" id="admin-chart-legend-employment-rules3">Employees’ rules & regulations</option>
+                                                                    <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules3">Academic rules & regulations</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
@@ -698,7 +698,7 @@ there's also many filtering options to find the policy and other adminstrative s
                         <h4 id= "admin-no-records-heading" dir="rtl">لم يتم العثور على سجلات</h4>
                         <p id= "admin-no-records-message" dir="rtl">لا توجد حالياً قوانين ولوائح في قاعدة البيانات.</p>
                         <a href="@Url.Action("AddNewRecord", "Admin")" class="btn btn-primary">
-                            <i class="fas fa-plus me-2" id= "admin-add-new-record-button"></i>إضافة سجل جديد
+                            <i class="fas fa-plus me-2" id= "admin-add-new-record-button"></i>
                         </a>
                     </div>
                 }
