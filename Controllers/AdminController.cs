@@ -86,31 +86,33 @@ public class AdminController : Controller
     [HttpGet]
     public JsonResult GetDashboardStats()
     {
-        // Example queries - replace with real DB queries
-        int totalPolicies = _oracleDbService.GetAllRecords().Count();
+        try
+        {
+            // Example queries - replace with real DB queries
+            int totalPolicies = _oracleDbService.GetAllRecords().Count();
 
             // Query USER_HISTORY for most viewed record
             string mostViewedName = "N/A";
             int mostViewedViews = 0;
-                using (var conn = new Oracle.ManagedDataAccess.Client.OracleConnection(_connectionString))
+            using (var conn = new Oracle.ManagedDataAccess.Client.OracleConnection(_connectionString))
+            {
+                conn.Open();
+                string sql = @"SELECT r.REGULATION_NAME, COUNT(*) AS views
+                               FROM USER_HISTORY h
+                               LEFT JOIN RECORDS r ON h.RECORD_ID = r.RECORD_ID
+                               WHERE h.ACTION = 'view'
+                               GROUP BY r.REGULATION_NAME
+                               ORDER BY views DESC";
+                using (var cmd = new Oracle.ManagedDataAccess.Client.OracleCommand(sql, conn))
+                using (var reader = cmd.ExecuteReader())
                 {
-                    conn.Open();
-                    string sql = @"SELECT r.REGULATION_NAME, COUNT(*) AS views
-                                   FROM USER_HISTORY h
-                                   LEFT JOIN RECORDS r ON h.RECORD_ID = r.RECORD_ID
-                                   WHERE h.ACTION = 'view'
-                                   GROUP BY r.REGULATION_NAME
-                                   ORDER BY views DESC";
-                    using (var cmd = new Oracle.ManagedDataAccess.Client.OracleCommand(sql, conn))
-                    using (var reader = cmd.ExecuteReader())
+                    if (reader.Read())
                     {
-                        if (reader.Read())
-                        {
-                            mostViewedName = reader["REGULATION_NAME"]?.ToString() ?? "N/A";
-                            mostViewedViews = Convert.ToInt32(reader["views"] ?? 0);
-                        }
+                        mostViewedName = reader["REGULATION_NAME"]?.ToString() ?? "N/A";
+                        mostViewedViews = Convert.ToInt32(reader["views"] ?? 0);
                     }
                 }
+            }
             var mostViewedPolicy = new { name = mostViewedName, views = mostViewedViews };
 
             // Fetch dynamic donut chart data from the database
