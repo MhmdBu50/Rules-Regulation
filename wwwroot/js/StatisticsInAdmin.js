@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Donut Chart (Pie Chart)
             if (stats.donutData && stats.donutData.length > 0) {
                 const donutLabels = stats.donutData.map(d => d.label);
-                const donutValues = stats.donutData.map(d => d.value);
+                const donutValues = stats.donutData.map(d => d.value || d.count); // Handle both value and count
                 const donutPercentages = stats.donutData.map(d => d.percentage);
                 const donutColors = ['#8B4513', '#2E8B57', '#4682B4', '#DAA520'];
                 
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         
                         if (donutData && donutData.length > 0) {
                             const donutLabels = donutData.map(d => d.label);
-                            const donutValues = donutData.map(d => d.value);
+                            const donutValues = donutData.map(d => d.count); // Changed from d.value to d.count
                             const donutPercentages = donutData.map(d => d.percentage);
                             const donutColors = ['#8B4513', '#2E8B57', '#4682B4', '#DAA520'];
                             
