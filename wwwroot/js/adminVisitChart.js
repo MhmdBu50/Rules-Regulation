@@ -58,51 +58,47 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     plugins: {
                         legend: {
-                            // Override default legend click behavior to toggle between total and unique visits
-                            onClick: function (_, __, legend) {
-                                // Flip the global flag
-                                showingUnique = !showingUnique;
-
-                                // Select the appropriate API endpoint
-                                const apiUrl = showingUnique
-                                    ? '/api/analytics/unique-monthly-visits'
-                                    : '/api/analytics/monthly-visits';
-
-                                // Fetch new data and update the chart
-                                fetch(apiUrl)
-                                    .then(res => res.json())
-                                    .then(data => {
-                                        const chart = legend.chart;
-
-                                        // Replace chart data with the new dataset
-                                        chart.data.labels = data.labels;
-                                        chart.data.datasets[0].label = showingUnique
-                                            ? 'Unique Monthly Visits'
-                                            : 'Monthly Visits';
-                                        chart.data.datasets[0].data = data.data;
-
-                                        chart.getDatasetMeta(0).hidden = false; // Ensure the dataset is visible
-
-                                        chart.update(); // Re-render the chart with new data
-                                    })
-                                    .catch(error => console.error("Chart toggle error:", error)); // Handle fetch or rendering errors
-                            },
-
-                            // Customize legend appearance to remove the color box
-                            labels: {
-                                generateLabels: function (chart) {
-                                    return [{
-                                        text: showingUnique ? 'Unique Monthly Visits' : 'Monthly Visits',
-                                        fillStyle: 'transparent', // Hide color box
-                                        strokeStyle: 'transparent',
-                                        hidden: false,
-                                        index: 0
-                                    }];
-                                }
-                            }
+                            display: false // We hide Chart.js legend entirely in favor of a custom toggler
                         }
                     }
                 }
+            });
+
+            // Get reference to custom toggle element
+            const toggle = document.getElementById('visitToggler');
+
+            // Initialize label
+            toggle.textContent = 'Monthly Visits';
+
+            // Add click event to toggle dataset
+            toggle.addEventListener('click', () => {
+                // Flip the global flag
+                showingUnique = !showingUnique;
+
+                // Choose correct API
+                const apiUrl = showingUnique
+                    ? '/api/analytics/unique-monthly-visits'
+                    : '/api/analytics/monthly-visits';
+
+                // Fetch new data
+                fetch(apiUrl)
+                    .then(res => res.json())
+                    .then(data => {
+                        barChartInstance.data.labels = data.labels;
+                        barChartInstance.data.datasets[0].label = showingUnique
+                            ? 'Unique Monthly Visits'
+                            : 'Monthly Visits';
+                        barChartInstance.data.datasets[0].data = data.data;
+
+                        barChartInstance.getDatasetMeta(0).hidden = false; // Ensure dataset is visible
+                        barChartInstance.update();
+
+                        // Update label text
+                        toggle.textContent = showingUnique
+                            ? 'Unique Monthly Visits'
+                            : 'Monthly Visits';
+                    })
+                    .catch(error => console.error("Toggle fetch error:", error));
             });
         })
         .catch(error => console.error("Chart load error:", error)); // Handle fetch or rendering errors
