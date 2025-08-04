@@ -56,11 +56,13 @@ namespace Rules_Regulation.Controllers
                 }
 
                 // Validate file type
+#pragma warning disable CS8604 // Possible null reference argument.
                 if (!IsPdfFile(attachment.FileType, attachment.FilePath))
                 {
                     _logger?.LogWarning($"File {attachment.FilePath} is not a PDF");
                     return File(CreatePlaceholderThumbnail(), "image/jpeg");
                 }
+#pragma warning restore CS8604 // Possible null reference argument.
 
                 // Get full file path and validate existence
                 string fullPath = GetFullFilePath(attachment.FilePath);

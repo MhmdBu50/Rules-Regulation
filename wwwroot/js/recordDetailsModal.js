@@ -51,5 +51,10 @@ function displayRecordDetailsModal(recordId) {
 
 // Legacy function name for backward compatibility
 function showRecordDetailsModal(recordId) {
+    // Log the SHOW_DETAILS action
+    if (typeof logShowDetails === 'function') {
+        logShowDetails(recordId);
+    }
+    
     displayRecordDetailsModal(recordId);
 }
