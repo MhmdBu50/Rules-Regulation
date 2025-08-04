@@ -10,6 +10,9 @@ using System.Data;
 using Oracle.ManagedDataAccess.Types;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authorization;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System.Drawing;
 
 namespace RulesRegulation.Controllers;
 
@@ -1590,5 +1593,296 @@ public async Task<IActionResult> ViewPdf(int id)
             _logger.LogError(ex, "Error updating attachment for record {RecordId}", recordId);
             return Json(new { success = false, message = "An error occurred while updating the file." });
         }
+    }
+
+    /// <summary>
+    /// Export all database tables to Excel file
+    /// </summary>
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ExportAllDataToExcel()
+    {
+        try
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            
+            using var package = new ExcelPackage();
+            
+            // Export each table to a separate worksheet
+            await ExportRecordsToWorksheet(package);
+            await ExportUserHistoryToWorksheet(package);
+            await ExportUsersToWorksheet(package);
+            await ExportContactInformationToWorksheet(package);
+            await ExportAttachmentsToWorksheet(package);
+
+            // Generate filename with timestamp
+            var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            var fileName = $"AllData_Export_{timestamp}.xlsx";
+
+            // Return file for download
+            var fileBytes = package.GetAsByteArray();
+            return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error exporting data to Excel");
+            TempData["ErrorMessage"] = $"Export failed: {ex.Message}";
+            return RedirectToAction("AdminPage");
+        }
+    }
+
+    /// <summary>
+    /// Export RECORDS table to Excel worksheet
+    /// </summary>
+    private async Task ExportRecordsToWorksheet(ExcelPackage package)
+    {
+        var worksheet = package.Workbook.Worksheets.Add("RECORDS");
+
+        using var connection = new OracleConnection(_connectionString);
+        await connection.OpenAsync();
+
+        var command = new OracleCommand("SELECT * FROM RECORDS ORDER BY RECORD_ID", connection);
+        using var reader = await command.ExecuteReaderAsync();
+
+        // Add headers
+        var headers = new[] { 
+            "RECORD_ID", "USER_ID", "REGULATION_NAME", "NOTES", "VERSION", 
+            "DESCRIPTION", "DEPARTMENT", "DOCUMENT_TYPE", "VERSION_DATE", 
+            "APPROVAL_DATE", "SECTIONS", "CREATED_AT", "APPROVING_ENTITY",
+            "REGULATION_NAME_AR", "APPROVING_ENTITY_AR", "DESCRIPTION_AR", "NOTES_AR"
+        };
+
+        for (int i = 0; i < headers.Length; i++)
+        {
+            var cell = worksheet.Cells[1, i + 1];
+            cell.Value = headers[i];
+            cell.Style.Font.Bold = true;
+            cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            cell.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+        }
+
+        // Add data rows
+        int row = 2;
+        while (await reader.ReadAsync())
+        {
+            for (int col = 0; col < headers.Length; col++)
+            {
+                try
+                {
+                    var value = reader[headers[col]];
+                    worksheet.Cells[row, col + 1].Value = value == DBNull.Value ? "" : value?.ToString();
+                }
+                catch
+                {
+                    worksheet.Cells[row, col + 1].Value = "";
+                }
+            }
+            row++;
+        }
+
+        worksheet.Cells.AutoFitColumns();
+    }
+
+    /// <summary>
+    /// Export USER_HISTORY table to Excel worksheet
+    /// </summary>
+    private async Task ExportUserHistoryToWorksheet(ExcelPackage package)
+    {
+        var worksheet = package.Workbook.Worksheets.Add("USER_HISTORY");
+
+        using var connection = new OracleConnection(_connectionString);
+        await connection.OpenAsync();
+
+        var command = new OracleCommand(@"
+            SELECT h.ID, h.USER_ID, h.RECORD_ID, h.ACTION, h.ACTION_DATE, 
+                   r.REGULATION_NAME
+            FROM USER_HISTORY h
+            LEFT JOIN RECORDS r ON h.RECORD_ID = r.RECORD_ID
+            ORDER BY h.ACTION_DATE DESC", connection);
+        
+        using var reader = await command.ExecuteReaderAsync();
+
+        // Add headers
+        var headers = new[] { "ID", "USER_ID", "RECORD_ID", "ACTION", "ACTION_DATE", "REGULATION_NAME" };
+
+        for (int i = 0; i < headers.Length; i++)
+        {
+            var cell = worksheet.Cells[1, i + 1];
+            cell.Value = headers[i];
+            cell.Style.Font.Bold = true;
+            cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            cell.Style.Fill.BackgroundColor.SetColor(Color.LightBlue);
+        }
+
+        // Add data rows
+        int row = 2;
+        while (await reader.ReadAsync())
+        {
+            for (int col = 0; col < headers.Length; col++)
+            {
+                try
+                {
+                    var value = reader[headers[col]];
+                    worksheet.Cells[row, col + 1].Value = value == DBNull.Value ? "" : value?.ToString();
+                }
+                catch
+                {
+                    worksheet.Cells[row, col + 1].Value = "";
+                }
+            }
+            row++;
+        }
+
+        worksheet.Cells.AutoFitColumns();
+    }
+
+    /// <summary>
+    /// Export USERS table to Excel worksheet
+    /// </summary>
+    private async Task ExportUsersToWorksheet(ExcelPackage package)
+    {
+        var worksheet = package.Workbook.Worksheets.Add("USERS");
+
+        using var connection = new OracleConnection(_connectionString);
+        await connection.OpenAsync();
+
+        var command = new OracleCommand(@"
+            SELECT USER_ID, NAME, EMAIL, PHONE_NUMBER, CREATED_AT, UPDATED_AT, ROLE 
+            FROM USERS 
+            ORDER BY USER_ID", connection);
+        using var reader = await command.ExecuteReaderAsync();
+
+        // Add headers
+        var headers = new[] { "USER_ID", "NAME", "EMAIL", "PHONE_NUMBER", "CREATED_AT", "UPDATED_AT", "ROLE" };
+
+        for (int i = 0; i < headers.Length; i++)
+        {
+            var cell = worksheet.Cells[1, i + 1];
+            cell.Value = headers[i];
+            cell.Style.Font.Bold = true;
+            cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            cell.Style.Fill.BackgroundColor.SetColor(Color.LightGreen);
+        }
+
+        // Add data rows
+        int row = 2;
+        while (await reader.ReadAsync())
+        {
+            for (int col = 0; col < headers.Length; col++)
+            {
+                try
+                {
+                    var value = reader[headers[col]];
+                    worksheet.Cells[row, col + 1].Value = value == DBNull.Value ? "" : value?.ToString();
+                }
+                catch
+                {
+                    worksheet.Cells[row, col + 1].Value = "";
+                }
+            }
+            row++;
+        }
+
+        worksheet.Cells.AutoFitColumns();
+    }
+
+    /// <summary>
+    /// Export CONTACT_INFORMATION table to Excel worksheet
+    /// </summary>
+    private async Task ExportContactInformationToWorksheet(ExcelPackage package)
+    {
+        var worksheet = package.Workbook.Worksheets.Add("CONTACT_INFORMATION");
+
+        using var connection = new OracleConnection(_connectionString);
+        await connection.OpenAsync();
+
+        var command = new OracleCommand("SELECT * FROM CONTACT_INFORMATION ORDER BY CONTACT_ID", connection);
+        using var reader = await command.ExecuteReaderAsync();
+
+        // Add headers
+        var headers = new[] { "CONTACT_ID", "DEPARTMENT", "NAME", "EMAIL", "MOBILE", "TELEPHONE", "NAME_AR" };
+
+        for (int i = 0; i < headers.Length; i++)
+        {
+            var cell = worksheet.Cells[1, i + 1];
+            cell.Value = headers[i];
+            cell.Style.Font.Bold = true;
+            cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            cell.Style.Fill.BackgroundColor.SetColor(Color.LightYellow);
+        }
+
+        // Add data rows
+        int row = 2;
+        while (await reader.ReadAsync())
+        {
+            for (int col = 0; col < headers.Length; col++)
+            {
+                try
+                {
+                    var value = reader[headers[col]];
+                    worksheet.Cells[row, col + 1].Value = value == DBNull.Value ? "" : value?.ToString();
+                }
+                catch
+                {
+                    worksheet.Cells[row, col + 1].Value = "";
+                }
+            }
+            row++;
+        }
+
+        worksheet.Cells.AutoFitColumns();
+    }
+
+    /// <summary>
+    /// Export ATTACHMENTS table to Excel worksheet
+    /// </summary>
+    private async Task ExportAttachmentsToWorksheet(ExcelPackage package)
+    {
+        var worksheet = package.Workbook.Worksheets.Add("ATTACHMENTS");
+
+        using var connection = new OracleConnection(_connectionString);
+        await connection.OpenAsync();
+
+        var command = new OracleCommand(@"
+            SELECT a.ATTACHMENT_ID, a.RECORD_ID, a.FILE_TYPE, a.FILE_PATH, 
+                   a.UPLOAD_DATE, a.ORIGINAL_NAME, r.REGULATION_NAME 
+            FROM ATTACHMENTS a
+            LEFT JOIN RECORDS r ON a.RECORD_ID = r.RECORD_ID
+            ORDER BY a.ATTACHMENT_ID", connection);
+        
+        using var reader = await command.ExecuteReaderAsync();
+
+        // Add headers
+        var headers = new[] { "ATTACHMENT_ID", "RECORD_ID", "FILE_TYPE", "FILE_PATH", "UPLOAD_DATE", "ORIGINAL_NAME", "REGULATION_NAME" };
+
+        for (int i = 0; i < headers.Length; i++)
+        {
+            var cell = worksheet.Cells[1, i + 1];
+            cell.Value = headers[i];
+            cell.Style.Font.Bold = true;
+            cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            cell.Style.Fill.BackgroundColor.SetColor(Color.LightCoral);
+        }
+
+        // Add data rows
+        int row = 2;
+        while (await reader.ReadAsync())
+        {
+            for (int col = 0; col < headers.Length; col++)
+            {
+                try
+                {
+                    var value = reader[headers[col]];
+                    worksheet.Cells[row, col + 1].Value = value == DBNull.Value ? "" : value?.ToString();
+                }
+                catch
+                {
+                    worksheet.Cells[row, col + 1].Value = "";
+                }
+            }
+            row++;
+        }
+
+        worksheet.Cells.AutoFitColumns();
     }
 } // End of AdminController class
