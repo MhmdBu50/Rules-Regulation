@@ -211,7 +211,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                     <input id="desktopSearchInput" class="search poppins-regular flex-grow-1 small-font-size" type="text"
                                         placeholder="Search by Name/ID..."
                                         style="color: #ABB7C2; background: transparent; border: none; padding-right: 30px;"
-                                        oninput="updateSearchAndFilter(this.value, 'desktop')">>
+                                        oninput="updateSearchAndFilter(this.value, 'desktop')">
                                     <button id="desktopClearBtn" class="position-absolute" 
                                         style="right: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ABB7C2; font-size: 18px; cursor: pointer; display: none;"
                                         onclick="clearSearchInput('desktop')"
@@ -334,8 +334,6 @@ there's also many filtering options to find the policy and other adminstrative s
                                         class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size  field-padding" id="admin-table-header-regulation-name">
                                         Regulation/ Manual name</th>
                                     <th class="col-2 d-none d-md-table-cell field-padding">Document Type</th>
-                                    <th class="col-2 d-none d-md-table-cell field-padding">Version Number
-                                    <th class="col-1 d-none d-md-table-cell field-padding" id="admin-table-header-section">Section</th>
                                     <th class="col-2 d-none d-md-table-cell field-padding" id="admin-table-header-version-number">Version Number
                                     </th>
                                     <th class="col-2 d-none d-lg-table-cell field-padding" id="admin-table-header-approving-date">Approving Date
@@ -452,14 +450,6 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3">
-                                                                <label class="form-label fw-bold">Regulation/ Manual
-                                                                    name (Arabic)</label>
-                                                                <textarea name="regulationNameAr" class="form-control" rows="2" dir="rtl"
-                                                            readonly disabled>@(record.RegulationNameAr ?? "")</textarea>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="3">
                                                                 <label class="form-label fw-bold" id="admin-table-form-brief-description-label">Brief
                                                                     Description (English)</label>
                                                                 <textarea name="description" class="form-control" rows="4"
@@ -467,11 +457,17 @@ there's also many filtering options to find the policy and other adminstrative s
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td colspan="3">
-                                                                <label class="form-label fw-bold">Brief
-                                                                    Description (Arabic)</label>
-                                                                <textarea name="descriptionAr" class="form-control" rows="4" dir="rtl"
-                                                            readonly disabled>@(record.DescriptionAr ?? "")</textarea>
+                                                            <td colspan="2">
+                                                                <label class="form-label fw-bold" id= "admin-table-form-approving-entity-label">Approving Entity (English)</label>
+                                                                <input type="text" name="approvingEntity" class="form-control"
+                                                                    value="@record.ApprovingEntity" readonly disabled>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <label class="form-label fw-bold" id="admin-table-form-note-label">Note (English)</label>
+                                                                <input type="text" name="notes" class="form-control mb-2"
+                                                                    value="@record.Notes" readonly disabled>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -495,20 +491,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                 <input type="text" name="version" class="form-control mb-2" value="@record.Version"
                                                                     readonly disabled>
                                                             </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="2">
-                                                                <label class="form-label fw-bold" id= "admin-table-form-approving-entity-label">Approving Entity (English)</label>
-                                                                <input type="text" name="approvingEntity" class="form-control"
-                                                                    value="@record.ApprovingEntity" readonly disabled>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="2">
-                                                                <label class="form-label fw-bold">Approving Entity (Arabic)</label>
-                                                                <input type="text" name="approvingEntityAr" class="form-control" dir="rtl"
-                                                                    value="@(record.ApprovingEntityAr ?? "")" readonly disabled>
-                                                            </td>
+                                                            
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
@@ -527,11 +510,37 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                 </select>
                                                             </td>
                                                         </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <!------------------------------------------------ right side of the accordion menu inside------------------------------------------------------>
+                                            <div class="col-lg-6 col-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-borderless mb-0">
+                                                        
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <label class="form-label fw-bold">Regulation/ Manual
+                                                                    name (Arabic)</label>
+                                                                <textarea name="regulationNameAr" class="form-control" rows="2" dir="rtl"
+                                                            readonly disabled>@(record.RegulationNameAr ?? "")</textarea>
+                                                            </td>
+                                                        </tr>
+                                                        
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <label class="form-label fw-bold">Brief
+                                                                    Description (Arabic)</label>
+                                                                <textarea name="descriptionAr" class="form-control" rows="4" dir="rtl"
+                                                            readonly disabled>@(record.DescriptionAr ?? "")</textarea>
+                                                            </td>
+                                                        </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold" id="admin-table-form-note-label">Note (English)</label>
-                                                                <input type="text" name="notes" class="form-control mb-2"
-                                                                    value="@record.Notes" readonly disabled>
+                                                                <label class="form-label fw-bold">Approving Entity (Arabic)</label>
+                                                                <input type="text" name="approvingEntityAr" class="form-control" dir="rtl"
+                                                                    value="@(record.ApprovingEntityAr ?? "")" readonly disabled>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -541,14 +550,6 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                     value="@(record.NotesAr ?? "")" readonly disabled>
                                                             </td>
                                                         </tr>
-                                                    </table>
-                                                </div>
-                                            </div>
-
-                                            <!-- right side of the accordion menu inside-->
-                                            <div class="col-lg-6 col-12">
-                                                <div class="table-responsive">
-                                                    <table class="table table-borderless mb-0">
                                                         <tr>
                                                             <td colspan="2">
                                                                 <label class="form-label fw-bold" id="admin-table-form-document-type-label">Document
@@ -609,66 +610,75 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                 </div>
                                                             </td>
                                                         </tr>
-                                                        <tr>
-                                                            <td colspan="2">
-                                                                <label class="form-label fw-bold" id="admin-table-form-responsible-contact-label">Responsible
-                                                                    Department
-                                                                    contact
-                                                                    information:</label>
-                                                                @if (record.ContactInformation != null && ((IEnumerable<dynamic>)record.ContactInformation).Any())
-                                                                {
-                                                                    @foreach (var contact in record.ContactInformation)
-                                                                    {
-                                                                        <div class="mb-3 p-3 border rounded">
-                                                                            <div class="row mb-3">
-                                                                                <div class="col-md-6">
-                                                                                    <label class="form-label mb-0">Name (English)</label>
-                                                                                    <input type="text" class="form-control contact-input"
-                                                                                        value="@contact.Name" readonly>
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <label class="form-label mb-0">Name (Arabic)</label>
-                                                                                    <input type="text" class="form-control contact-input" dir="rtl"
-                                                                                        value="@(contact.NameAr ?? "")" readonly>
-                                                                                </div>
-                                                                            </div>  
-                                                                            @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
-                                                                            {
-                                                                                <div class="mb-3">
-                                                                                    <label class="form-label mb-0" id="admin-table-form-contact-email-label" dir="rtl">البريد الإلكتروني</label>
-                                                                                    <input type="email" class="form-control contact-input" dir="rtl"
-                                                                                        value="@contact.Email" readonly>
-                                                                                </div>
-                                                                            }
-                                                                            @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
-                                                                            {
-                                                                                <div class="mb-3">
-                                                                                    <label class="form-label mb-0" id= "admin-table-form-contact-telephone-label" dir="rtl">رقم الهاتف</label>
-                                                                                    <input type="text" class="form-control contact-input" value="@contact.Telephone" dir="rtl"
-                                                                                        readonly>
-                                                                                </div>
-                                                                            }
-                                                                            @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
-                                                                            {
-                                                                                <div class="mb-3">
-                                                                                    <label class="form-label mb-0" id = "admin-table-form-contact-mobile-label" dir="rtl">رقم الجوال</label>
-                                                                                    <input type="text" class="form-control contact-input" value="@contact.Mobile" dir="rtl"
-                                                                                        readonly>
-                                                                                </div>
-                                                                            }
-                                                                        </div>
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    <div class="mb-3">
-                                                                        <p class="text-muted" id="admin-table-form-no-contact-info" dir="rtl">لا توجد معلومات اتصال متاحة لهذا القسم.</p>
-                                                                    </div>
-                                                                }
-                                                            </td>
-                                                        </tr>
+                                                        
                                                     </table>
                                                 </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Contact Information Section - Full Width -->
+                                        <div class="row mt-4">
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold" id="admin-table-form-responsible-contact-label">Responsible Department contact information:</label>
+                                                @if (record.ContactInformation != null && ((IEnumerable<dynamic>)record.ContactInformation).Any())
+                                                {
+                                                    <div class="row">
+                                                        @foreach (var contact in record.ContactInformation)
+                                                        {
+                                                            <div class="col-12 col-md-12 col-lg-6 col-xl-4 mb-3">
+                                                                <div class="p-3 border rounded h-100">
+                                                                    <div class="mb-2">
+                                                                        <label class="form-label mb-0">Name (English)</label>
+                                                                        <input type="text" class="form-control contact-input"
+                                                                            value="@contact.Name" readonly>
+                                                                    </div>
+                                                                    <div class="mb-2">
+                                                                        <label class="form-label mb-0">Name (Arabic)</label>
+                                                                        <input type="text" class="form-control contact-input" dir="rtl"
+                                                                            value="@(contact.NameAr ?? "")" readonly>
+                                                                    </div>
+                                                                    @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
+                                                                    {
+                                                                        <div class="mb-2">
+                                                                            <label class="form-label mb-0" id="admin-table-form-contact-email-label">Email</label>
+                                                                            <input type="email" class="form-control contact-input"
+                                                                                value="@contact.Email" readonly>
+                                                                        </div>
+                                                                    }  
+                                                                    @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()) || !string.IsNullOrEmpty(contact.Mobile?.ToString()))
+                                                                    {
+                                                                        <div class="mb-2">
+                                                                            <div class="row">
+                                                                                @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
+                                                                                {
+                                                                                    <div class="col-6">
+                                                                                        <label class="form-label mb-0" id= "admin-table-form-contact-telephone-label">Telephone number</label>
+                                                                                        <input type="text" class="form-control contact-input" value="@contact.Telephone"
+                                                                                            readonly>
+                                                                                    </div>
+                                                                                }
+                                                                                @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
+                                                                                {
+                                                                                    <div class="col-6">
+                                                                                        <label class="form-label mb-0" id = "admin-table-form-contact-mobile-label">Mobile number</label>
+                                                                                        <input type="text" class="form-control contact-input" value="@contact.Mobile"
+                                                                                            readonly>
+                                                                                    </div>
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="mb-3">
+                                                        <p class="text-muted" id="admin-table-form-no-contact-info" dir="rtl">لا توجد معلومات اتصال متاحة لهذا القسم.</p>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
 
@@ -706,3 +716,162 @@ there's also many filtering options to find the policy and other adminstrative s
         </div>
     </div>
 </div>
+
+<script>
+    // Enhanced debugging script
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('=== ENHANCED DEBUG SCRIPT LOADED ===');
+        
+        // Wait a bit to ensure all elements are rendered
+        setTimeout(function() {
+            console.log('Starting element search...');
+            
+            // Check if parent containers exist first
+            const totalPoliciesContainer = document.getElementById('admin-stats-total-policies');
+            const mostViewedContainer = document.getElementById('admin-stats-most-viewed');
+            const viewedTimesElement = document.getElementById('admin-stats-viewed-times');
+            
+            console.log('Container elements:', {
+                totalPoliciesContainer: totalPoliciesContainer ? 'FOUND' : 'NOT FOUND',
+                mostViewedContainer: mostViewedContainer ? 'FOUND' : 'NOT FOUND', 
+                viewedTimesElement: viewedTimesElement ? 'FOUND' : 'NOT FOUND'
+            });
+            
+            if (totalPoliciesContainer) {
+                console.log('Total policies container HTML:', totalPoliciesContainer.innerHTML);
+            }
+            if (mostViewedContainer) {
+                console.log('Most viewed container HTML:', mostViewedContainer.innerHTML);
+            }
+            
+            // Try different selector approaches
+            const totalPoliciesElem1 = document.querySelector('#admin-stats-total-policies .number');
+            const totalPoliciesElem2 = document.querySelector('#admin-stats-total-policies div.number');
+            const totalPoliciesElem3 = totalPoliciesContainer ? totalPoliciesContainer.querySelector('.number') : null;
+            
+            console.log('Total policies selectors:', {
+                '.number': totalPoliciesElem1 ? 'FOUND' : 'NOT FOUND',
+                'div.number': totalPoliciesElem2 ? 'FOUND' : 'NOT FOUND',
+                'container.querySelector': totalPoliciesElem3 ? 'FOUND' : 'NOT FOUND'
+            });
+            
+            const mostViewedSubtitle1 = document.querySelector('#admin-stats-most-viewed .subtitle');
+            const mostViewedSubtitle2 = mostViewedContainer ? mostViewedContainer.querySelector('.subtitle') : null;
+            
+            console.log('Most viewed subtitle selectors:', {
+                '.subtitle': mostViewedSubtitle1 ? 'FOUND' : 'NOT FOUND',
+                'container.querySelector': mostViewedSubtitle2 ? 'FOUND' : 'NOT FOUND'
+            });
+            
+            // Use the best working selectors
+            const totalPoliciesElem = totalPoliciesElem3 || totalPoliciesElem1 || totalPoliciesElem2;
+            const mostViewedSubtitle = mostViewedSubtitle2 || mostViewedSubtitle1;
+            const mostViewedText = viewedTimesElement;
+            
+            console.log('Final elements to use:', {
+                totalPolicies: totalPoliciesElem ? 'YES' : 'NO',
+                mostViewedSubtitle: mostViewedSubtitle ? 'YES' : 'NO',
+                mostViewedText: mostViewedText ? 'YES' : 'NO'
+            });
+            
+            // Test setting values
+            if (totalPoliciesElem) {
+                totalPoliciesElem.textContent = 'TEST';
+                console.log('✓ Set total policies to TEST');
+            } else {
+                console.error('✗ Could not find total policies element');
+            }
+            
+            if (mostViewedSubtitle) {
+                mostViewedSubtitle.textContent = 'Test Policy';
+                console.log('✓ Set most viewed title to Test Policy');
+            } else {
+                console.error('✗ Could not find most viewed subtitle element');
+            }
+            
+            if (mostViewedText) {
+                mostViewedText.textContent = 'Viewed: 999 times';
+                console.log('✓ Set most viewed text to 999 times');
+            } else {
+                console.error('✗ Could not find most viewed text element');
+            }
+            
+        }, 500); // Wait 500ms for DOM to be fully ready
+        
+        // Try API call after 2 seconds
+        }, 500); // Wait 500ms for DOM to be fully ready
+        
+        // Try API call after 2 seconds
+        setTimeout(function() {
+            console.log('=== ATTEMPTING API CALL ===');
+            
+            // Get elements again for API update
+            const totalPoliciesContainer = document.getElementById('admin-stats-total-policies');
+            const mostViewedContainer = document.getElementById('admin-stats-most-viewed');
+            const viewedTimesElement = document.getElementById('admin-stats-viewed-times');
+            
+            const totalPoliciesElem = totalPoliciesContainer ? totalPoliciesContainer.querySelector('.number') : null;
+            const mostViewedSubtitle = mostViewedContainer ? mostViewedContainer.querySelector('.subtitle') : null;
+            const mostViewedText = viewedTimesElement;
+            
+            fetch('/Admin/TestStats')
+                .then(response => {
+                    console.log('API Response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('API Data received:', data);
+                    
+                    if (totalPoliciesElem && data.totalPolicies !== undefined) {
+                        totalPoliciesElem.textContent = data.totalPolicies;
+                        console.log('✓ Updated total policies from API:', data.totalPolicies);
+                    }
+                    
+                    if (mostViewedSubtitle && data.mostViewed && data.mostViewed.name) {
+                        mostViewedSubtitle.textContent = data.mostViewed.name;
+                        console.log('✓ Updated most viewed name from API:', data.mostViewed.name);
+                    }
+                    
+                    if (mostViewedText && data.mostViewed && data.mostViewed.views !== undefined) {
+                        mostViewedText.textContent = `Viewed: ${data.mostViewed.views} times`;
+                        console.log('✓ Updated most viewed views from API:', data.mostViewed.views);
+                    }
+                })
+                .catch(error => {
+                    console.error('API Error:', error);
+                    
+                    // Try the real endpoint as fallback
+                    console.log('Trying real endpoint...');
+                    fetch('/Admin/GetDashboardStats')
+                        .then(response => {
+                            console.log('Real API Response status:', response.status);
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Real API Data received:', data);
+                            
+                            if (totalPoliciesElem && data.totalPolicies !== undefined) {
+                                totalPoliciesElem.textContent = data.totalPolicies;
+                                console.log('✓ Updated total policies from real API:', data.totalPolicies);
+                            }
+                            
+                            if (mostViewedSubtitle && data.mostViewed && data.mostViewed.name) {
+                                mostViewedSubtitle.textContent = data.mostViewed.name;
+                                console.log('✓ Updated most viewed name from real API:', data.mostViewed.name);
+                            }
+                            
+                            if (mostViewedText && data.mostViewed && data.mostViewed.views !== undefined) {
+                                mostViewedText.textContent = `Viewed: ${data.mostViewed.views} times`;
+                                console.log('✓ Updated most viewed views from real API:', data.mostViewed.views);
+                            }
+                        })
+                        .catch(realError => {
+                            console.error('Real API Error:', realError);
+                        });
+                });
+        }, 3000); // Wait 3 seconds for API call
+    });
+</script>
