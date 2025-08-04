@@ -928,3 +928,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
   console.log("Document filters initialized successfully");
 });
+
+/**
+ * Export all data to Excel file
+ */
+function exportData() {
+    console.log("Starting data export...");
+    
+    // Show loading state
+    const exportButton = document.getElementById('admin-button-export-data');
+    const originalText = exportButton.innerHTML;
+    exportButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
+    exportButton.disabled = true;
+
+    // Create form and submit
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/Admin/ExportAllDataToExcel';
+    
+    // Add anti-forgery token
+    const token = document.querySelector('input[name="__RequestVerificationToken"]');
+    if (token) {
+        const tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = '__RequestVerificationToken';
+        tokenInput.value = token.value;
+        form.appendChild(tokenInput);
+    }
+    
+    document.body.appendChild(form);
+    
+    // Submit form
+    form.submit();
+    
+    // Reset button after a delay (in case of error)
+    setTimeout(() => {
+        exportButton.innerHTML = originalText;
+        exportButton.disabled = false;
+        document.body.removeChild(form);
+    }, 5000);
+}
