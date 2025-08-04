@@ -930,41 +930,92 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /**
- * Export all data to Excel file
+ * Export all data to Excel file - shows modal for table selection
  */
 function exportData() {
-    console.log("Starting data export...");
+    console.log("Opening export table selection modal...");
     
-    // Show loading state
-    const exportButton = document.getElementById('admin-button-export-data');
-    const originalText = exportButton.innerHTML;
-    exportButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
-    exportButton.disabled = true;
+    // Show the modal
+    const exportModal = new bootstrap.Modal(document.getElementById('exportModal'));
+    exportModal.show();
+}
 
-    // Create form and submit
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '/Admin/ExportAllDataToExcel';
+/**
+ * Confirm export with selected tables
+ */
+function confirmExport() {
+    console.log("Starting data export with selected tables...");
     
-    // Add anti-forgery token
-    const token = document.querySelector('input[name="__RequestVerificationToken"]');
-    if (token) {
-        const tokenInput = document.createElement('input');
-        tokenInput.type = 'hidden';
-        tokenInput.name = '__RequestVerificationToken';
-        tokenInput.value = token.value;
-        form.appendChild(tokenInput);
+    // Get selected tables
+    const form = document.getElementById('exportForm');
+    const selectedTables = [];
+    const checkboxes = form.querySelectorAll('input[name="tables"]:checked');
+    
+    checkboxes.forEach(checkbox => {
+        selectedTables.push(checkbox.value);
+    });
+    
+    if (selectedTables.length === 0) {
+        alert('Please select at least one table to export.');
+        return;
     }
     
-    document.body.appendChild(form);
+    console.log("Selected tables:", selectedTables);
+    
+    // Show loading state
+    const exportButton = document.getElementById('confirmExportBtn');
+    const originalText = exportButton.innerHTML;
+    exportButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Exporting...';
+    exportButton.disabled = true;
+    
+    // Add selected tables as hidden inputs to the form
+    const existingTableInputs = form.querySelectorAll('input[name="selectedTables"]');
+    existingTableInputs.forEach(input => input.remove());
+    
+    selectedTables.forEach(table => {
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'selectedTables';
+        hiddenInput.value = table;
+        form.appendChild(hiddenInput);
+    });
     
     // Submit form
     form.submit();
     
-    // Reset button after a delay (in case of error)
+    // Close modal and reset button after a delay
     setTimeout(() => {
         exportButton.innerHTML = originalText;
         exportButton.disabled = false;
-        document.body.removeChild(form);
-    }, 5000);
+        bootstrap.Modal.getInstance(document.getElementById('exportModal')).hide();
+    }, 3000);
 }
+
+// Modal JavaScript for Select All functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle Select All checkbox
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const tableCheckboxes = document.querySelectorAll('.table-checkbox');
+    
+    if (selectAllCheckbox && tableCheckboxes.length > 0) {
+        selectAllCheckbox.addEventListener('change', function() {
+            tableCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+        
+        // Handle individual checkboxes
+        tableCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                // If any checkbox is unchecked, uncheck "Select All"
+                if (!this.checked) {
+                    selectAllCheckbox.checked = false;
+                } else {
+                    // If all checkboxes are checked, check "Select All"
+                    const allChecked = Array.from(tableCheckboxes).every(cb => cb.checked);
+                    selectAllCheckbox.checked = allChecked;
+                }
+            });
+        });
+    }
+});

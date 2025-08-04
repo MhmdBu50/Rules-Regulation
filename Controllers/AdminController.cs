@@ -1596,11 +1596,11 @@ public async Task<IActionResult> ViewPdf(int id)
     }
 
     /// <summary>
-    /// Export all database tables to Excel file
+    /// Export selected database tables to Excel file
     /// </summary>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ExportAllDataToExcel()
+    public async Task<IActionResult> ExportAllDataToExcel(List<string> selectedTables)
     {
         try
         {
@@ -1608,16 +1608,46 @@ public async Task<IActionResult> ViewPdf(int id)
             
             using var package = new ExcelPackage();
             
-            // Export each table to a separate worksheet
-            await ExportRecordsToWorksheet(package);
-            await ExportUserHistoryToWorksheet(package);
-            await ExportUsersToWorksheet(package);
-            await ExportContactInformationToWorksheet(package);
-            await ExportAttachmentsToWorksheet(package);
+            // If no tables selected or "all" is selected, export all tables
+            if (selectedTables == null || selectedTables.Count == 0 || selectedTables.Contains("all"))
+            {
+                selectedTables = new List<string> { "records", "history", "users", "contact", "attachments" };
+            }
+            
+            // Export selected tables to separate worksheets
+            foreach (var table in selectedTables)
+            {
+                switch (table.ToLower())
+                {
+                    case "records":
+                        await ExportRecordsToWorksheet(package);
+                        break;
+                    case "history":
+                        await ExportUserHistoryToWorksheet(package);
+                        break;
+                    case "users":
+                        await ExportUsersToWorksheet(package);
+                        break;
+                    case "contact":
+                        await ExportContactInformationToWorksheet(package);
+                        break;
+                    case "attachments":
+                        await ExportAttachmentsToWorksheet(package);
+                        break;
+                }
+            }
+            
+            // Ensure at least one worksheet exists
+            if (package.Workbook.Worksheets.Count == 0)
+            {
+                TempData["ErrorMessage"] = "No valid tables selected for export.";
+                return RedirectToAction("AdminPage");
+            }
 
-            // Generate filename with timestamp
+            // Generate filename with timestamp and selected tables info
             var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            var fileName = $"AllData_Export_{timestamp}.xlsx";
+            var tablesInfo = selectedTables.Count == 5 ? "AllTables" : string.Join("-", selectedTables);
+            var fileName = $"Export_{tablesInfo}_{timestamp}.xlsx";
 
             // Return file for download
             var fileBytes = package.GetAsByteArray();
