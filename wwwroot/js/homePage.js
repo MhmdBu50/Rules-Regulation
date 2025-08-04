@@ -446,7 +446,9 @@ function navigateToHistory() {
                             <i class="fas fa-eye text-info me-3"></i>
                             <span class="text-muted me-4">View actions</span>
                             <i class="fas fa-download text-success me-3"></i>
-                            <span class="text-muted">Download actions</span>
+                            <span class="text-muted me-4">Download actions</span>
+                            <i class="fas fa-info-circle text-warning me-3"></i>
+                            <span class="text-muted">Show details actions</span>
                         </div>
                     </div>
                 `;
@@ -518,8 +520,30 @@ function navigateToHistory() {
 
             data.forEach(item => {
                 console.log("🟢 Processing item:", item);
-                const action = item.action === 'download' ? 'Download' : 'View';
-                const actionIcon = item.action === 'download' ? 'fas fa-download' : 'fas fa-eye';
+                let action, actionIcon, badgeClass;
+                
+                switch(item.action.toLowerCase()) {
+                    case 'download':
+                        action = 'Download';
+                        actionIcon = 'fas fa-download';
+                        badgeClass = 'bg-success text-white';
+                        break;
+                    case 'view':
+                        action = 'View';
+                        actionIcon = 'fas fa-eye';
+                        badgeClass = 'bg-info text-white';
+                        break;
+                    case 'show_details':
+                        action = 'Show details';
+                        actionIcon = 'fas fa-info-circle';
+                        badgeClass = 'bg-warning text-dark';
+                        break;
+                    default:
+                        action = item.action;
+                        actionIcon = 'fas fa-question-circle';
+                        badgeClass = 'bg-secondary text-white';
+                }
+                
                 const timestamp = new Date(item.actionDate).toLocaleString('en-US');
                 const recordName = item.recordName || 'Unknown Record';
                 
@@ -530,7 +554,7 @@ function navigateToHistory() {
                             ${recordName}
                         </td>
                         <td>
-                            <span class="action-badge ${item.action === 'download' ? 'bg-success text-white' : 'bg-info text-white'}">
+                            <span class="action-badge ${badgeClass}">
                                 <i class="${actionIcon} me-2"></i>${action}
                             </span>
                         </td>

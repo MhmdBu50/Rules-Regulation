@@ -9,7 +9,7 @@
             
             /* Responsive scaling - maintains aspect ratio */
             width:300px;
-            aspect-ratio: 300 / 350;
+            aspect-ratio: 4/5.5;
             
             /* Scale the entire card based on viewport */
             transform-origin: center;
