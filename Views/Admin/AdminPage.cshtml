@@ -5,6 +5,7 @@ there's also many filtering options to find the policy and other adminstrative s
 @section Styles {
     <link rel="stylesheet" href="~/css/AdminPage.css">
     <link rel="stylesheet" href="~/css/_rtl_Styles.css">
+    <link rel="stylesheet" href="~/css/AdminPageCustom.css">
 }
 <!-- Scripts for the admin page -->
 @section Scripts {
@@ -131,6 +132,7 @@ there's also many filtering options to find the policy and other adminstrative s
                     <div class="col-md-6">
                         <div class="chart-section">
                             <div id="admin-chart-title-visits" class="chart-title">Website visits over the past 6 months</div>
+                            <div id="visitToggler" class="legendToggler"> Monthly Visits </div>
                             <div class="chart-canvas-container">
                                 <canvas id="barChartCanvas"></canvas>
                             </div>
@@ -675,7 +677,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                 else
                                                 {
                                                     <div class="mb-3">
-                                                        <p class="text-muted" id="admin-table-form-no-contact-info" dir="rtl">لا توجد معلومات اتصال متاحة لهذا القسم.</p>
+                                                        <p class="text-muted" id="admin-table-form-no-contact-info">No contact information available for this department.</p>
                                                     </div>
                                                 }
                                             </div>
@@ -704,8 +706,8 @@ there's also many filtering options to find the policy and other adminstrative s
                 {
                     <!-- No records message for admin -->
                     <div class="alert alert-info text-center">
-                        <h4 id= "admin-no-records-heading" dir="rtl">لم يتم العثور على سجلات</h4>
-                        <p id= "admin-no-records-message" dir="rtl">لا توجد حالياً قوانين ولوائح في قاعدة البيانات.</p>
+                        <h4 id= "admin-no-records-heading" dir="rtl">No Records Found</h4>
+                        <p id= "admin-no-records-message" dir="rtl">No rules and regulations are currently available in the database</p>
                         <a href="@Url.Action("AddNewRecord", "Admin")" class="btn btn-primary">
                             <i class="fas fa-plus me-2" id= "admin-add-new-record-button"></i>
                         </a>
@@ -874,3 +876,98 @@ there's also many filtering options to find the policy and other adminstrative s
         }, 3000); // Wait 3 seconds for API call
     });
 </script>
+
+<!-- Export Table Selection Modal -->
+<div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 15px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px 15px 0 0;">
+                <h5 class="modal-title fw-bold" id="exportModalLabel">
+                    <i class="fas fa-file-excel me-2"></i>Select Tables to Export
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="text-muted mb-4">
+                    <i class="fas fa-info-circle me-2"></i>Choose which database tables to include in your Excel export:
+                </p>
+                
+                <form id="exportForm" method="POST" action="/Admin/ExportAllDataToExcel">
+                    @Html.AntiForgeryToken()
+                    
+                    <!-- Select All Option -->
+                    <div class="form-check mb-3 p-3" style="background: #f8f9fa; border-radius: 10px; border-left: 4px solid #6c757d;">
+                        <input class="form-check-input" type="checkbox" id="selectAll" name="tables" value="all" checked>
+                        <label class="form-check-label fw-bold" for="selectAll">
+                            <i class="fas fa-database me-2 text-secondary"></i>All Tables
+                        </label>
+                        <small class="d-block text-muted mt-1">Export all available database tables</small>
+                    </div>
+                    
+                    <hr class="my-3">
+                    
+                    <!-- Individual Table Options -->
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="form-check p-3" style="background: #f0f8ff; border-radius: 10px; border-left: 4px solid #17a2b8;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="recordsTable" name="tables" value="records" checked>
+                                <label class="form-check-label" for="recordsTable">
+                                    <i class="fas fa-file-alt me-2 text-info"></i><strong>Records</strong>
+                                </label>
+                                <small class="d-block text-muted mt-1">All regulation and policy records</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="form-check p-3" style="background: #e8f5e8; border-radius: 10px; border-left: 4px solid #28a745;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="usersTable" name="tables" value="users" checked>
+                                <label class="form-check-label" for="usersTable">
+                                    <i class="fas fa-users me-2 text-success"></i><strong>Users</strong>
+                                </label>
+                                <small class="d-block text-muted mt-1">All registered users information</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="form-check p-3" style="background: #fff5e6; border-radius: 10px; border-left: 4px solid #ffc107;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="contactTable" name="tables" value="contact" checked>
+                                <label class="form-check-label" for="contactTable">
+                                    <i class="fas fa-address-book me-2 text-warning"></i><strong>Contact Information</strong>
+                                </label>
+                                <small class="d-block text-muted mt-1">Department contact details</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="form-check p-3" style="background: #ffeaea; border-radius: 10px; border-left: 4px solid #dc3545;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="attachmentsTable" name="tables" value="attachments" checked>
+                                <label class="form-check-label" for="attachmentsTable">
+                                    <i class="fas fa-paperclip me-2 text-danger"></i><strong>Attachments</strong>
+                                </label>
+                                <small class="d-block text-muted mt-1">File attachments and documents</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="form-check p-3" style="background: #f0f0ff; border-radius: 10px; border-left: 4px solid #6f42c1;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="historyTable" name="tables" value="history" checked>
+                                <label class="form-check-label" for="historyTable">
+                                    <i class="fas fa-history me-2 text-primary"></i><strong>User History</strong>
+                                </label>
+                                <small class="d-block text-muted mt-1">User activity and action logs</small>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-light" style="border-radius: 0 0 15px 15px;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cancel
+                </button>
+                <button type="button" class="btn btn-primary" onclick="confirmExport()" id="confirmExportBtn">
+                    <i class="fas fa-download me-2"></i>Export Selected Tables
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
