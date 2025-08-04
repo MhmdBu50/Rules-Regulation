@@ -38,11 +38,11 @@ body.rtl .navbar-nav {
 
 /* Sidebar RTL fix */
 .sidebar {
-    margin-right: 20px;
+    margin-inline-end: 20px;
 }
 body.rtl .sidebar {
     margin-right: 0;
-    margin-left: 20px;
+    margin-inline-start: 20px;
 }
 
 /* Filter section fix */
@@ -55,12 +55,12 @@ body.rtl .filter-section {
 body.rtl .container,
 body.rtl .row,
 body.rtl .d-flex {
-    direction: ltr;
+    direction: rtl;
     text-align: right;
 }
 
 body.rtl .d-flex {
-    flex-direction: row-reverse;
+    /*flex-direction: row-reverse;*/
 }
 
 /* Cards, content boxes */
@@ -80,19 +80,19 @@ body.rtl textarea {
 /* Button text */
 body.rtl .btn,
 body.rtl button {
-    text-align: right !important;
+    /*! text-align: right !important; */
 }
 
 body.rtl header,
 body.rtl .header {
-    direction: ltr !important;
+    direction: rtl !important;
     text-align: left !important;
 }
 /* Forms, search bar */
 body.ltr .search-bar,
 body.ltr input,
 body.ltr select,
-body.ltr textarea
+body.ltr textarea,
 body.ltr label {
-    text-align: left !important;
+    text-align: start !important;
 }

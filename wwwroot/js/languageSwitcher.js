@@ -104,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-button-add-new-record": "Add New Record",
         "admin-button-export-data": "Export Data",
         "admin-button-manage-contact-info": "Manage Contact Info",
+        "visitToggler": "Monthly Visits",
         "desktopSearchInput": "Search by Name/ID...",
         "admin-clear-search-title": "Clear search",
         "admin-section-filter-all": "All Sections",
@@ -148,6 +149,42 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-no-records-heading": "No records found",
         "admin-no-records-message": "There are currently no rules and regulations in the database.",
         "admin-add-new-record-button": "Add New Record",
+        // add new record translations
+        "add-record-page-title": "New Record",
+        "label-regulationName": "Regulation/Manual Name (English)",
+        "label-regulationNameAr": "Regulation/Manual Name (Arabic)",
+        "label-relevantDepartment": "Relevant Department",
+        "label-versionNumber": "Version Number",
+        "label-versionDate": "Version Date",
+        "label-approvingDate": "Approving Date",
+        "label-approvingEntity": "Approving Entity (English)",
+        "label-approvingEntityAr": "Approving Entity (Arabic)",
+        "label-wordAttachment": "Word Attachment",
+        "label-pdfAttachment": "PDF Attachment",
+        "label-description": "Brief Description (English)",
+        "label-descriptionAr": "Brief Description (Arabic)",
+        "label-notes": "Notes (English)",
+        "label-notesAr": "Notes (Arabic)",
+        "label-documentType": "Document Type",
+        "btn-save": "Save and upload",
+        "btn-cancel": "Cancel",
+        "btn-logout": "Logout",
+        "btn-back": "Back",
+    "label-relevantDepartment": "Relevant Department",
+    "select-department1": "Select department",
+    "option-dept-reg": "Reg and Admission",
+    "option-dept-ccsit": "CCSIT",
+    "option-dept-tech": "Communication and tech",
+    "option-dept-hospital": "Hospital",
+    "option-dept-library": "Library",
+    "option-dept-students": "Students Affairs",
+    "option-dept-prep": "Preparetory",
+    "option-dept-academic": "Academic Affairs",
+    "label-doc-type-section-7851": 'Document Type',
+    "label-doc-student-guides-7851": 'Student guides & templates',
+    "label-doc-student-rules-7851": 'Student rules & regulations',
+    "label-doc-employee-rules-7851": 'Employees’ rules & regulations',
+    "label-doc-academic-rules-7851": 'Academic rules & regulations',
         },
         "ar": {
             // General page elements
@@ -249,6 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-button-add-new-record": "إضافة سجل جديد",
         "admin-button-export-data": "تصدير البيانات",
         "admin-button-manage-contact-info": "إدارة معلومات الاتصال",
+        "visitToggler": "الزيارات الشهرية",
         "desktopSearchInput": "...البحث بالاسم/الرقم التعريفي",
         "admin-clear-search-title": "مسح البحث",
         "admin-section-filter-all": "جميع الأقسام",
@@ -295,7 +333,49 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-add-new-record-button": "إضافة سجل جديد",
         "admin-success-message-heading": "نجاح!",
         "admin-error-message-heading": "خطأ!",
+        // add new record translations
+        "add-record-page-title": "إضافة سجل جديد",
+        "label-regulationName": "اسم النظام / الدليل (بالإنجليزية)",
+        "label-regulationNameAr": "اسم النظام / الدليل (بالعربية)",
+        "label-relevantDepartment": "القسم المعني",
+        "label-versionNumber": "رقم الإصدار",
+        "label-versionDate": "تاريخ الإصدار",
+        "label-approvingDate": "تاريخ الاعتماد",
+        "label-approvingEntity": "جهة الاعتماد (بالإنجليزية)",
+        "label-approvingEntityAr": "جهة الاعتماد (بالعربية)",
+        "label-wordAttachment": "ملف Word مرفق",
+        "label-pdfAttachment": "ملف PDF مرفق",
+        "label-description": "وصف مختصر (بالإنجليزية)",
+        "label-descriptionAr": "وصف مختصر (بالعربية)",
+        "label-notes": "ملاحظات (بالإنجليزية)",
+        "label-notesAr": "ملاحظات (بالعربية)",
+        "label-documentType": "نوع المستند",
+        "btn-save": "حفظ ورفع الملف",
+        "btn-cancel": "إلغاء",
+        "btn-logout": "تسجيل الخروج",
+        "btn-back": "رجوع",
+    "label-relevantDepartment": "القسم المعني",
+    "select-department1": "اختر القسم",
+    "option-dept-reg": "التسجيل والقبول",
+    "option-dept-ccsit": "كلية علوم الحاسب وتقنية المعلومات",
+    "option-dept-tech": "الاتصالات والتقنية",
+    "option-dept-hospital": "المستشفى",
+    "option-dept-library": "المكتبة",
+    "option-dept-students": "شؤون الطلاب",
+    "option-dept-prep": "السنة التحضيرية",
+    "option-dept-academic": "الشؤون الأكاديمية",
+    "label-doc-type-section-7851": 'نوع المستند',
+    "label-doc-student-guides-7851": 'أدلة الطلاب والقوالب',
+    "label-doc-student-rules-7851": 'قواعد وأنظمة الطلاب',
+    "label-doc-employee-rules-7851": 'قواعد وأنظمة الموظفين',
+    "label-doc-academic-rules-7851": 'قواعد وأنظمة أكاديمية',   
         }
+    };
+
+    // Make monthTranslations globally accessible
+    window.monthTranslations = {
+    "en": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    "ar": ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"]
     };
 
     function applyTranslations(lang) {
@@ -413,6 +493,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
         applyTranslations(lang);
+        translateChartMonths(lang); // Translate chart months if applicable
         localStorage.setItem("websiteLanguage", lang);
     }
 
@@ -428,4 +509,39 @@ document.addEventListener("DOMContentLoaded", () => {
             setLanguage(newLang);
         });
     }
+    //this method is used to translate the months in the chart
+    function translateChartMonths(lang) {
+    const months = window.monthTranslations[lang];
+    if (window.barChartInstance && window.barChartInstance.data) {
+        const originalLabels = window.barChartInstance.data.labels;
+        const translatedLabels = originalLabels.map(label => {
+            // Check if label is already in Arabic, convert to English first
+            const arabicIndex = window.monthTranslations["ar"].indexOf(label);
+            const englishLabel = arabicIndex >= 0 ? window.monthTranslations["en"][arabicIndex] : label;
+            
+            // Now translate to target language
+            const index = window.monthTranslations["en"].indexOf(englishLabel);
+            return index >= 0 ? months[index] : label;
+        });
+        window.barChartInstance.data.labels = translatedLabels;
+        
+        // Update dataset label based on current state and language
+        if (window.barChartInstance.data.datasets[0]) {
+            const currentLabel = window.barChartInstance.data.datasets[0].label;
+            const isUnique = currentLabel.includes('Unique') || currentLabel.includes('الفريدة');
+            
+            window.barChartInstance.data.datasets[0].label = isUnique
+                ? (lang === 'ar' ? 'الزيارات الشهرية الفريدة' : 'Unique Monthly Visits')
+                : (lang === 'ar' ? 'الزيارات الشهرية' : 'Monthly Visits');
+            
+            // Update the toggle button text as well
+            const toggle = document.getElementById('visitToggler');
+            if (toggle) {
+                toggle.textContent = window.barChartInstance.data.datasets[0].label;
+            }
+        }
+        
+        window.barChartInstance.update();
+    }
+}
 });

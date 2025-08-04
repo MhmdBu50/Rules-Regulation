@@ -928,3 +928,94 @@ document.addEventListener("DOMContentLoaded", function () {
 
   console.log("Document filters initialized successfully");
 });
+
+/**
+ * Export all data to Excel file - shows modal for table selection
+ */
+function exportData() {
+    console.log("Opening export table selection modal...");
+    
+    // Show the modal
+    const exportModal = new bootstrap.Modal(document.getElementById('exportModal'));
+    exportModal.show();
+}
+
+/**
+ * Confirm export with selected tables
+ */
+function confirmExport() {
+    console.log("Starting data export with selected tables...");
+    
+    // Get selected tables
+    const form = document.getElementById('exportForm');
+    const selectedTables = [];
+    const checkboxes = form.querySelectorAll('input[name="tables"]:checked');
+    
+    checkboxes.forEach(checkbox => {
+        selectedTables.push(checkbox.value);
+    });
+    
+    if (selectedTables.length === 0) {
+        alert('Please select at least one table to export.');
+        return;
+    }
+    
+    console.log("Selected tables:", selectedTables);
+    
+    // Show loading state
+    const exportButton = document.getElementById('confirmExportBtn');
+    const originalText = exportButton.innerHTML;
+    exportButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Exporting...';
+    exportButton.disabled = true;
+    
+    // Add selected tables as hidden inputs to the form
+    const existingTableInputs = form.querySelectorAll('input[name="selectedTables"]');
+    existingTableInputs.forEach(input => input.remove());
+    
+    selectedTables.forEach(table => {
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'selectedTables';
+        hiddenInput.value = table;
+        form.appendChild(hiddenInput);
+    });
+    
+    // Submit form
+    form.submit();
+    
+    // Close modal and reset button after a delay
+    setTimeout(() => {
+        exportButton.innerHTML = originalText;
+        exportButton.disabled = false;
+        bootstrap.Modal.getInstance(document.getElementById('exportModal')).hide();
+    }, 3000);
+}
+
+// Modal JavaScript for Select All functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle Select All checkbox
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const tableCheckboxes = document.querySelectorAll('.table-checkbox');
+    
+    if (selectAllCheckbox && tableCheckboxes.length > 0) {
+        selectAllCheckbox.addEventListener('change', function() {
+            tableCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+        
+        // Handle individual checkboxes
+        tableCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                // If any checkbox is unchecked, uncheck "Select All"
+                if (!this.checked) {
+                    selectAllCheckbox.checked = false;
+                } else {
+                    // If all checkboxes are checked, check "Select All"
+                    const allChecked = Array.from(tableCheckboxes).every(cb => cb.checked);
+                    selectAllCheckbox.checked = allChecked;
+                }
+            });
+        });
+    }
+});

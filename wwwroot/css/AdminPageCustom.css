@@ -117,3 +117,17 @@
     cursor: not-allowed;
     opacity: 0.6;
 }
+
+.legendToggler {
+    cursor: pointer;
+    font-weight: 600;
+    color: #000000;
+    transition: color 0.2s ease-in-out;
+    text-align: center;
+    width: 100%;
+}
+
+.legendToggler:hover {
+    color: #3c7cbf;
+    text-decoration: none !important;
+}
