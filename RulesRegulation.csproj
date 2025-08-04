@@ -12,8 +12,9 @@
     <PackageReference Include="Oracle.ManagedDataAccess" Version="23.9.1" />
     <PackageReference Include="Oracle.EntityFrameworkCore" Version="9.23.90" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
-    <PackageReference Include="PDFiumSharpV2" Version="1.1.4" />
+    <PackageReference Include="PDFtoImage" Version="5.1.1" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageReference Include="EPPlus" Version="7.0.5" />
   </ItemGroup>
 
 </Project>
