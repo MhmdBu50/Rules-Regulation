@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Rules_Regulation.Models.Entities;
 using RulesRegulation.Models;
 using System.Linq;
 using System.Security.Claims;
@@ -69,6 +70,16 @@ public async Task<IActionResult> LoginPage(string Name, string password)
 
         // ✅ Sign the user in
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+        //logs visits
+        _dbContext.Visits.Add(new Visit
+        {
+            UserId = user.UserId,
+            IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString(),
+            VisitTimestamp = DateTime.UtcNow
+        });
+
+        await _dbContext.SaveChangesAsync();
 
         return RedirectToAction("HomePage", "Home");
     }

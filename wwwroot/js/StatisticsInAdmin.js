@@ -223,94 +223,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
             }
 
-            // Bar Chart
-            if (stats.barData && stats.barData.length > 0) {
-                const barLabels = stats.barData.map(d => d.month);
-                const barValues = stats.barData.map(d => d.visits);
-                
-                console.log('Bar chart data:', { barLabels, barValues });
-                
-                const barCtx = document.getElementById('barChartCanvas');
-                if (barCtx) {
-                    new Chart(barCtx.getContext('2d'), {
-                        type: 'bar',
-                        data: {
-                            labels: barLabels,
-                            datasets: [{
-                                data: barValues,
-                                backgroundColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA726', '#AB47BC', '#26C6DA'],
-                                borderRadius: 4,
-                                borderSkipped: false,
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    display: false
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    max: 400,
-                                    grid: {
-                                        display: true,
-                                        color: '#e9ecef'
-                                    },
-                                    ticks: {
-                                        stepSize: 100,
-                                        font: {
-                                            size: 10
-                                        },
-                                        color: '#6c757d'
-                                    }
-                                },
-                                x: {
-                                    grid: {
-                                        display: false
-                                    },
-                                    ticks: {
-                                        font: {
-                                            size: 10
-                                        },
-                                        color: '#6c757d'
-                                    }
-                                }
-                            },
-                            layout: {
-                                padding: {
-                                    top: 10,
-                                    right: 10,
-                                    bottom: 10,
-                                    left: 10
-                                }
-                            }
-                        }
-                    });
-                    console.log('Bar chart created successfully');
-                } else {
-                    console.error('Bar chart canvas element not found');
-                }
-            } else {
-                console.error('No bar data received or empty array');
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching dashboard stats:', error);
-            
-            // Set default values if fetch fails
-            const totalPoliciesElem = document.querySelector('.stats-card-blue .number');
-            const mostViewedSubtitle = document.querySelector('.stats-card-green .subtitle');
-            const mostViewedText = document.querySelector('.stats-card-green .viewed-text');
-            
-            if (totalPoliciesElem) totalPoliciesElem.textContent = '0';
-            if (mostViewedSubtitle) mostViewedSubtitle.textContent = 'N/A';
-            if (mostViewedText) mostViewedText.textContent = 'Viewed: 0 times';
-        });
-});
-
         // Button functions
         function viewReport() {
             alert('View Report clicked!');
@@ -327,7 +239,11 @@ document.addEventListener('DOMContentLoaded', function () {
             // Add your functionality here
         }
 
-        function contactInfo() {
-            alert('Contact Info clicked!');
-            // Add your functionality here
+            function contactInfo() {
+                alert('Contact Info clicked!');
+                // Add your functionality here
+            }
         }
+    );
+    }
+)
