@@ -140,9 +140,6 @@ there's also many filtering options to find the policy and other adminstrative s
                 </div>
             </div>
 
-            <!-- Vertical Separator to separate buttons from charts -->
-            <div class="chart-sidebar-separator"></div>
-
             <!-- Right Sidebar -->
             <div class="sidebar-section">
                 <div class="sidebar-container">
@@ -316,13 +313,13 @@ there's also many filtering options to find the policy and other adminstrative s
         <div class="accordion">
             <div class="accordion-item position-relative">
                 <!-- Master Checkbox positioned outside accordion button -->
-                <div class="position-absolute field-padding" style="left: 20px; top: 50%; transform: translateY(-50%); z-index: 10;">
+                <div class="position-absolute field-padding" style="inset-inline-start: 20px; top: 50%; transform: translateY(-50%); z-index: 10;">
                     <input type="checkbox" id="masterCheckbox" onchange="toggleAllCheckboxes()" />
                 </div>
                 <h2>
                     <button class="accordion-button collapsed custom-header-btn" type="button" data-bs-toggle="collapse"
                         data-bs-target="#collapseHeader" aria-expanded="false" aria-controls="collapseHeader"
-                        id="headerAccordion" disabled style="padding-left: 50px;">
+                        id="headerAccordion" disabled style="padding-inline-start: 50px;">
                         <table class="table-responsive w-100">
                             <thead class="text-center">
                                 <tr>
@@ -384,14 +381,14 @@ there's also many filtering options to find the policy and other adminstrative s
                             <!-- Accordion Item 1 -->
                             <div class="accordion-item position-relative" data-section="@(record.Sections ?? "")" data-document-type="@(record.DocumentType ?? "")">
                                 <!-- Checkbox positioned outside accordion button -->
-                                <div class="position-absolute field-padding" style="left: 20px; top: 50%; transform: translateY(-50%); z-index: 10;">
+                                <div class="position-absolute field-padding" style="inset-inline-start: 20px; top: 50%; transform: translateY(-50%); z-index: 10;">
                                     <input type="checkbox" class="record-checkbox" data-record-id="@record.Id" onclick="handleRecordCheckbox()" />
                                 </div>
                                 <h2 class="accordion-header" id="@headingId">
                                     <button class="accordion-button collapsed custom-acc-btn" type="button"
                                         data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false"
                                         aria-controls="@collapseId" onclick="showAdminRecordDetails(@record.Id)"
-                                        style="padding-left: 50px;">
+                                        style="padding-inline-start: 50px;">
                                         <table class=" w-100">
                                             <thead class="text-center">
                                                 <tr>

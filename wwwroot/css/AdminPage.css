@@ -73,26 +73,25 @@ body {
 
 /* Chart Containers */
 .chart-section {
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 20px;
+
+  padding: 20px 0;
   margin-bottom: 0;
 }
 
 .chart-section:first-child {
   border-right: 1px solid #dee2e6;
-  margin-right: 10px;
+  margin-right: 20px;
 }
 
 .chart-section:last-child {
-  margin-left: 0px;
+  margin-inline-start: 0px;
 }
 
 .chart-title {
   font-size: 13px;
   font-weight: 500;
   color: #495057;
-  margin-bottom: 20px;
+  margin-bottom: 26px;
 }
 
 .chart-canvas-container {
@@ -182,8 +181,8 @@ body {
   justify-content: space-between;
   gap: 12px;
   flex: 1;
-  padding-left: 20px;
-  border-left: 1px solid #dee2e6;
+  padding-inline-start: 20px;
+  border-inline-start: 1px solid #dee2e6;
 }
 
 /* Stats Cards */
@@ -297,7 +296,7 @@ body {
 
 .sidebar-section {
   flex: 0 0 400px;
-  padding-left: 20px;
+  padding-inline-end: 20px;
 }
 
 /* Responsive Design */
@@ -398,8 +397,8 @@ body {
   transform: rotate(0deg);
   transform-origin: center center;
   transition: transform 0.3s ease;
-  margin-left: auto;
-  margin-right: 15px;
+  margin-inline-start: auto;
+  margin-inline-end: 15px;
   flex-shrink: 0;
   display: block;
   order: 999;
