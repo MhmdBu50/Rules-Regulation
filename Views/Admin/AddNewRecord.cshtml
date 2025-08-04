@@ -13,9 +13,9 @@
 
   <!-- Top Bar -->
   <div class="top-bar">
-    <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"> <img
-        src="@Url.Content("~/svgs/admin/backButton.svg")"> Back</a>
-    <a class="btn"onclick="location.href='@Url.Action("LoginPage", "Account")'"> Logout <img
+    <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"  id="btn-back"> <img
+        src="@Url.Content("~/svgs/admin/backButton.svg")" > Back</a>
+    <a class="btn"onclick="location.href='@Url.Action("LoginPage", "Account")'" id="btn-logout"> Logout <img
         src="@Url.Content("~/svgs/admin/logOut.svg")"> </a>
   </div>
 
@@ -26,7 +26,7 @@
 
   <!-- Main Header -->
   <div class="main-header">
-    <h1>New Record</h1>
+    <h1 id="add-record-page-title">New Record</h1>
   </div>
 
   <!-- Success/Error Messages -->
@@ -54,11 +54,11 @@
         @Html.AntiForgeryToken()
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="regulationName">Regulation/Manual Name (English)</label>
+            <label for="regulationName" id= "label-regulationName">Regulation/Manual Name (English)</label>
             <input type="text" class="form-control" id="regulationName" name="regulationName" required>
           </div>
           <div class="col-md-6">
-            <label for="regulationNameAr">Regulation/Manual Name (Arabic)</label>
+            <label for="regulationNameAr" id="label-regulationNameAr">Regulation/Manual Name (Arabic)</label>
             <input type="text" class="form-control" id="regulationNameAr" name="regulationNameAr" dir="rtl" lang="ar" required>
             <div id="regulationNameArError" class="text-danger mt-1" style="display: none;"></div>
           </div>
@@ -66,43 +66,43 @@
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="relevantDepartment">Relevant Department</label>
+            <label for="relevantDepartment" id="label-relevantDepartment">Relevant Department</label>
             <select class="form-select" id="relevantDepartment" name="relevantDepartment" required>
-              <option value="">Select department</option>
-              <option value="Reg and Admission">Reg and Admission</option>
-              <option value="CCSIT">CCSIT</option>
-              <option value="Communication and tech">Communication and tech</option>
-              <option value="Hospital">Hospital</option>
-              <option value="Library">Library</option>
-              <option value="Students Affairs">Students Affairs</option>
-              <option value="Preparetory">Preparetory</option>
-              <option value="Academic Affairs">Academic Affairs</option>
+              <option value="" id="select-department1">Select department</option>
+              <option value="Reg and Admission" id="option-dept-reg">Reg and Admission</option>
+              <option value="CCSIT" id="option-dept-ccsit">CCSIT</option>
+              <option value="Communication and tech" id="option-dept-tech">Communication and tech</option>
+              <option value="Hospital" id="option-dept-hospital">Hospital</option>
+              <option value="Library" id="option-dept-library">Library</option>
+              <option value="Students Affairs" id="option-dept-students">Students Affairs</option>
+              <option value="Preparetory" id="option-dept-prep">Preparetory</option>
+              <option value="Academic Affairs" id="option-dept-academic">Academic Affairs</option>
             </select>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-4">
-            <label for="versionNumber">Version Number</label>
+            <label for="versionNumber" id="label-versionNumber">Version Number</label>
             <input type="text" class="form-control" id="versionNumber" name="versionNumber" required>
           </div>
           <div class="col-md-4">
-            <label for="versionDate">Version Date</label>
+            <label for="versionDate" id="label-versionDate">Version Date</label>
             <input type="date" class="form-control" id="versionDate" name="versionDate" required>
           </div>
           <div class="col-md-4">
-            <label for="ApprovingDate">Approving Date</label>
+            <label for="ApprovingDate" id="label-approvingDate">Approving Date</label>
             <input type="date" class="form-control" id="ApprovingDate" name="ApprovingDate" required>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="ApprovingEntity">Approving Entity (English)</label>
+            <label for="ApprovingEntity" id="label-approvingEntity">Approving Entity (English)</label>
             <input type="text" class="form-control" id="ApprovingEntity" name="ApprovingEntity" required>
           </div>
           <div class="col-md-6">
-            <label for="ApprovingEntityAr">Approving Entity (Arabic)</label>
+            <label for="ApprovingEntityAr" id="label-approvingEntityAr">Approving Entity (Arabic)</label>
             <input type="text" class="form-control" id="ApprovingEntityAr" name="ApprovingEntityAr" dir="rtl" lang="ar" required>
             <div id="approvingEntityArError" class="text-danger mt-1" style="display: none;"></div>
           </div>
@@ -110,22 +110,22 @@
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="wordAttachment">Word Attachment</label>
+            <label for="wordAttachment" id="label-wordAttachment">Word Attachment</label>
             <input type="file" class="form-control" id="wordAttachment" name="wordAttachment" accept=".doc,.docx">
           </div>
           <div class="col-md-6">
-            <label for="pdfAttachment">PDF Attachment</label>
+            <label for="pdfAttachment" id="label-pdfAttachment">PDF Attachment</label>
             <input type="file" class="form-control" id="pdfAttachment" name="pdfAttachment" accept=".pdf">
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="Description">Brief Description (English)</label>
+            <label for="Description" id="label-description">Brief Description (English)</label>
             <textarea class="form-control" id="Description" name="Description" rows="3"></textarea>
           </div>
           <div class="col-md-6">
-            <label for="DescriptionAr">Brief Description (Arabic)</label>
+            <label for="DescriptionAr" id="label-descriptionAr">Brief Description (Arabic)</label>
             <textarea class="form-control" id="DescriptionAr" name="DescriptionAr" rows="3" dir="rtl" lang="ar"></textarea>
             <div id="descriptionArError" class="text-danger mt-1" style="display: none;"></div>
           </div>
@@ -133,45 +133,45 @@
 
         <div class="row mb-4">
           <div class="col-md-5">
-            <label>Document Type</label>
+            <label id="label-doc-type-section-7851">Document Type</label>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="doctype" value="Student guides & templates" id="reg"
                 required>
-              <label class="form-check-label" for="reg">Student guides & templates</label>
+              <label class="form-check-label" for="reg" id="label-doc-student-guides-7851">Student guides & templates</label>
             </div>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="doctype" value="Student rules & regulations"
                 id="Guidelines">
-              <label class="form-check-label" for="Guidelines">Student rules & regulations</label>
+              <label class="form-check-label" for="Guidelines" id="label-doc-student-rules-7851">Student rules & regulations</label>
             </div>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="doctype" value="Employees’ rules & regulations"
                 id="policy">
-              <label class="form-check-label" for="policy">Employees’ rules & regulations</label>
+              <label class="form-check-label" for="policy" id= "label-doc-employee-rules-7851">Employees’ rules & regulations</label>
             </div>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="doctype" value="Academic rules & regulations"
                 id="policy">
-              <label class="form-check-label" for="policy">Academic rules & regulations</label>
+              <label class="form-check-label" for="policy" id="label-doc-academic-rules-7851">Academic rules & regulations</label>
             </div>
           </div>
         </div>
 
         <div class="row mb-5">
           <div class="col-md-6">
-            <label for="notes">Notes (English)</label>
+            <label for="notes" id="label-notes">Notes (English)</label>
             <input type="text" class="form-control" id="notes" name="notes">
           </div>
           <div class="col-md-6">
-            <label for="notesAr">Notes (Arabic)</label>
+            <label for="notesAr" id="label-notesAr">Notes (Arabic)</label>
             <input type="text" class="form-control" id="notesAr" name="notesAr" dir="rtl" lang="ar">
             <div id="notesArError" class="text-danger mt-1" style="display: none;"></div>
           </div>
         </div>
 
         <div class="text-center">
-          <button type="submit" class="btn btn-primary me-2">Save and upload</button>
-          <button type="button" class="btn btn-secondary" onclick="confirmCancel()">Cancel</button>
+          <button type="submit" class="btn btn-primary me-2" id="btn-save">Save and upload</button>
+          <button type="button" class="btn btn-secondary" onclick="confirmCancel()" id="btn-cancel">Cancel</button>
         </div>
       </form>
     </div>
