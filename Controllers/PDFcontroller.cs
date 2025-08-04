@@ -1,66 +1,115 @@
+using Microsoft.AspNetCore.Mvc;
+using Oracle.ManagedDataAccess.Client;
+using PDFtoImage;
+using SkiaSharp;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Oracle.ManagedDataAccess.Client;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using PDFtoImage;
-using SkiaSharp;
-using System.Data;
-using PDFThumbnailGenerator.Web.Services;
-using PDFThumbnailGenerator.Web.Data;
 
-namespace PDFThumbnailGenerator.Web.Services
+namespace RulesRegulation.Controllers
 {
     /// <summary>
-    /// PDF to Image converter service for web applications
-    /// Converts second page of PDFs to 1200x1273 resolution images
+    /// PDF Thumbnail Controller for Rules-Regulation Project
+    /// Converts second page of PDF attachments to 1200x1273 thumbnails
     /// </summary>
-    public interface IPdfImageService
+    [ApiController]
+    [Route("api/[controller]")]
+    public class PDFController : ControllerBase
     {
-        Task<string> ConvertSecondPageToImageAsync(string pdfFilePath);
-        Task<byte[]> ConvertSecondPageToImageBytesAsync(string pdfFilePath);
-        bool ValidatePdfPageCount(string pdfFilePath);
-        int GetPdfPageCount(string pdfFilePath);
-    }
+        private readonly IConfiguration _configuration;
+        private readonly string _connectionString;
 
-    public class PdfImageService : IPdfImageService
-    {
-        private readonly string _outputDirectory;
-
-        public PdfImageService(string outputDirectory = null)
+        public PDFController(IConfiguration configuration)
         {
-            _outputDirectory = outputDirectory ?? Path.Combine(Path.GetTempPath(), "PDFImages");
-            Directory.CreateDirectory(_outputDirectory);
+            _configuration = configuration;
+            _connectionString = _configuration.GetConnectionString("OracleConnection");
         }
 
-        public async Task<string> ConvertSecondPageToImageAsync(string pdfFilePath)
-        {
-            if (!File.Exists(pdfFilePath))
-                throw new FileNotFoundException($"PDF file not found: {pdfFilePath}");
-
-            var fileName = Path.GetFileNameWithoutExtension(pdfFilePath);
-            var outputPath = Path.Combine(_outputDirectory, $"{fileName}_page_2_{DateTime.Now:yyyyMMdd_HHmmss}.png");
-
-            await GenerateSecondPageImageAsync(pdfFilePath, outputPath, 1200, 1273);
-            return outputPath;
-        }
-
-        public async Task<byte[]> ConvertSecondPageToImageBytesAsync(string pdfFilePath)
-        {
-            if (!File.Exists(pdfFilePath))
-                throw new FileNotFoundException($"PDF file not found: {pdfFilePath}");
-
-            return await GenerateSecondPageImageBytesAsync(pdfFilePath, 1200, 1273);
-        }
-
-        public bool ValidatePdfPageCount(string pdfFilePath)
+        /// <summary>
+        /// Get PDF thumbnail for a specific record
+        /// GET: /api/pdf/thumbnail?recordId=123
+        /// </summary>
+        /// <param name="recordId">The record ID to get PDF thumbnail for</param>
+        /// <returns>PNG image of the second page thumbnail</returns>
+        [HttpGet("thumbnail")]
+        public async Task<IActionResult> GetThumbnail([FromQuery] int recordId)
         {
             try
             {
-                if (!File.Exists(pdfFilePath)) return false;
+                // Get PDF file path from database
+                var pdfFilePath = await GetPdfFilePathFromDatabase(recordId);
+                
+                if (string.IsNullOrEmpty(pdfFilePath))
+                {
+                    return File(CreateErrorImageBytes("PDF not found for this record"), "image/png", $"error_{recordId}.png");
+                }
 
+                // Check if file exists on server
+                if (!System.IO.File.Exists(pdfFilePath))
+                {
+                    return File(CreateErrorImageBytes("PDF file not found on server"), "image/png", $"error_{recordId}.png");
+                }
+
+                // Check if PDF has at least 2 pages
+                if (!ValidatePdfHasSecondPage(pdfFilePath))
+                {
+                    return File(CreateErrorImageBytes("PDF has less than 2 pages"), "image/png", $"error_{recordId}.png");
+                }
+
+                // Convert second page to thumbnail
+                var thumbnailBytes = await ConvertSecondPageToThumbnail(pdfFilePath);
+                
+                return File(thumbnailBytes, "image/png", $"thumbnail_{recordId}.png");
+            }
+            catch (Exception ex)
+            {
+                // Log the error (you can inject ILogger if needed)
+                // _logger.LogError(ex, "Error generating thumbnail for recordId: {RecordId}", recordId);
+                
+                return File(CreateErrorImageBytes($"Error: {ex.Message}"), "image/png", $"error_{recordId}.png");
+            }
+        }
+
+        /// <summary>
+        /// Get PDF file path from ATTACHMENTS table using record ID
+        /// </summary>
+        private async Task<string> GetPdfFilePathFromDatabase(int recordId)
+        {
+            try
+            {
+                using var connection = new OracleConnection(_connectionString);
+                await connection.OpenAsync();
+
+                var query = "SELECT FILE_PATH FROM ATTACHMENTS WHERE RECORD_ID = :recordId AND (UPPER(FILE_TYPE) LIKE '%PDF%' OR UPPER(FILE_PATH) LIKE '%.PDF')";
+                using var command = new OracleCommand(query, connection);
+                command.Parameters.Add(new OracleParameter("recordId", OracleDbType.Int32, recordId, System.Data.ParameterDirection.Input));
+
+                var result = await command.ExecuteScalarAsync();
+                var filePath = result?.ToString() ?? "";
+                
+                // If the path is relative, make it absolute
+                if (!string.IsNullOrEmpty(filePath) && !Path.IsPathRooted(filePath))
+                {
+                    // Adjust this path based on where your PDFs are stored
+                    filePath = Path.Combine("wwwroot", filePath.TrimStart('~', '/', '\\'));
+                }
+                
+                return filePath;
+            }
+            catch (Exception ex)
+            {
+                // Consider logging the exception
+                return "";
+            }
+        }
+
+        /// <summary>
+        /// Validate if PDF has at least 2 pages
+        /// </summary>
+        private bool ValidatePdfHasSecondPage(string pdfFilePath)
+        {
+            try
+            {
                 using var fileStream = new FileStream(pdfFilePath, FileMode.Open, FileAccess.Read);
                 var pageCount = Conversion.GetPageCount(fileStream);
                 return pageCount >= 2;
@@ -71,45 +120,34 @@ namespace PDFThumbnailGenerator.Web.Services
             }
         }
 
-        public int GetPdfPageCount(string pdfFilePath)
+        /// <summary>
+        /// Convert second page of PDF to 1200x1273 thumbnail
+        /// </summary>
+        private async Task<byte[]> ConvertSecondPageToThumbnail(string pdfFilePath)
         {
-            try
-            {
-                if (!File.Exists(pdfFilePath)) return 0;
-
-                using var fileStream = new FileStream(pdfFilePath, FileMode.Open, FileAccess.Read);
-                return Conversion.GetPageCount(fileStream);
-            }
-            catch
-            {
-                return 0;
-            }
-        }
-
-        private async Task GenerateSecondPageImageAsync(string pdfPath, string outputPath, int targetWidth, int targetHeight)
-        {
-            await Task.Run(() =>
+            return await Task.Run(() =>
             {
                 try
                 {
-                    using var fileStream = new FileStream(pdfPath, FileMode.Open, FileAccess.Read);
+                    using var fileStream = new FileStream(pdfFilePath, FileMode.Open, FileAccess.Read);
                     using var originalBitmap = Conversion.ToImage(fileStream, page: 1); // Page index 1 = second page
                     
-                    using var surface = SKSurface.Create(new SKImageInfo(targetWidth, targetHeight));
+                    // Create 1200x1273 canvas
+                    using var surface = SKSurface.Create(new SKImageInfo(1200, 1273));
                     var canvas = surface.Canvas;
                     canvas.Clear(SKColors.White);
                     
-                    // Calculate scaling to fit within target dimensions while maintaining aspect ratio
-                    float scaleX = (float)targetWidth / originalBitmap.Width;
-                    float scaleY = (float)targetHeight / originalBitmap.Height;
+                    // Calculate scaling to fit within 1200x1273 while maintaining aspect ratio
+                    float scaleX = 1200f / originalBitmap.Width;
+                    float scaleY = 1273f / originalBitmap.Height;
                     float scale = Math.Min(scaleX, scaleY);
                     
                     int scaledWidth = (int)(originalBitmap.Width * scale);
                     int scaledHeight = (int)(originalBitmap.Height * scale);
                     
                     // Center the image
-                    int offsetX = (targetWidth - scaledWidth) / 2;
-                    int offsetY = (targetHeight - scaledHeight) / 2;
+                    int offsetX = (1200 - scaledWidth) / 2;
+                    int offsetY = (1273 - scaledHeight) / 2;
                     
                     // Draw the scaled image centered on the canvas
                     var destRect = new SKRect(offsetX, offsetY, offsetX + scaledWidth, offsetY + scaledHeight);
@@ -119,500 +157,132 @@ namespace PDFThumbnailGenerator.Web.Services
                         IsAntialias = true
                     });
                     
-                    // Save the final image
-                    using var finalImage = surface.Snapshot();
-                    using var data = finalImage.Encode(SKEncodedImageFormat.Png, 95);
-                    using var stream = File.OpenWrite(outputPath);
-                    data.SaveTo(stream);
-                }
-                catch (Exception ex)
-                {
-                    CreateErrorImage(outputPath, Path.GetFileNameWithoutExtension(pdfPath), ex.Message, targetWidth, targetHeight);
-                }
-            });
-        }
-
-        private async Task<byte[]> GenerateSecondPageImageBytesAsync(string pdfPath, int targetWidth, int targetHeight)
-        {
-            return await Task.Run(() =>
-            {
-                try
-                {
-                    using var fileStream = new FileStream(pdfPath, FileMode.Open, FileAccess.Read);
-                    using var originalBitmap = Conversion.ToImage(fileStream, page: 1);
-                    
-                    using var surface = SKSurface.Create(new SKImageInfo(targetWidth, targetHeight));
-                    var canvas = surface.Canvas;
-                    canvas.Clear(SKColors.White);
-                    
-                    float scaleX = (float)targetWidth / originalBitmap.Width;
-                    float scaleY = (float)targetHeight / originalBitmap.Height;
-                    float scale = Math.Min(scaleX, scaleY);
-                    
-                    int scaledWidth = (int)(originalBitmap.Width * scale);
-                    int scaledHeight = (int)(originalBitmap.Height * scale);
-                    
-                    int offsetX = (targetWidth - scaledWidth) / 2;
-                    int offsetY = (targetHeight - scaledHeight) / 2;
-                    
-                    var destRect = new SKRect(offsetX, offsetY, offsetX + scaledWidth, offsetY + scaledHeight);
-                    canvas.DrawBitmap(originalBitmap, destRect, new SKPaint
-                    {
-                        FilterQuality = SKFilterQuality.High,
-                        IsAntialias = true
-                    });
-                    
+                    // Convert to PNG bytes with high quality
                     using var finalImage = surface.Snapshot();
                     using var data = finalImage.Encode(SKEncodedImageFormat.Png, 95);
                     return data.ToArray();
                 }
                 catch
                 {
-                    return CreateErrorImageBytes(targetWidth, targetHeight);
+                    return CreateErrorImageBytes("PDF conversion failed");
                 }
             });
         }
 
-        private void CreateErrorImage(string outputPath, string fileName, string errorMessage, int width, int height)
+        /// <summary>
+        /// Create error image bytes for various error scenarios
+        /// </summary>
+        private byte[] CreateErrorImageBytes(string errorMessage)
         {
-            using var surface = SKSurface.Create(new SKImageInfo(width, height));
+            using var surface = SKSurface.Create(new SKImageInfo(1200, 1273));
             var canvas = surface.Canvas;
+            
+            // Create professional error image
             canvas.Clear(SKColors.White);
             
-            using var borderPaint = new SKPaint { Color = SKColors.Red, Style = SKPaintStyle.Stroke, StrokeWidth = 4 };
-            canvas.DrawRect(4, 4, width - 8, height - 8, borderPaint);
+            // Draw border
+            using var borderPaint = new SKPaint 
+            { 
+                Color = SKColors.LightGray, 
+                Style = SKPaintStyle.Stroke, 
+                StrokeWidth = 3 
+            };
+            canvas.DrawRect(10, 10, 1190, 1263, borderPaint);
             
-            using var textPaint = new SKPaint { Color = SKColors.Black, TextSize = 24, IsAntialias = true };
-            canvas.DrawText("PDF Rendering Error", 40, 80, textPaint);
-            canvas.DrawText($"File: {fileName}", 40, 120, textPaint);
+            // Draw main error icon and text
+            using var titlePaint = new SKPaint 
+            { 
+                Color = SKColors.DarkGray, 
+                TextSize = 48, 
+                IsAntialias = true,
+                Typeface = SKTypeface.Default
+            };
             
-            using var image = surface.Snapshot();
-            using var data = image.Encode(SKEncodedImageFormat.Png, 90);
-            using var stream = File.OpenWrite(outputPath);
-            data.SaveTo(stream);
-        }
-
-        private byte[] CreateErrorImageBytes(int width, int height)
-        {
-            using var surface = SKSurface.Create(new SKImageInfo(width, height));
-            var canvas = surface.Canvas;
-            canvas.Clear(SKColors.White);
+            using var messagePaint = new SKPaint 
+            { 
+                Color = SKColors.Gray, 
+                TextSize = 24, 
+                IsAntialias = true,
+                Typeface = SKTypeface.Default
+            };
             
-            using var borderPaint = new SKPaint { Color = SKColors.Red, Style = SKPaintStyle.Stroke, StrokeWidth = 4 };
-            canvas.DrawRect(4, 4, width - 8, height - 8, borderPaint);
+            // Center the content
+            canvas.DrawText("📄", 570, 400, titlePaint); // PDF icon
+            canvas.DrawText("PDF Thumbnail", 450, 500, titlePaint);
+            canvas.DrawText("Not Available", 480, 560, titlePaint);
             
-            using var textPaint = new SKPaint { Color = SKColors.Black, TextSize = 24, IsAntialias = true };
-            canvas.DrawText("PDF Rendering Error", 40, 80, textPaint);
+            // Error message
+            var wrappedMessage = WrapText(errorMessage, 50);
+            var lines = wrappedMessage.Split('\n');
+            float startY = 650;
+            
+            foreach (var line in lines)
+            {
+                canvas.DrawText(line, 100, startY, messagePaint);
+                startY += 35;
+            }
+            
+            // Footer
+            using var footerPaint = new SKPaint 
+            { 
+                Color = SKColors.LightGray, 
+                TextSize = 18, 
+                IsAntialias = true 
+            };
+            canvas.DrawText("Rules & Regulation System", 450, 1200, footerPaint);
             
             using var image = surface.Snapshot();
             using var data = image.Encode(SKEncodedImageFormat.Png, 90);
             return data.ToArray();
         }
-    }
-}
-
-namespace PDFThumbnailGenerator.Web.Data
-{
-    /// <summary>
-    /// Data access layer for PDF file operations
-    /// </summary>
-    public interface IPdfDataService
-    {
-        Task<List<string>> GetPdfFilePathsAsync();
-        Task<string> GetPdfFilePathByRecordIdAsync(int recordId);
-        Task<string> GetPdfFilePathByFileNameAsync(string fileName);
-        Task<List<PdfFileInfo>> GetPdfFileInfosAsync();
-    }
-
-    public class PdfFileInfo
-    {
-        public int AttachmentId { get; set; }
-        public int RecordId { get; set; }
-        public string FilePath { get; set; }
-        public string FileName { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public long FileSize { get; set; }
-    }
-
-    public class PdfDataService : IPdfDataService
-    {
-        private readonly string _connectionString;
-
-        public PdfDataService(IConfiguration configuration)
-        {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
-        }
-
-        public async Task<List<string>> GetPdfFilePathsAsync()
-        {
-            var filePaths = new List<string>();
-            
-            using var connection = new OracleConnection(_connectionString);
-            await connection.OpenAsync();
-            
-            var query = "SELECT FilePath FROM ATTACHMENTS WHERE UPPER(FileName) LIKE '%.PDF'";
-            using var command = new OracleCommand(query, connection);
-            using var reader = await command.ExecuteReaderAsync();
-            
-            while (await reader.ReadAsync())
-            {
-                var filePath = reader.GetString("FilePath");
-                if (!string.IsNullOrEmpty(filePath))
-                    filePaths.Add(filePath);
-            }
-            
-            return filePaths;
-        }
-
-        public async Task<string> GetPdfFilePathByRecordIdAsync(int recordId)
-        {
-            using var connection = new OracleConnection(_connectionString);
-            await connection.OpenAsync();
-            
-            var query = "SELECT FilePath FROM ATTACHMENTS WHERE ATTACHMENT_ID = :recordId AND UPPER(FileName) LIKE '%.PDF'";
-            using var command = new OracleCommand(query, connection);
-            command.Parameters.Add(new OracleParameter("recordId", OracleDbType.Int32, recordId, System.Data.ParameterDirection.Input));
-            
-            var result = await command.ExecuteScalarAsync();
-            return result?.ToString() ?? "";
-        }
-
-        public async Task<string> GetPdfFilePathByFileNameAsync(string fileName)
-        {
-            using var connection = new OracleConnection(_connectionString);
-            await connection.OpenAsync();
-            
-            var query = "SELECT FilePath FROM ATTACHMENTS WHERE FileName = :fileName AND UPPER(FileName) LIKE '%.PDF' AND ROWNUM = 1";
-            using var command = new OracleCommand(query, connection);
-            command.Parameters.Add(new OracleParameter("fileName", OracleDbType.Varchar2, fileName, System.Data.ParameterDirection.Input));
-            
-            var result = await command.ExecuteScalarAsync();
-            return result?.ToString() ?? "";
-        }
-
-        public async Task<List<PdfFileInfo>> GetPdfFileInfosAsync()
-        {
-            var fileInfos = new List<PdfFileInfo>();
-            
-            using var connection = new OracleConnection(_connectionString);
-            await connection.OpenAsync();
-            
-            var query = @"SELECT ATTACHMENT_ID, RECORD_ID, FilePath, FileName, CreatedDate, FileSize 
-                         FROM ATTACHMENTS 
-                         WHERE UPPER(FileName) LIKE '%.PDF' 
-                         ORDER BY CreatedDate DESC";
-            
-            using var command = new OracleCommand(query, connection);
-            using var reader = await command.ExecuteReaderAsync();
-            
-            while (await reader.ReadAsync())
-            {
-                fileInfos.Add(new PdfFileInfo
-                {
-                    AttachmentId = reader.GetInt32("ATTACHMENT_ID"),
-                    RecordId = reader.GetInt32("RECORD_ID"),
-                    FilePath = reader.GetString("FilePath"),
-                    FileName = reader.GetString("FileName"),
-                    CreatedDate = reader.GetDateTime("CreatedDate"),
-                    FileSize = reader.GetInt64("FileSize")
-                });
-            }
-            
-            return fileInfos;
-        }
-    }
-}
-
-namespace PDFThumbnailGenerator.Web.Controllers
-{
-    /// <summary>
-    /// API Controller for PDF to Image conversion operations
-    /// </summary>
-    [ApiController]
-    [Route("api/[controller]")]
-    public class PDFController : ControllerBase
-    {
-        private readonly IPdfImageService _pdfImageService;
-        private readonly IPdfDataService _pdfDataService;
-
-        public PDFController(IPdfImageService pdfImageService, IPdfDataService pdfDataService)
-        {
-            _pdfImageService = pdfImageService;
-            _pdfDataService = pdfDataService;
-        }
 
         /// <summary>
-        /// Convert all PDFs from ATTACHMENTS table to images
-        /// GET: api/pdf/convert
+        /// Wrap text to fit within specified character limit
         /// </summary>
-        [HttpGet("convert")]
-        public async Task<IActionResult> ConvertPdfsToImages()
+        private string WrapText(string text, int maxCharsPerLine)
         {
-            try
-            {
-                var pdfFilePaths = await _pdfDataService.GetPdfFilePathsAsync();
-                var imageResults = new List<object>();
+            if (string.IsNullOrEmpty(text) || text.Length <= maxCharsPerLine)
+                return text;
 
-                foreach (var filePath in pdfFilePaths)
+            var words = text.Split(' ');
+            var lines = new System.Collections.Generic.List<string>();
+            var currentLine = "";
+
+            foreach (var word in words)
+            {
+                if ((currentLine + word).Length <= maxCharsPerLine)
                 {
-                    try
-                    {
-                        if (_pdfImageService.ValidatePdfPageCount(filePath))
-                        {
-                            var imagePath = await _pdfImageService.ConvertSecondPageToImageAsync(filePath);
-                            imageResults.Add(new
-                            {
-                                OriginalPath = filePath,
-                                ImagePath = imagePath,
-                                FileName = Path.GetFileNameWithoutExtension(filePath),
-                                Success = true,
-                                PageCount = _pdfImageService.GetPdfPageCount(filePath)
-                            });
-                        }
-                        else
-                        {
-                            imageResults.Add(new
-                            {
-                                OriginalPath = filePath,
-                                ImagePath = "",
-                                FileName = Path.GetFileNameWithoutExtension(filePath),
-                                Success = false,
-                                Error = "PDF has less than 2 pages",
-                                PageCount = _pdfImageService.GetPdfPageCount(filePath)
-                            });
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        imageResults.Add(new
-                        {
-                            OriginalPath = filePath,
-                            ImagePath = "",
-                            FileName = Path.GetFileNameWithoutExtension(filePath),
-                            Success = false,
-                            Error = ex.Message,
-                            PageCount = 0
-                        });
-                    }
+                    currentLine += (currentLine.Length > 0 ? " " : "") + word;
                 }
-
-                return Ok(imageResults);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Error = ex.Message });
-            }
-        }
-
-        /// <summary>
-        /// Get image as byte array for direct display by RECORD_ID
-        /// GET: api/pdf/{recordId}
-        /// </summary>
-        [HttpGet("{recordId:int}")]
-        public async Task<IActionResult> GetImageByRecordId(int recordId)
-        {
-            try
-            {
-                var pdfFilePath = await _pdfDataService.GetPdfFilePathByRecordIdAsync(recordId);
-                if (string.IsNullOrEmpty(pdfFilePath) || !System.IO.File.Exists(pdfFilePath))
-                    return NotFound("PDF file not found");
-
-                var imageBytes = await _pdfImageService.ConvertSecondPageToImageBytesAsync(pdfFilePath);
-                return File(imageBytes, "image/png", $"page_2_record_{recordId}.png");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Error = ex.Message });
-            }
-        }
-
-        /// <summary>
-        /// Get image by filename
-        /// GET: api/pdf/byname/{fileName}
-        /// </summary>
-        [HttpGet("byname/{fileName}")]
-        public async Task<IActionResult> GetImageByFileName(string fileName)
-        {
-            try
-            {
-                var pdfFilePath = await _pdfDataService.GetPdfFilePathByFileNameAsync(fileName);
-                if (string.IsNullOrEmpty(pdfFilePath) || !System.IO.File.Exists(pdfFilePath))
-                    return NotFound("PDF file not found");
-
-                var imageBytes = await _pdfImageService.ConvertSecondPageToImageBytesAsync(pdfFilePath);
-                return File(imageBytes, "image/png", $"{fileName}_page_2.png");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Error = ex.Message });
-            }
-        }
-
-        /// <summary>
-        /// Get all PDF file information from ATTACHMENTS table
-        /// GET: api/pdf/files
-        /// </summary>
-        [HttpGet("files")]
-        public async Task<IActionResult> GetPdfFiles()
-        {
-            try
-            {
-                var pdfFiles = await _pdfDataService.GetPdfFileInfosAsync();
-                
-                var result = pdfFiles.Select(pdf => new
+                else
                 {
-                    pdf.AttachmentId,
-                    pdf.RecordId,
-                    pdf.FileName,
-                    pdf.CreatedDate,
-                    pdf.FileSize,
-                    PageCount = _pdfImageService.GetPdfPageCount(pdf.FilePath),
-                    HasSecondPage = _pdfImageService.ValidatePdfPageCount(pdf.FilePath),
-                    ImageUrl = $"/api/pdf/{pdf.RecordId}"
-                });
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Error = ex.Message });
-            }
-        }
-
-        /// <summary>
-        /// Batch convert specific RECORD_IDs
-        /// POST: api/pdf/batch
-        /// </summary>
-        [HttpPost("batch")]
-        public async Task<IActionResult> BatchConvertPdfs([FromBody] List<int> recordIds)
-        {
-            try
-            {
-                var results = new List<object>();
-
-                foreach (var recordId in recordIds)
-                {
-                    try
-                    {
-                        var pdfFilePath = await _pdfDataService.GetPdfFilePathByRecordIdAsync(recordId);
-                        if (string.IsNullOrEmpty(pdfFilePath) || !System.IO.File.Exists(pdfFilePath))
-                        {
-                            results.Add(new { RecordId = recordId, Success = false, Error = "PDF file not found" });
-                            continue;
-                        }
-
-                        if (_pdfImageService.ValidatePdfPageCount(pdfFilePath))
-                        {
-                            var imagePath = await _pdfImageService.ConvertSecondPageToImageAsync(pdfFilePath);
-                            results.Add(new
-                            {
-                                RecordId = recordId,
-                                Success = true,
-                                ImagePath = imagePath,
-                                FileName = Path.GetFileNameWithoutExtension(pdfFilePath)
-                            });
-                        }
-                        else
-                        {
-                            results.Add(new { RecordId = recordId, Success = false, Error = "PDF has less than 2 pages" });
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        results.Add(new { RecordId = recordId, Success = false, Error = ex.Message });
-                    }
+                    if (!string.IsNullOrEmpty(currentLine))
+                        lines.Add(currentLine);
+                    currentLine = word;
                 }
+            }
 
-                return Ok(results);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Error = ex.Message });
-            }
+            if (!string.IsNullOrEmpty(currentLine))
+                lines.Add(currentLine);
+
+            return string.Join("\n", lines);
         }
     }
 }
 
-namespace PDFThumbnailGenerator.Web.Configuration
+// Extension method for Startup.cs or Program.cs
+namespace RulesRegulation.Extensions
 {
-    /// <summary>
-    /// Dependency injection configuration
-    /// </summary>
-    public static class ServiceConfiguration
-    {
-        public static void ConfigurePdfServices(this IServiceCollection services, IConfiguration configuration)
-        {
-            // Register services
-            services.AddScoped<IPdfImageService>(provider => 
-                new PdfImageService(configuration.GetValue<string>("PdfImageOutputPath")));
-            
-            services.AddScoped<IPdfDataService, PdfDataService>();
-            
-            // Configure output directory
-            var outputPath = configuration.GetValue<string>("PdfImageOutputPath") 
-                ?? Path.Combine(Path.GetTempPath(), "PDFImages");
-            Directory.CreateDirectory(outputPath);
-        }
-    }
-
-    /// <summary>
-    /// Oracle-specific database helper methods
-    /// </summary>
-    public static class OracleDbHelper
+    public static class ServiceExtensions
     {
         /// <summary>
-        /// Execute a scalar query with Oracle parameters
+        /// Configure PDF services and required dependencies
+        /// Add this to your Startup.cs ConfigureServices method
         /// </summary>
-        public static async Task<T> ExecuteScalarAsync<T>(string connectionString, string query, params OracleParameter[] parameters)
+        public static void AddPdfServices(this IServiceCollection services)
         {
-            using var connection = new OracleConnection(connectionString);
-            await connection.OpenAsync();
-            
-            using var command = new OracleCommand(query, connection);
-            if (parameters != null)
-                command.Parameters.AddRange(parameters);
-            
-            var result = await command.ExecuteScalarAsync();
-            return result == null || result == DBNull.Value ? default(T) : (T)result;
-        }
-
-        /// <summary>
-        /// Execute a reader query with Oracle parameters
-        /// </summary>
-        public static async Task<List<T>> ExecuteReaderAsync<T>(string connectionString, string query, 
-            Func<OracleDataReader, T> mapper, params OracleParameter[] parameters)
-        {
-            var results = new List<T>();
-            
-            using var connection = new OracleConnection(connectionString);
-            await connection.OpenAsync();
-            
-            using var command = new OracleCommand(query, connection);
-            if (parameters != null)
-                command.Parameters.AddRange(parameters);
-            
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                results.Add(mapper(reader));
-            }
-            
-            return results;
-        }
-
-        /// <summary>
-        /// Create Oracle parameter with proper type mapping
-        /// </summary>
-        public static OracleParameter CreateParameter(string name, object value)
-        {
-            return value switch
-            {
-                int intValue => new OracleParameter(name, OracleDbType.Int32, intValue, System.Data.ParameterDirection.Input),
-                string stringValue => new OracleParameter(name, OracleDbType.Varchar2, stringValue, System.Data.ParameterDirection.Input),
-                DateTime dateValue => new OracleParameter(name, OracleDbType.Date, dateValue, System.Data.ParameterDirection.Input),
-                long longValue => new OracleParameter(name, OracleDbType.Int64, longValue, System.Data.ParameterDirection.Input),
-                _ => new OracleParameter(name, value)
-            };
+            // No additional services needed for this implementation
+            // PDFtoImage and Oracle.ManagedDataAccess are used directly in controller
         }
     }
 }

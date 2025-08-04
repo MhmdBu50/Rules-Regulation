@@ -104,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-button-add-new-record": "Add New Record",
         "admin-button-export-data": "Export Data",
         "admin-button-manage-contact-info": "Manage Contact Info",
+        "visitToggler": "Monthly Visits",
         "desktopSearchInput": "Search by Name/ID...",
         "admin-clear-search-title": "Clear search",
         "admin-section-filter-all": "All Sections",
@@ -285,6 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-button-add-new-record": "إضافة سجل جديد",
         "admin-button-export-data": "تصدير البيانات",
         "admin-button-manage-contact-info": "إدارة معلومات الاتصال",
+        "visitToggler": "الزيارات الشهرية",
         "desktopSearchInput": "...البحث بالاسم/الرقم التعريفي",
         "admin-clear-search-title": "مسح البحث",
         "admin-section-filter-all": "جميع الأقسام",
@@ -368,6 +370,12 @@ document.addEventListener("DOMContentLoaded", () => {
     "label-doc-employee-rules-7851": 'قواعد وأنظمة الموظفين',
     "label-doc-academic-rules-7851": 'قواعد وأنظمة أكاديمية',   
         }
+    };
+
+    // Make monthTranslations globally accessible
+    window.monthTranslations = {
+    "en": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    "ar": ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"]
     };
 
     function applyTranslations(lang) {
@@ -485,6 +493,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
         applyTranslations(lang);
+        translateChartMonths(lang); // Translate chart months if applicable
         localStorage.setItem("websiteLanguage", lang);
     }
 
@@ -500,4 +509,39 @@ document.addEventListener("DOMContentLoaded", () => {
             setLanguage(newLang);
         });
     }
+    //this method is used to translate the months in the chart
+    function translateChartMonths(lang) {
+    const months = window.monthTranslations[lang];
+    if (window.barChartInstance && window.barChartInstance.data) {
+        const originalLabels = window.barChartInstance.data.labels;
+        const translatedLabels = originalLabels.map(label => {
+            // Check if label is already in Arabic, convert to English first
+            const arabicIndex = window.monthTranslations["ar"].indexOf(label);
+            const englishLabel = arabicIndex >= 0 ? window.monthTranslations["en"][arabicIndex] : label;
+            
+            // Now translate to target language
+            const index = window.monthTranslations["en"].indexOf(englishLabel);
+            return index >= 0 ? months[index] : label;
+        });
+        window.barChartInstance.data.labels = translatedLabels;
+        
+        // Update dataset label based on current state and language
+        if (window.barChartInstance.data.datasets[0]) {
+            const currentLabel = window.barChartInstance.data.datasets[0].label;
+            const isUnique = currentLabel.includes('Unique') || currentLabel.includes('الفريدة');
+            
+            window.barChartInstance.data.datasets[0].label = isUnique
+                ? (lang === 'ar' ? 'الزيارات الشهرية الفريدة' : 'Unique Monthly Visits')
+                : (lang === 'ar' ? 'الزيارات الشهرية' : 'Monthly Visits');
+            
+            // Update the toggle button text as well
+            const toggle = document.getElementById('visitToggler');
+            if (toggle) {
+                toggle.textContent = window.barChartInstance.data.datasets[0].label;
+            }
+        }
+        
+        window.barChartInstance.update();
+    }
+}
 });

@@ -339,7 +339,17 @@ border: none;" onclick="navigateToHome(this)">
                         <div class="bookmark" data-record-id="@record.Id" onclick="toggleBookmark(this)"></div>
 
                         <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
-
+                        <div class="pdf-thumbnail-container">
+                        <div class="thumbnail-loading" id="loading-@record.Id">
+                            <div class="spinner"></div>
+                            <span>Loading...</span>
+                        </div>
+                        <img class="pdf-thumbnail" 
+                             id="thumbnail-@record.Id"
+                             data-record-id="@record.Id"
+                             style="display:none;" 
+                             alt="PDF Thumbnail" />
+                        </div>
                         </div>
                         <h2 class="card-title">@record.RegulationName</h2>
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -95,7 +96,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.MapStaticAssets(); 
 
-app.UseRequestLocalization();
+var localizationOptions = app.Services
+    .GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
+
+app.UseRequestLocalization(localizationOptions);
 app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
@@ -104,5 +108,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=homePage}/{id?}");
-
+    
+app.MapControllers(); 
 app.Run();

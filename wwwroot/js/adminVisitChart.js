@@ -22,13 +22,25 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch('/api/analytics/monthly-visits')
         .then(res => res.json())
         .then(data => {
+            // Get current language
+            const currentLang = localStorage.getItem("websiteLanguage") || "en";
+            
+            // Translate month labels if translations are available
+            let translatedLabels = data.labels;
+            if (window.monthTranslations) {
+                translatedLabels = data.labels.map(label => {
+                    const index = window.monthTranslations["en"].indexOf(label);
+                    return index >= 0 ? window.monthTranslations[currentLang][index] : label;
+                });
+            }
+            
             // Create and assign a new Chart.js instance to render the bar chart
             barChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: data.labels, // Month names
+                    labels: translatedLabels, // Use translated month names
                     datasets: [{
-                        label: 'Monthly Visits',
+                        label: currentLang === 'ar' ? 'الزيارات الشهرية' : 'Monthly Visits',
                         data: data.data, // Visit counts
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.6)',
@@ -63,12 +75,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
             });
+            // Store the chart instance globally so we can access it later
+            window.barChartInstance = barChartInstance;
 
             // Get reference to custom toggle element
             const toggle = document.getElementById('visitToggler');
 
-            // Initialize label
-            toggle.textContent = 'Monthly Visits';
+            // Initialize label with correct language
+            toggle.textContent = currentLang === 'ar' ? 'الزيارات الشهرية' : 'Monthly Visits';
 
             // Add click event to toggle dataset
             toggle.addEventListener('click', () => {
@@ -82,22 +96,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Fetch new data
                 fetch(apiUrl)
-                    .then(res => res.json())
-                    .then(data => {
-                        barChartInstance.data.labels = data.labels;
-                        barChartInstance.data.datasets[0].label = showingUnique
-                            ? 'Unique Monthly Visits'
-                            : 'Monthly Visits';
-                        barChartInstance.data.datasets[0].data = data.data;
+                .then(res => res.json())
+                .then(data => {
+                    const currentLang = localStorage.getItem("websiteLanguage") || "en";
+                    let translatedLabels = data.labels;
+                    
+                    // Only translate if monthTranslations is available
+                    if (window.monthTranslations) {
+                        translatedLabels = data.labels.map(label => {
+                            const index = window.monthTranslations["en"].indexOf(label);
+                            return index >= 0 ? window.monthTranslations[currentLang][index] : label;
+                        });
+                    }
 
-                        barChartInstance.getDatasetMeta(0).hidden = false; // Ensure dataset is visible
-                        barChartInstance.update();
+                    barChartInstance.data.labels = translatedLabels;
+                    barChartInstance.data.datasets[0].label = showingUnique
+                        ? (currentLang === 'ar' ? 'الزيارات الشهرية الفريدة' : 'Unique Monthly Visits')
+                        : (currentLang === 'ar' ? 'الزيارات الشهرية' : 'Monthly Visits');
+                    barChartInstance.data.datasets[0].data = data.data;
 
-                        // Update label text
-                        toggle.textContent = showingUnique
-                            ? 'Unique Monthly Visits'
-                            : 'Monthly Visits';
-                    })
+                    barChartInstance.getDatasetMeta(0).hidden = false;
+                    barChartInstance.update();
+
+                    toggle.textContent = barChartInstance.data.datasets[0].label;
+                })
                     .catch(error => console.error("Toggle fetch error:", error));
             });
         })
