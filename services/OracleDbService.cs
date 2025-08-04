@@ -576,7 +576,7 @@ namespace RulesRegulation.Services
                 {
                     conn.Open();
 
-                    string query = @"SELECT CONTACT_ID, DEPARTMENT, NAME, EMAIL, MOBILE, TELEPHONE 
+                    string query = @"SELECT CONTACT_ID, DEPARTMENT, NAME, NAME_AR, EMAIL, MOBILE, TELEPHONE 
                                     FROM CONTACT_INFORMATION 
                                     WHERE CONTACT_ID = :id";
 
@@ -593,6 +593,7 @@ namespace RulesRegulation.Services
                                     ContactId = reader.GetInt32("CONTACT_ID"),
                                     Department = reader.GetString("DEPARTMENT"),
                                     Name = reader.GetString("NAME"),
+                                    NameAr = reader.IsDBNull(reader.GetOrdinal("NAME_AR")) ? null : reader.GetString("NAME_AR"),
                                     Email = reader.IsDBNull(reader.GetOrdinal("EMAIL")) ? null : reader.GetString("EMAIL"),
                                     Mobile = reader.IsDBNull(reader.GetOrdinal("MOBILE")) ? null : reader.GetString("MOBILE"),
                                     Telephone = reader.IsDBNull(reader.GetOrdinal("TELEPHONE")) ? null : reader.GetString("TELEPHONE")
@@ -610,7 +611,7 @@ namespace RulesRegulation.Services
         }
 
         // Method to update a contact
-        public bool UpdateContact(int id, string department, string name, string? email, string? mobile, string? telephone)
+        public bool UpdateContact(int id, string department, string name, string? nameAr, string? email, string? mobile, string? telephone)
         {
             try
             {
@@ -619,7 +620,7 @@ namespace RulesRegulation.Services
                     conn.Open();
 
                     string query = @"UPDATE CONTACT_INFORMATION 
-                                    SET DEPARTMENT = :department, NAME = :name, EMAIL = :email, 
+                                    SET DEPARTMENT = :department, NAME = :name, NAME_AR = :nameAr, EMAIL = :email, 
                                         MOBILE = :mobile, TELEPHONE = :telephone 
                                     WHERE CONTACT_ID = :id";
 
@@ -627,6 +628,7 @@ namespace RulesRegulation.Services
                     {
                         cmd.Parameters.Add(":department", department);
                         cmd.Parameters.Add(":name", name);
+                        cmd.Parameters.Add(":nameAr", nameAr ?? (object)DBNull.Value);
                         cmd.Parameters.Add(":email", email ?? (object)DBNull.Value);
                         cmd.Parameters.Add(":mobile", mobile ?? (object)DBNull.Value);
                         cmd.Parameters.Add(":telephone", telephone ?? (object)DBNull.Value);
