@@ -5,6 +5,7 @@ there's also many filtering options to find the policy and other adminstrative s
 @section Styles {
     <link rel="stylesheet" href="~/css/AdminPage.css">
     <link rel="stylesheet" href="~/css/_rtl_Styles.css">
+    <link rel="stylesheet" href="~/css/AdminPageCustom.css">
 }
 <!-- Scripts for the admin page -->
 @section Scripts {
@@ -131,6 +132,7 @@ there's also many filtering options to find the policy and other adminstrative s
                     <div class="col-md-6">
                         <div class="chart-section">
                             <div id="admin-chart-title-visits" class="chart-title">Website visits over the past 6 months</div>
+                            <div id="visitToggler" class="legendToggler"> Monthly Visits </div>
                             <div class="chart-canvas-container">
                                 <canvas id="barChartCanvas"></canvas>
                             </div>
@@ -678,7 +680,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                 else
                                                 {
                                                     <div class="mb-3">
-                                                        <p class="text-muted" id="admin-table-form-no-contact-info" dir="rtl">لا توجد معلومات اتصال متاحة لهذا القسم.</p>
+                                                        <p class="text-muted" id="admin-table-form-no-contact-info">No contact information available for this department.</p>
                                                     </div>
                                                 }
                                             </div>
@@ -707,8 +709,8 @@ there's also many filtering options to find the policy and other adminstrative s
                 {
                     <!-- No records message for admin -->
                     <div class="alert alert-info text-center">
-                        <h4 id= "admin-no-records-heading" dir="rtl">لم يتم العثور على سجلات</h4>
-                        <p id= "admin-no-records-message" dir="rtl">لا توجد حالياً قوانين ولوائح في قاعدة البيانات.</p>
+                        <h4 id= "admin-no-records-heading" dir="rtl">No Records Found</h4>
+                        <p id= "admin-no-records-message" dir="rtl">No rules and regulations are currently available in the database</p>
                         <a href="@Url.Action("AddNewRecord", "Admin")" class="btn btn-primary">
                             <i class="fas fa-plus me-2" id= "admin-add-new-record-button"></i>
                         </a>
