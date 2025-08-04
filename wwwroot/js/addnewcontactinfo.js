@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const error = document.getElementById('nameError');
       if (error) {
         if (this.value && !englishPattern.test(this.value)) {
-          error.textContent = "Name must be in English letters only.";
+          error.textContent = "This field must contain only English text.";
         } else {
           error.textContent = "";
         }
