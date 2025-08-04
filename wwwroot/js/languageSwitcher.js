@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Chatbot Section
             "chatbot-name": "الدردشة مع السيد كبسة",
             "chatbot-initial-message": "مرحباً، كيف يمكنني مساعدتك اليوم؟",
-            "message-input": "...اكتب رسالتك",
+            "message-input": "... اكتب رسالتك",
 
             // Modal elements
             "modal-title-regulation-details": "تفاصيل اللائحة",
