@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Rules_Regulation.Models.Entities;
 using RulesRegulation.Models.Entities;
 
 namespace RulesRegulation.Models
@@ -12,6 +13,7 @@ namespace RulesRegulation.Models
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Users> Users { get; set; }
         public DbSet<SavedRecord> SavedRecords { get; set; }
+        public DbSet<Visit> Visits { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -115,6 +117,17 @@ namespace RulesRegulation.Models
                     .HasForeignKey(e => e.UserId)
                     .HasConstraintName("FK_SAVED_RECORDS_USERS");
             });
-        }
+            modelBuilder.Entity<Visit>(entity =>
+            {
+                entity.ToTable("VISITS"); // Oracle table name
+
+                entity.HasKey(e => e.VisitId);
+
+                entity.Property(e => e.VisitId).HasColumnName("VISIT_ID");
+                entity.Property(e => e.UserId).HasColumnName("USER_ID");
+                entity.Property(e => e.IPAddress).HasColumnName("IP_ADDRESS");
+                entity.Property(e => e.VisitTimestamp).HasColumnName("VISIT_TIMESTAMP");
+            });
+        }   
     }
 }
