@@ -57,18 +57,18 @@ body {
 /* Dashboard Styles */
 
 .dashboard-container {
-  max-width: 1200px;
+  max-width: 1415px;
   margin: 0 auto;
 }
 
 /* Main Rectangle Container */
 .dashboard-rectangle {
   background-color: #ffffff;
-  border-radius: 12px;
+  border-radius: 32px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 24px;
   margin-bottom: 20px;
-  margin: 20px 0;
+  margin: 20px 20px;
 }
 
 /* Chart Containers */
@@ -79,13 +79,15 @@ body {
 }
 
 .chart-section:first-child {
-  border-right: 1px solid #dee2e6;
-  margin-right: 20px;
+  border-inline-end: 1px solid #dee2e6;
+  margin-inline-end: 20px;
 }
 
 .chart-section:last-child {
   margin-inline-start: 0px;
-}
+  padding: 5px !important;
+  height: 259px;
+  }
 
 .chart-title {
   font-size: 13px;
@@ -104,7 +106,7 @@ body {
 .donut-chart-container {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
   height: 180px;
 }
 
@@ -187,7 +189,7 @@ body {
 
 /* Stats Cards */
 .stats-card {
-  border-radius: 8px;
+  border-radius: 16px;
   padding: 20px;
   text-align: center;
   color: white;
@@ -195,15 +197,17 @@ body {
 }
 
 .stats-card-blue {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-}
+background: linear-gradient(129.57deg, #369FFF 35.24%, #215F99 126.14%);
+box-shadow: 0px 10px 15px rgba(54, 159, 255, 0.4);
+border-radius: 20px;}
 
 .stats-card-green {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+background: linear-gradient(129.06deg, #8AC53E 20.3%, #618F26 112.74%);
+box-shadow: 0px 10px 30px rgba(138, 197, 62, 0.4);
 }
 
 .stats-card h6 {
-  font-size: 14px;
+  font-size: 18px;  
   font-weight: 500;
   margin-bottom: 8px;
   opacity: 0.9;
@@ -230,13 +234,14 @@ body {
 .btn-custom {
   width: 100%;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: 12px;
   font-weight: 500;
   font-size: 14px;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: center;
+  box-shadow: 0px 1.3px 5px rgba(64, 72, 82, 0.5);
 }
 
 .btn-primary-custom {
@@ -273,7 +278,6 @@ body {
 .main-row {
   display: flex;
   align-items: stretch;
-  height: 259px;
 }
 
 .charts-section {
@@ -294,9 +298,18 @@ body {
   padding-left: 0;
 }
 
-.sidebar-section {
-  flex: 0 0 400px;
-  padding-inline-end: 20px;
+@media (max-width: 1200px) {
+.chart-section:first-child {
+  margin-inline-end: 0px;
+}
+
+  .chart-section {
+    border-left: none;
+  }
+  .sidebar-cards,
+  .sidebar-buttons {
+    padding-top: 15px;
+    }
 }
 
 /* Responsive Design */
@@ -331,10 +344,12 @@ body {
   }
 
   .sidebar-buttons {
+    border-right: none;
     border-left: none;
     border-top: 1px solid #dee2e6;
     padding-left: 0;
     padding-top: 20px;
+    padding-inline-start: 0px;
   }
 
   .stats-card .number {
