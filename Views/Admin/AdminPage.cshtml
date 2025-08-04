@@ -680,7 +680,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                 else
                                                 {
                                                     <div class="mb-3">
-                                                        <p class="text-muted" id="admin-table-form-no-contact-info" dir="rtl">لا توجد معلومات اتصال متاحة لهذا القسم.</p>
+                                                        <p class="text-muted" id="admin-table-form-no-contact-info">No contact information available for this department.</p>
                                                     </div>
                                                 }
                                             </div>
@@ -709,8 +709,8 @@ there's also many filtering options to find the policy and other adminstrative s
                 {
                     <!-- No records message for admin -->
                     <div class="alert alert-info text-center">
-                        <h4 id= "admin-no-records-heading" dir="rtl">لم يتم العثور على سجلات</h4>
-                        <p id= "admin-no-records-message" dir="rtl">لا توجد حالياً قوانين ولوائح في قاعدة البيانات.</p>
+                        <h4 id= "admin-no-records-heading" dir="rtl">No Records Found</h4>
+                        <p id= "admin-no-records-message" dir="rtl">No rules and regulations are currently available in the database</p>
                         <a href="@Url.Action("AddNewRecord", "Admin")" class="btn btn-primary">
                             <i class="fas fa-plus me-2" id= "admin-add-new-record-button"></i>
                         </a>
@@ -720,162 +720,3 @@ there's also many filtering options to find the policy and other adminstrative s
         </div>
     </div>
 </div>
-
-<script>
-    // Enhanced debugging script
-    document.addEventListener('DOMContentLoaded', function () {
-        console.log('=== ENHANCED DEBUG SCRIPT LOADED ===');
-        
-        // Wait a bit to ensure all elements are rendered
-        setTimeout(function() {
-            console.log('Starting element search...');
-            
-            // Check if parent containers exist first
-            const totalPoliciesContainer = document.getElementById('admin-stats-total-policies');
-            const mostViewedContainer = document.getElementById('admin-stats-most-viewed');
-            const viewedTimesElement = document.getElementById('admin-stats-viewed-times');
-            
-            console.log('Container elements:', {
-                totalPoliciesContainer: totalPoliciesContainer ? 'FOUND' : 'NOT FOUND',
-                mostViewedContainer: mostViewedContainer ? 'FOUND' : 'NOT FOUND', 
-                viewedTimesElement: viewedTimesElement ? 'FOUND' : 'NOT FOUND'
-            });
-            
-            if (totalPoliciesContainer) {
-                console.log('Total policies container HTML:', totalPoliciesContainer.innerHTML);
-            }
-            if (mostViewedContainer) {
-                console.log('Most viewed container HTML:', mostViewedContainer.innerHTML);
-            }
-            
-            // Try different selector approaches
-            const totalPoliciesElem1 = document.querySelector('#admin-stats-total-policies .number');
-            const totalPoliciesElem2 = document.querySelector('#admin-stats-total-policies div.number');
-            const totalPoliciesElem3 = totalPoliciesContainer ? totalPoliciesContainer.querySelector('.number') : null;
-            
-            console.log('Total policies selectors:', {
-                '.number': totalPoliciesElem1 ? 'FOUND' : 'NOT FOUND',
-                'div.number': totalPoliciesElem2 ? 'FOUND' : 'NOT FOUND',
-                'container.querySelector': totalPoliciesElem3 ? 'FOUND' : 'NOT FOUND'
-            });
-            
-            const mostViewedSubtitle1 = document.querySelector('#admin-stats-most-viewed .subtitle');
-            const mostViewedSubtitle2 = mostViewedContainer ? mostViewedContainer.querySelector('.subtitle') : null;
-            
-            console.log('Most viewed subtitle selectors:', {
-                '.subtitle': mostViewedSubtitle1 ? 'FOUND' : 'NOT FOUND',
-                'container.querySelector': mostViewedSubtitle2 ? 'FOUND' : 'NOT FOUND'
-            });
-            
-            // Use the best working selectors
-            const totalPoliciesElem = totalPoliciesElem3 || totalPoliciesElem1 || totalPoliciesElem2;
-            const mostViewedSubtitle = mostViewedSubtitle2 || mostViewedSubtitle1;
-            const mostViewedText = viewedTimesElement;
-            
-            console.log('Final elements to use:', {
-                totalPolicies: totalPoliciesElem ? 'YES' : 'NO',
-                mostViewedSubtitle: mostViewedSubtitle ? 'YES' : 'NO',
-                mostViewedText: mostViewedText ? 'YES' : 'NO'
-            });
-            
-            // Test setting values
-            if (totalPoliciesElem) {
-                totalPoliciesElem.textContent = 'TEST';
-                console.log('✓ Set total policies to TEST');
-            } else {
-                console.error('✗ Could not find total policies element');
-            }
-            
-            if (mostViewedSubtitle) {
-                mostViewedSubtitle.textContent = 'Test Policy';
-                console.log('✓ Set most viewed title to Test Policy');
-            } else {
-                console.error('✗ Could not find most viewed subtitle element');
-            }
-            
-            if (mostViewedText) {
-                mostViewedText.textContent = 'Viewed: 999 times';
-                console.log('✓ Set most viewed text to 999 times');
-            } else {
-                console.error('✗ Could not find most viewed text element');
-            }
-            
-        }, 500); // Wait 500ms for DOM to be fully ready
-        
-        // Try API call after 2 seconds
-        }, 500); // Wait 500ms for DOM to be fully ready
-        
-        // Try API call after 2 seconds
-        setTimeout(function() {
-            console.log('=== ATTEMPTING API CALL ===');
-            
-            // Get elements again for API update
-            const totalPoliciesContainer = document.getElementById('admin-stats-total-policies');
-            const mostViewedContainer = document.getElementById('admin-stats-most-viewed');
-            const viewedTimesElement = document.getElementById('admin-stats-viewed-times');
-            
-            const totalPoliciesElem = totalPoliciesContainer ? totalPoliciesContainer.querySelector('.number') : null;
-            const mostViewedSubtitle = mostViewedContainer ? mostViewedContainer.querySelector('.subtitle') : null;
-            const mostViewedText = viewedTimesElement;
-            
-            fetch('/Admin/TestStats')
-                .then(response => {
-                    console.log('API Response status:', response.status);
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('API Data received:', data);
-                    
-                    if (totalPoliciesElem && data.totalPolicies !== undefined) {
-                        totalPoliciesElem.textContent = data.totalPolicies;
-                        console.log('✓ Updated total policies from API:', data.totalPolicies);
-                    }
-                    
-                    if (mostViewedSubtitle && data.mostViewed && data.mostViewed.name) {
-                        mostViewedSubtitle.textContent = data.mostViewed.name;
-                        console.log('✓ Updated most viewed name from API:', data.mostViewed.name);
-                    }
-                    
-                    if (mostViewedText && data.mostViewed && data.mostViewed.views !== undefined) {
-                        mostViewedText.textContent = `Viewed: ${data.mostViewed.views} times`;
-                        console.log('✓ Updated most viewed views from API:', data.mostViewed.views);
-                    }
-                })
-                .catch(error => {
-                    console.error('API Error:', error);
-                    
-                    // Try the real endpoint as fallback
-                    console.log('Trying real endpoint...');
-                    fetch('/Admin/GetDashboardStats')
-                        .then(response => {
-                            console.log('Real API Response status:', response.status);
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log('Real API Data received:', data);
-                            
-                            if (totalPoliciesElem && data.totalPolicies !== undefined) {
-                                totalPoliciesElem.textContent = data.totalPolicies;
-                                console.log('✓ Updated total policies from real API:', data.totalPolicies);
-                            }
-                            
-                            if (mostViewedSubtitle && data.mostViewed && data.mostViewed.name) {
-                                mostViewedSubtitle.textContent = data.mostViewed.name;
-                                console.log('✓ Updated most viewed name from real API:', data.mostViewed.name);
-                            }
-                            
-                            if (mostViewedText && data.mostViewed && data.mostViewed.views !== undefined) {
-                                mostViewedText.textContent = `Viewed: ${data.mostViewed.views} times`;
-                                console.log('✓ Updated most viewed views from real API:', data.mostViewed.views);
-                            }
-                        })
-                        .catch(realError => {
-                            console.error('Real API Error:', realError);
-                        });
-                });
-        }, 3000); // Wait 3 seconds for API call
-    });
-</script>

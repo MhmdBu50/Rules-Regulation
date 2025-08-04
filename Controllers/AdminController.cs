@@ -580,6 +580,7 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
      * @param id - Contact ID to update
      * @param Department - Required department name
      * @param Name - Required contact person name
+     * @param NameAr - Optional contact person name in Arabic
      * @param Email - Optional email address
      * @param Mobile - Optional mobile phone number
      * @param Telephone - Optional telephone number
@@ -588,7 +589,7 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
      */
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult EditContactInfo(int id, string Department, string Name, string? Email, string? Mobile, string? Telephone)
+    public IActionResult EditContactInfo(int id, string Department, string Name, string? NameAr, string? Email, string? Mobile, string? Telephone)
     {
         try
         {
@@ -602,7 +603,7 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
             }
 
             // Attempt to update contact information in database
-            bool success = _oracleDbService.UpdateContact(id, Department, Name, Email, Mobile, Telephone);
+            bool success = _oracleDbService.UpdateContact(id, Department, Name, NameAr, Email, Mobile, Telephone);
 
             if (success)
             {
