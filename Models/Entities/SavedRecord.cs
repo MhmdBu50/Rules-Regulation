@@ -17,12 +17,12 @@ namespace RulesRegulation.Models
         public int UserId { get; set; }
 
         [Column("SAVED_TIMESTAMP")]
-        public string SavedTimestamp { get; set; }
+        public string? SavedTimestamp { get; set; }
 
         [ForeignKey("RecordId")]
-        public AddNewRecord Record { get; set; }
+        public AddNewRecord? Record { get; set; }
 
         [ForeignKey("UserId")]
-        public Users User { get; set; }
+        public Users? User { get; set; }
     }
 }

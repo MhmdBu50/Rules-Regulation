@@ -43,6 +43,11 @@ function showSuccessAlert(message) {
 }
 
 function showAdminRecordDetails(recordId) {
+  // Log the SHOW_DETAILS action
+  if (typeof logShowDetails === 'function') {
+    logShowDetails(recordId);
+  }
+  
   const detailsContainer = document.getElementById("adminDetails" + recordId);
 
   // Check if details are already loaded
