@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "filter-apply-btn": "تطبيق",
 
             // Navigation Bar
-            "nav-home-label": "الصفحة الرئيسية",
+            "nav-home-label": "الرئيسية",
             "nav-student-guides-label": "أدلة وقوالب الطلاب",
             "nav-student-rules-label": "قواعد وأنظمة الطلاب",
             "nav-employee-rules-label": "قواعد وأنظمة الموظفين",
