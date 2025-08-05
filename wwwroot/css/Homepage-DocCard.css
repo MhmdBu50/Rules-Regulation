@@ -36,9 +36,14 @@
             transition: all 0.3s ease;
         }
         
+        .bookmark-wrapper{
+            z-index: 10;
+            filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.2));
+        }
+
         .bookmark:hover {
             background: #FFFFFF;
-            transform: scale(1.1);
+            clip-path: polygon(0px 0px, 100% 0px, 100% 90%, 50.00% 70%, 0px 90%);
         }
 
 
@@ -65,6 +70,7 @@
         border-radius: 8px;
         overflow: hidden;
         cursor: pointer;
+        transition: transform 0.3s ease;
         }
 
         .pdf-thumbnail-container {
@@ -111,7 +117,7 @@
 
         .document-icon:hover {
             background-color: #1a2444;
-            transform: scale(1.02);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
         .document-icon::after {
