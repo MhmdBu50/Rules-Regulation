@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.Drawing;
+using RulesRegulation.Filters;
 
 namespace RulesRegulation.Controllers;
 
@@ -33,6 +34,8 @@ namespace RulesRegulation.Controllers;
  * - DatabaseConnection: Direct database connection for complex operations
  */
 [Authorize(Roles = "Admin")]
+[SecurePage]
+[NoCache]
 public class AdminController : Controller
 {
     // Logger instance for tracking operations and debugging

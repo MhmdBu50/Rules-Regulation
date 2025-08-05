@@ -121,6 +121,54 @@ if (user != null)
 - Error message added to ModelState
 - Login form redisplayed with error
 
+### User Logout
+
+#### `Logout()` - GET/POST
+
+**Purpose**: Securely logout user and clear all authentication data
+
+**Route**: Both GET and POST methods supported at `/Account/Logout`
+**Returns**: Redirect to login page
+
+**Process Flow**:
+
+1. **Session Clearing**: Removes all session data including `UserId`
+2. **Authentication Sign-out**: Clears cookie authentication
+3. **Logging**: Records logout action with timestamp
+4. **Redirection**: Redirects to login page
+
+```csharp
+[HttpPost, HttpGet]
+public async Task<IActionResult> Logout()
+```
+
+**Logout Logic**:
+
+```csharp
+// Clear session data
+HttpContext.Session.Clear();
+
+// Sign out from cookie authentication
+await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+// Redirect to login
+return RedirectToAction("LoginPage", "Account");
+```
+
+**Security Features**:
+
+- **Complete Session Clearing**: Removes all user session data
+- **Cookie Authentication Logout**: Properly signs out authenticated user
+- **Error Handling**: Graceful fallback even if logout process fails
+- **Logging**: Records logout events for security auditing
+
+**HTTP Methods**:
+
+- **POST**: Recommended for logout buttons (more secure)
+- **GET**: Supported for direct URL access convenience
+- Error message added to ModelState
+- Login form redisplayed with error
+
 ## Session Management
 
 ### Session Creation

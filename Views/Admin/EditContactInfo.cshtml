@@ -16,11 +16,14 @@
 <div class="AddContactInfo">
     <!-- Top Bar -->
     <div class="top-bar">
-        <!-- back button-->
-        <a class="btn" onclick="location.href='@Url.Action("ManageContactInfo", "Admin")'" id="topbar-back-90201": "Back",> <img
-                src="@Url.Content("~/svgs/admin/backButton.svg")"> </a>
-        <a class="btn" onclick="location.href='@Url.Action("LoginPage", "Account")'" id="topbar-logout-90201"> Logout <img
-                src="@Url.Content("~/svgs/admin/logOut.svg")"> </a>
+        <a class="btn" onclick="location.href='@Url.Action("ManageContactInfo", "Admin")'"> <img
+                src="@Url.Content("~/svgs/admin/backButton.svg")"> Back</a>
+        <form method="post" action="@Url.Action("Logout", "Account")" style="display: inline;">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
+                Logout <img src="@Url.Content("~/svgs/admin/logOut.svg")">
+            </button>
+        </form>
     </div>
 
     <!-- Logo -->
@@ -80,11 +83,14 @@
                     <div class="row">
                         <div class="col-6">
                             <label for="Name" id="label-name-en-90201">Name of Responsible Person (English)</label>
-                            <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" lang="en" required>
+                            <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" lang="en"
+                                required>
+                            <div id="nameError" class="text-danger mt-1"></div>
                         </div>
                         <div class="col-6">
                             <label for="NameAr" id="label-name-ar-90201">Name of Responsible Person (Arabic)</label>
-                            <input type="text" class="form-control" id="NameAr" name="NameAr" value="@(Model.NameAr ?? "")" lang="ar" dir="rtl" required>
+                            <input type="text" class="form-control" id="NameAr" name="NameAr"
+                                value="@(Model.NameAr ?? "")" lang="ar" dir="rtl" required>
                             <div id="nameArError" class="text-danger mt-1"></div>
                         </div>
                     </div>
@@ -108,10 +114,10 @@
                         </div>
                     </div>
 
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary me-2" id="btn-update-90201">Update Contact Info</button>
-                        <a href="@Url.Action("ManageContactInfo", "Admin")" class="btn btn-secondary" id="btn-cancel-90201">Cancel</a>
-                    </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary me-2" id="btn-update-90201">Update Contact Info</button>
+                    <a href="@Url.Action("ManageContactInfo", "Admin")" class="btn btn-secondary" id="btn-cancel-90201">Cancel</a>
+                </div>
             </form>
         </div>
     </div>

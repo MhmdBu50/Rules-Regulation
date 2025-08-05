@@ -17,8 +17,13 @@
 <div class="AddContactInfo">
     <!-- Top Bar -->
     <div class="top-bar">
-      <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'" id="back-btn33"> <img src="@Url.Content("~/svgs/admin/backButton.svg")" >Back</a>
-      <a class="btn" onclick="location.href='@Url.Action("LoginPage", "Account")'" id="logout-btn33"> Logout   <img src="@Url.Content("~/svgs/admin/logOut.svg")"> </a>
+      <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"> <img src="@Url.Content("~/svgs/admin/backButton.svg")"> Back</a>
+      <form method="post" action="@Url.Action("Logout", "Account")" style="display: inline;">
+          @Html.AntiForgeryToken()
+          <button type="submit" class="btn" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
+              Logout <img src="@Url.Content("~/svgs/admin/logOut.svg")">
+          </button>
+      </form>
     </div>
 
     <!-- Logo -->
