@@ -17,7 +17,7 @@
 <div class="AddContactInfo">
     <!-- Top Bar -->
     <div class="top-bar">
-      <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"> <img src="@Url.Content("~/svgs/admin/backButton.svg")" id="back-btn33"> Back</a>
+      <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'" id="back-btn33"> <img src="@Url.Content("~/svgs/admin/backButton.svg")" >Back</a>
       <a class="btn" onclick="location.href='@Url.Action("LoginPage", "Account")'" id="logout-btn33"> Logout   <img src="@Url.Content("~/svgs/admin/logOut.svg")"> </a>
     </div>
 
@@ -33,7 +33,7 @@
     <button onclick="location.href='@Url.Action("AddNewContactInfo", "Admin")'" class="btn btn-outline-light btn-lg d-flex align-items-center justify-content-center">
         <!-- Inline SVG is needed here for easier color changing on hover effect-->
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="22" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class="btn-outline-light"><g><path d="M23 11h-2V9a1 1 0 0 0-2 0v2h-2a1 1 0 0 0 0 2h2v2a1 1 0 0 0 2 0v-2h2a1 1 0 0 0 0-2ZM9 12a6 6 0 1 0-6-6 6.006 6.006 0 0 0 6 6ZM9 2a4 4 0 1 1-4 4 4 4 0 0 1 4-4ZM9 14a9.01 9.01 0 0 0-9 9 1 1 0 0 0 2 0 7 7 0 0 1 14 0 1 1 0 0 0 2 0 9.01 9.01 0 0 0-9-9Z" fill="currentColor" opacity="1" data-original="#000000" class=""></path></g></svg>
-        <i class="bi bi-plus-circle me-2" id="addContact-btn33"></i> Add New Contact
+        <i class="bi bi-plus-circle me-2" id="addContact-btn33"></i>
     </button>
   </div>
 </div>

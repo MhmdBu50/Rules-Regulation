@@ -5,6 +5,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Define translatable texts - matching IDs in your .cshtml files
     const translations = {
         "en": {
+            //login translations
+            "login-title": "Sign in to Rules And Regulations System",
+            "username-label": "Username",
+            "password-label": "Password",
+            "login-button": "Login",
+            "login-help": "Need help logging in?",
             // General page elements
             "page-title": "Home Page",
             "welcome-message": "Welcome to our platform. Please navigate through the sections below.",
@@ -231,10 +237,39 @@ document.addEventListener("DOMContentLoaded", () => {
     "modal-body-confirmation33": "Are you sure you want to delete the contact information for:",
     "modal-warning33": "This action cannot be undone!",
     "modal-button-cancel33": "Cancel",
-    "modal-button-delete33": "Delete Contact"
+    "modal-button-delete33": "Delete Contact",
+    // edit contact info translations
+    "title-90201": "Edit Contact Info",
+    "topbar-back-90201": "Back",
+    "topbar-logout-90201": "Logout",
+    "main-header-90201": "Edit Contact Information",
+    "subtitle-90201": "Update contact information details",
+    "label-department-90201": "Relevant Department",
+    "option-select-dept-90201": "Select department",
+    "option-reg-90201": "Reg and Admission",
+    "option-ccsit-90201": "CCSIT",
+    "option-commtech-90201": "Communication and tech",
+    "option-hospital-90201": "Hospital",
+    "option-library-90201": "Library",
+    "option-affairs-90201": "Students Affairs",
+    "option-prep-90201": "Preparetory",
+    "option-academic-90201": "Academic Affairs",
+    "label-name-en-90201": "Name of Responsible Person (English)",
+    "label-name-ar-90201": "Name of Responsible Person (Arabic)",
+    "label-email-90201": "E-mail",
+    "label-telephone-90201": "Telephone number",
+    "label-mobile-90201": "Mobile number",
+    "btn-update-90201": "Update Contact Info",
+    "btn-cancel-90201": "Cancel"
 
         },
         "ar": {
+            //login translations
+            "login-title": "تسجيل الدخول إلى نظام اللوائح والتنظيمات",
+            "username-label": "اسم المستخدم",
+            "password-label": "كلمة المرور",
+            "login-button": "تسجيل الدخول",
+            "login-help": "هل تحتاج مساعدة في تسجيل الدخول؟",
             // General page elements
             "page-title": "الرئيسية",
             "welcome-message": "مرحباً بك في منصتنا. يرجى التنقل عبر الأقسام أدناه.",
@@ -464,6 +499,29 @@ document.addEventListener("DOMContentLoaded", () => {
     "modal-warning33": "هذا الإجراء لا يمكن التراجع عنه!",
     "modal-button-cancel33": "إلغاء",
     "modal-button-delete33": "حذف جهة التواصل",
+    // edit contact info translations
+    "title-90201": "تعديل معلومات التواصل",
+    "topbar-back-90201": "رجوع",
+    "topbar-logout-90201": "تسجيل الخروج",
+    "main-header-90201": "تعديل معلومات التواصل",
+    "subtitle-90201": "تحديث تفاصيل معلومات التواصل",
+    "label-department-90201": "القسم المعني",
+    "option-select-dept-90201": "اختر القسم",
+    "option-reg-90201": "التسجيل والقبول",
+    "option-ccsit-90201": "كلية علوم الحاسب وتقنية المعلومات",
+    "option-commtech-90201": "الاتصالات والتقنية",
+    "option-hospital-90201": "المستشفى",
+    "option-library-90201": "المكتبة",
+    "option-affairs-90201": "شؤون الطلاب",
+    "option-prep-90201": "السنة التحضيرية",
+    "option-academic-90201": "الشؤون الأكاديمية",
+    "label-name-en-90201": "اسم الشخص المسؤول (بالإنجليزية)",
+    "label-name-ar-90201": "اسم الشخص المسؤول (بالعربية)",
+    "label-email-90201": "البريد الإلكتروني",
+    "label-telephone-90201": "رقم الهاتف",
+    "label-mobile-90201": "رقم الجوال",
+    "btn-update-90201": "تحديث المعلومات",
+    "btn-cancel-90201": "إلغاء"
         }
     };
 
