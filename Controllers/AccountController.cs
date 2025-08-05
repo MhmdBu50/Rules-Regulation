@@ -44,7 +44,7 @@ public async Task<IActionResult> LoginPage(string Name, string password)
 
         // 🔎 Query the database (case-sensitive by default in Oracle)
         var user = _dbContext.Users
-            .FirstOrDefault(u => u.Name.ToLower() == normalizedName.ToLower()
+            .FirstOrDefault(u => u.Name != null && u.Name.ToLower() == normalizedName.ToLower()
                               && u.Password == normalizedPassword);
 
         // ❌ If user not found
@@ -60,7 +60,7 @@ public async Task<IActionResult> LoginPage(string Name, string password)
         // ✅ Set up claims for authentication
         var claims = new List<System.Security.Claims.Claim>
         {
-            new(System.Security.Claims.ClaimTypes.Name, user.Name),
+            new(System.Security.Claims.ClaimTypes.Name, user.Name ?? ""),
             new(System.Security.Claims.ClaimTypes.NameIdentifier, user.UserId.ToString()),
             new(System.Security.Claims.ClaimTypes.Role, user.Role ?? "")
         };
@@ -91,6 +91,49 @@ public async Task<IActionResult> LoginPage(string Name, string password)
         ModelState.AddModelError("", "A database error occurred. Please try again later.");
         return View("~/Views/Account/LoginPage.cshtml");
     }
+}
+
+// Logout User (supports both GET and POST)
+[HttpPost, HttpGet]
+public async Task<IActionResult> Logout()
+{
+    try
+    {
+        // 🔒 Clear the session
+        HttpContext.Session.Clear();
+
+        // 🔒 Sign out the user from cookie authentication
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        // ✅ Log the logout action
+        _logger.LogInformation("User logged out successfully at {Time}", DateTime.UtcNow);
+
+        // ✅ Redirect to login page
+        return RedirectToAction("LoginPage", "Account");
+    }
+    catch (Exception ex)
+    {
+        // ⚠️ Log any logout errors
+        _logger.LogError(ex, "Error occurred during logout");
+        
+        // Even if there's an error, clear session and redirect
+        HttpContext.Session.Clear();
+        return RedirectToAction("LoginPage", "Account");
+    }
+}
+
+// GET: Check Authentication Status (for AJAX calls)
+[HttpGet]
+public IActionResult CheckAuth()
+{
+    var userId = HttpContext.Session.GetInt32("UserId");
+    
+    if (userId == null || userId == 0)
+    {
+        return Unauthorized();
+    }
+    
+    return Ok(new { authenticated = true, userId = userId });
 }
 }
 
