@@ -26,6 +26,15 @@ there's also many filtering options to find the policy and other adminstrative s
             <!-- Left Section - Logo/Hamburger -->
             <div class="col-auto">
                 <div class="d-flex align-items-center">
+                     <div>
+                        <form method="post" action="@Url.Action("Logout", "Account")" style="margin: 0;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
+                                <img src="@Url.Content("~/svgs/admin/logOut.svg")">
+                                <span style="color: white;">logout</span>
+                            </button>
+                        </form>
+                    </div>
 
                     <!-- Language Logo -->
 <div class="language-switcher-container d-none d-lg-block">
