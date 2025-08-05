@@ -401,6 +401,10 @@ there's also many filtering options to find the policy and other adminstrative s
                                 ? record.RegulationNameAr 
                                 : record.RegulationName;
                             
+                            var displayApprovingEntity = isArabic && !string.IsNullOrEmpty(record.ApprovingEntityAr) 
+                                ? record.ApprovingEntityAr 
+                                : record.ApprovingEntity;
+                            
                             <!-- Accordion Item 1 -->
                             <div class="accordion-item position-relative" data-section="@(record.Sections ?? "")" data-document-type="@(record.DocumentType ?? "")">
                                 <!-- Checkbox positioned outside accordion button -->
@@ -441,8 +445,8 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         @record.ApprovalDate</th>
                                                     <th class="col-3 d-none d-lg-table-cell field-padding" 
                                                         style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-                                                        title="IAU @record.ApprovingEntity">IAU
-                                                        @record.ApprovingEntity</th>
+                                                        title="@displayApprovingEntity">
+                                                        @displayApprovingEntity</th>
                                                 </tr>
                                             </thead>
                                         </table>
