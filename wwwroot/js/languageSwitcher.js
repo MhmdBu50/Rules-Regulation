@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-delete-button-alt": "Delete btn",
         "admin-table-header-id": "ID",
         "admin-table-header-regulation-name": "Regulation/ Manual name",
-        "admin-table-header-section": "Section",
+        "admin-table-header-DocumentType": "Document Type",
         "admin-table-header-version-number": "Version Number",
         "admin-table-header-approving-date": "Approving Date",
         "admin-table-header-responsible-entity": "Responsible Entity",
@@ -384,7 +384,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-delete-button-alt": "زر الحذف",
         "admin-table-header-id": "رقم",
         "admin-table-header-regulation-name": "اسم اللائحة/الدليل",
-        "admin-table-header-section": "القسم",
+        "admin-table-header-documentType": "نوع المستند",
         "admin-table-header-version-number": "رقم الإصدار",
         "admin-table-header-approving-date": "تاريخ الاعتماد",
         "admin-table-header-responsible-entity": "الجهة المسؤولة",
@@ -546,6 +546,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         }
+
+        // Handle translatable labels with data-translate-key attribute
+        const translatableLabels = document.querySelectorAll('.translatable-label[data-translate-key]');
+        translatableLabels.forEach(label => {
+            const translateKey = label.getAttribute('data-translate-key');
+            if (translations[lang] && translations[lang][translateKey]) {
+                label.textContent = translations[lang][translateKey];
+            }
+        });
 
         // Handle department labels in multi-select dropdown
         const departmentLabels = document.querySelectorAll('.department-option');
