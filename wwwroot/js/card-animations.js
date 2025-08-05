@@ -30,45 +30,34 @@ function toggleBookmark(bookmark) {
 }
 
 function openPDFPreview() {
-    // Show loading indicator
-    const loadingIndicator = document.getElementById('loadingIndicator');
-    loadingIndicator.style.display = 'block';
-    
-    // Add visual feedback to the document icon
-    const documentIcon = document.querySelector('.document-icon');
-    documentIcon.style.transform = 'scale(0.95)';
-    
-    // Simulate loading time and open PDF
-    setTimeout(() => {
-        try {
-            // Open PDF in new tab
-            const newWindow = window.open(PDF_URL, '_blank');
-            
-            // Check if popup was blocked
-            if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-                showToast('Popup blocked. Please allow popups for this site.');
-                // Fallback: create a download link
-                const link = document.createElement('a');
-                link.href = PDF_URL;
-                link.download = 'document.pdf';
-                link.target = '_blank';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            } else {
-                showToast('PDF preview opened in new tab');
-            }
-        } catch (error) {
-            console.error('Error opening PDF:', error);
-            showToast('Error opening PDF preview');
+    try {
+        // Get the clicked element and find the document icon
+        const clickedElement = event ? event.target : null;
+        const documentIcon = clickedElement ? clickedElement.closest('.document-icon') : document.querySelector('.document-icon');
+        
+        // Check if loading indicator exists before using it
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        if (loadingIndicator) {
+            loadingIndicator.style.display = 'block';
         }
         
-        // Hide loading indicator
-        loadingIndicator.style.display = 'none';
+        // Add visual feedback to the document icon if it exists
+        if (documentIcon) {
+            documentIcon.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                documentIcon.style.transform = '';
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'none';
+                }
+            }, 1000);
+        }
         
-        // Reset document icon transform
-        documentIcon.style.transform = '';
-    }, 1000);
+        showToast('Loading PDF Preview...');
+    } catch (error) {
+        console.error('Error in openPDFPreview:', error);
+        showToast('Error opening PDF preview');
+    }
 }
 
 function testPdfApiDirect() {
