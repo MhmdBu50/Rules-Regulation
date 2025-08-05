@@ -755,8 +755,9 @@ namespace RulesRegulation.Services
 
                     // Build dynamic query based on filters
                     var queryBuilder = new System.Text.StringBuilder(@"SELECT 
-                        RECORD_ID, REGULATION_NAME, SECTIONS, VERSION, APPROVAL_DATE, APPROVING_ENTITY,
-                        DEPARTMENT, DOCUMENT_TYPE, DESCRIPTION, VERSION_DATE, NOTES, CREATED_AT
+                        RECORD_ID, REGULATION_NAME, REGULATION_NAME_AR, SECTIONS, VERSION, APPROVAL_DATE, 
+                        APPROVING_ENTITY, APPROVING_ENTITY_AR, DEPARTMENT, DOCUMENT_TYPE, DESCRIPTION, 
+                        DESCRIPTION_AR, VERSION_DATE, NOTES, NOTES_AR, CREATED_AT
                         FROM RECORDS WHERE 1=1");
 
                     var parameters = new List<OracleParameter>();
@@ -896,17 +897,21 @@ namespace RulesRegulation.Services
                                 {
                                     Id = reader["RECORD_ID"]?.ToString(),
                                     RegulationName = reader["REGULATION_NAME"]?.ToString(),
+                                    RegulationNameAr = reader["REGULATION_NAME_AR"]?.ToString(),
                                     Sections = reader["SECTIONS"]?.ToString(),
                                     Version = reader["VERSION"]?.ToString(),
                                     ApprovalDate = reader["APPROVAL_DATE"] != DBNull.Value ?
                                         Convert.ToDateTime(reader["APPROVAL_DATE"]).ToString("yyyy-MM-dd") : "",
                                     ApprovingEntity = reader["APPROVING_ENTITY"]?.ToString(),
+                                    ApprovingEntityAr = reader["APPROVING_ENTITY_AR"]?.ToString(),
                                     Department = reader["DEPARTMENT"]?.ToString(),
                                     DocumentType = reader["DOCUMENT_TYPE"]?.ToString(),
                                     Description = reader["DESCRIPTION"]?.ToString(),
+                                    DescriptionAr = reader["DESCRIPTION_AR"]?.ToString(),
                                     VersionDate = reader["VERSION_DATE"] != DBNull.Value ?
                                         Convert.ToDateTime(reader["VERSION_DATE"]).ToString("yyyy-MM-dd") : "",
                                     Notes = reader["NOTES"]?.ToString(),
+                                    NotesAr = reader["NOTES_AR"]?.ToString(),
                                     CreatedAt = reader["CREATED_AT"] != DBNull.Value ?
                                         Convert.ToDateTime(reader["CREATED_AT"]).ToString("yyyy-MM-dd") : ""
                                 });

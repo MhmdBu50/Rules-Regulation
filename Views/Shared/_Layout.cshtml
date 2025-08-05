@@ -1,5 +1,13 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+@using Microsoft.AspNetCore.Localization
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
+    var isArabic = currentCulture == "ar-SA";
+    var htmlLang = isArabic ? "ar" : "en";
+    var htmlDir = isArabic ? "rtl" : "ltr";
+}
+<html lang="@htmlLang">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,7 +25,7 @@
     @RenderSection("Styles", required: false)
 </head>
 <script src="~lib/bootstrap/dist/js/bootstrap.js"></script>
-<body>
+<body lang="@htmlLang" dir="@htmlDir" class="@(isArabic ? "rtl" : "ltr")">
             @RenderBody()
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

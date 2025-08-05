@@ -1,4 +1,11 @@
 @model IEnumerable<dynamic>
+@using Microsoft.AspNetCore.Localization
+
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
+    var isArabic = currentCulture == "ar-SA";
+}
 
 <!-- This File is about the admin page that controls what to be added, wheather its a new record or contact. in this page you can edit and delete.
 there's also many filtering options to find the policy and other adminstrative stuff-->
@@ -388,6 +395,11 @@ there's also many filtering options to find the policy and other adminstrative s
                             var itemNumber = i;
                             var headingId = "heading" + itemNumber;
                             var collapseId = "collapse" + itemNumber;
+                            
+                            var displayName = isArabic && !string.IsNullOrEmpty(record.RegulationNameAr) 
+                                ? record.RegulationNameAr 
+                                : record.RegulationName;
+                            
                             <!-- Accordion Item 1 -->
                             <div class="accordion-item position-relative" data-section="@(record.Sections ?? "")" data-document-type="@(record.DocumentType ?? "")">
                                 <!-- Checkbox positioned outside accordion button -->
@@ -411,8 +423,8 @@ there's also many filtering options to find the policy and other adminstrative s
                                                     <th
                                                         class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size field-padding" 
                                                         style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-                                                        title="@record.RegulationName">
-                                                        @record.RegulationName</th>
+                                                        title="@displayName">
+                                                        @displayName</th>
                                                     <th class="col-2 d-none d-md-table-cell field-padding" 
                                                         style="max-width: 111px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
                                                         title="@record.DocumentType">

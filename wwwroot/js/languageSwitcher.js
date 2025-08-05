@@ -650,8 +650,22 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("websiteLanguage", lang);
     }
 
-    // Initialize language from localStorage or default to English
-    const savedLanguage = localStorage.getItem("websiteLanguage") || "en";
+    // Initialize language from server culture or localStorage fallback
+    let savedLanguage = "en";
+    
+    // Check if we can get the culture from the server (via meta tag or body attribute)
+    const bodyLang = document.body.getAttribute('lang');
+    const bodyDir = document.body.getAttribute('dir');
+    
+    if (bodyLang === 'ar' || bodyDir === 'rtl') {
+        savedLanguage = "ar";
+    } else if (bodyLang === 'en' || bodyDir === 'ltr') {
+        savedLanguage = "en";
+    } else {
+        // Fallback to localStorage
+        savedLanguage = localStorage.getItem("websiteLanguage") || "en";
+    }
+    
     setLanguage(savedLanguage);
 
     // Add event listener to language toggle button
@@ -659,7 +673,40 @@ document.addEventListener("DOMContentLoaded", () => {
         languageToggleButton.addEventListener("click", () => {
             const currentLang = bodyElement.classList.contains("rtl") ? "ar" : "en";
             const newLang = currentLang === "ar" ? "en" : "ar";
-            setLanguage(newLang);
+            const newCulture = newLang === "ar" ? "ar-SA" : "en-US";
+            
+            // Create a form to submit the language change to the server
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/Language/SetLanguage';
+            
+            // Add CSRF token
+            const token = document.querySelector('input[name="__RequestVerificationToken"]');
+            if (token) {
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = token.value;
+                form.appendChild(tokenInput);
+            }
+            
+            // Add culture parameter
+            const cultureInput = document.createElement('input');
+            cultureInput.type = 'hidden';
+            cultureInput.name = 'culture';
+            cultureInput.value = newCulture;
+            form.appendChild(cultureInput);
+            
+            // Add return URL parameter
+            const returnUrlInput = document.createElement('input');
+            returnUrlInput.type = 'hidden';
+            returnUrlInput.name = 'returnUrl';
+            returnUrlInput.value = window.location.pathname + window.location.search;
+            form.appendChild(returnUrlInput);
+            
+            // Submit the form
+            document.body.appendChild(form);
+            form.submit();
         });
     }
     //this method is used to translate the months in the chart
