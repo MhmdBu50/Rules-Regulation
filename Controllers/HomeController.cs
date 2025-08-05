@@ -5,6 +5,7 @@ using RulesRegulation.Models;
 using RulesRegulation.Data;
 using RulesRegulation.Services;
 using Oracle.ManagedDataAccess.Client;
+using RulesRegulation.Filters;
 
 namespace RulesRegulation.Controllers;
 
@@ -47,6 +48,8 @@ public class HomeController : Controller
         return View("~/Views/Account/LoginPage.cshtml");
     }
 
+    [SecurePage]
+    [NoCache]
     public IActionResult homePage(string? department, string? sections, string? documentTypes,
         string? alphabetical, string? dateSort, string? fromDate, string? toDate)
     {

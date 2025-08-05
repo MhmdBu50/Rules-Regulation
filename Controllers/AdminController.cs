@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.Drawing;
+using RulesRegulation.Filters;
 
 namespace RulesRegulation.Controllers;
 
@@ -33,6 +34,8 @@ namespace RulesRegulation.Controllers;
  * - DatabaseConnection: Direct database connection for complex operations
  */
 [Authorize(Roles = "Admin")]
+[SecurePage]
+[NoCache]
 public class AdminController : Controller
 {
     // Logger instance for tracking operations and debugging
@@ -1294,15 +1297,19 @@ public async Task<IActionResult> ViewPdf(int id)
      * 
      * @param recordId - ID of record to update
      * @param regulationName - Updated regulation name
+     * @param regulationNameAr - Updated regulation name (Arabic)
      * @param department - Updated department
      * @param version - Updated version number
      * @param versionDate - Updated version date
      * @param approvalDate - Updated approval date
      * @param approvingEntity - Updated approving entity
+     * @param approvingEntityAr - Updated approving entity (Arabic)
      * @param description - Updated description
+     * @param descriptionAr - Updated description (Arabic)
      * @param documentType - Updated document type
      * @param sections - Updated sections (comma-separated)
      * @param notes - Updated notes
+     * @param notesAr - Updated notes (Arabic)
      * 
      * @return RedirectToAction to AdminPage with success/error message
      */
@@ -1311,22 +1318,59 @@ public async Task<IActionResult> ViewPdf(int id)
     public IActionResult UpdateRecord(
         int recordId,
         string regulationName,
+        string? regulationNameAr,
         string department,
         string version,
         DateTime versionDate,
         DateTime approvalDate,
         string approvingEntity,
+        string? approvingEntityAr,
         string description,
+        string? descriptionAr,
         string documentType,
         string sections,
-        string notes)
+        string notes,
+        string? notesAr)
     {
         try
         {
-            // Attempt to update record using Oracle service
+            // Step 1: Arabic validation for update fields
+            var arabicValidationResults = OracleDbService.ValidateAddNewRecordArabicFields(
+                regulationNameAr, 
+                approvingEntityAr, 
+                descriptionAr, 
+                notesAr
+            );
+            
+            var arabicValidationErrors = new List<string>();
+            
+            foreach (var validation in arabicValidationResults)
+            {
+                if (!validation.Value)
+                {
+                    var fieldName = validation.Key switch
+                    {
+                        "regulationNameAr" => "Regulation Name (Arabic)",
+                        "approvingEntityAr" => "Approving Entity (Arabic)",
+                        "descriptionAr" => "Description (Arabic)",
+                        "notesAr" => "Notes (Arabic)",
+                        _ => validation.Key
+                    };
+                    arabicValidationErrors.Add($"{fieldName} contains invalid Arabic characters");
+                }
+            }
+            
+            if (arabicValidationErrors.Any())
+            {
+                TempData["ErrorMessage"] = "Arabic validation failed: " + string.Join("; ", arabicValidationErrors);
+                return RedirectToAction("AdminPage");
+            }
+
+            // Step 2: Attempt to update record using Oracle service
             bool success = _oracleDbService.UpdateRecord(
-                recordId, regulationName, department, version, versionDate,
-                approvalDate, approvingEntity, description, documentType, sections, notes);
+                recordId, regulationName, regulationNameAr, department, version, versionDate,
+                approvalDate, approvingEntity, approvingEntityAr, description, descriptionAr, 
+                documentType, sections, notes, notesAr);
 
             if (success)
             {

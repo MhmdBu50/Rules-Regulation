@@ -14,10 +14,14 @@
 <div class="AddContactInfo">
   <!-- Top Bar -->
   <div class="top-bar">
-    <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"> <img
+    <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'" id="topbar-back-90101"> <img
         src="@Url.Content("~/svgs/admin/backButton.svg")"> Back</a>
-    <a class="btn" onclick="location.href='@Url.Action("LoginPage", "Account")'"> Logout <img
-        src="@Url.Content("~/svgs/admin/logOut.svg")"> </a>
+    <form method="post" action="@Url.Action("Logout", "Account")" style="display: inline;">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn" id="topbar-logout-90201" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
+            Logout <img src="@Url.Content("~/svgs/admin/logOut.svg")">
+        </button>
+    </form>
   </div>
 
   <!-- Logo -->
@@ -27,8 +31,8 @@
 
   <!-- Main Header -->
   <div class="main-header">
-    <h1>Add Contact Information</h1>
-    <p class="subtitle">Add new contact information for departments</p>
+    <h1 id="title-90101">Add Contact Information</h1>
+    <p class="subtitle" id="subtitle-90101">Add new contact information for departments</p>
   </div>
 
   @if (TempData["SuccessMessage"] != null)
@@ -54,45 +58,45 @@
         @Html.AntiForgeryToken()
 
         <div class="mb-5">
-          <label for="Department">Relevant Department</label>
+          <label for="Department" id="label-department-90101">Relevant Department</label>
           <select class="form-select" id="Department" name="Department" required>
-            <option value="">Select department</option>
-            <option value="Reg and Admission">Reg and Admission</option>
-            <option value="CCSIT">CCSIT</option>
-            <option value="Communication and tech">Communication and tech</option>
-            <option value="Hospital">Hospital</option>
-            <option value="Library">Library</option>
-            <option value="Students Affairs">Students Affairs</option>
-            <option value="Preparetory">Preparetory</option>
-            <option value="Academic Affairs">Academic Affairs</option>
+            <option value="" id="option-select-dept-90101">Select department</option>
+            <option value="Reg and Admission" id="option-reg-90101">Reg and Admission</option>
+            <option value="CCSIT" id="option-ccsit-90101">CCSIT</option>
+            <option value="Communication and tech" id="option-commtech-90101">Communication and tech</option>
+            <option value="Hospital" id="option-hospital-90101">Hospital</option>
+            <option value="Library" id="option-library-90101">Library</option>
+            <option value="Students Affairs" id="option-affairs-90101">Students Affairs</option>
+            <option value="Preparetory" id="option-prep-90101">Preparetory</option>
+            <option value="Academic Affairs" id="option-academic-90101">Academic Affairs</option>
           </select>
         </div>
 
         <div class="row mb-5">
           <div class="col-md-6">
-            <label for="Name">Name of Responsible Person (English)</label>
+            <label for="Name" id="label-name-en-90101">Name of Responsible Person (English)</label>
             <input type="text" class="form-control" id="Name" name="Name" required>
             <div id="nameError" class="text-danger mt-1"></div>
           </div>
           <div class="col-md-6">
-            <label for="NameAr">Name of Responsible Person (Arabic)</label>
+            <label for="NameAr" id="label-name-ar-90101">Name of Responsible Person (Arabic)</label>
             <input type="text" class="form-control" id="NameAr" name="NameAr" lang="ar" dir="rtl" required>
             <div id="nameArError" class="text-danger mt-1"></div>
           </div>
         </div>
 
         <div class="mb-5">
-          <label for="Email">E-mail</label>
+          <label for="Email" id="label-email-90101">E-mail</label>
           <input type="email" class="form-control" id="Email" name="Email">
         </div>
 
         <div class="mb-5">
-          <label for="Telephone">Telephone number</label>
+          <label for="Telephone" id="label-telephone-90101">Telephone number</label>
           <input type="tel" class="form-control" id="Telephone" name="Telephone">
         </div>
 
         <div class="mb-5">
-          <label for="Mobile">Mobile number</label>
+          <label for="Mobile" id="label-mobile-90101">Mobile number</label>
           <div class="input-group">
             <span class="input-group-text shadowed">+966</span>
             <input type="tel" class="form-control" id="Mobile" name="Mobile">
@@ -100,10 +104,12 @@
         </div>
 
         <div class="text-center">
-          <button type="submit" class="btn btn-primary me-2">Submit</button>
-          <button type="button" class="btn btn-secondary" onclick="confirmCancel()">Cancel</button>
+          <button type="submit" class="btn btn-primary me-2" id="btn-submit-90101">Submit</button>
+          <button type="button" class="btn btn-secondary" onclick="confirmCancel()"
+            id="btn-cancel-90101">Cancel</button>
         </div>
       </form>
     </div>
   </div>
 </div>
+<!-- End of Form Section -->

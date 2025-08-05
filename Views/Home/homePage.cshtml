@@ -42,7 +42,17 @@
                         <img src="~/svgs/navigation/hamburger-menu.svg" alt="Menu" width="36" height="36" />
                     </button>
 
-                    <div class="language-switcher-container">
+                    <div class="d-none d-lg-block d-xl-block">
+                        <form method="post" action="@Url.Action("Logout", "Account")" style="margin: 0">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
+                                <img src="@Url.Content("~/svgs/admin/logOut.svg")">
+                                <span style="color: white;">logout</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="language-switcher-container d-none d-lg-block d-xl-block">
                         <button id="language-toggle" class="language-toggle-btn">
                             <svg class="desktop-logo logo" width="33" height="33" viewBox="0 0 40 40" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -336,8 +346,9 @@ border: none;" onclick="navigateToHome(this)">
                     <div class="card document-card" data-title="@record.RegulationName" data-department="@record.Department"
                         data-section="@(record.Sections != null ? string.Join(",", record.Sections) : "")"
                         data-type="@record.DocumentType" data-version-date="@record.VersionDate">
+                        <div class="bookmark-wrapper">
                         <div class="bookmark" data-record-id="@record.Id" onclick="toggleBookmark(this)"></div>
-
+                        </div>
                         <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
                         <div class="pdf-thumbnail-container">
                         <div class="thumbnail-loading" id="loading-@record.Id">
