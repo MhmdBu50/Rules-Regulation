@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "btn-cancel-90101": "Cancel",
     "manageContact-title33": "Manage Contact Information",
     "manageContact-subtitle33": "View and manage all contact information",
-    "addContact-btn33": "Add Contact Info",
+    "addContact-btn33": "Add New Contact",
     "back-btn33": "Back",
     "logout-btn33": "Logout",
     "table-header-contactType33": "Contact Type",
