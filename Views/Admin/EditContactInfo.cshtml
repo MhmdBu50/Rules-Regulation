@@ -18,8 +18,12 @@
     <div class="top-bar">
         <a class="btn" onclick="location.href='@Url.Action("ManageContactInfo", "Admin")'"> <img
                 src="@Url.Content("~/svgs/admin/backButton.svg")"> Back</a>
-        <a class="btn" onclick="location.href='@Url.Action("LoginPage", "Account")'"> Logout <img
-                src="@Url.Content("~/svgs/admin/logOut.svg")"> </a>
+        <form method="post" action="@Url.Action("Logout", "Account")" style="display: inline;">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
+                Logout <img src="@Url.Content("~/svgs/admin/logOut.svg")">
+            </button>
+        </form>
     </div>
 
     <!-- Logo -->
@@ -29,8 +33,8 @@
 
     <!-- Main Header -->
     <div class="main-header">
-        <h1>Edit Contact Information</h1>
-        <p class="subtitle">Update contact information details</p>
+        <h1 id="main-header-90201">Edit Contact Information</h1>
+        <p class="subtitle" id= "subtitle-90201">Update contact information details</p>
     </div>
 
     @if (TempData["SuccessMessage"] != null)
@@ -57,20 +61,20 @@
                 <input type="hidden" name="id" value="@Model.ContactId" />
 
                 <div class="mb-5">
-                    <label for="Department">Relevant Department</label>
+                    <label for="Department" id="label-department-90201">Relevant Department</label>
                     <select class="form-select" id="Department" name="Department" required>
-                        <option value="">Select department</option>
-                        <option value="Reg and Admission" selected="@(Model.Department == "Reg and Admission")">Reg and
+                        <option value="" id="option-select-dept-90201">Select department</option>
+                        <option value="Reg and Admission" selected="@(Model.Department == "Reg and Admission")" id="option-reg-90201">Reg and
                             Admission</option>
-                        <option value="CCSIT" selected="@(Model.Department == "CCSIT")">CCSIT</option>
+                        <option value="CCSIT" selected="@(Model.Department == "CCSIT")" id="option-ccsit-90201">CCSIT</option>
                         <option value="Communication and tech"
-                            selected="@(Model.Department == "Communication and tech")">Communication and tech</option>
-                        <option value="Hospital" selected="@(Model.Department == "Hospital")">Hospital</option>
-                        <option value="Library" selected="@(Model.Department == "Library")">Library</option>
-                        <option value="Students Affairs" selected="@(Model.Department == "Students Affairs")">Students
+                            selected="@(Model.Department == "Communication and tech")" id="option-commtech-90201">Communication and tech</option>
+                        <option value="Hospital" selected="@(Model.Department == "Hospital")" id="option-hospital-90201">Hospital</option>
+                        <option value="Library" selected="@(Model.Department == "Library")" id="option-library-90201">Library</option>
+                        <option value="Students Affairs" selected="@(Model.Department == "Students Affairs")" id="option-affairs-90201">Students
                             Affairs</option>
-                        <option value="Preparetory" selected="@(Model.Department == "Preparetory")">Preparetory</option>
-                        <option value="Academic Affairs" selected="@(Model.Department == "Academic Affairs")">Academic
+                        <option value="Preparetory" selected="@(Model.Department == "Preparetory")" id="option-prep-90201">Preparetory</option>
+                        <option value="Academic Affairs" selected="@(Model.Department == "Academic Affairs")" id="option-academic-90201">Academic
                             Affairs</option>
                     </select>
                 </div>
@@ -78,39 +82,42 @@
                 <div class="mb-5">
                     <div class="row">
                         <div class="col-6">
-                            <label for="Name">Name of Responsible Person (English)</label>
-                            <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" lang="en" required>
+                            <label for="Name" id="label-name-en-90201">Name of Responsible Person (English)</label>
+                            <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" lang="en"
+                                required>
+                            <div id="nameError" class="text-danger mt-1"></div>
                         </div>
                         <div class="col-6">
-                            <label for="NameAr">Name of Responsible Person (Arabic)</label>
-                            <input type="text" class="form-control" id="NameAr" name="NameAr" value="@(Model.NameAr ?? "")" lang="ar" dir="rtl" required>
+                            <label for="NameAr" id="label-name-ar-90201">Name of Responsible Person (Arabic)</label>
+                            <input type="text" class="form-control" id="NameAr" name="NameAr"
+                                value="@(Model.NameAr ?? "")" lang="ar" dir="rtl" required>
                             <div id="nameArError" class="text-danger mt-1"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="mb-5">
-                    <label for="Email">E-mail</label>
+                    <label for="Email" id="label-email-90201">E-mail</label>
                     <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email">
                 </div>
 
                 <div class="mb-5">
-                    <label for="Telephone">Telephone number</label>
+                    <label for="Telephone" id="label-telephone-90201">Telephone number</label>
                     <input type="tel" class="form-control" id="Telephone" name="Telephone" value="@Model.Telephone">
                 </div>
 
                     <div class="mb-5">
-                        <label for="Mobile">Mobile number</label>
+                        <label for="Mobile" id="label-mobile-90201">Mobile number</label>
                         <div class="input-group">
                             <span class="input-group-text shadowed">+966</span>
                             <input type="tel" class="form-control" id="Mobile" name="Mobile" value="@Model.Mobile">
                         </div>
                     </div>
 
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary me-2">Update Contact Info</button>
-                        <a href="@Url.Action("ManageContactInfo", "Admin")" class="btn btn-secondary">Cancel</a>
-                    </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary me-2" id="btn-update-90201">Update Contact Info</button>
+                    <a href="@Url.Action("ManageContactInfo", "Admin")" class="btn btn-secondary" id="btn-cancel-90201">Cancel</a>
+                </div>
             </form>
         </div>
     </div>

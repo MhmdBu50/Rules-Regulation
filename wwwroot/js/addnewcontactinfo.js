@@ -7,6 +7,9 @@ function confirmCancel() {
 document.addEventListener('DOMContentLoaded', function () {
   // Arabic validation pattern - includes Arabic letters, punctuation, and common symbols
   const arabicPattern = /^[\u0600-\u06FF\s\u060C\u061B\u061F\u0640]*$/;
+
+  // English validation pattern
+  
   
   // Arabic validation function
   function validateArabicField(input, errorElementId) {
@@ -28,18 +31,26 @@ document.addEventListener('DOMContentLoaded', function () {
   const mobileInput = document.getElementById('Mobile');
   const telephoneInput = document.getElementById('Telephone');
 
-  // English name validation (letters, spaces, and common characters)
+  // English validation function
+  function validateEnglishField(input, errorElementId) {
+    const errorElement = document.getElementById(errorElementId);
+    const englishPattern = /^[a-zA-Z0-9\s\-.,'()&]+$/;
+    
+    if (input.value.trim() && !englishPattern.test(input.value)) {
+      errorElement.textContent = "This field must contain only English text.";
+      errorElement.style.display = "block";
+      return false;
+    } else {
+      errorElement.textContent = "";
+      errorElement.style.display = "none";
+      return true;
+    }
+  }
+
+  // Real-time validation for English name field
   if (nameInput) {
     nameInput.addEventListener('input', function () {
-      const englishPattern = /^[a-zA-Z\s\.\-\']*$/;
-      const error = document.getElementById('nameError');
-      if (error) {
-        if (this.value && !englishPattern.test(this.value)) {
-          error.textContent = "This field must contain only English text.";
-        } else {
-          error.textContent = "";
-        }
-      }
+      validateEnglishField(this, 'nameError');
     });
   }
 
@@ -69,6 +80,13 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function(e) {
       let isValid = true;
       
+      // Validate English name field if it has content
+      if (nameInput && nameInput.value.trim()) {
+        if (!validateEnglishField(nameInput, 'nameError')) {
+          isValid = false;
+        }
+      }
+      
       // Validate Arabic name field if it has content
       if (nameArInput && nameArInput.value.trim()) {
         if (!validateArabicField(nameArInput, 'nameArError')) {
@@ -78,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
       
       if (!isValid) {
         e.preventDefault();
-        alert('Please ensure Arabic name contains only Arabic script before submitting.');
+        alert('Please ensure all fields contain only the appropriate script before submitting.');
       }
     });
   }
