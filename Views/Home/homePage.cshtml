@@ -1,9 +1,14 @@
 @model List<dynamic>
+@using Microsoft.AspNetCore.Localization
 
 @{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
     @await Html.PartialAsync("_svgsTemplate")
+    
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
+    var isArabic = currentCulture == "ar-SA";
 }
 
 @section Styles {
@@ -341,30 +346,34 @@ border: none;" onclick="navigateToHome(this)">
         {
             @foreach (var record in Model)
             {
+                var displayName = isArabic && !string.IsNullOrEmpty(record.RegulationNameAr) 
+                    ? record.RegulationNameAr 
+                    : record.RegulationName;
+                
                 <!-- Dynamic card -->
                 <div class="col-auto medium-card">
-                    <div class="card document-card" data-title="@record.RegulationName" data-department="@record.Department"
+                    <div class="card document-card" data-title="@displayName" data-department="@record.Department"
                         data-section="@(record.Sections != null ? string.Join(",", record.Sections) : "")"
                         data-type="@record.DocumentType" data-version-date="@record.VersionDate">
                         <div class="bookmark-wrapper">
-                        <div class="bookmark" data-record-id="@record.Id" onclick="toggleBookmark(this)"></div>
+                            <div class="bookmark" data-record-id="@record.Id" onclick="toggleBookmark(this)"></div>
                         </div>
                         <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
-                        <div class="pdf-thumbnail-container">
-                        <div class="thumbnail-loading" id="loading-@record.Id">
-                            <div class="spinner"></div>
-                            <span>Loading...</span>
+                            <div class="pdf-thumbnail-container">
+                                <div class="thumbnail-loading" id="loading-@record.Id">
+                                    <div class="spinner"></div>
+                                    <span>Loading...</span>
+                                </div>
+                                <img class="pdf-thumbnail" 
+                                     id="thumbnail-@record.Id"
+                                     data-record-id="@record.Id"
+                                     style="display:none;" 
+                                     alt="PDF Thumbnail" />
+                            </div>
                         </div>
-                        <img class="pdf-thumbnail" 
-                             id="thumbnail-@record.Id"
-                             data-record-id="@record.Id"
-                             style="display:none;" 
-                             alt="PDF Thumbnail" />
-                        </div>
-                        </div>
-                        <h2 class="card-title">@record.RegulationName</h2>
+                        <h2 class="card-title">@displayName</h2>
 
-                        <p class="card-text d-none">@record.RegulationName @record.Description</p>
+                        <p class="card-text d-none">@displayName @record.Description</p>
 
                         <div class="info-footer">
 

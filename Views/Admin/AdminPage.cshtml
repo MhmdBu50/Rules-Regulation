@@ -1,4 +1,11 @@
 @model IEnumerable<dynamic>
+@using Microsoft.AspNetCore.Localization
+
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
+    var isArabic = currentCulture == "ar-SA";
+}
 
 <!-- This File is about the admin page that controls what to be added, wheather its a new record or contact. in this page you can edit and delete.
 there's also many filtering options to find the policy and other adminstrative stuff-->
@@ -18,6 +25,7 @@ there's also many filtering options to find the policy and other adminstrative s
     <script src="@Url.Content("~/js/AdminTable.js")"></script>
     <script src="@Url.Content("~/js/adminVisitChart.js")"></script>
     <script src="@Url.Content("~/js/adminPageValidation.js")"></script>
+    <script src="@Url.Content("~/js/languageSwitcher.js")"></script>
 }
 
 <!-- This is the header section of the admin page -->
@@ -173,7 +181,7 @@ there's also many filtering options to find the policy and other adminstrative s
                     <!-- Buttons Section -->
                     <div class="sidebar-buttons">
                         <!-- View Report Button -->
-                        <button class="btn-custom btn-primary-custom" id="admin-button-view-report" onclick="viewReport()">
+                        <button class="btn-custom btn-primary-custom" id="admin-button-view-report" onclick="location.href='@Url.Action("ViewReport", "Admin")'">
                             View Report
                         </button>
 
@@ -311,8 +319,6 @@ there's also many filtering options to find the policy and other adminstrative s
                             </select>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -343,7 +349,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                     <th
                                         class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size  field-padding" id="admin-table-header-regulation-name">
                                         Regulation/ Manual name</th>
-                                    <th class="col-2 d-none d-md-table-cell field-padding">Document Type</th>
+                                    <th class="col-2 d-none d-md-table-cell field-padding" id="admin-table-header-documentType">Document Type</th>
                                     <th class="col-2 d-none d-md-table-cell field-padding" id="admin-table-header-version-number">Version Number
                                     </th>
                                     <th class="col-2 d-none d-lg-table-cell field-padding" id="admin-table-header-approving-date">Approving Date
@@ -389,6 +395,15 @@ there's also many filtering options to find the policy and other adminstrative s
                             var itemNumber = i;
                             var headingId = "heading" + itemNumber;
                             var collapseId = "collapse" + itemNumber;
+                            
+                            var displayName = isArabic && !string.IsNullOrEmpty(record.RegulationNameAr) 
+                                ? record.RegulationNameAr 
+                                : record.RegulationName;
+                            
+                            var displayApprovingEntity = isArabic && !string.IsNullOrEmpty(record.ApprovingEntityAr) 
+                                ? record.ApprovingEntityAr 
+                                : record.ApprovingEntity;
+                            
                             <!-- Accordion Item 1 -->
                             <div class="accordion-item position-relative" data-section="@(record.Sections ?? "")" data-document-type="@(record.DocumentType ?? "")">
                                 <!-- Checkbox positioned outside accordion button -->
@@ -412,8 +427,8 @@ there's also many filtering options to find the policy and other adminstrative s
                                                     <th
                                                         class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size field-padding" 
                                                         style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-                                                        title="@record.RegulationName">
-                                                        @record.RegulationName</th>
+                                                        title="@displayName">
+                                                        @displayName</th>
                                                     <th class="col-2 d-none d-md-table-cell field-padding" 
                                                         style="max-width: 111px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
                                                         title="@record.DocumentType">
@@ -429,8 +444,8 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         @record.ApprovalDate</th>
                                                     <th class="col-3 d-none d-lg-table-cell field-padding" 
                                                         style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-                                                        title="IAU @record.ApprovingEntity">IAU
-                                                        @record.ApprovingEntity</th>
+                                                        title="@displayApprovingEntity">
+                                                        @displayApprovingEntity</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -452,7 +467,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                     <table class="table table-borderless mb-0">
                                                         <tr>
                                                             <td colspan="3">
-                                                                <label class="form-label fw-bold" id="admin-table-form-regulation-name-label">Regulation/ Manual
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-regulation-name-label">Regulation/ Manual
                                                                     name (English)</label>
                                                                 <textarea name="regulationName" class="form-control" rows="2"
                                                             readonly disabled>@record.RegulationName</textarea>
@@ -460,7 +475,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3">
-                                                                <label class="form-label fw-bold" id="admin-table-form-brief-description-label">Brief
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-brief-description-label">Brief
                                                                     Description (English)</label>
                                                                 <textarea name="description" class="form-control" rows="4"
                                                             readonly disabled>@record.Description</textarea>
@@ -468,27 +483,27 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold" id= "admin-table-form-approving-entity-label">Approving Entity (English)</label>
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-approving-entity-label">Approving Entity (English)</label>
                                                                 <input type="text" name="approvingEntity" class="form-control"
                                                                     value="@record.ApprovingEntity" readonly disabled>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold" id="admin-table-form-note-label">Note (English)</label>
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-note-label">Note (English)</label>
                                                                 <input type="text" name="notes" class="form-control mb-2"
                                                                     value="@record.Notes" readonly disabled>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="col-12 col-sm-4">
-                                                                <label class="form-label fw-bold" id="admin-table-form-approving-date-label">Approving
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-approving-date-label">Approving
                                                                     Date</label>
                                                                 <input type="date" name="approvalDate" class="form-control mb-2" value="@record.ApprovalDate"
                                                                     readonly disabled>
                                                             </td>
                                                             <td class="col-12 col-sm-4">
-                                                                <label class="form-label fw-bold" id="admin-table-form-version-date-label">Version Date</label>
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-version-date-label">Version Date</label>
                                                                 <input type="date" name="versionDate" class="form-control mb-2" value="@record.VersionDate"
                                                                     readonly disabled>
                                                             </td>
@@ -496,7 +511,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold" id="admin-table-form-version-number-label">Version
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-version-number-label">Version
                                                                     Number</label>
                                                                 <input type="text" name="version" class="form-control mb-2" value="@record.Version"
                                                                     readonly disabled>
@@ -505,7 +520,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="fw-bold" id="admin-table-form-responsible-department-label">Responsible
+                                                                <label class="fw-bold translatable-label" data-translate-key="admin-table-form-responsible-department-label">Responsible
                                                                     Department</label>
                                                                 <select name="department" class="form-select" disabled>
                                                                     <option value="@record.Department" selected>@record.Department</option>
@@ -562,7 +577,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold" id="admin-table-form-document-type-label">Document
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-document-type-label">Document
                                                                     Type</label>
                                                                 <select name="documentType" class="form-select mb-2" disabled>
                                                                     <option value="@record.DocumentType" selected>@record.DocumentType</option>
@@ -576,7 +591,7 @@ there's also many filtering options to find the policy and other adminstrative s
 
                                                         <tr>
                                                             <td>
-                                                                <label class="form-label fw-bold" id="admin-table-form-attach-word-label">Attach word file</label>
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-attach-word-label">Attach word file</label>
                                                                 @{
                                                                     var wordAttachment = ((IEnumerable<dynamic>)record.Attachments)?.FirstOrDefault(a => a.FileType?.ToString()?.ToLower() == "word" || a.FileType?.ToString()?.ToLower() == "docx");
                                                                 }
@@ -598,7 +613,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <label class="form-label fw-bold" id="admin-table-form-attach-pdf-label">Attach PDF file</label>
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-attach-pdf-label">Attach PDF file</label>
                                                                 @{
                                                                     var pdfAttachment = ((IEnumerable<dynamic>)record.Attachments)?.FirstOrDefault(a => a.FileType?.ToString()?.ToLower() == "pdf");
                                                                 }
@@ -629,7 +644,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                         <!-- Contact Information Section - Full Width -->
                                         <div class="row mt-4">
                                             <div class="col-12">
-                                                <label class="form-label fw-bold" id="admin-table-form-responsible-contact-label">Responsible Department contact information:</label>
+                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-responsible-contact-label">Responsible Department contact information:</label>
                                                 @if (record.ContactInformation != null && ((IEnumerable<dynamic>)record.ContactInformation).Any())
                                                 {
                                                     <div class="row">
@@ -650,7 +665,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                     @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
                                                                     {
                                                                         <div class="mb-2">
-                                                                            <label class="form-label mb-0" id="admin-table-form-contact-email-label">Email</label>
+                                                                            <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-email-label">Email</label>
                                                                             <input type="email" class="form-control contact-input"
                                                                                 value="@contact.Email" readonly>
                                                                         </div>
@@ -662,7 +677,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                                 @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
                                                                                 {
                                                                                     <div class="col-6">
-                                                                                        <label class="form-label mb-0" id= "admin-table-form-contact-telephone-label">Telephone number</label>
+                                                                                        <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-telephone-label">Telephone number</label>
                                                                                         <input type="text" class="form-control contact-input" value="@contact.Telephone"
                                                                                             readonly>
                                                                                     </div>
@@ -670,7 +685,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                                 @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
                                                                                 {
                                                                                     <div class="col-6">
-                                                                                        <label class="form-label mb-0" id = "admin-table-form-contact-mobile-label">Mobile number</label>
+                                                                                        <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-mobile-label">Mobile number</label>
                                                                                         <input type="text" class="form-control contact-input" value="@contact.Mobile"
                                                                                             readonly>
                                                                                     </div>
@@ -696,10 +711,10 @@ there's also many filtering options to find the policy and other adminstrative s
                                         <div class="row mt-3">
                                             <div class="col-12">
                                                 <div class="d-flex flex-wrap justify-content-end gap-2">
-                                                    <button type="button" class="btn btn-danger" id="admin-table-delete-button" onclick="deleteRecord(@record.Id)">Delete</button>
-                                                    <button type="button" class="btn btn-secondary edit-btn" id="admin-table-edit-button" onclick="toggleEditMode(@record.Id)">Edit</button>
-                                                    <button type="submit" class="btn btn-success save-btn" id="admin-table-save-button" style="display: none;">Save</button>
-                                                    <button type="button" class="btn btn-outline-secondary cancel-btn" id="admin-table-cancel-button" style="display: none;" onclick="cancelEdit(@record.Id)">Cancel</button>
+                                                    <button type="button" class="btn btn-danger translatable-label" data-translate-key="admin-table-delete-button" onclick="deleteRecord(@record.Id)">Delete</button>
+                                                    <button type="button" class="btn btn-secondary edit-btn translatable-label" data-translate-key="admin-table-edit-button" onclick="toggleEditMode(@record.Id)">Edit</button>
+                                                    <button type="submit" class="btn btn-success save-btn translatable-label" data-translate-key="admin-table-save-button" style="display: none;">Save</button>
+                                                    <button type="button" class="btn btn-outline-secondary cancel-btn translatable-label" data-translate-key="admin-table-cancel-button" style="display: none;" onclick="cancelEdit(@record.Id)">Cancel</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -726,165 +741,6 @@ there's also many filtering options to find the policy and other adminstrative s
         </div>
     </div>
 </div>
-
-<script>
-    // Enhanced debugging script
-    document.addEventListener('DOMContentLoaded', function () {
-        console.log('=== ENHANCED DEBUG SCRIPT LOADED ===');
-        
-        // Wait a bit to ensure all elements are rendered
-        setTimeout(function() {
-            console.log('Starting element search...');
-            
-            // Check if parent containers exist first
-            const totalPoliciesContainer = document.getElementById('admin-stats-total-policies');
-            const mostViewedContainer = document.getElementById('admin-stats-most-viewed');
-            const viewedTimesElement = document.getElementById('admin-stats-viewed-times');
-            
-            console.log('Container elements:', {
-                totalPoliciesContainer: totalPoliciesContainer ? 'FOUND' : 'NOT FOUND',
-                mostViewedContainer: mostViewedContainer ? 'FOUND' : 'NOT FOUND', 
-                viewedTimesElement: viewedTimesElement ? 'FOUND' : 'NOT FOUND'
-            });
-            
-            if (totalPoliciesContainer) {
-                console.log('Total policies container HTML:', totalPoliciesContainer.innerHTML);
-            }
-            if (mostViewedContainer) {
-                console.log('Most viewed container HTML:', mostViewedContainer.innerHTML);
-            }
-            
-            // Try different selector approaches
-            const totalPoliciesElem1 = document.querySelector('#admin-stats-total-policies .number');
-            const totalPoliciesElem2 = document.querySelector('#admin-stats-total-policies div.number');
-            const totalPoliciesElem3 = totalPoliciesContainer ? totalPoliciesContainer.querySelector('.number') : null;
-            
-            console.log('Total policies selectors:', {
-                '.number': totalPoliciesElem1 ? 'FOUND' : 'NOT FOUND',
-                'div.number': totalPoliciesElem2 ? 'FOUND' : 'NOT FOUND',
-                'container.querySelector': totalPoliciesElem3 ? 'FOUND' : 'NOT FOUND'
-            });
-            
-            const mostViewedSubtitle1 = document.querySelector('#admin-stats-most-viewed .subtitle');
-            const mostViewedSubtitle2 = mostViewedContainer ? mostViewedContainer.querySelector('.subtitle') : null;
-            
-            console.log('Most viewed subtitle selectors:', {
-                '.subtitle': mostViewedSubtitle1 ? 'FOUND' : 'NOT FOUND',
-                'container.querySelector': mostViewedSubtitle2 ? 'FOUND' : 'NOT FOUND'
-            });
-            
-            // Use the best working selectors
-            const totalPoliciesElem = totalPoliciesElem3 || totalPoliciesElem1 || totalPoliciesElem2;
-            const mostViewedSubtitle = mostViewedSubtitle2 || mostViewedSubtitle1;
-            const mostViewedText = viewedTimesElement;
-            
-            console.log('Final elements to use:', {
-                totalPolicies: totalPoliciesElem ? 'YES' : 'NO',
-                mostViewedSubtitle: mostViewedSubtitle ? 'YES' : 'NO',
-                mostViewedText: mostViewedText ? 'YES' : 'NO'
-            });
-            
-            // Test setting values
-            if (totalPoliciesElem) {
-                totalPoliciesElem.textContent = 'TEST';
-                console.log('✓ Set total policies to TEST');
-            } else {
-                console.error('✗ Could not find total policies element');
-            }
-            
-            if (mostViewedSubtitle) {
-                mostViewedSubtitle.textContent = 'Test Policy';
-                console.log('✓ Set most viewed title to Test Policy');
-            } else {
-                console.error('✗ Could not find most viewed subtitle element');
-            }
-            
-            if (mostViewedText) {
-                mostViewedText.textContent = 'Viewed: 999 times';
-                console.log('✓ Set most viewed text to 999 times');
-            } else {
-                console.error('✗ Could not find most viewed text element');
-            }
-            
-        }, 500); // Wait 500ms for DOM to be fully ready
-        
-        // Try API call after 2 seconds
-        }, 500); // Wait 500ms for DOM to be fully ready
-        
-        // Try API call after 2 seconds
-        setTimeout(function() {
-            console.log('=== ATTEMPTING API CALL ===');
-            
-            // Get elements again for API update
-            const totalPoliciesContainer = document.getElementById('admin-stats-total-policies');
-            const mostViewedContainer = document.getElementById('admin-stats-most-viewed');
-            const viewedTimesElement = document.getElementById('admin-stats-viewed-times');
-            
-            const totalPoliciesElem = totalPoliciesContainer ? totalPoliciesContainer.querySelector('.number') : null;
-            const mostViewedSubtitle = mostViewedContainer ? mostViewedContainer.querySelector('.subtitle') : null;
-            const mostViewedText = viewedTimesElement;
-            
-            fetch('/Admin/TestStats')
-                .then(response => {
-                    console.log('API Response status:', response.status);
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('API Data received:', data);
-                    
-                    if (totalPoliciesElem && data.totalPolicies !== undefined) {
-                        totalPoliciesElem.textContent = data.totalPolicies;
-                        console.log('✓ Updated total policies from API:', data.totalPolicies);
-                    }
-                    
-                    if (mostViewedSubtitle && data.mostViewed && data.mostViewed.name) {
-                        mostViewedSubtitle.textContent = data.mostViewed.name;
-                        console.log('✓ Updated most viewed name from API:', data.mostViewed.name);
-                    }
-                    
-                    if (mostViewedText && data.mostViewed && data.mostViewed.views !== undefined) {
-                        mostViewedText.textContent = `Viewed: ${data.mostViewed.views} times`;
-                        console.log('✓ Updated most viewed views from API:', data.mostViewed.views);
-                    }
-                })
-                .catch(error => {
-                    console.error('API Error:', error);
-                    
-                    // Try the real endpoint as fallback
-                    console.log('Trying real endpoint...');
-                    fetch('/Admin/GetDashboardStats')
-                        .then(response => {
-                            console.log('Real API Response status:', response.status);
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log('Real API Data received:', data);
-                            
-                            if (totalPoliciesElem && data.totalPolicies !== undefined) {
-                                totalPoliciesElem.textContent = data.totalPolicies;
-                                console.log('✓ Updated total policies from real API:', data.totalPolicies);
-                            }
-                            
-                            if (mostViewedSubtitle && data.mostViewed && data.mostViewed.name) {
-                                mostViewedSubtitle.textContent = data.mostViewed.name;
-                                console.log('✓ Updated most viewed name from real API:', data.mostViewed.name);
-                            }
-                            
-                            if (mostViewedText && data.mostViewed && data.mostViewed.views !== undefined) {
-                                mostViewedText.textContent = `Viewed: ${data.mostViewed.views} times`;
-                                console.log('✓ Updated most viewed views from real API:', data.mostViewed.views);
-                            }
-                        })
-                        .catch(realError => {
-                            console.error('Real API Error:', realError);
-                        });
-                });
-        }, 3000); // Wait 3 seconds for API call
-    });
-</script>
 
 <!-- Export Table Selection Modal -->
 <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">

@@ -84,6 +84,7 @@
             height: 100%;
             object-fit: cover;
             border-radius: 8px;
+            scale: 1.3;
         }
 
         .thumbnail-loading {
@@ -118,32 +119,6 @@
         .document-icon:hover {
             background-color: #1a2444;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        .document-icon::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 80px;
-            background: #fff;
-            border-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        .document-icon::before {
-            content: '\f1c1';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #0F1734;
-            font-size: 2rem;
-            z-index: 1;
         }
 
         .card-title {

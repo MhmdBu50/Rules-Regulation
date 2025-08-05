@@ -13,12 +13,19 @@
 
   <!-- Top Bar -->
   <div class="top-bar">
-    <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"  id="btn-back"> <img
-        src="@Url.Content("~/svgs/admin/backButton.svg")" > Back</a>
+
+    <!-- Back Button -->
+    <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"> 
+      <img src="@Url.Content("~/svgs/admin/backButton.svg")"> 
+      <span id="btn-back" class="me-2"></span>
+    </a>    
+
+    <!-- Logout Button --> 
     <form method="post" action="@Url.Action("Logout", "Account")" style="display: inline;">
         @Html.AntiForgeryToken()
-        <button type="submit" class="btn" id="btn-logout" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
-            Logout <img src="@Url.Content("~/svgs/admin/logOut.svg")">
+        <button type="submit" class="btn"  style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
+          <span id="btn-logout" class="ms-2"></span>
+          <img src="@Url.Content("~/svgs/admin/logOut.svg")">       
         </button>
     </form>
   </div>

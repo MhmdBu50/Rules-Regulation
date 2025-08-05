@@ -1,4 +1,15 @@
 @model dynamic
+@using Microsoft.AspNetCore.Localization
+
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
+    var isArabic = currentCulture == "ar-SA";
+    
+    var displayName = isArabic && !string.IsNullOrEmpty(Model.RegulationNameAr) 
+        ? Model.RegulationNameAr 
+        : Model.RegulationName;
+}
 
 @section Styles {
     <link rel="stylesheet" href="~/css/_RecordDetails.css" asp-append-version="true">
@@ -9,8 +20,8 @@
     <div class="regulation-header">
         <div class="header-content">
             <div>
-                <h3 class="header-title">@Model.RegulationName</h3>
-                <p class="header-subtitle">Comprehensive information about this regulation</p>
+                <h3 class="header-title">@displayName</h3>
+                <p class="header-subtitle" id="record-details-comprehensive-info">Comprehensive information about this regulation</p>
             </div>
         </div>
     </div>
@@ -24,7 +35,7 @@
                 <div class="detail-label">
                     <i class="fas fa-heading"></i> Regulation Name
                 </div>
-                <div class="detail-value">@Model.RegulationName</div>
+                <div class="detail-value">@displayName</div>
             </div>
             -->
             <div class="detail-card">

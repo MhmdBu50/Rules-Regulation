@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-delete-button-alt": "Delete btn",
         "admin-table-header-id": "ID",
         "admin-table-header-regulation-name": "Regulation/ Manual name",
-        "admin-table-header-section": "Section",
+        "admin-table-header-DocumentType": "Document Type",
         "admin-table-header-version-number": "Version Number",
         "admin-table-header-approving-date": "Approving Date",
         "admin-table-header-responsible-entity": "Responsible Entity",
@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "btn-cancel-90101": "Cancel",
     "manageContact-title33": "Manage Contact Information",
     "manageContact-subtitle33": "View and manage all contact information",
-    "addContact-btn33": "Add Contact Info",
+    "addContact-btn33": "Add New Contact",
     "back-btn33": "Back",
     "logout-btn33": "Logout",
     "table-header-contactType33": "Contact Type",
@@ -370,8 +370,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-button-export-data": "تصدير البيانات",
         "admin-button-manage-contact-info": "إدارة معلومات الاتصال",
         "visitToggler": "الزيارات الشهرية",
-        "desktopSearchInput": "...البحث بالاسم/الرقم التعريفي",
-        "admin-clear-search-title": "مسح البحث",
+        "desktopSearchInput": "...البحث بالاسم/رقم السجل",
+        "admin-clear-search-title": "مسح البحث",    
         "admin-section-filter-all": "جميع الأقسام",
         "admin-section-filter-students": "الطلاب",
         "admin-section-filter-members": "الأعضاء",
@@ -382,9 +382,9 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-document-filter-guidelines": "إرشادات",
         "admin-document-filter-policy": "سياسات",
         "admin-delete-button-alt": "زر الحذف",
-        "admin-table-header-id": "الرقم التعريفي",
+        "admin-table-header-id": "رقم",
         "admin-table-header-regulation-name": "اسم اللائحة/الدليل",
-        "admin-table-header-section": "القسم",
+        "admin-table-header-documentType": "نوع المستند",
         "admin-table-header-version-number": "رقم الإصدار",
         "admin-table-header-approving-date": "تاريخ الاعتماد",
         "admin-table-header-responsible-entity": "الجهة المسؤولة",
@@ -547,6 +547,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
+        // Handle translatable labels with data-translate-key attribute
+        const translatableLabels = document.querySelectorAll('.translatable-label[data-translate-key]');
+        translatableLabels.forEach(label => {
+            const translateKey = label.getAttribute('data-translate-key');
+            if (translations[lang] && translations[lang][translateKey]) {
+                label.textContent = translations[lang][translateKey];
+            }
+        });
+
         // Handle department labels in multi-select dropdown
         const departmentLabels = document.querySelectorAll('.department-option');
         if (departmentLabels.length > 0) {
@@ -650,8 +659,22 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("websiteLanguage", lang);
     }
 
-    // Initialize language from localStorage or default to English
-    const savedLanguage = localStorage.getItem("websiteLanguage") || "en";
+    // Initialize language from server culture or localStorage fallback
+    let savedLanguage = "en";
+    
+    // Check if we can get the culture from the server (via meta tag or body attribute)
+    const bodyLang = document.body.getAttribute('lang');
+    const bodyDir = document.body.getAttribute('dir');
+    
+    if (bodyLang === 'ar' || bodyDir === 'rtl') {
+        savedLanguage = "ar";
+    } else if (bodyLang === 'en' || bodyDir === 'ltr') {
+        savedLanguage = "en";
+    } else {
+        // Fallback to localStorage
+        savedLanguage = localStorage.getItem("websiteLanguage") || "en";
+    }
+    
     setLanguage(savedLanguage);
 
     // Add event listener to language toggle button
@@ -659,7 +682,40 @@ document.addEventListener("DOMContentLoaded", () => {
         languageToggleButton.addEventListener("click", () => {
             const currentLang = bodyElement.classList.contains("rtl") ? "ar" : "en";
             const newLang = currentLang === "ar" ? "en" : "ar";
-            setLanguage(newLang);
+            const newCulture = newLang === "ar" ? "ar-SA" : "en-US";
+            
+            // Create a form to submit the language change to the server
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/Language/SetLanguage';
+            
+            // Add CSRF token
+            const token = document.querySelector('input[name="__RequestVerificationToken"]');
+            if (token) {
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = token.value;
+                form.appendChild(tokenInput);
+            }
+            
+            // Add culture parameter
+            const cultureInput = document.createElement('input');
+            cultureInput.type = 'hidden';
+            cultureInput.name = 'culture';
+            cultureInput.value = newCulture;
+            form.appendChild(cultureInput);
+            
+            // Add return URL parameter
+            const returnUrlInput = document.createElement('input');
+            returnUrlInput.type = 'hidden';
+            returnUrlInput.name = 'returnUrl';
+            returnUrlInput.value = window.location.pathname + window.location.search;
+            form.appendChild(returnUrlInput);
+            
+            // Submit the form
+            document.body.appendChild(form);
+            form.submit();
         });
     }
     //this method is used to translate the months in the chart
