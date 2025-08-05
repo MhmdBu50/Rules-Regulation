@@ -351,6 +351,14 @@ public class AdminController : Controller
      */
 
     /**
+     * Redirect to Reports page
+     */
+    public IActionResult ViewReport()
+    {
+        return RedirectToAction("ReportPage", "Reports");
+    }
+
+    /**
      * AddNewRecord (GET) - Display the form for adding new regulation records
      * 
      * @return View with empty form for creating new records
