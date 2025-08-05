@@ -16,8 +16,12 @@
   <div class="top-bar">
     <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'" id="topbar-back-90201"> <img
         src="@Url.Content("~/svgs/admin/backButton.svg")"> Back</a>
-    <a class="btn" onclick="location.href='@Url.Action("LoginPage", "Account")'" id="topbar-logout-90201"> Logout <img
-        src="@Url.Content("~/svgs/admin/logOut.svg")"> </a>
+    <form method="post" action="@Url.Action("Logout", "Account")" style="display: inline;">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn" id="topbar-logout-90201" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
+            Logout <img src="@Url.Content("~/svgs/admin/logOut.svg")">
+        </button>
+    </form>
   </div>
 
   <!-- Logo -->
