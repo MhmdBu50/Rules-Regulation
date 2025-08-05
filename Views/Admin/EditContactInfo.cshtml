@@ -79,11 +79,14 @@
                     <div class="row">
                         <div class="col-6">
                             <label for="Name">Name of Responsible Person (English)</label>
-                            <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" lang="en" required>
+                            <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" lang="en"
+                                required>
+                            <div id="nameError" class="text-danger mt-1"></div>
                         </div>
                         <div class="col-6">
                             <label for="NameAr">Name of Responsible Person (Arabic)</label>
-                            <input type="text" class="form-control" id="NameAr" name="NameAr" value="@(Model.NameAr ?? "")" lang="ar" dir="rtl" required>
+                            <input type="text" class="form-control" id="NameAr" name="NameAr"
+                                value="@(Model.NameAr ?? "")" lang="ar" dir="rtl" required>
                             <div id="nameArError" class="text-danger mt-1"></div>
                         </div>
                     </div>
@@ -99,18 +102,18 @@
                     <input type="tel" class="form-control" id="Telephone" name="Telephone" value="@Model.Telephone">
                 </div>
 
-                    <div class="mb-5">
-                        <label for="Mobile">Mobile number</label>
-                        <div class="input-group">
-                            <span class="input-group-text shadowed">+966</span>
-                            <input type="tel" class="form-control" id="Mobile" name="Mobile" value="@Model.Mobile">
-                        </div>
+                <div class="mb-5">
+                    <label for="Mobile">Mobile number</label>
+                    <div class="input-group">
+                        <span class="input-group-text shadowed">+966</span>
+                        <input type="tel" class="form-control" id="Mobile" name="Mobile" value="@Model.Mobile">
                     </div>
+                </div>
 
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary me-2">Update Contact Info</button>
-                        <a href="@Url.Action("ManageContactInfo", "Admin")" class="btn btn-secondary">Cancel</a>
-                    </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary me-2">Update Contact Info</button>
+                    <a href="@Url.Action("ManageContactInfo", "Admin")" class="btn btn-secondary">Cancel</a>
+                </div>
             </form>
         </div>
     </div>
