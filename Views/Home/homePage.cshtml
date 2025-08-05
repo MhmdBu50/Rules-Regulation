@@ -355,8 +355,9 @@ border: none;" onclick="navigateToHome(this)">
                     <div class="card document-card" data-title="@displayName" data-department="@record.Department"
                         data-section="@(record.Sections != null ? string.Join(",", record.Sections) : "")"
                         data-type="@record.DocumentType" data-version-date="@record.VersionDate">
+                        <div class="bookmark-wrapper">
                         <div class="bookmark" data-record-id="@record.Id" onclick="toggleBookmark(this)"></div>
-
+                        </div>
                         <div class="document-icon" onclick="openPDFPreview()" title="Click to preview PDF">
                         <div class="pdf-thumbnail-container">
                         <div class="thumbnail-loading" id="loading-@record.Id">
