@@ -219,7 +219,7 @@ namespace RulesRegulation.Services
             return records;
         }
 
-        // Method to get single record with full details (for accordion expansion)
+        // Method to get single record with full details (for accordion expansion) - with Arabic fields support
         public dynamic? GetRecordById(int recordId)
         {
             try
@@ -248,17 +248,21 @@ namespace RulesRegulation.Services
                                     {
                                         Id = reader["RECORD_ID"]?.ToString(),
                                         RegulationName = reader["REGULATION_NAME"]?.ToString(),
+                                        RegulationNameAr = reader["REGULATION_NAME_AR"]?.ToString(),
                                         Sections = reader["SECTIONS"]?.ToString(),
                                         Version = reader["VERSION"]?.ToString(),
                                         ApprovalDate = reader["APPROVAL_DATE"] != DBNull.Value ?
                                             Convert.ToDateTime(reader["APPROVAL_DATE"]).ToString("yyyy-MM-dd") : "",
                                         ApprovingEntity = reader["APPROVING_ENTITY"]?.ToString(),
+                                        ApprovingEntityAr = reader["APPROVING_ENTITY_AR"]?.ToString(),
                                         Department = reader["DEPARTMENT"]?.ToString(),
                                         DocumentType = reader["DOCUMENT_TYPE"]?.ToString(),
                                         Description = reader["DESCRIPTION"]?.ToString(),
+                                        DescriptionAr = reader["DESCRIPTION_AR"]?.ToString(),
                                         VersionDate = reader["VERSION_DATE"] != DBNull.Value ?
                                             Convert.ToDateTime(reader["VERSION_DATE"]).ToString("yyyy-MM-dd") : "",
                                         Notes = reader["NOTES"]?.ToString(),
+                                        NotesAr = reader["NOTES_AR"]?.ToString(),
                                         CreatedAt = reader["CREATED_AT"] != DBNull.Value ?
                                             Convert.ToDateTime(reader["CREATED_AT"]).ToString("yyyy-MM-dd") : "",
                                         UserId = reader["USER_ID"]?.ToString(),
@@ -297,15 +301,19 @@ namespace RulesRegulation.Services
                                     {
                                         Id = record.Id,
                                         RegulationName = record.RegulationName,
+                                        RegulationNameAr = record.RegulationNameAr,
                                         Sections = record.Sections,
                                         Version = record.Version,
                                         ApprovalDate = record.ApprovalDate,
                                         ApprovingEntity = record.ApprovingEntity,
+                                        ApprovingEntityAr = record.ApprovingEntityAr,
                                         Department = record.Department,
                                         DocumentType = record.DocumentType,
                                         Description = record.Description,
+                                        DescriptionAr = record.DescriptionAr,
                                         VersionDate = record.VersionDate,
                                         Notes = record.Notes,
+                                        NotesAr = record.NotesAr,
                                         CreatedAt = record.CreatedAt,
                                         UserId = record.UserId,
                                         Attachments = record.Attachments,
@@ -319,15 +327,19 @@ namespace RulesRegulation.Services
                                     {
                                         Id = record.Id,
                                         RegulationName = record.RegulationName,
+                                        RegulationNameAr = record.RegulationNameAr,
                                         Sections = record.Sections,
                                         Version = record.Version,
                                         ApprovalDate = record.ApprovalDate,
                                         ApprovingEntity = record.ApprovingEntity,
+                                        ApprovingEntityAr = record.ApprovingEntityAr,
                                         Department = record.Department,
                                         DocumentType = record.DocumentType,
                                         Description = record.Description,
+                                        DescriptionAr = record.DescriptionAr,
                                         VersionDate = record.VersionDate,
                                         Notes = record.Notes,
+                                        NotesAr = record.NotesAr,
                                         CreatedAt = record.CreatedAt,
                                         UserId = record.UserId,
                                         Attachments = record.Attachments,
@@ -429,19 +441,23 @@ namespace RulesRegulation.Services
             }
         }
 
-        // Method to update an existing record
+        // Method to update an existing record (with Arabic fields support)
         public bool UpdateRecord(
             int recordId,
             string regulationName,
+            string? regulationNameAr,
             string department,
             string version,
             DateTime versionDate,
             DateTime approvalDate,
             string approvingEntity,
+            string? approvingEntityAr,
             string description,
+            string? descriptionAr,
             string documentType,
             string sections,
-            string notes)
+            string notes,
+            string? notesAr)
         {
             try
             {
@@ -451,29 +467,37 @@ namespace RulesRegulation.Services
 
                     string query = @"UPDATE RECORDS 
                                     SET REGULATION_NAME = :regulationName,
+                                        REGULATION_NAME_AR = :regulationNameAr,
                                         DEPARTMENT = :department,
                                         VERSION = :version,
                                         VERSION_DATE = :versionDate,
                                         APPROVAL_DATE = :approvalDate,
                                         APPROVING_ENTITY = :approvingEntity,
+                                        APPROVING_ENTITY_AR = :approvingEntityAr,
                                         DESCRIPTION = :description,
+                                        DESCRIPTION_AR = :descriptionAr,
                                         DOCUMENT_TYPE = :documentType,
                                         SECTIONS = :sections,
-                                        NOTES = :notes
+                                        NOTES = :notes,
+                                        NOTES_AR = :notesAr
                                     WHERE RECORD_ID = :recordId";
 
                     using (var cmd = new OracleCommand(query, conn))
                     {
                         cmd.Parameters.Add(":regulationName", regulationName);
+                        cmd.Parameters.Add(":regulationNameAr", regulationNameAr ?? (object)DBNull.Value);
                         cmd.Parameters.Add(":department", department);
                         cmd.Parameters.Add(":version", version);
                         cmd.Parameters.Add(":versionDate", versionDate);
                         cmd.Parameters.Add(":approvalDate", approvalDate);
                         cmd.Parameters.Add(":approvingEntity", approvingEntity);
+                        cmd.Parameters.Add(":approvingEntityAr", approvingEntityAr ?? (object)DBNull.Value);
                         cmd.Parameters.Add(":description", description);
+                        cmd.Parameters.Add(":descriptionAr", descriptionAr ?? (object)DBNull.Value);
                         cmd.Parameters.Add(":documentType", documentType);
                         cmd.Parameters.Add(":sections", sections);
                         cmd.Parameters.Add(":notes", notes);
+                        cmd.Parameters.Add(":notesAr", notesAr ?? (object)DBNull.Value);
                         cmd.Parameters.Add(":recordId", recordId);
 
                         int result = cmd.ExecuteNonQuery();
