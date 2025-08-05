@@ -25,6 +25,7 @@ there's also many filtering options to find the policy and other adminstrative s
     <script src="@Url.Content("~/js/AdminTable.js")"></script>
     <script src="@Url.Content("~/js/adminVisitChart.js")"></script>
     <script src="@Url.Content("~/js/adminPageValidation.js")"></script>
+    <script src="@Url.Content("~/js/languageSwitcher.js")"></script>
 }
 
 <!-- This is the header section of the admin page -->
@@ -322,7 +323,7 @@ there's also many filtering options to find the policy and other adminstrative s
 
                 </div>
             </div>
-        </div>
+        </div>ال
     </section>
 
 
@@ -350,7 +351,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                     <th
                                         class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size  field-padding" id="admin-table-header-regulation-name">
                                         Regulation/ Manual name</th>
-                                    <th class="col-2 d-none d-md-table-cell field-padding">Document Type</th>
+                                    <th class="col-2 d-none d-md-table-cell field-padding" id="admin-table-header-documentType">Document Type</th>
                                     <th class="col-2 d-none d-md-table-cell field-padding" id="admin-table-header-version-number">Version Number
                                     </th>
                                     <th class="col-2 d-none d-lg-table-cell field-padding" id="admin-table-header-approving-date">Approving Date
@@ -401,6 +402,10 @@ there's also many filtering options to find the policy and other adminstrative s
                                 ? record.RegulationNameAr 
                                 : record.RegulationName;
                             
+                            var displayApprovingEntity = isArabic && !string.IsNullOrEmpty(record.ApprovingEntityAr) 
+                                ? record.ApprovingEntityAr 
+                                : record.ApprovingEntity;
+                            
                             <!-- Accordion Item 1 -->
                             <div class="accordion-item position-relative" data-section="@(record.Sections ?? "")" data-document-type="@(record.DocumentType ?? "")">
                                 <!-- Checkbox positioned outside accordion button -->
@@ -441,8 +446,8 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         @record.ApprovalDate</th>
                                                     <th class="col-3 d-none d-lg-table-cell field-padding" 
                                                         style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-                                                        title="IAU @record.ApprovingEntity">IAU
-                                                        @record.ApprovingEntity</th>
+                                                        title="@displayApprovingEntity">
+                                                        @displayApprovingEntity</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -464,7 +469,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                     <table class="table table-borderless mb-0">
                                                         <tr>
                                                             <td colspan="3">
-                                                                <label class="form-label fw-bold" id="admin-table-form-regulation-name-label">Regulation/ Manual
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-regulation-name-label">Regulation/ Manual
                                                                     name (English)</label>
                                                                 <textarea name="regulationName" class="form-control" rows="2"
                                                             readonly disabled>@record.RegulationName</textarea>
@@ -472,7 +477,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3">
-                                                                <label class="form-label fw-bold" id="admin-table-form-brief-description-label">Brief
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-brief-description-label">Brief
                                                                     Description (English)</label>
                                                                 <textarea name="description" class="form-control" rows="4"
                                                             readonly disabled>@record.Description</textarea>
@@ -480,27 +485,27 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold" id= "admin-table-form-approving-entity-label">Approving Entity (English)</label>
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-approving-entity-label">Approving Entity (English)</label>
                                                                 <input type="text" name="approvingEntity" class="form-control"
                                                                     value="@record.ApprovingEntity" readonly disabled>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold" id="admin-table-form-note-label">Note (English)</label>
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-note-label">Note (English)</label>
                                                                 <input type="text" name="notes" class="form-control mb-2"
                                                                     value="@record.Notes" readonly disabled>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="col-12 col-sm-4">
-                                                                <label class="form-label fw-bold" id="admin-table-form-approving-date-label">Approving
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-approving-date-label">Approving
                                                                     Date</label>
                                                                 <input type="date" name="approvalDate" class="form-control mb-2" value="@record.ApprovalDate"
                                                                     readonly disabled>
                                                             </td>
                                                             <td class="col-12 col-sm-4">
-                                                                <label class="form-label fw-bold" id="admin-table-form-version-date-label">Version Date</label>
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-version-date-label">Version Date</label>
                                                                 <input type="date" name="versionDate" class="form-control mb-2" value="@record.VersionDate"
                                                                     readonly disabled>
                                                             </td>
@@ -508,7 +513,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold" id="admin-table-form-version-number-label">Version
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-version-number-label">Version
                                                                     Number</label>
                                                                 <input type="text" name="version" class="form-control mb-2" value="@record.Version"
                                                                     readonly disabled>
@@ -517,7 +522,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="fw-bold" id="admin-table-form-responsible-department-label">Responsible
+                                                                <label class="fw-bold translatable-label" data-translate-key="admin-table-form-responsible-department-label">Responsible
                                                                     Department</label>
                                                                 <select name="department" class="form-select" disabled>
                                                                     <option value="@record.Department" selected>@record.Department</option>
@@ -574,7 +579,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="form-label fw-bold" id="admin-table-form-document-type-label">Document
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-document-type-label">Document
                                                                     Type</label>
                                                                 <select name="documentType" class="form-select mb-2" disabled>
                                                                     <option value="@record.DocumentType" selected>@record.DocumentType</option>
@@ -588,7 +593,7 @@ there's also many filtering options to find the policy and other adminstrative s
 
                                                         <tr>
                                                             <td>
-                                                                <label class="form-label fw-bold" id="admin-table-form-attach-word-label">Attach word file</label>
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-attach-word-label">Attach word file</label>
                                                                 @{
                                                                     var wordAttachment = ((IEnumerable<dynamic>)record.Attachments)?.FirstOrDefault(a => a.FileType?.ToString()?.ToLower() == "word" || a.FileType?.ToString()?.ToLower() == "docx");
                                                                 }
@@ -610,7 +615,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <label class="form-label fw-bold" id="admin-table-form-attach-pdf-label">Attach PDF file</label>
+                                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-attach-pdf-label">Attach PDF file</label>
                                                                 @{
                                                                     var pdfAttachment = ((IEnumerable<dynamic>)record.Attachments)?.FirstOrDefault(a => a.FileType?.ToString()?.ToLower() == "pdf");
                                                                 }
@@ -641,7 +646,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                         <!-- Contact Information Section - Full Width -->
                                         <div class="row mt-4">
                                             <div class="col-12">
-                                                <label class="form-label fw-bold" id="admin-table-form-responsible-contact-label">Responsible Department contact information:</label>
+                                                <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-responsible-contact-label">Responsible Department contact information:</label>
                                                 @if (record.ContactInformation != null && ((IEnumerable<dynamic>)record.ContactInformation).Any())
                                                 {
                                                     <div class="row">
@@ -662,7 +667,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                     @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
                                                                     {
                                                                         <div class="mb-2">
-                                                                            <label class="form-label mb-0" id="admin-table-form-contact-email-label">Email</label>
+                                                                            <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-email-label">Email</label>
                                                                             <input type="email" class="form-control contact-input"
                                                                                 value="@contact.Email" readonly>
                                                                         </div>
@@ -674,7 +679,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                                 @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
                                                                                 {
                                                                                     <div class="col-6">
-                                                                                        <label class="form-label mb-0" id= "admin-table-form-contact-telephone-label">Telephone number</label>
+                                                                                        <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-telephone-label">Telephone number</label>
                                                                                         <input type="text" class="form-control contact-input" value="@contact.Telephone"
                                                                                             readonly>
                                                                                     </div>
@@ -682,7 +687,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                                 @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
                                                                                 {
                                                                                     <div class="col-6">
-                                                                                        <label class="form-label mb-0" id = "admin-table-form-contact-mobile-label">Mobile number</label>
+                                                                                        <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-mobile-label">Mobile number</label>
                                                                                         <input type="text" class="form-control contact-input" value="@contact.Mobile"
                                                                                             readonly>
                                                                                     </div>
@@ -708,10 +713,10 @@ there's also many filtering options to find the policy and other adminstrative s
                                         <div class="row mt-3">
                                             <div class="col-12">
                                                 <div class="d-flex flex-wrap justify-content-end gap-2">
-                                                    <button type="button" class="btn btn-danger" id="admin-table-delete-button" onclick="deleteRecord(@record.Id)">Delete</button>
-                                                    <button type="button" class="btn btn-secondary edit-btn" id="admin-table-edit-button" onclick="toggleEditMode(@record.Id)">Edit</button>
-                                                    <button type="submit" class="btn btn-success save-btn" id="admin-table-save-button" style="display: none;">Save</button>
-                                                    <button type="button" class="btn btn-outline-secondary cancel-btn" id="admin-table-cancel-button" style="display: none;" onclick="cancelEdit(@record.Id)">Cancel</button>
+                                                    <button type="button" class="btn btn-danger translatable-label" data-translate-key="admin-table-delete-button" onclick="deleteRecord(@record.Id)">Delete</button>
+                                                    <button type="button" class="btn btn-secondary edit-btn translatable-label" data-translate-key="admin-table-edit-button" onclick="toggleEditMode(@record.Id)">Edit</button>
+                                                    <button type="submit" class="btn btn-success save-btn translatable-label" data-translate-key="admin-table-save-button" style="display: none;">Save</button>
+                                                    <button type="button" class="btn btn-outline-secondary cancel-btn translatable-label" data-translate-key="admin-table-cancel-button" style="display: none;" onclick="cancelEdit(@record.Id)">Cancel</button>
                                                 </div>
                                             </div>
                                         </div>
