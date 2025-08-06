@@ -71,20 +71,6 @@ function testPdfApiDirect() {
         
 }
 
-function testSpecificRecord() {
-    const recordId = 1; // Change this to a record ID you know exists
-    const testUrl = `/api/pdf/thumbnail?recordId=${recordId}`;
-    
-    fetch(testUrl)
-        .then(response => {
-            if (response.ok) {
-                showToast(`Thumbnail API working for record ${recordId}`);
-            } else {
-            }
-        })
-        .catch(error => {
-        });
-}
 
 function clearThumbnailCache(recordId) {
     fetch(`/api/pdf/clear-cache?recordId=${recordId}`, {
