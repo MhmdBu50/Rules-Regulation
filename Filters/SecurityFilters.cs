@@ -6,13 +6,15 @@ namespace RulesRegulation.Filters
     /// <summary>
     /// Security filter that prevents page caching and adds security headers
     /// This helps prevent users from accessing cached pages after logout
+    /// Updated to allow better back button functionality while maintaining security
     /// </summary>
     public class NoCache : ActionFilterAttribute
     {
         public override void OnResultExecuting(ResultExecutingContext context)
         {
-            // Set cache control headers to prevent browser caching
-            context.HttpContext.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+            // Set cache control headers to prevent browser caching sensitive content
+            // But allow normal browser navigation
+            context.HttpContext.Response.Headers["Cache-Control"] = "no-store, must-revalidate";
             context.HttpContext.Response.Headers["Pragma"] = "no-cache";
             context.HttpContext.Response.Headers["Expires"] = "0";
             
@@ -41,8 +43,9 @@ namespace RulesRegulation.Filters
                 return;
             }
 
-            // Set no-cache headers for authenticated pages
-            context.HttpContext.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate, private";
+            // Set cache control headers for authenticated pages
+            // Allow browser navigation but prevent sensitive data caching
+            context.HttpContext.Response.Headers["Cache-Control"] = "no-store, must-revalidate, private";
             context.HttpContext.Response.Headers["Pragma"] = "no-cache";
             context.HttpContext.Response.Headers["Expires"] = "0";
             

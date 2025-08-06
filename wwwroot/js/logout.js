@@ -6,6 +6,9 @@
  * This ensures that the user session is properly cleared and authentication is terminated
  */
 function secureLogout() {
+    // Mark that user is logging out
+    sessionStorage.setItem('userLoggedOut', 'true');
+    
     // Create a form dynamically to submit a POST request
     const form = document.createElement('form');
     form.method = 'POST';
@@ -32,6 +35,9 @@ function secureLogout() {
  */
 async function logoutWithFeedback() {
     try {
+        // Mark that user is logging out
+        sessionStorage.setItem('userLoggedOut', 'true');
+        
         // Show loading state (optional)
         const loadingMessage = document.createElement('div');
         loadingMessage.innerHTML = 'Logging out...';
@@ -72,16 +78,16 @@ async function logoutWithFeedback() {
             // Clear any client-side data
             clearClientData();
             // Successful logout - redirect to login page
-            window.location.href = '/Account/LoginPage';
+            window.location.replace('/Account/LoginPage');
         } else {
             console.error('Logout failed with status:', response.status);
             // Fallback: redirect anyway for security
-            window.location.href = '/Account/LoginPage';
+            window.location.replace('/Account/LoginPage');
         }
     } catch (error) {
         console.error('Logout error:', error);
         // Fallback: redirect to login page for security
-        window.location.href = '/Account/LoginPage';
+        window.location.replace('/Account/LoginPage');
     }
 }
 
@@ -134,6 +140,7 @@ function checkAuthStatus() {
 
 /**
  * Prevent browser back button access to protected pages after logout
+ * Updated to allow normal back button functionality while protecting against unauthorized access
  */
 function preventBackButtonAccess() {
     // Only apply to protected pages
@@ -141,20 +148,45 @@ function preventBackButtonAccess() {
         return;
     }
 
-    // Add a state to history to detect back button usage
-    window.history.pushState(null, "", window.location.href);
+    // Only prevent back button if user has actually logged out
+    let isLoggedOut = sessionStorage.getItem('userLoggedOut') === 'true';
     
+    if (isLoggedOut) {
+        // Only block if user logged out - redirect to login
+        window.location.replace('/Account/LoginPage');
+        return;
+    }
+    
+    // For normal navigation, just check auth status but don't block
     window.addEventListener('popstate', function(event) {
-        // When back button is pressed, check authentication
-        checkAuthStatus();
-        
-        // Push the state again to prevent going back
-        window.history.pushState(null, "", window.location.href);
+        // Check authentication but allow normal back navigation
+        fetch('/Account/CheckAuth', {
+            method: 'GET',
+            credentials: 'same-origin'
+        })
+        .then(response => {
+            if (!response.ok) {
+                // Not authenticated, redirect to login
+                window.location.replace('/Account/LoginPage');
+            }
+            // If authenticated, allow normal back navigation
+        })
+        .catch(error => {
+            console.error('Auth check failed:', error);
+            // On error, redirect to login for security
+            window.location.replace('/Account/LoginPage');
+        });
     });
 }
 
 // Run security checks when page loads
 document.addEventListener('DOMContentLoaded', function() {
+    // Clear logout state if on login page (successful login)
+    if (window.location.pathname.includes('/Account/LoginPage')) {
+        sessionStorage.removeItem('userLoggedOut');
+        return;
+    }
+    
     checkAuthStatus();
     preventBackButtonAccess();
 });

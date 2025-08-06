@@ -31,33 +31,33 @@ public async Task<IActionResult> LoginPage(string Name, string password)
 {
     try
     {
-        // 🔒 Validate input
+        // Validate input
         if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(password))
         {
             ModelState.AddModelError("", "Username and password are required.");
             return View("~/Views/Account/LoginPage.cshtml");
         }
 
-        // 🔍 Clean values for consistency
+        // Clean values for consistency
         string normalizedName = Name.Trim();
         string normalizedPassword = password.Trim();
 
-        // 🔎 Query the database (case-sensitive by default in Oracle)
+        // Query the database (case-sensitive by default in Oracle)
         var user = _dbContext.Users
             .FirstOrDefault(u => u.Name != null && u.Name.ToLower() == normalizedName.ToLower()
                               && u.Password == normalizedPassword);
 
-        // ❌ If user not found
+        // If user not found
         if (user == null)
         {
             ModelState.AddModelError("", "Invalid username or password.");
             return View("~/Views/Account/LoginPage.cshtml");
         }
 
-        // ✅ Save UserId to session
+        // Save UserId to session
         HttpContext.Session.SetInt32("UserId", user.UserId);
 
-        // ✅ Set up claims for authentication
+        // Set up claims for authentication
         var claims = new List<System.Security.Claims.Claim>
         {
             new(System.Security.Claims.ClaimTypes.Name, user.Name ?? ""),
@@ -68,7 +68,7 @@ public async Task<IActionResult> LoginPage(string Name, string password)
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var principal = new ClaimsPrincipal(identity);
 
-        // ✅ Sign the user in
+        // Sign the user in
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
         //logs visits
@@ -81,12 +81,15 @@ public async Task<IActionResult> LoginPage(string Name, string password)
 
         await _dbContext.SaveChangesAsync();
 
+        // Add script to clear logout state on successful login
+        TempData["ClearLogoutState"] = true;
+
         return RedirectToAction("HomePage", "Home");
     }
     catch (Oracle.ManagedDataAccess.Client.OracleException ex)
     {
-        // ⚠️ Log Oracle-specific error (helpful for debugging)
-        Console.WriteLine("💥 ORACLE ERROR: " + ex.Message);
+        // Log Oracle-specific error (helpful for debugging)
+        Console.WriteLine(" ORACLE ERROR: " + ex.Message);
 
         ModelState.AddModelError("", "A database error occurred. Please try again later.");
         return View("~/Views/Account/LoginPage.cshtml");
