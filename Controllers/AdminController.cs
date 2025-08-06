@@ -871,7 +871,7 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
                 using (var stream = new FileStream(wordFullPath, FileMode.Create))
                     await model.WordAttachment.CopyToAsync(stream);
                 // Store relative path for database
-                wordPath = "/uploads/" + wordFileName;
+                wordPath = "uploads/" + wordFileName;
             }
 
             // Step 3: Save PDF file if provided
@@ -883,7 +883,7 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
                 using (var stream = new FileStream(pdfFullPath, FileMode.Create))
                     await model.PdfAttachment.CopyToAsync(stream);
                 // Store relative path for database
-                pdfPath = "/uploads/" + pdfFileName;
+                pdfPath = "uploads/" + pdfFileName;
             }
 
             // Debug logging for file upload tracking

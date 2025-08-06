@@ -260,7 +260,19 @@ document.addEventListener("DOMContentLoaded", () => {
     "label-telephone-90201": "Telephone number",
     "label-mobile-90201": "Mobile number",
     "btn-update-90201": "Update Contact Info",
-    "btn-cancel-90201": "Cancel"
+    "btn-cancel-90201": "Cancel",
+
+    // Mobile Menu Translations
+    "mobile-home": "Home",
+    "mobile-admin-view": "view as Admin",
+    "mobile-student-guides": "Student Guides & Templates",
+    "mobile-student-rules": "Student Rules & Regulations",
+    "mobile-employee-rules": "Employees' Rules & Regulations",
+    "mobile-academic-rules": "Academic Rules & Regulations",
+    "mobile-saved-rules": "Saved Rules & Regulations",
+    "mobile-history": "History",
+    "mobile-language-text": "change language",
+    "mobile-logout": "logout"
 
         },
         "ar": {
@@ -521,7 +533,19 @@ document.addEventListener("DOMContentLoaded", () => {
     "label-telephone-90201": "رقم الهاتف",
     "label-mobile-90201": "رقم الجوال",
     "btn-update-90201": "تحديث المعلومات",
-    "btn-cancel-90201": "إلغاء"
+    "btn-cancel-90201": "إلغاء",
+
+    // Mobile Menu Translations
+    "mobile-home": "الرئيسية",
+    "mobile-admin-view": "عرض كمسؤول",
+    "mobile-student-guides": "أدلة وقوالب الطلاب",
+    "mobile-student-rules": "قواعد وأنظمة الطلاب",
+    "mobile-employee-rules": "قواعد وأنظمة الموظفين",
+    "mobile-academic-rules": "قواعد وأنظمة أكاديمية",
+    "mobile-saved-rules": "القواعد واللوائح المحفوظة",
+    "mobile-history": "السجل",
+    "mobile-language-text": "تغيير اللغة",
+    "mobile-logout": "تسجيل الخروج"
         }
     };
 
