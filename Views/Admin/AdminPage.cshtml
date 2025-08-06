@@ -424,6 +424,39 @@ there's also many filtering options to find the policy and other adminstrative s
                                         break;
                                 }
                             }
+
+                            // Department translation logic
+                            var displayDepartment = record.Department;
+                            if (isArabic)
+                            {
+                                switch (record.Department)
+                                {
+                                    case "Reg and Admission":
+                                        displayDepartment = "التسجيل والقبول";
+                                        break;
+                                    case "CCSIT":
+                                        displayDepartment = "كلية علوم الحاسب وتقنية المعلومات";
+                                        break;
+                                    case "Communication and tech":
+                                        displayDepartment = "الاتصالات والتقنية";
+                                        break;
+                                    case "Hospital":
+                                        displayDepartment = "المستشفى";
+                                        break;
+                                    case "Library":
+                                        displayDepartment = "المكتبة";
+                                        break;
+                                    case "Students Affairs":
+                                        displayDepartment = "شؤون الطلاب";
+                                        break;
+                                    case "Preparetory":
+                                        displayDepartment = "السنة التحضيرية";
+                                        break;
+                                    case "Academic Affairs":
+                                        displayDepartment = "الشؤون الأكاديمية";
+                                        break;
+                                }
+                            }
                             
                             <!-- Accordion Item 1 -->
                             <div class="accordion-item position-relative" data-section="@(record.Sections ?? "")" data-document-type="@(record.DocumentType ?? "")">
@@ -541,18 +574,17 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <label class="fw-bold translatable-label" data-translate-key="admin-table-form-responsible-department-label">Responsible
-                                                                    Department</label>
+                                                                <label class="fw-bold translatable-label" data-translate-key="admin-table-form-responsible-department-label">Responsible Department</label>
                                                                 <select name="department" class="form-select" disabled>
-                                                                    <option value="@record.Department" selected>@record.Department</option>
-                                                                    <option value="Reg and Admission">Reg and Admission</option>
-                                                                    <option value="CCSIT">CCSIT</option>
-                                                                    <option value="Communication and tech">Communication and tech</option>
-                                                                    <option value="Hospital">Hospital</option>
-                                                                    <option value="Library">Library</option>
-                                                                    <option value="Students Affairs">Students Affairs</option>
-                                                                    <option value="Preparetory">Preparetory</option>
-                                                                    <option value="Academic Affairs">Academic Affairs</option>
+                                                                    <option value="@record.Department" selected>@displayDepartment</option>
+                                                                    <option value="Reg and Admission">@(isArabic ? "التسجيل والقبول" : "Reg and Admission")</option>
+                                                                    <option value="CCSIT">@(isArabic ? "كلية علوم الحاسب وتقنية المعلومات" : "CCSIT")</option>
+                                                                    <option value="Communication and tech">@(isArabic ? "الاتصالات والتقنية" : "Communication and tech")</option>
+                                                                    <option value="Hospital">@(isArabic ? "المستشفى" : "Hospital")</option>
+                                                                    <option value="Library">@(isArabic ? "المكتبة" : "Library")</option>
+                                                                    <option value="Students Affairs">@(isArabic ? "شؤون الطلاب" : "Students Affairs")</option>
+                                                                    <option value="Preparetory">@(isArabic ? "السنة التحضيرية" : "Preparetory")</option>
+                                                                    <option value="Academic Affairs">@(isArabic ? "الشؤون الأكاديمية" : "Academic Affairs")</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
