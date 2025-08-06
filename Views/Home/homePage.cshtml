@@ -95,7 +95,7 @@
     <div class="container-fluid h-100 bootstrap-wrapper">
         <div class="row align-items-center h-100 g-0">
             <div class="col-auto">
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center justify-content-around ms-2 gap-3 me-2 ">
 
                     <button id="burgerBtn" class="navbar-toggler d-lg-none me-2" style="margin-left: 15px;"
                         type="button">
@@ -105,9 +105,8 @@
                     <div class="d-none d-lg-block d-xl-block">
                         <form method="post" action="@Url.Action("Logout", "Account")" style="margin: 0">
                             @Html.AntiForgeryToken()
-                            <button type="submit" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
-                                <img src="@Url.Content("~/svgs/admin/logOut.svg")">
-                                <span style="color: white;">logout</span>
+                            <button class="desktop-logo logo" type="submit" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
+                                <img src="~/svgs/navigation/logout.svg" alt="Menu" width="36" height="36" />
                             </button>
                         </form>
                     </div>
@@ -393,7 +392,7 @@ border: none;" onclick="navigateToHome(this)">
 
 
 
-<div class="container-fluid">
+<div class="container-fluid mb-footer-space">
     <div class="row justify-content-center g-lg-4 g-md-3 g-sm-2 g-1" style="margin: 0px 40px;">
 
         @if (Model != null && Model.Any())
@@ -413,7 +412,7 @@ border: none;" onclick="navigateToHome(this)">
                         <div class="bookmark-wrapper">
                             <div class="bookmark" data-record-id="@record.Id" onclick="toggleBookmark(this)"></div>
                         </div>
-                        <div class="document-icon" onclick="ViewPdf(@record.Id) title="Click to preview PDF">
+                        <div class="document-icon" onclick="ViewPdf(@record.Id)" title="Click to preview PDF">
                             <div class="pdf-thumbnail-container">
                                 <div class="thumbnail-loading" id="loading-@record.Id">
                                     <div class="spinner"></div>

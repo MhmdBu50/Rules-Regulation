@@ -94,7 +94,6 @@ body {
   transition: stroke 0.3s ease-in-out; /* Smooth transition */
 }
 .logo {
-  margin: 0 10px 0 15px;
   transform: scale(1.02);
   transition: transform 0.08s ease-in-out;
   width: 38px !important;
