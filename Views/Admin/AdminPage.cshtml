@@ -404,6 +404,27 @@ there's also many filtering options to find the policy and other adminstrative s
                                 ? record.ApprovingEntityAr 
                                 : record.ApprovingEntity;
                             
+                            // Document Type translation logic
+                            var displayDocumentType = record.DocumentType;
+                            if (isArabic)
+                            {
+                                switch (record.DocumentType)
+                                {
+                                    case "Student guides & templates":
+                                        displayDocumentType = "أدلة ونماذج الطلاب";
+                                        break;
+                                    case "Student rules & regulations":
+                                        displayDocumentType = "قواعد وأنظمة الطلاب";
+                                        break;
+                                    case "Employees' rules & regulations":
+                                        displayDocumentType = "قواعد وأنظمة الموظفين";
+                                        break;
+                                    case "Academic rules & regulations":
+                                        displayDocumentType = "قواعد وأنظمة أكاديمية";
+                                        break;
+                                }
+                            }
+                            
                             <!-- Accordion Item 1 -->
                             <div class="accordion-item position-relative" data-section="@(record.Sections ?? "")" data-document-type="@(record.DocumentType ?? "")">
                                 <!-- Checkbox positioned outside accordion button -->
@@ -431,8 +452,8 @@ there's also many filtering options to find the policy and other adminstrative s
                                                         @displayName</th>
                                                     <th class="col-2 d-none d-md-table-cell field-padding" 
                                                         style="max-width: 111px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-                                                        title="@record.DocumentType">
-                                                        @record.DocumentType</th>
+                                                        title="@displayDocumentType">
+                                                        @displayDocumentType</th>
                                                     <th class="col-2 d-none d-md-table-cell field-padding" 
                                                         style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
                                                         title="@record.Version">
@@ -580,11 +601,11 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                 <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-document-type-label">Document
                                                                     Type</label>
                                                                 <select name="documentType" class="form-select mb-2" disabled>
-                                                                    <option value="@record.DocumentType" selected>@record.DocumentType</option>
-                                                                    <option value="Student guides & templates" id= "admin-chart-legend-student-guides3">Student guides & templates</option>
-                                                                    <option value="Student rules & regulations" id="admin-chart-legend-student-rules3">Student rules & regulations</option>
+                                                                    <option value="@record.DocumentType" selected>@displayDocumentType</option>
+                                                                    <option value="Student guides & templates" id= "admin-chart-legend-student-guides3">@(isArabic ? "أدلة وقوالب الطلاب" : "Student guides & templates")</option>
+                                                                    <option value="Student rules & regulations" id="admin-chart-legend-student-rules3">@(isArabic ? "قواعد وأنظمة الطلاب" : "Student rules & regulations")</option>
                                                                     <option value="Employees’ rules & regulations" id="admin-chart-legend-employment-rules3">Employees’ rules & regulations</option>
-                                                                    <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules3">Academic rules & regulations</option>
+                                                                    <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules3">@(isArabic ? "قواعد وأنظمة أكاديمية" : "Academic rules & regulations")</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
