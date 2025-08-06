@@ -14,6 +14,7 @@ using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.Drawing;
 using RulesRegulation.Filters;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace RulesRegulation.Controllers;
 
@@ -53,6 +54,9 @@ public class AdminController : Controller
     // Web hosting environment for file operations and path management
     private readonly IWebHostEnvironment _webHostEnvironment;
 
+    // Memory cache for thumbnail caching
+    private readonly IMemoryCache _cache;
+
     /**
      * Constructor - Initializes all dependencies and establishes database connections
      * 
@@ -72,7 +76,7 @@ public class AdminController : Controller
      * 
      * Throws InvalidOperationException if Oracle connection string is not found
      */
-    public AdminController(ILogger<AdminController> logger, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
+    public AdminController(ILogger<AdminController> logger, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, IMemoryCache cache)
     {
         _logger = logger;
         // Get Oracle connection string from configuration, throw exception if not found
@@ -83,6 +87,8 @@ public class AdminController : Controller
         _oracleDbService = new OracleDbService(_connectionString);
         // Store web hosting environment for file operations
         _webHostEnvironment = webHostEnvironment;
+        // Store memory cache for thumbnail caching
+        _cache = cache;
     }
 
     /**
@@ -1736,7 +1742,15 @@ public async Task<IActionResult> ViewPdf(int id)
 
             if (success)
             {
-                // STEP 6: Database update successful - now clean up old file
+                // STEP 6: Clear thumbnail cache if PDF was updated
+                if (fileType.ToLower() == "pdf")
+                {
+                    var thumbnailCacheKey = $"thumbnail_{recordId}";
+                    _cache.Remove(thumbnailCacheKey);
+                    _logger.LogInformation($"Cleared thumbnail cache for recordId: {recordId} after PDF update");
+                }
+
+                // STEP 7: Database update successful - now clean up old file
                 if (!string.IsNullOrEmpty(oldFilePath) && System.IO.File.Exists(oldFilePath))
                 {
                     try

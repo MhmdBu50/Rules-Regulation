@@ -86,15 +86,15 @@ namespace RulesRegulation.Controllers
                     _logger.LogWarning($"PDF has less than 2 pages: {pdfFilePath}");
                     // Let's try the first page instead
                     var firstPageThumbnail = await ConvertFirstPageToThumbnail(pdfFilePath);
-                    _cache.Set(cacheKey, firstPageThumbnail, TimeSpan.FromHours(1));
+                    _cache.Set(cacheKey, firstPageThumbnail, TimeSpan.FromMinutes(30));
                     return File(firstPageThumbnail, "image/png", $"thumbnail_{recordId}.png");
                 }
 
                 // Convert second page to thumbnail
                 var thumbnailBytes = await ConvertSecondPageToThumbnail(pdfFilePath);
 
-                // Cache for 1 hour
-                _cache.Set(cacheKey, thumbnailBytes, TimeSpan.FromHours(1));
+                // Cache for 30 minutes (reduced from 1 hour for faster updates)
+                _cache.Set(cacheKey, thumbnailBytes, TimeSpan.FromMinutes(30));
 
                 _logger.LogInformation($"Successfully generated thumbnail for recordId: {recordId}");
                 return File(thumbnailBytes, "image/png", $"thumbnail_{recordId}.png");
@@ -103,6 +103,23 @@ namespace RulesRegulation.Controllers
             {
                 _logger.LogError(ex, $"Error generating thumbnail for recordId: {recordId}");
                 return File(CreateErrorImageBytes($"Error: {ex.Message}"), "image/png", $"error_{recordId}.png");
+            }
+        }
+
+        [HttpPost("clear-cache")]
+        public IActionResult ClearThumbnailCache([FromQuery] int recordId)
+        {
+            try
+            {
+                var cacheKey = $"thumbnail_{recordId}";
+                _cache.Remove(cacheKey);
+                _logger.LogInformation($"Cleared thumbnail cache for recordId: {recordId}");
+                return Ok(new { success = true, message = $"Cache cleared for record {recordId}" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error clearing cache for recordId: {recordId}");
+                return BadRequest(new { success = false, message = ex.Message });
             }
         }
 
