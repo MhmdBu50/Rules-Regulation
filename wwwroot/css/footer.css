@@ -1,0 +1,314 @@
+/* Footer Styles */
+.site-footer {
+    background: linear-gradient(135deg, #1a237e 0%, #2b334f 50%, #0f1734 100%);
+    color: white;
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+    position: relative;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    border-top: none;
+    border-bottom: none;
+}
+
+/* Ensure footer appears at bottom with minimal space */
+body {
+    min-height: 100vh;
+}
+
+/* Remove any interference with main content */
+main, .container-fluid {
+    margin-bottom: 0;
+}
+
+/* Remove any default page borders that might show as lines */
+body {
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+}
+
+/* Specific fix for white line above footer - target common culprits */
+.site-footer {
+    border-top: none !important;
+}
+
+/* Remove borders from form containers and main content areas */
+.container, .container-fluid, form, .row, .col-md-6, .text-center {
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+}
+
+/* Ensure no lines appear around footer */
+.site-footer::before,
+.site-footer::after {
+    display: none;
+}
+
+/* Remove any container borders that might show */
+.container-fluid {
+    border: none;
+    outline: none;
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 1.5rem;
+    padding: 0 2rem 1rem;
+    border: none;
+    outline: none;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.footer-logo {
+    max-height: 45px;
+    width: auto;
+}
+
+.footer-logo-white {
+    filter: brightness(0) invert(1);
+}
+
+.university-info h5 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.university-info p {
+    margin: 0;
+    color: #b0bec5;
+    font-size: 0.85rem;
+}
+
+.footer-links h6,
+.footer-contact h6,
+.footer-social h6 {
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    border-bottom: 2px solid #3f51b5;
+    padding-bottom: 0.25rem;
+    display: inline-block;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.4rem;
+}
+
+.footer-links a {
+    color: #b0bec5;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 0.85rem;
+}
+
+.footer-links a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #b0bec5;
+    font-size: 0.85rem;
+}
+
+.contact-item i {
+    color: #3f51b5;
+    width: 16px;
+    text-align: center;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: #ffffff;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-links a svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.social-links a:hover {
+    background: #3f51b5;
+    transform: translateY(-2px);
+}
+
+.footer-bottom {
+    padding: 1rem 2rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    outline: none;
+    margin-bottom: 0;
+}
+
+.footer-bottom-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-bottom-content p {
+    margin: 0;
+    color: #b0bec5;
+    font-size: 0.9rem;
+}
+
+.footer-bottom-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.footer-bottom-links a {
+    color: #b0bec5;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.footer-bottom-links a:hover {
+    color: #ffffff;
+}
+
+.footer-bottom-links .divider {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+/* RTL Support */
+body.rtl .footer-content {
+    direction: rtl;
+    text-align: right;
+}
+
+body.rtl .footer-brand {
+    flex-direction: row-reverse;
+}
+
+body.rtl .contact-item {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+
+body.rtl .social-links {
+    justify-content: flex-end;
+}
+
+body.rtl .footer-bottom-content {
+    flex-direction: row-reverse;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .footer-brand {
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-bottom-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .footer-bottom-links {
+        justify-content: center;
+    }
+    
+    body.rtl .footer-brand {
+        flex-direction: column;
+    }
+    
+    body.rtl .contact-item {
+        justify-content: center;
+    }
+    
+    body.rtl .social-links {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .site-footer {
+        padding: 1rem 0;
+    }
+    
+    .footer-content {
+        padding: 0 1rem 0.75rem;
+        gap: 1rem;
+    }
+    
+    .footer-bottom {
+        padding: 0.75rem;
+    }
+    
+    .footer-logo {
+        max-height: 40px;
+    }
+    
+    .university-info h5 {
+        font-size: 0.9rem;
+    }
+    
+    .social-links a {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+    }
+}

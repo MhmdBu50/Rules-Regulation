@@ -1,0 +1,92 @@
+@using Microsoft.AspNetCore.Localization
+
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
+    var isArabic = currentCulture == "ar-SA";
+}
+
+<link rel="stylesheet" href="~/css/footer.css" />
+
+<footer class="site-footer">
+    <div class="container-fluid">
+        <div class="footer-content">
+            <!-- University Logo and Name -->
+            <div class="footer-brand">
+                <img src="~/imgs/B&W IAU Logo (Horizontal).png" alt="IAU Logo" class="footer-logo footer-logo-white">
+                <div class="university-info">
+                    <h5 id="footer-university-name">@(isArabic ? "جامعة الإمام عبدالرحمن بن فيصل" : "Imam Abdulrahman Bin Faisal University")</h5>
+                    <p id="footer-system-name">@(isArabic ? "نظام اللوائح والتنظيمات" : "Rules and Regulations System")</p>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-links">
+                <h6 id="footer-quick-links-title">@(isArabic ? "روابط سريعة" : "Quick Links")</h6>
+                <ul>
+                    <li><a href="@Url.Action("homePage", "Home")" id="footer-home-link">@(isArabic ? "الرئيسية" : "Home")</a></li>
+                    <li><a href="#" onclick="navigateToStudentGuides()" id="footer-student-guides-link">@(isArabic ? "أدلة ونماذج الطلاب" : "Student guides & templates")</a></li>
+                    <li><a href="#" onclick="navigateToStudentRules()" id="footer-student-rules-link">@(isArabic ? "قواعد ولوائح الطلاب" : "Student rules & regulations")</a></li>
+                    <li><a href="#" onclick="navigateToEmployeeRules()" id="footer-employee-rules-link">@(isArabic ? "قواعد ولوائح الموظفين" : "Employees' rules & regulations")</a></li>
+                    <li><a href="#" onclick="navigateToAcademicRules()" id="footer-academic-rules-link">@(isArabic ? "قواعد أكاديمية" : "Academic rules & regulations")</a></li>
+                    <li><a href="#" onclick="navigateToSaved()" id="footer-saved-rules-link">@(isArabic ? "اللوائح المحفوظة" : "Saved rules & regulations")</a></li>
+                    <li><a href="#" onclick="navigateToHistory()" id="footer-history-link">@(isArabic ? "التاريخ" : "History")</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="footer-contact">
+                <h6 id="footer-contact-title">@(isArabic ? "اتصل بنا" : "Contact Us")</h6>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>info@iau.edu.sa</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span dir="ltr">+966 13 333 0000</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="footer-address">@(isArabic ? "الدمام، المملكة العربية السعودية" : "Dammam, Saudi Arabia")</span>
+                </div>
+            </div>
+
+            <!-- Social Media Links -->
+            <div class="footer-social">
+                <h6 id="footer-social-title">@(isArabic ? "تابعنا" : "Follow Us")</h6>
+                <div class="social-links">
+                    <a href="https://x.com/iau_ksa?s=21" target="_blank" aria-label="X">
+                        <img src="~/svgs/twitter.svg" alt="X" width="16" height="16" />
+                    </a>
+                    <a href="https://www.instagram.com/iau.ksa" target="_blank" aria-label="Instagram">
+                        <img src="~/svgs/instagram.svg" alt="Instagram" width="16" height="16" />
+                    </a>
+                    <a href="https://linkedin.com/school/iau-edu-sa" target="_blank" aria-label="LinkedIn">
+                        <img src="~/svgs/linkedin.svg" alt="LinkedIn" width="16" height="16" />
+                    </a>
+                    <a href="https://youtube.com/c/iauedusa" target="_blank" aria-label="YouTube">
+                        <img src="~/svgs/youtube.svg" alt="YouTube" width="16" height="16" />
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <p id="footer-copyright">
+                    @(isArabic ? 
+                        $"© {DateTime.Now.Year} جامعة الإمام عبدالرحمن بن فيصل. جميع الحقوق محفوظة." : 
+                        $"© {DateTime.Now.Year} Imam Abdulrahman Bin Faisal University. All rights reserved.")
+                </p>
+                <div class="footer-bottom-links">
+                    <a href="#" id="footer-privacy-link">@(isArabic ? "سياسة الخصوصية" : "Privacy Policy")</a>
+                    <span class="divider">|</span>
+                    <a href="#" id="footer-terms-link">@(isArabic ? "الشروط والأحكام" : "Terms & Conditions")</a>
+                    <span class="divider">|</span>
+                    <a href="https://www.iau.edu.sa" target="_blank" id="footer-university-website">@(isArabic ? "موقع الجامعة" : "University Website")</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
