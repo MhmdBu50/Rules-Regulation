@@ -33,6 +33,7 @@ body {
 /* Specific fix for white line above footer - target common culprits */
 .site-footer {
     border-top: none !important;
+
 }
 
 /* Remove borders from form containers and main content areas */
@@ -223,18 +224,12 @@ body.rtl .footer-content {
     text-align: right;
 }
 
-body.rtl .footer-brand {
-    flex-direction: row-reverse;
-}
 
 body.rtl .contact-item {
     flex-direction: row-reverse;
     text-align: right;
 }
 
-body.rtl .social-links {
-    justify-content: flex-end;
-}
 
 body.rtl .footer-bottom-content {
     flex-direction: row-reverse;

@@ -92,9 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         legendContainer.style.display = 'flex';
                         legendContainer.style.flexWrap = 'wrap';
                         legendContainer.style.justifyContent = 'center';
-                        legendContainer.style.alignItems = 'center';
                         legendContainer.style.gap = '15px';
-                        legendContainer.style.marginTop = '20px';
                         
                         stats.donutData.forEach((item, index) => {
                             const legendItem = document.createElement('div');
