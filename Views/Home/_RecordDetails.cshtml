@@ -5,18 +5,18 @@
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
     var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
     var isArabic = currentCulture == "ar-SA";
-    
-    var displayName = isArabic && !string.IsNullOrEmpty(Model.RegulationNameAr) 
-        ? Model.RegulationNameAr 
-        : Model.RegulationName;
+
+    var displayName = isArabic && !string.IsNullOrEmpty(Model.RegulationNameAr)
+    ? Model.RegulationNameAr
+    : Model.RegulationName;
 
     var Description = isArabic && !string.IsNullOrEmpty(Model.DescriptionAr)
-        ? Model.DescriptionAr
-        : Model.Description;
+    ? Model.DescriptionAr
+    : Model.Description;
 
     var ApprovingEntity = isArabic && !string.IsNullOrEmpty(Model.ApprovingEntityAr)
-        ? Model.ApprovingEntityAr
-        : Model.ApprovingEntity;
+    ? Model.ApprovingEntityAr
+    : Model.ApprovingEntity;
 
     // Document Type translation logic
     var displayDocumentType = Model.DocumentType;
@@ -72,6 +72,34 @@
         }
     }
 
+    // Field Labels translation logic
+    var departmentLabel = "Department";
+    var documentTypeLabel = "Document Type";
+    var versionNumberLabel = "Version Number";
+    var versionDateLabel = "Version Date";
+    var approvingEntityLabel = "Approving Entity";
+    var approvalDateLabel = "Approval Date";
+    var descriptionLabel = "Description";
+    var departmentContactsLabel = "Department Contacts";
+    var approvalInfoLabel = "Approval Information";
+    var comprehensiveInfoLabel = "Comprehensive information about this regulation";
+    var noDescriptionLabel = "No description available";
+
+    if (isArabic)
+    {
+        departmentLabel = "القسم";
+        documentTypeLabel = "نوع المستند";
+        versionNumberLabel = "رقم الإصدار";
+        versionDateLabel = "تاريخ الإصدار";
+        approvingEntityLabel = "الجهة المعتمدة";
+        approvalDateLabel = "تاريخ الاعتماد";
+        descriptionLabel = "الوصف";
+        departmentContactsLabel = "جهات الاتصال بالقسم";
+        approvalInfoLabel = "معلومات الاعتماد";
+        comprehensiveInfoLabel = "معلومات شاملة حول هذه اللائحة";
+        noDescriptionLabel = "لا يوجد وصف متاح";
+    }
+
 
 }
 
@@ -85,7 +113,7 @@
         <div class="header-content">
             <div>
                 <h3 class="header-title">@displayName</h3>
-                <p class="header-subtitle" id="record-details-comprehensive-info">Comprehensive information about this regulation</p>
+                <p class="header-subtitle">@comprehensiveInfoLabel</p>
             </div>
         </div>
     </div>
@@ -104,30 +132,30 @@
             -->
             <div class="detail-card">
                 <div class="detail-label">
-                    <i class="fas fa-building"></i> Department
+                    <i class="fas fa-building"></i> @departmentLabel
                 </div>
                 <div class="detail-value">@displayDepartment</div>
             </div>
 
             <div class="detail-card">
                 <div class="detail-label">
-                    <i class="fas fa-file-alt"></i> Document Type
+                    <i class="fas fa-file-alt"></i> @documentTypeLabel
                 </div>
                 <div class="detail-value">
-                        <div class="detail-value">@displayDocumentType</div>
+                    <div class="detail-value">@displayDocumentType</div>
                 </div>
             </div>
 
             <div class="detail-card">
                 <div class="detail-label">
-                    <i class="fas fa-code-branch"></i> Version Number
+                    <i class="fas fa-code-branch"></i> @versionNumberLabel
                 </div>
                 <div class="detail-value">@Model.Version</div>
             </div>
 
             <div class="detail-card">
                 <div class="detail-label">
-                    <i class="fas fa-calendar-alt"></i> Version Date
+                    <i class="fas fa-calendar-alt"></i> @versionDateLabel
                 </div>
                 <div class="detail-value">@Model.VersionDate</div>
             </div>
@@ -137,15 +165,15 @@
         <!-- Approval section with distinct styling -->
         <div class="section-group">
             <h3 class="section-title">
-                <i class="fas fa-stamp"></i> Approval Information
+                <i class="fas fa-stamp"></i> @approvalInfoLabel
             </h3>
             <div class="approval-details">
                 <div class="approval-item">
-                    <div class="approval-label" id="record-details-approving-entity-label">Approving Entity</div>
+                    <div class="approval-label">@approvingEntityLabel</div>
                     <div class="approval-value">@ApprovingEntity</div>
                 </div>
                 <div class="approval-item">
-                    <div class="approval-label">Approval Date</div>
+                    <div class="approval-label">@approvalDateLabel</div>
                     <div class="approval-value">@Model.ApprovalDate</div>
                 </div>
             </div>
@@ -154,7 +182,7 @@
         <!-- Description section -->
         <div class="section-group">
             <h3 class="section-title">
-                <i class="fas fa-align-left"></i> Description
+                <i class="fas fa-align-left"></i> @descriptionLabel
             </h3>
             <div class="description-box">
                 @if (Model.Description != null && !string.IsNullOrWhiteSpace(Model.Description.ToString()))
@@ -163,7 +191,7 @@
                 }
                 else
                 {
-                    <p class="no-description">No description available</p>
+                    <p class="no-description">@noDescriptionLabel</p>
                 }
             </div>
         </div>
@@ -173,18 +201,26 @@
         {
             <div>
                 <h3 class="section-title">
-                    <i class="fas fa-address-book"></i> Department Contacts
+                    <i class="fas fa-address-book"></i> @departmentContactsLabel
                 </h3>
                 <div class="contacts-container">
                     @foreach (var contact in Model.ContactInformation)
                     {
                         <div class="contact-card">
                             <div class="contact-avatar">
-                                @contact.Name.ToString().Substring(0, 1)
                             </div>
                             <div class="contact-details">
-                                <div class="contact-name">@contact.Name</div>
-                                <div class="contact-position">@contact.Department</div>
+                                <div class="contact-name">
+                                    @{
+                                        var contactName = isArabic && !string.IsNullOrEmpty(contact.NameAr?.ToString())
+                                        ? contact.NameAr
+                                        : contact.Name;
+                                    }
+                                    @contactName
+                                </div>
+                                <div class="contact-position">
+                                    @displayDepartment
+                                </div>
                                 <div class="contact-info">
                                     @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
                                     {
