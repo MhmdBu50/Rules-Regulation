@@ -797,6 +797,31 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // =============================================
+// ACCORDION MANAGEMENT FUNCTIONALITY
+// =============================================
+
+// Function to close all open accordions
+function closeAllAccordions() {
+  console.log("Closing all open accordions...");
+  
+  // Get all accordion collapse elements
+  const accordionCollapses = document.querySelectorAll('#regulationAccordion .accordion-collapse.show');
+  
+  accordionCollapses.forEach(function(collapse) {
+    // Use Bootstrap's collapse API to hide the accordion
+    const bsCollapse = bootstrap.Collapse.getInstance(collapse);
+    if (bsCollapse) {
+      bsCollapse.hide();
+    } else {
+      // If no Bootstrap instance exists, create one and hide it
+      new bootstrap.Collapse(collapse, { toggle: false }).hide();
+    }
+  });
+  
+  console.log(`Closed ${accordionCollapses.length} open accordions`);
+}
+
+// =============================================
 // COMBINED SEARCH AND FILTER FUNCTIONALITY
 // =============================================
 
@@ -816,6 +841,9 @@ function updateSearchAndFilter(searchTerm, type) {
 // Apply admin filters based on document type
 function applyAdminFilters() {
   console.log("Applying admin filters...");
+
+  // Close all open accordions before applying filters
+  closeAllAccordions();
 
   // Get filter values from both desktop and mobile dropdowns
   const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
