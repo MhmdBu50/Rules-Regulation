@@ -129,14 +129,18 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-table-header-version-number": "Version Number",
         "admin-table-header-approving-date": "Approving Date",
         "admin-table-header-responsible-entity": "Responsible Entity",
-        "admin-table-form-regulation-name-label": "Regulation/ Manual name",
-        "admin-table-form-brief-description-label": "Brief Description",
+        "admin-table-form-regulation-name-label": "Regulation/ Manual name (English)",
+        "admin-table-form-regulation-name-ar-label": "Regulation/ Manual name (Arabic)",
+        "admin-table-form-brief-description-label": "Brief Description (English)",
+        "admin-table-form-brief-description-ar-label": "Brief Description (Arabic)",
         "admin-table-form-approving-date-label": "Approving Date",
         "admin-table-form-version-date-label": "Version Date",
         "admin-table-form-version-number-label": "Version Number",
-        "admin-table-form-approving-entity-label": "Approving Entity",
+        "admin-table-form-approving-entity-label": "Approving Entity (English)",
+        "admin-table-form-approving-entity-ar-label": "Approving Entity (Arabic)",
         "admin-table-form-responsible-department-label": "Responsible Department",
-        "admin-table-form-note-label": "Note",
+        "admin-table-form-note-label": "Note (English)",
+        "admin-table-form-note-ar-label": "Note (Arabic)",
         "admin-table-form-document-type-label": "Document Type",
         "admin-table-form-section-label": "Section",
         "admin-table-form-attach-word-label": "Attach word file",
@@ -260,19 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "label-telephone-90201": "Telephone number",
     "label-mobile-90201": "Mobile number",
     "btn-update-90201": "Update Contact Info",
-    "btn-cancel-90201": "Cancel",
-
-    // Mobile Menu Translations
-    "mobile-home": "Home",
-    "mobile-admin-view": "view as Admin",
-    "mobile-student-guides": "Student Guides & Templates",
-    "mobile-student-rules": "Student Rules & Regulations",
-    "mobile-employee-rules": "Employees' Rules & Regulations",
-    "mobile-academic-rules": "Academic Rules & Regulations",
-    "mobile-saved-rules": "Saved Rules & Regulations",
-    "mobile-history": "History",
-    "mobile-language-text": "change language",
-    "mobile-logout": "logout"
+    "btn-cancel-90201": "Cancel"
 
         },
         "ar": {
@@ -400,14 +392,18 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-table-header-version-number": "رقم الإصدار",
         "admin-table-header-approving-date": "تاريخ الاعتماد",
         "admin-table-header-responsible-entity": "الجهة المسؤولة",
-        "admin-table-form-regulation-name-label": "اسم اللائحة/الدليل",
-        "admin-table-form-brief-description-label": "وصف موجز",
+        "admin-table-form-regulation-name-label": "اسم اللائحة/الدليل (انجليزي)",
+        "admin-table-form-regulation-name-ar-label": "اسم اللائحة/الدليل (عربي)",
+        "admin-table-form-brief-description-label": "وصف موجز (انجليزي)",
+        "admin-table-form-brief-description-ar-label": "وصف موجز (عربي)",
         "admin-table-form-approving-date-label": "تاريخ الاعتماد",
         "admin-table-form-version-date-label": "تاريخ الإصدار",
         "admin-table-form-version-number-label": "رقم الإصدار",
-        "admin-table-form-approving-entity-label": "الجهة المعتمدة",
+        "admin-table-form-approving-entity-label": "الجهة المعتمدة (انجليزي)",
+        "admin-table-form-approving-entity-ar-label": "الجهة المعتمدة (عربي)",
         "admin-table-form-responsible-department-label": "القسم المسؤول",
-        "admin-table-form-note-label": "ملاحظة",
+        "admin-table-form-note-label": "ملاحظة (انجليزي)",
+        "admin-table-form-note-ar-label": "ملاحظة (عربي)",
         "admin-table-form-document-type-label": "نوع المستند",
         "admin-table-form-section-label": "القسم",
         "admin-table-form-attach-word-label": "إرفاق ملف وورد",
@@ -533,19 +529,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "label-telephone-90201": "رقم الهاتف",
     "label-mobile-90201": "رقم الجوال",
     "btn-update-90201": "تحديث المعلومات",
-    "btn-cancel-90201": "إلغاء",
-
-    // Mobile Menu Translations
-    "mobile-home": "الرئيسية",
-    "mobile-admin-view": "عرض كمسؤول",
-    "mobile-student-guides": "أدلة وقوالب الطلاب",
-    "mobile-student-rules": "قواعد وأنظمة الطلاب",
-    "mobile-employee-rules": "قواعد وأنظمة الموظفين",
-    "mobile-academic-rules": "قواعد وأنظمة أكاديمية",
-    "mobile-saved-rules": "القواعد واللوائح المحفوظة",
-    "mobile-history": "السجل",
-    "mobile-language-text": "تغيير اللغة",
-    "mobile-logout": "تسجيل الخروج"
+    "btn-cancel-90201": "إلغاء"
         }
     };
 
