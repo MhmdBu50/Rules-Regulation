@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddMemoryCache();
+// builder.Services.AddMemoryCache();
 
 //  Increase upload limits to 200 MB
 builder.WebHost.ConfigureKestrel(serverOptions =>
