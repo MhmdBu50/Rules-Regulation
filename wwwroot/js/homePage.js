@@ -161,12 +161,38 @@
     document.addEventListener('DOMContentLoaded', () => {
         initIcons('.navigation-bar .svg-container');
         initIcons('#sideNavBar .svg-container');
+        
+        // Add small delay to ensure SVG templates are fully loaded
+        setTimeout(() => {
+            // Set home button to altered state since we're on the home page
+            const homeButton = document.querySelector('[data-id="homeButton"]');
+            if (homeButton) {
+                const container = homeButton.querySelector('.svg-container');
+                if (container) {
+                    const alteredHomeSvg = getSVGFromTemplate('altered-homeButton');
+                    if (alteredHomeSvg) {
+                        container.innerHTML = '';
+                        container.appendChild(alteredHomeSvg);
+                    }
+                }
+                
+                // Also mark it as active
+                homeButton.classList.add('active');
+                homeButton.classList.add('hovered');
+            }
+        }, 200); // Increased delay to ensure everything is loaded
     });
 
 
 document.addEventListener("DOMContentLoaded", function () {
     const buttons = document.querySelectorAll('.bar-button');
     let activeBtn = null;
+    
+    // Set home button as initially active since we're on the home page
+    const homeButton = document.querySelector('[data-id="homeButton"]');
+    if (homeButton) {
+        activeBtn = homeButton;
+    }
 
     buttons.forEach(btn => {
         // Hover in: expand hovered button, shrink active if different
@@ -318,40 +344,6 @@ function navigateToAcademicRules(buttonElement) {
     setFilters({
         sections: ['Enrolled Programs'],
         types: ['Regulation', 'Policy']
-    });
-}
-
-// ==================== Set Filters Helper ====================
-
-function setFilters({ sections = [], types = [] }) {
-    console.log("✅ setFilters triggered");
-    // Clear everything first
-    clearFilters();
-
-    // Then apply new filters
-    sections.forEach(section => {
-        if (section === 'Students') document.getElementById('studentsFilter').checked = true;
-        if (section === 'Members') document.getElementById('membersFilter').checked = true;
-        if (section === 'Enrolled Programs') document.getElementById('enrolledFilter').checked = true;
-    });
-
-    types.forEach(type => {
-        if (type === 'Regulation') document.getElementById('regulationsFilter').checked = true;
-        if (type === 'Guidelines') document.getElementById('guidelinesFilter').checked = true;
-        if (type === 'Policy' || type === 'Policies') {
-            document.getElementById('policiesFilter').checked = true;
-        }
-    });
-
-    applyFilters(); // Apply everything after setup
-}
-
-// ==================== Reset Card Visibility Helper ====================
-
-function resetCardDisplay() {
-    // Show all cards before applying new filters
-    document.querySelectorAll('.medium-card').forEach(card => {
-        card.style.display = 'block';
     });
 }
 

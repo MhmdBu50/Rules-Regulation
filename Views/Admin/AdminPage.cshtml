@@ -172,7 +172,7 @@ there's also many filtering options to find the policy and other adminstrative s
 
                         <!-- Most Viewed Card -->
                         <div  class="stats-card stats-card-green">
-                            <h6>Most Viewed</h6>
+                            <h6 id="admin-stats-most-viewed">Most Viewed</h6>
                             <div class="subtitle">Student Code of Conduct</div>
                             <div class="viewed-text">Viewed: 785 times</div>
                         </div>
@@ -653,12 +653,12 @@ there's also many filtering options to find the policy and other adminstrative s
                                                             <div class="col-12 col-md-12 col-lg-6 col-xl-4 mb-3">
                                                                 <div class="p-3 border rounded h-100">
                                                                     <div class="mb-2">
-                                                                        <label class="form-label mb-0">Name (English)</label>
+                                                                        <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-name-en-label">Name (English)</label>
                                                                         <input type="text" class="form-control contact-input"
                                                                             value="@contact.Name" readonly>
                                                                     </div>
                                                                     <div class="mb-2">
-                                                                        <label class="form-label mb-0">Name (Arabic)</label>
+                                                                        <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-name-ar-label">Name (Arabic)</label>
                                                                         <input type="text" class="form-control contact-input" dir="rtl"
                                                                             value="@(contact.NameAr ?? "")" readonly>
                                                                     </div>

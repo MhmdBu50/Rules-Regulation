@@ -33,6 +33,61 @@
     <script src="@Url.Content("~/js/homePageFilters.js")"></script>
     <script src="@Url.Content("~/js/savedFunctions.js")"></script>
     <script src="@Url.Content("~/js/searchFunctionality.js")"></script>
+    
+    <script>
+        // Handle URL parameters for footer navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const filter = urlParams.get('filter');
+            
+            if (filter) {
+                // Wait a bit for all scripts to load
+                setTimeout(function() {
+                    switch(filter) {
+                        case 'student-guides':
+                            if (typeof navigateToStudentGuides === 'function') {
+                                // Create a dummy button element for the function
+                                const dummyBtn = document.createElement('button');
+                                navigateToStudentGuides(dummyBtn);
+                            }
+                            break;
+                        case 'student-rules':
+                            if (typeof navigateToStudentRules === 'function') {
+                                const dummyBtn = document.createElement('button');
+                                navigateToStudentRules(dummyBtn);
+                            }
+                            break;
+                        case 'employee-rules':
+                            if (typeof navigateToEmployeeRules === 'function') {
+                                const dummyBtn = document.createElement('button');
+                                navigateToEmployeeRules(dummyBtn);
+                            }
+                            break;
+                        case 'academic-rules':
+                            if (typeof navigateToAcademicRules === 'function') {
+                                const dummyBtn = document.createElement('button');
+                                navigateToAcademicRules(dummyBtn);
+                            }
+                            break;
+                        case 'saved':
+                            if (typeof navigateToSaved === 'function') {
+                                const dummyBtn = document.createElement('button');
+                                navigateToSaved(dummyBtn);
+                            }
+                            break;
+                        case 'history':
+                            if (typeof navigateToHistory === 'function') {
+                                navigateToHistory();
+                            }
+                            break;
+                    }
+                    
+                    // Clean up the URL by removing the filter parameter
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }, 500);
+            }
+        });
+    </script>
 }
 
 <header class="menu">

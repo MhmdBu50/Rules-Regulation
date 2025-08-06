@@ -25,12 +25,12 @@
                 <h6 id="footer-quick-links-title">@(isArabic ? "روابط سريعة" : "Quick Links")</h6>
                 <ul>
                     <li><a href="@Url.Action("homePage", "Home")" id="footer-home-link">@(isArabic ? "الرئيسية" : "Home")</a></li>
-                    <li><a href="#" onclick="navigateToStudentGuides()" id="footer-student-guides-link">@(isArabic ? "أدلة ونماذج الطلاب" : "Student guides & templates")</a></li>
-                    <li><a href="#" onclick="navigateToStudentRules()" id="footer-student-rules-link">@(isArabic ? "قواعد ولوائح الطلاب" : "Student rules & regulations")</a></li>
-                    <li><a href="#" onclick="navigateToEmployeeRules()" id="footer-employee-rules-link">@(isArabic ? "قواعد ولوائح الموظفين" : "Employees' rules & regulations")</a></li>
-                    <li><a href="#" onclick="navigateToAcademicRules()" id="footer-academic-rules-link">@(isArabic ? "قواعد أكاديمية" : "Academic rules & regulations")</a></li>
-                    <li><a href="#" onclick="navigateToSaved()" id="footer-saved-rules-link">@(isArabic ? "اللوائح المحفوظة" : "Saved rules & regulations")</a></li>
-                    <li><a href="#" onclick="navigateToHistory()" id="footer-history-link">@(isArabic ? "التاريخ" : "History")</a></li>
+                    <li><a href="@Url.Action("homePage", "Home")?filter=student-guides" id="footer-student-guides-link">@(isArabic ? "أدلة ونماذج الطلاب" : "Student guides & templates")</a></li>
+                    <li><a href="@Url.Action("homePage", "Home")?filter=student-rules" id="footer-student-rules-link">@(isArabic ? "قواعد ولوائح الطلاب" : "Student rules & regulations")</a></li>
+                    <li><a href="@Url.Action("homePage", "Home")?filter=employee-rules" id="footer-employee-rules-link">@(isArabic ? "قواعد ولوائح الموظفين" : "Employees' rules & regulations")</a></li>
+                    <li><a href="@Url.Action("homePage", "Home")?filter=academic-rules" id="footer-academic-rules-link">@(isArabic ? "قواعد أكاديمية" : "Academic rules & regulations")</a></li>
+                    <li><a href="@Url.Action("homePage", "Home")?filter=saved" id="footer-saved-rules-link">@(isArabic ? "اللوائح المحفوظة" : "Saved rules & regulations")</a></li>
+                    <li><a href="@Url.Action("homePage", "Home")?filter=history" id="footer-history-link">@(isArabic ? "التاريخ" : "History")</a></li>
                 </ul>
             </div>
 

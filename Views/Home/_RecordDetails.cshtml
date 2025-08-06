@@ -9,6 +9,15 @@
     var displayName = isArabic && !string.IsNullOrEmpty(Model.RegulationNameAr) 
         ? Model.RegulationNameAr 
         : Model.RegulationName;
+
+    var Description = isArabic && !string.IsNullOrEmpty(Model.DescriptionAr)
+        ? Model.DescriptionAr
+        : Model.Description;
+
+    var ApprovingEntity = isArabic && !string.IsNullOrEmpty(Model.ApprovingEntityAr)
+        ? Model.ApprovingEntityAr
+        : Model.ApprovingEntity;
+
 }
 
 @section Styles {
@@ -88,8 +97,8 @@
             </h3>
             <div class="approval-details">
                 <div class="approval-item">
-                    <div class="approval-label">Approving Entity</div>
-                    <div class="approval-value">@Model.ApprovingEntity</div>
+                    <div class="approval-label" id="record-details-approving-entity-label">Approving Entity</div>
+                    <div class="approval-value">@ApprovingEntity</div>
                 </div>
                 <div class="approval-item">
                     <div class="approval-label">Approval Date</div>
@@ -106,7 +115,7 @@
             <div class="description-box">
                 @if (Model.Description != null && !string.IsNullOrWhiteSpace(Model.Description.ToString()))
                 {
-                    <p>@Model.Description</p>
+                    <p>@Description</p>
                 }
                 else
                 {
