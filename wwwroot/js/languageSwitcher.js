@@ -149,6 +149,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-table-form-upload-file-title": "Click Edit to enable file upload",
         "admin-table-form-responsible-contact-label": "Responsible Department contact information:",
         "admin-table-form-contact-name-label": "Name",
+        "admin-table-form-contact-name-en-label": "Name (English)",
+        "admin-table-form-contact-name-ar-label": "Name (Arabic)",
         "admin-table-form-contact-email-label": "E-mail",
         "admin-table-form-contact-telephone-label": "Telephone number",
         "admin-table-form-contact-mobile-label": "Mobile number",
@@ -413,6 +415,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-table-form-upload-file-title": "انقر على تحرير لتمكين تحميل الملف",
         "admin-table-form-responsible-contact-label": ":معلومات الاتصال بالقسم المسؤول",
         "admin-table-form-contact-name-label": "الاسم",
+        "admin-table-form-contact-name-en-label": "الاسم (انجليزي)",
+        "admin-table-form-contact-name-ar-label": "الاسم (عربي)",
         "admin-table-form-contact-email-label": "البريد الإلكتروني",
         "admin-table-form-contact-telephone-label": "رقم الهاتف",
         "admin-table-form-contact-mobile-label": "رقم الجوال",
@@ -559,9 +563,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Handle translatable labels with data-translate-key attribute
         const translatableLabels = document.querySelectorAll('.translatable-label[data-translate-key]');
+        console.log('Found translatable labels:', translatableLabels.length);
         translatableLabels.forEach(label => {
             const translateKey = label.getAttribute('data-translate-key');
             if (translations[lang] && translations[lang][translateKey]) {
+                console.log('Translating:', translateKey, 'to:', translations[lang][translateKey]);
                 label.textContent = translations[lang][translateKey];
             }
         });

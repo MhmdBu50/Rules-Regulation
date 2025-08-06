@@ -62,6 +62,7 @@ main, .container-fluid, .main-content {
 /* Specific fix for white line above footer - target common culprits */
 .site-footer {
     border-top: none !important;
+
 }
 
 /* Remove borders from form containers and main content areas */

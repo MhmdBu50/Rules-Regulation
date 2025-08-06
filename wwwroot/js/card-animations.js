@@ -1,6 +1,4 @@
 src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"
-// Sample PDF URL - replace with your actual PDF file path
-const PDF_URL = 'https://www.iau.edu.sa/sites/default/files/resources/user_guide_for_student_information_system_0.pdf';
 
 function handleAction(action) {
     const actions = {
@@ -71,14 +69,14 @@ function testPdfApiDirect() {
         })
         .then(data => {
             console.log('API test success:', data);
-            showToast('PDF API is working!');
+            // showToast('PDF API is working!');
             
             // Now test with a specific record ID
             testSpecificRecord();
         })
         .catch(error => {
             console.error('PDF API test failed:', error);
-            showToast('PDF API test failed');
+            // showToast('PDF API test failed');
         });
 }
 
@@ -93,7 +91,7 @@ function testSpecificRecord() {
             console.log(`Record ${recordId} response status:`, response.status);
             if (response.ok) {
                 console.log('Thumbnail API is working for record', recordId);
-                showToast(`Thumbnail API working for record ${recordId}`);
+                // showToast(`Thumbnail API working for record ${recordId}`);
             } else {
                 console.log('Thumbnail API returned error for record', recordId);
                 response.text().then(text => console.log('Error response:', text));
