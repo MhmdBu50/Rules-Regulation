@@ -87,15 +87,10 @@ function showAdminRecordDetails(recordId) {
 }
 
 function toggleEditMode(recordId) {
-
-
   const form = document.getElementById("recordForm_" + recordId);
   if (!form) {
-
     return;
   }
-
-
 
   const inputs = form.querySelectorAll(
     'input:not([type="hidden"]):not(.contact-input), textarea:not(.contact-input), select:not(.contact-input)'
@@ -104,17 +99,10 @@ function toggleEditMode(recordId) {
   const saveBtn = form.querySelector(".save-btn");
   const cancelBtn = form.querySelector(".cancel-btn");
 
-
-
-
-
-
   const isCurrentlyEditing = editBtn.style.display === "none";
-
 
   // Toggle readonly and disabled state
   inputs.forEach((input, index) => {
-
     if (isCurrentlyEditing) {
       // Switch to view mode
       input.readOnly = true;
@@ -192,6 +180,9 @@ function toggleEditMode(recordId) {
 
 }
 
+// Make toggleEditMode globally accessible
+window.toggleEditMode = toggleEditMode;
+
 // Function to clear pending file selections
 function clearPendingFileSelections(recordId) {
   const wordFileInput = document.getElementById(`wordFile_${recordId}`);
@@ -261,7 +252,7 @@ function toggleAllCheckboxes() {
 
     "Master checkbox toggled. All checkboxes set to:",
     masterCheckbox.checked
-  );
+  ;
 }
 
 function handleRecordCheckbox() {
@@ -865,9 +856,6 @@ function applyAdminFilters() {
     ? mobileSearchInput.value.toLowerCase().trim()
     : "";
 
-
-
-
   // Sync both dropdowns
   if (desktopDocumentFilter && mobileDocumentFilter) {
     desktopDocumentFilter.value = selectedDocumentType;
@@ -907,17 +895,6 @@ function applyAdminFilters() {
       selectedDocumentType === "all" ||
       recordDocumentType === selectedDocumentType;
 
-
-      "Record:",
-      recordId,
-      "DocumentType:",
-      recordDocumentType,
-      "MatchesSearch:",
-      matchesSearch,
-      "MatchesFilter:",
-      matchesFilter
-    );
-
     // Show item if both search and filter criteria match
     if (matchesSearch && matchesFilter) {
       item.style.display = "block";
@@ -942,8 +919,6 @@ function applyAdminFilters() {
 
 // Reset admin filters
 function resetAdminFilters() {
-
-
   // Reset dropdowns
   const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
   const mobileDocumentFilter = document.getElementById("mobileDocumentFilter");
@@ -960,18 +935,12 @@ function resetAdminFilters() {
 
 // Admin Page Search and Filter Functionality
 document.addEventListener("DOMContentLoaded", function () {
-
-
   const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
   const mobileDocumentFilter = document.getElementById("mobileDocumentFilter");
-
-
-
 
   // Add event listeners for desktop document filter
   if (desktopDocumentFilter) {
     desktopDocumentFilter.addEventListener("change", function () {
-
       applyAdminFilters();
     });
   }
@@ -979,7 +948,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Add event listeners for mobile document filter
   if (mobileDocumentFilter) {
     mobileDocumentFilter.addEventListener("change", function () {
-
       applyAdminFilters();
     });
   }
@@ -987,8 +955,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Set default values
   if (desktopDocumentFilter) desktopDocumentFilter.value = "all";
   if (mobileDocumentFilter) mobileDocumentFilter.value = "all";
-
-
 });
 
 /**
