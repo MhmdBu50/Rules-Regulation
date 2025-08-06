@@ -64,7 +64,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                     callbacks: {
                                         label: function (tooltipItem) {
                                             const index = tooltipItem.dataIndex;
-                                            return `${donutLabels[index]}: ${donutValues[index]} (${donutPercentages[index]}%)`;
+                                            const currentLang = document.body.classList.contains('rtl') ? 'ar' : 'en';
+                                            const translatedLabel = window.translateDocumentType ? 
+                                                window.translateDocumentType(donutLabels[index], currentLang) : donutLabels[index];
+                                            return `${translatedLabel}: ${donutValues[index]} (${donutPercentages[index]}%)`;
                                         }
                                     }
                                 }
@@ -109,7 +112,13 @@ document.addEventListener('DOMContentLoaded', function () {
                             
                             // Format: "Category name" + percentage + (count)
                             const value = item.value || item.count || 0;
-                            legendLabel.textContent = `${item.label} ${item.percentage}% (${value})`;
+                            
+                            // Get current language and translate if needed
+                            const currentLang = document.body.classList.contains('rtl') ? 'ar' : 'en';
+                            const translatedLabel = window.translateDocumentType ? 
+                                window.translateDocumentType(item.label, currentLang) : item.label;
+                            
+                            legendLabel.textContent = `${translatedLabel} ${item.percentage}% (${value})`;
 
                             legendItem.appendChild(legendColor);
                             legendItem.appendChild(legendLabel);
@@ -191,7 +200,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                                         const legendText = document.createElement('span');
                                         legendText.style.fontWeight = '500';
-                                        legendText.textContent = `${item.label} ${item.percentage}% (${item.count})`;
+                                        
+                                        // Get current language and translate if needed
+                                        const currentLang = document.body.classList.contains('rtl') ? 'ar' : 'en';
+                                        const translatedLabel = window.translateDocumentType ? 
+                                            window.translateDocumentType(item.label, currentLang) : item.label;
+                                        
+                                        legendText.textContent = `${translatedLabel} ${item.percentage}% (${item.count})`;
 
                                         legendItem.appendChild(legendColor);
                                         legendItem.appendChild(legendText);
@@ -227,5 +242,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     );
+    
+    // Listen for language changes to update chart legends
+    document.addEventListener('languageChanged', function(event) {
+        const newLang = event.detail.language;
+        if (typeof updateChartLegends === 'function') {
+            updateChartLegends(newLang);
+        }
+    });
     }
 )

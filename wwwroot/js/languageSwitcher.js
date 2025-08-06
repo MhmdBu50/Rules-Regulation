@@ -653,6 +653,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 btn.textContent = 'Clear';
             }
         });
+
+        // Update chart legends with translations if available
+        if (typeof updateChartLegends === 'function') {
+            updateChartLegends(lang);
+        }
     }
 
     function setLanguage(lang) {
@@ -671,6 +676,12 @@ document.addEventListener("DOMContentLoaded", () => {
         applyTranslations(lang);
         translateChartMonths(lang); // Translate chart months if applicable
         localStorage.setItem("websiteLanguage", lang);
+        
+        // Dispatch custom event for other scripts to listen to language changes
+        const languageChangeEvent = new CustomEvent('languageChanged', {
+            detail: { language: lang }
+        });
+        document.dispatchEvent(languageChangeEvent);
     }
 
     // Initialize language from server culture or localStorage fallback
@@ -767,4 +778,59 @@ document.addEventListener("DOMContentLoaded", () => {
         window.barChartInstance.update();
     }
 }
+
+// Document type translations mapping
+const documentTypeTranslations = {
+    "Student rules & regulations": {
+        en: "Student rules & regulations",
+        ar: "قواعد وأنظمة الطلاب"
+    },
+    "Academic rules & regulations": {
+        en: "Academic rules & regulations", 
+        ar: "القواعد واللوائح الأكاديمية"
+    },
+    "Student guides & templates": {
+        en: "Student guides & templates",
+        ar: "أدلة ونماذج الطلاب"
+    },
+    "Employees’ rules & regulations": {
+        en: "Employees’ rules & regulations",
+        ar: "قواعد وأنظمة الموظفين"
+    }
+};
+
+// Function to translate document type text
+function translateDocumentType(text, targetLang) {
+    // Find the translation entry for this text
+    for (const [key, translations] of Object.entries(documentTypeTranslations)) {
+        if (translations.en === text || translations.ar === text) {
+            return translations[targetLang] || text;
+        }
+    }
+    return text; // Return original if no translation found
+}
+
+// Function to update chart legends with translations
+function updateChartLegends(targetLang) {
+    // Update donut chart legends
+    const legendItems = document.querySelectorAll('.legend-text, .legend-item span');
+    legendItems.forEach(item => {
+        if (item.textContent) {
+            // Extract the label part (before percentage)
+            const fullText = item.textContent;
+            const match = fullText.match(/^(.+?)\s+\d+%/);
+            if (match) {
+                const labelText = match[1];
+                const translatedLabel = translateDocumentType(labelText, targetLang);
+                // Replace only the label part, keep percentage and count
+                item.textContent = fullText.replace(labelText, translatedLabel);
+            }
+        }
+    });
+}
+
+// Export functions for use in other scripts
+window.translateDocumentType = translateDocumentType;
+window.updateChartLegends = updateChartLegends;
+
 });
