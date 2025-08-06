@@ -1419,13 +1419,56 @@ public async Task<IActionResult> ViewPdf(int id)
     {
         try
         {
-            // Attempt to delete record (cascades to remove attachments)
+            // STEP 1: Get all attachments for this record before deletion (for file cleanup)
+            List<string> filesToDelete = new List<string>();
+            try
+            {
+                var attachments = _oracleDbService.GetAttachmentsByRecordId(recordId);
+                foreach (var attachment in attachments)
+                {
+                    if (attachment?.FilePath != null)
+                    {
+                        string filePath = attachment.FilePath.ToString() ?? "";
+                        if (!string.IsNullOrEmpty(filePath))
+                        {
+                            string fullPath = Path.Combine(_webHostEnvironment.WebRootPath, filePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                            filesToDelete.Add(fullPath);
+                        }
+                    }
+                }
+                _logger.LogInformation($"Found {filesToDelete.Count} files to delete for record {recordId}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, $"Could not retrieve attachments for record {recordId} cleanup. Files may need manual cleanup.");
+            }
+
+            // STEP 2: Delete record from database (cascades to remove attachments)
             bool success = _oracleDbService.DeleteRecord(recordId);
 
             if (success)
             {
+                // STEP 3: Database deletion successful - now clean up physical files
+                int filesDeleted = 0;
+                foreach (string fileToDelete in filesToDelete)
+                {
+                    try
+                    {
+                        if (System.IO.File.Exists(fileToDelete))
+                        {
+                            System.IO.File.Delete(fileToDelete);
+                            filesDeleted++;
+                            _logger.LogInformation($"Successfully deleted file: {fileToDelete}");
+                        }
+                    }
+                    catch (Exception deleteEx)
+                    {
+                        _logger.LogWarning(deleteEx, $"Could not delete file: {fileToDelete}. File may need manual cleanup.");
+                    }
+                }
+
                 // Deletion successful: set success message with record ID
-                TempData["SuccessMessage"] = $"Record #{recordId} deleted successfully!";
+                TempData["SuccessMessage"] = $"Record #{recordId} deleted successfully! {filesDeleted} associated files were also removed.";
             }
             else
             {
@@ -1481,17 +1524,61 @@ public async Task<IActionResult> ViewPdf(int id)
             // Track deletion results
             int successCount = 0;
             int totalCount = recordIds.Count;
+            int totalFilesDeleted = 0;
             List<int> successfulDeletes = new List<int>();
             List<int> failedDeletes = new List<int>();
 
             // Attempt to delete each record individually
             foreach (int recordId in recordIds)
             {
+                // STEP 1: Get all attachments for this record before deletion (for file cleanup)
+                List<string> filesToDelete = new List<string>();
+                try
+                {
+                    var attachments = _oracleDbService.GetAttachmentsByRecordId(recordId);
+                    foreach (var attachment in attachments)
+                    {
+                        if (attachment?.FilePath != null)
+                        {
+                            string filePath = attachment.FilePath.ToString() ?? "";
+                            if (!string.IsNullOrEmpty(filePath))
+                            {
+                                string fullPath = Path.Combine(_webHostEnvironment.WebRootPath, filePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                                filesToDelete.Add(fullPath);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, $"Could not retrieve attachments for record {recordId} cleanup. Files may need manual cleanup.");
+                }
+
+                // STEP 2: Delete record from database
                 bool success = _oracleDbService.DeleteRecord(recordId);
+                
                 if (success)
                 {
                     successCount++;
                     successfulDeletes.Add(recordId);
+
+                    // STEP 3: Database deletion successful - now clean up physical files
+                    foreach (string fileToDelete in filesToDelete)
+                    {
+                        try
+                        {
+                            if (System.IO.File.Exists(fileToDelete))
+                            {
+                                System.IO.File.Delete(fileToDelete);
+                                totalFilesDeleted++;
+                                _logger.LogInformation($"Successfully deleted file: {fileToDelete}");
+                            }
+                        }
+                        catch (Exception deleteEx)
+                        {
+                            _logger.LogWarning(deleteEx, $"Could not delete file: {fileToDelete}. File may need manual cleanup.");
+                        }
+                    }
                 }
                 else
                 {
@@ -1505,17 +1592,17 @@ public async Task<IActionResult> ViewPdf(int id)
                 // All deletions successful
                 if (totalCount == 1)
                 {
-                    TempData["SuccessMessage"] = $"Record #{successfulDeletes[0]} deleted successfully!";
+                    TempData["SuccessMessage"] = $"Record #{successfulDeletes[0]} deleted successfully! {totalFilesDeleted} associated files were also removed.";
                 }
                 else
                 {
-                    TempData["SuccessMessage"] = $"Successfully deleted {successCount} records: #{string.Join(", #", successfulDeletes)}";
+                    TempData["SuccessMessage"] = $"Successfully deleted {successCount} records: #{string.Join(", #", successfulDeletes)}. {totalFilesDeleted} associated files were also removed.";
                 }
             }
             else if (successCount > 0)
             {
                 // Partial success: some deletions failed
-                TempData["SuccessMessage"] = $"Successfully deleted {successCount} records: #{string.Join(", #", successfulDeletes)}";
+                TempData["SuccessMessage"] = $"Successfully deleted {successCount} records: #{string.Join(", #", successfulDeletes)}. {totalFilesDeleted} associated files were also removed.";
                 TempData["ErrorMessage"] = $"Failed to delete {totalCount - successCount} records: #{string.Join(", #", failedDeletes)}";
             }
             else
@@ -1600,29 +1687,70 @@ public async Task<IActionResult> ViewPdf(int id)
                 return Json(new { success = false, message = $"Only {string.Join(", ", allowedExtensions)} files are allowed for {fileType} type." });
             }
 
-            // Create uploads directory if it doesn't exist
+            // STEP 1: Get the old file path before updating (for cleanup)
+            string? oldFilePath = null;
+            try
+            {
+                var attachments = _oracleDbService.GetAttachmentsByRecordId(recordId);
+                var existingAttachment = attachments?.FirstOrDefault(a => 
+                    (fileType.ToLower() == "word" && (a.FileType?.ToString()?.ToLower() == "word" || a.FileType?.ToString()?.ToLower() == "docx")) ||
+                    (fileType.ToLower() == "pdf" && a.FileType?.ToString()?.ToLower() == "pdf"));
+                
+                if (existingAttachment?.FilePath != null)
+                {
+                    // Convert relative path to absolute path
+                    string existingFilePath = existingAttachment.FilePath.ToString() ?? "";
+                    if (!string.IsNullOrEmpty(existingFilePath))
+                    {
+                        oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, existingFilePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                        _logger.LogInformation($"Found existing file to cleanup: {oldFilePath}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Could not retrieve old file path for cleanup. Continuing with update...");
+            }
+
+            // STEP 2: Create uploads directory if it doesn't exist
             var uploadsPath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
             if (!Directory.Exists(uploadsPath))
             {
                 Directory.CreateDirectory(uploadsPath);
             }
 
-            // Generate unique filename to prevent conflicts
-            var fileName = $"{recordId}_{fileType}_{Guid.NewGuid()}{fileExtension}";
+            // STEP 3: Generate unique filename to prevent conflicts
+            var fileName = file.FileName;
             var filePath = Path.Combine(uploadsPath, fileName);
+            
 
-            // Save file to server asynchronously
+            // STEP 4: Save new file to server asynchronously
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
 
-            // Update database with new file information (stores original filename for user display)
+            // STEP 5: Update database with new file information
             var relativePath = $"uploads/{fileName}";
             bool success = _oracleDbService.UpdateAttachment(recordId, fileType, relativePath, file.FileName);
 
             if (success)
             {
+                // STEP 6: Database update successful - now clean up old file
+                if (!string.IsNullOrEmpty(oldFilePath) && System.IO.File.Exists(oldFilePath))
+                {
+                    try
+                    {
+                        System.IO.File.Delete(oldFilePath);
+                        _logger.LogInformation($"Successfully deleted old file: {oldFilePath}");
+                    }
+                    catch (Exception deleteEx)
+                    {
+                        _logger.LogWarning(deleteEx, $"Could not delete old file: {oldFilePath}. File may need manual cleanup.");
+                        // Don't fail the operation if old file can't be deleted
+                    }
+                }
+
                 // Success: return positive JSON response with original filename
                 return Json(new { 
                     success = true, 
@@ -1632,7 +1760,7 @@ public async Task<IActionResult> ViewPdf(int id)
             }
             else
             {
-                // Database update failed: clean up uploaded file and return error
+                // Database update failed: clean up new uploaded file and return error
                 if (System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);
@@ -1967,5 +2095,101 @@ public async Task<IActionResult> ViewPdf(int id)
         }
 
         worksheet.Cells.AutoFitColumns();
+    }
+
+    /**
+     * CleanupOrphanedFiles - Administrative utility to clean up files that exist in uploads folder 
+     * but are no longer referenced in the database
+     * 
+     * This method should be called periodically for maintenance or can be triggered manually.
+     * It's useful for cleaning up files that were uploaded but their database records were deleted
+     * without proper file cleanup (e.g., manual database operations, system failures, etc.)
+     * 
+     * @return JSON response with cleanup results
+     */
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public JsonResult CleanupOrphanedFiles()
+    {
+        try
+        {
+            var uploadsPath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+            
+            if (!Directory.Exists(uploadsPath))
+            {
+                return Json(new { success = true, message = "Uploads directory does not exist. No cleanup needed.", filesDeleted = 0 });
+            }
+
+            // Get all files in uploads directory
+            var allFiles = Directory.GetFiles(uploadsPath);
+            
+            // Get all file paths referenced in database
+            var referencedFiles = new HashSet<string>();
+            try
+            {
+                using var connection = new OracleConnection(_connectionString);
+                connection.Open();
+                
+                var command = new OracleCommand("SELECT FILE_PATH FROM ATTACHMENTS WHERE FILE_PATH IS NOT NULL", connection);
+                using var reader = command.ExecuteReader();
+                
+                while (reader.Read())
+                {
+                    var filePath = reader["FILE_PATH"]?.ToString();
+                    if (!string.IsNullOrEmpty(filePath))
+                    {
+                        var fullPath = Path.Combine(_webHostEnvironment.WebRootPath, filePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                        referencedFiles.Add(fullPath);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting referenced files from database");
+                return Json(new { success = false, message = "Error accessing database for file references." });
+            }
+
+            // Find orphaned files (exist in filesystem but not referenced in database)
+            var orphanedFiles = allFiles.Where(file => !referencedFiles.Contains(file)).ToList();
+            
+            int filesDeleted = 0;
+            var deletionErrors = new List<string>();
+
+            // Delete orphaned files
+            foreach (var orphanedFile in orphanedFiles)
+            {
+                try
+                {
+                    System.IO.File.Delete(orphanedFile);
+                    filesDeleted++;
+                    _logger.LogInformation($"Deleted orphaned file: {orphanedFile}");
+                }
+                catch (Exception ex)
+                {
+                    var error = $"Could not delete {Path.GetFileName(orphanedFile)}: {ex.Message}";
+                    deletionErrors.Add(error);
+                    _logger.LogWarning(ex, $"Could not delete orphaned file: {orphanedFile}");
+                }
+            }
+
+            var message = $"Cleanup completed. {filesDeleted} orphaned files deleted out of {orphanedFiles.Count} found.";
+            if (deletionErrors.Any())
+            {
+                message += $" {deletionErrors.Count} files could not be deleted.";
+            }
+
+            return Json(new { 
+                success = true, 
+                message = message, 
+                filesDeleted = filesDeleted,
+                orphanedFilesFound = orphanedFiles.Count,
+                errors = deletionErrors
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during orphaned files cleanup");
+            return Json(new { success = false, message = "An error occurred during cleanup." });
+        }
     }
 } // End of AdminController class
