@@ -563,11 +563,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Handle translatable labels with data-translate-key attribute
         const translatableLabels = document.querySelectorAll('.translatable-label[data-translate-key]');
-        console.log('Found translatable labels:', translatableLabels.length);
         translatableLabels.forEach(label => {
             const translateKey = label.getAttribute('data-translate-key');
             if (translations[lang] && translations[lang][translateKey]) {
-                console.log('Translating:', translateKey, 'to:', translations[lang][translateKey]);
                 label.textContent = translations[lang][translateKey];
             }
         });

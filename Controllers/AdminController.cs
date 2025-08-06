@@ -164,9 +164,8 @@ public class AdminController : Controller
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogError(ex, "Error getting donut chart data");
                 // Provide default data if database fails
                 donutData = new List<object>
                 {
@@ -187,8 +186,6 @@ public class AdminController : Controller
                 new { month = "August", visits = 200 }
             };
 
-            _logger.LogInformation($"Dashboard stats: totalPolicies={totalPolicies}, mostViewed={mostViewedName}({mostViewedViews}), donutData count={donutData.Count}");
-
             return Json(new {
                 totalPolicies,
                 mostViewed = mostViewedPolicy,
@@ -196,9 +193,8 @@ public class AdminController : Controller
                 barData
             });
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            _logger.LogError(ex, "Error in GetDashboardStats");
             // Return default values to prevent frontend errors
             return Json(new {
                 totalPolicies = 0,
@@ -301,16 +297,6 @@ public class AdminController : Controller
      */
     public IActionResult AdminPage()
     {
-        // Check if TempData messages exist and log them for debugging
-        if (TempData["SuccessMessage"] != null)
-        {
-            _logger.LogInformation($"Success message found: {TempData["SuccessMessage"]}");
-        }
-        if (TempData["ErrorMessage"] != null)
-        {
-            _logger.LogInformation($"Error message found: {TempData["ErrorMessage"]}");
-        }
-
         try
         {
             // Get all records from the database using Oracle service
@@ -344,10 +330,8 @@ public class AdminController : Controller
             
             return View(enhancedRecords);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            // Log any errors that occur during record loading
-            _logger.LogError(ex, "Error loading records for admin page");
             // Return empty list if there's an error to prevent application crash
             return View(new List<dynamic>());
         }
@@ -448,8 +432,7 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
         }
         else
         {
-            // Database operation failed: Log warning and show error message
-            _logger.LogWarning("AddContactInfo returned false for Department={Department}, Name={Name}, NameAr={NameAr}, Email={Email}, Mobile={Mobile}, Telephone={Telephone}", Department, Name, NameAr, Email, Mobile, Telephone);
+            // Database operation failed: Show error message
             TempData["ErrorMessage"] = "Failed to add contact information. Please try again. (Check logs for details)";
             return View();
         }
@@ -460,14 +443,12 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
         var errorDetails = $"Oracle DB error {ex.Number}: {ex.Message}";
         if (ex.InnerException != null)
             errorDetails += $" | Inner: {ex.InnerException.Message}";
-        _logger.LogError(ex, "Oracle DB error while adding contact info: {ErrorDetails}", errorDetails);
         TempData["ErrorMessage"] = errorDetails;
         return View();
     }
     catch (Exception ex)
     {
         // Handle any other unexpected errors
-        _logger.LogError(ex, "Unexpected error while adding contact info: {Message}", ex.Message);
         TempData["ErrorMessage"] = $"Unexpected error: {ex.Message}";
         return View();
     }
@@ -492,24 +473,19 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
     {
         try
         {
-            _logger.LogInformation("Attempting to retrieve contact information");
-
             // First test the database connection to ensure it's working
             using (var conn = new OracleConnection(_connectionString))
             {
                 conn.Open();
-                _logger.LogInformation("Database connection successful");
             }
 
             // Retrieve all contacts from database using Oracle service
             var contacts = _oracleDbService.GetAllContacts();
-            _logger.LogInformation($"Retrieved {contacts.Count} contacts successfully");
             return View(contacts);
         }
         catch (Exception ex)
         {
             // Log database errors and provide fallback mock data for testing
-            _logger.LogError(ex, "Error retrieving contact information: {Message}", ex.Message);
             TempData["ErrorMessage"] = $"Database Error: {ex.Message}. Showing mock data for testing.";
 
             // Return mock data for testing when database is not available
@@ -563,10 +539,9 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
             // Return view with contact data for editing
             return View(contact);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Handle database or other errors during contact retrieval
-            _logger.LogError(ex, "Error retrieving contact information for editing");
             TempData["ErrorMessage"] = "An error occurred while retrieving contact information.";
             return RedirectToAction("ManageContactInfo");
         }
@@ -636,10 +611,9 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
                 return View(contact);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Handle any errors during update process
-            _logger.LogError(ex, "Error updating contact information");
             TempData["ErrorMessage"] = "An error occurred while updating contact information.";
             // Reload contact data and return to form
             var contact = _oracleDbService.GetContactById(id);
@@ -686,10 +660,9 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
                 TempData["ErrorMessage"] = "Failed to delete contact information. Please try again.";
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Handle any errors during deletion process
-            _logger.LogError(ex, "Error deleting contact information");
             TempData["ErrorMessage"] = "An error occurred while deleting contact information.";
         }
 
@@ -769,7 +742,6 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
         catch (Exception ex)
         {
             // Handle any errors during simple record insertion
-            _logger.LogError(ex, "Simple insert failed: {ErrorMessage}", ex.Message);
             TempData["ErrorMessage"] = $"Simple insert failed: {ex.Message}";
             return View("AddNewRecord", model);
         }
@@ -824,8 +796,6 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
     [ActionName("AddNewRecord")]
     public async Task<IActionResult> AddNewRecordAsync(AddNewRecordViewModel model, IFormFile wordAttachment, IFormFile pdfAttachment)
     {
-        System.Console.WriteLine("AddNewRecord hit");
-
         try
         {
             // Step 1: Fast Arabic validation using OracleDbService methods
@@ -891,10 +861,6 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
                 // Store relative path for database
                 pdfPath = "uploads/" + pdfFileName;
             }
-
-            // Debug logging for file upload tracking
-            Console.WriteLine($"Word file saved: {wordPath ?? "null"}");
-            Console.WriteLine($"PDF file saved: {pdfPath ?? "null"}");
 
             // Step 4: Validate and prepare date fields
             // Set default dates if not provided to prevent database errors
@@ -980,25 +946,19 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
             };
             parameters.Add(outputIdParam);
 
-            // Execute SQL insert with debug logging
+            // Execute SQL insert
             int newId = 0;
             try
             {
-                Console.WriteLine($"About to execute SQL with UserId: {userId}, DocumentType: {documentType}");
                 await _db.ExecuteNonQueryAsync(insertSql, parameters.ToArray());
                 newId = ((OracleDecimal)outputIdParam.Value).ToInt32();
-                Console.WriteLine("SQL executed successfully with new RECORD_ID: " + newId);
             }
-            catch (Exception sqlEx)
+            catch (Exception)
             {
-                Console.WriteLine($"SQL Error: {sqlEx.Message}");
                 throw; // Re-throw to be caught by outer catch block
             }
 
             // Step 8: Insert file attachments (no silent failure - all errors are logged)
-            Console.WriteLine($"Attempting to insert attachments for RECORD_ID = {newId}");
-            Console.WriteLine($"WordPath = {wordPath}, HasWordAttachment = {model.WordAttachment != null}");
-            Console.WriteLine($"PdfPath = {pdfPath}, HasPdfAttachment = {model.PdfAttachment != null}");
 
             if (newId > 0)
             {
@@ -1007,8 +967,6 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
                 {
                     try
                     {
-                        Console.WriteLine("Preparing to insert Word attachment...");
-
                         // SQL to insert Word attachment metadata
                         var insertWordSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) " +
                                             "VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME)";
@@ -1019,14 +977,9 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
                             new OracleParameter("fileType", "DOCX"),
                             new OracleParameter("path", wordPath),
                             new OracleParameter("ORIGINAL_NAME", model.WordAttachment.FileName));
-
-                        Console.WriteLine("Word attachment inserted successfully.");
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        // Log detailed error information for Word attachment insertion
-                        Console.WriteLine($"Error inserting Word attachment: {ex.Message}");
-                        Console.WriteLine($"Details — ID: {newId}, Path: {wordPath}, FileName: {model.WordAttachment?.FileName ?? "null"}");
                         throw; // Re-throw to be handled by outer catch
                     }
                 }
@@ -1036,8 +989,6 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
                 {
                     try
                     {
-                        Console.WriteLine("Preparing to insert PDF attachment...");
-
                         // SQL to insert PDF attachment metadata
                         var insertPdfSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) " +
                                         "VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME)";
@@ -1048,25 +999,12 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
                             new OracleParameter("fileType", "PDF"),
                             new OracleParameter("path", pdfPath),
                             new OracleParameter("ORIGINAL_NAME", model.PdfAttachment.FileName));
-
-                        Console.WriteLine("PDF attachment inserted successfully.");
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        // Log detailed error information for PDF attachment insertion
-                        Console.WriteLine($"Error inserting PDF: {ex.Message}");
-                        Console.WriteLine($"Details — ID: {newId}, Path: {pdfPath}, FileName: {model.PdfAttachment?.FileName ?? "null"}");
                         throw; // Re-throw to be handled by outer catch
                     }
                 }
-                else
-                {
-                    Console.WriteLine("No PDF attachment to insert.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("No attachments inserted due to missing RECORD_ID.");
             }
 
             // Step 10: Success - Set success message and redirect
@@ -1076,7 +1014,6 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
         catch (Exception ex)
         {
             // Handle any errors during the entire record creation process
-            _logger.LogError(ex, "Insert failed: {ErrorMessage}", ex.Message);
 
             // More specific error message for debugging including inner exception details
             string errorDetails = ex.Message;
@@ -1125,10 +1062,9 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
             // Return partial view with record details for admin interface
             return PartialView("_AdminRecordDetails", record);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Handle errors during record retrieval
-            _logger.LogError(ex, "Error getting record details for ID: {Id}", id);
             Response.StatusCode = 500;
             return PartialView("_AdminRecordDetails", null);
         }
@@ -1389,10 +1325,9 @@ public async Task<IActionResult> ViewPdf(int id)
                 TempData["ErrorMessage"] = "Failed to update record. Please try again.";
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Handle any errors during update process
-            _logger.LogError(ex, "Error updating record");
             TempData["ErrorMessage"] = "An error occurred while updating the record.";
         }
 
@@ -1442,11 +1377,9 @@ public async Task<IActionResult> ViewPdf(int id)
                         }
                     }
                 }
-                _logger.LogInformation($"Found {filesToDelete.Count} files to delete for record {recordId}");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogWarning(ex, $"Could not retrieve attachments for record {recordId} cleanup. Files may need manual cleanup.");
             }
 
             // STEP 2: Delete record from database (cascades to remove attachments)
@@ -1464,12 +1397,10 @@ public async Task<IActionResult> ViewPdf(int id)
                         {
                             System.IO.File.Delete(fileToDelete);
                             filesDeleted++;
-                            _logger.LogInformation($"Successfully deleted file: {fileToDelete}");
                         }
                     }
-                    catch (Exception deleteEx)
+                    catch (Exception)
                     {
-                        _logger.LogWarning(deleteEx, $"Could not delete file: {fileToDelete}. File may need manual cleanup.");
                     }
                 }
 
@@ -1482,10 +1413,9 @@ public async Task<IActionResult> ViewPdf(int id)
                 TempData["ErrorMessage"] = "Failed to delete record. Please try again.";
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Handle any errors during deletion process
-            _logger.LogError(ex, "Error deleting record");
             TempData["ErrorMessage"] = "An error occurred while deleting the record.";
         }
 
@@ -1555,9 +1485,8 @@ public async Task<IActionResult> ViewPdf(int id)
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    _logger.LogWarning(ex, $"Could not retrieve attachments for record {recordId} cleanup. Files may need manual cleanup.");
                 }
 
                 // STEP 2: Delete record from database
@@ -1577,12 +1506,10 @@ public async Task<IActionResult> ViewPdf(int id)
                             {
                                 System.IO.File.Delete(fileToDelete);
                                 totalFilesDeleted++;
-                                _logger.LogInformation($"Successfully deleted file: {fileToDelete}");
                             }
                         }
-                        catch (Exception deleteEx)
+                        catch (Exception)
                         {
-                            _logger.LogWarning(deleteEx, $"Could not delete file: {fileToDelete}. File may need manual cleanup.");
                         }
                     }
                 }
@@ -1617,10 +1544,9 @@ public async Task<IActionResult> ViewPdf(int id)
                 TempData["ErrorMessage"] = $"Failed to delete records: #{string.Join(", #", failedDeletes)}. Please try again.";
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Handle any errors during bulk deletion process
-            _logger.LogError(ex, "Error deleting multiple records");
             TempData["ErrorMessage"] = "An error occurred while deleting the records.";
         }
 
@@ -1673,9 +1599,6 @@ public async Task<IActionResult> ViewPdf(int id)
     {
         try
         {
-            // Log the update attempt for debugging
-            _logger.LogInformation($"UpdateAttachment called for recordId: {recordId}, fileType: {fileType}, fileName: {file?.FileName}");
-            
             // Validate that a file was provided
             if (file == null || file.Length == 0)
             {
@@ -1709,13 +1632,11 @@ public async Task<IActionResult> ViewPdf(int id)
                     if (!string.IsNullOrEmpty(existingFilePath))
                     {
                         oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, existingFilePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
-                        _logger.LogInformation($"Found existing file to cleanup: {oldFilePath}");
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogWarning(ex, "Could not retrieve old file path for cleanup. Continuing with update...");
             }
 
             // STEP 2: Create uploads directory if it doesn't exist
@@ -1747,7 +1668,6 @@ public async Task<IActionResult> ViewPdf(int id)
                 {
                     var thumbnailCacheKey = $"thumbnail_{recordId}";
                     _cache.Remove(thumbnailCacheKey);
-                    _logger.LogInformation($"Cleared thumbnail cache for recordId: {recordId} after PDF update");
                 }
 
                 // STEP 7: Database update successful - now clean up old file
@@ -1756,11 +1676,9 @@ public async Task<IActionResult> ViewPdf(int id)
                     try
                     {
                         System.IO.File.Delete(oldFilePath);
-                        _logger.LogInformation($"Successfully deleted old file: {oldFilePath}");
                     }
-                    catch (Exception deleteEx)
+                    catch (Exception)
                     {
-                        _logger.LogWarning(deleteEx, $"Could not delete old file: {oldFilePath}. File may need manual cleanup.");
                         // Don't fail the operation if old file can't be deleted
                     }
                 }
@@ -1782,10 +1700,9 @@ public async Task<IActionResult> ViewPdf(int id)
                 return Json(new { success = false, message = "Failed to update file in database." });
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Handle any errors during file update process
-            _logger.LogError(ex, "Error updating attachment for record {RecordId}", recordId);
             return Json(new { success = false, message = "An error occurred while updating the file." });
         }
     }
@@ -1850,7 +1767,6 @@ public async Task<IActionResult> ViewPdf(int id)
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error exporting data to Excel");
             TempData["ErrorMessage"] = $"Export failed: {ex.Message}";
             return RedirectToAction("AdminPage");
         }
@@ -2157,9 +2073,8 @@ public async Task<IActionResult> ViewPdf(int id)
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogError(ex, "Error getting referenced files from database");
                 return Json(new { success = false, message = "Error accessing database for file references." });
             }
 
@@ -2176,13 +2091,11 @@ public async Task<IActionResult> ViewPdf(int id)
                 {
                     System.IO.File.Delete(orphanedFile);
                     filesDeleted++;
-                    _logger.LogInformation($"Deleted orphaned file: {orphanedFile}");
                 }
                 catch (Exception ex)
                 {
                     var error = $"Could not delete {Path.GetFileName(orphanedFile)}: {ex.Message}";
                     deletionErrors.Add(error);
-                    _logger.LogWarning(ex, $"Could not delete orphaned file: {orphanedFile}");
                 }
             }
 
@@ -2200,9 +2113,8 @@ public async Task<IActionResult> ViewPdf(int id)
                 errors = deletionErrors
             });
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            _logger.LogError(ex, "Error during orphaned files cleanup");
             return Json(new { success = false, message = "An error occurred during cleanup." });
         }
     }

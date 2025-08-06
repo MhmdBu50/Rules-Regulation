@@ -10,33 +10,27 @@
     // Initialize charts when page loads
 
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('StatisticsInAdmin.js loaded');
     
     fetch('/Admin/GetDashboardStats')
         .then(res => {
-            console.log('Dashboard stats response status:', res.status);
             return res.json();
         })
         .then(stats => {
-            console.log('Dashboard stats received:', stats);
             
             // Update stat cards
             const totalPoliciesElem = document.querySelector('.stats-card-blue .number');
             if (totalPoliciesElem && stats.totalPolicies !== undefined) {
                 totalPoliciesElem.textContent = stats.totalPolicies;
-                console.log('Updated total policies:', stats.totalPolicies);
             }
 
             const mostViewedSubtitle = document.querySelector('.stats-card-green .subtitle');
             if (mostViewedSubtitle && stats.mostViewed && stats.mostViewed.name) {
                 mostViewedSubtitle.textContent = stats.mostViewed.name;
-                console.log('Updated most viewed name:', stats.mostViewed.name);
             }
             
             const mostViewedText = document.querySelector('.stats-card-green .viewed-text');
             if (mostViewedText && stats.mostViewed && stats.mostViewed.views !== undefined) {
                 mostViewedText.textContent = `Viewed: ${stats.mostViewed.views} times`;
-                console.log('Updated most viewed views:', stats.mostViewed.views);
             }
 
             // Donut Chart (Pie Chart)
@@ -45,8 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const donutValues = stats.donutData.map(d => d.value || d.count); // Handle both value and count
                 const donutPercentages = stats.donutData.map(d => d.percentage);
                 const donutColors = ['#8B4513', '#2E8B57', '#4682B4', '#DAA520'];
-                
-                console.log('Donut chart data:', { donutLabels, donutValues, donutPercentages });
                 
                 const ctx = document.getElementById('chartCanvas');
                 if (ctx) {
@@ -81,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     });
                     
-                    console.log('Donut chart created successfully');
+
                     
                     // Update legend with bottom layout and count in parentheses
                     const legendContainer = document.querySelector('.legend-container');
@@ -123,21 +115,16 @@ document.addEventListener('DOMContentLoaded', function () {
                             legendItem.appendChild(legendLabel);
                             legendContainer.appendChild(legendItem);
                         });
-                        console.log('Legend updated successfully with bottom layout');
                     }
                 } else {
-                    console.error('Chart canvas element not found');
                 }
             } else {
-                console.error('No donut data received or empty array');
                 // Try the dedicated donut chart endpoint as fallback
                 fetch('/Admin/GetDocumentTypeStats')
                     .then(res => {
-                        console.log('Document type stats response status:', res.status);
                         return res.json();
                     })
                     .then(donutData => {
-                        console.log('Document type stats received:', donutData);
                         
                         if (donutData && donutData.length > 0) {
                             const donutLabels = donutData.map(d => d.label);
@@ -177,7 +164,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                         cutout: '60%'
                                     }
                                 });
-                                console.log('Fallback donut chart created successfully');
                                 
                                 // Update legend
                                 const legendContainer = document.querySelector('.legend-container');
@@ -211,13 +197,11 @@ document.addEventListener('DOMContentLoaded', function () {
                                         legendItem.appendChild(legendText);
                                         legendContainer.appendChild(legendItem);
                                     });
-                                    console.log('Fallback legend updated successfully');
                                 }
                             }
                         }
                     })
                     .catch(fallbackError => {
-                        console.error('Fallback donut chart also failed:', fallbackError);
                     });
             }
 

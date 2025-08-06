@@ -31,7 +31,6 @@ namespace RulesRegulation.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error loading report page: {ErrorMessage}", ex.Message);
                 TempData["ErrorMessage"] = $"Error loading report data: {ex.Message}. Please try again.";
                 return RedirectToAction("AdminPage", "Admin");
             }
@@ -71,9 +70,8 @@ namespace RulesRegulation.Controllers
                 reportData.TopRecordsChartData = await GetTopRecordsChartDataAsync(connection);
                 reportData.TopDownloadsChartData = await GetTopDownloadsChartDataAsync(connection);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogError(ex, "Error in GetReportDataAsync: {ErrorMessage}", ex.Message);
                 throw;
             }
 

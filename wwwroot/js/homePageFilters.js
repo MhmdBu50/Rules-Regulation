@@ -93,7 +93,6 @@ function navigateToSaved(btn) {
 
 function applyFilters() {
   // Grab all selected filter values
-  console.log("✅ applyFilters triggered!");
 
   // Normalize selected values for safe comparison
   const department = document
@@ -120,16 +119,6 @@ function applyFilters() {
     document.getElementById("searchInput")?.value?.toLowerCase() || "";
 
   // 🚨 DEBUGGING: Log all filter values
-  console.log("🔍 FILTER VALUES:", {
-    department,
-    sections,
-    types,
-    alpha,
-    dateSort,
-    fromDate,
-    toDate,
-    search,
-  });
 
   // Reset all cards to visible before filtering
   document.querySelectorAll(".medium-card").forEach((card) => {
@@ -138,7 +127,6 @@ function applyFilters() {
 
   // Loop through all document cards
   const cards = document.querySelectorAll(".document-card");
-  console.log("🔍 TOTAL CARDS FOUND:", cards.length);
 
   cards.forEach((card) => {
     // Normalize all dataset values for matching
@@ -166,18 +154,6 @@ function applyFilters() {
     }
 
     // 🔍 DEBUG LOGGING for matching
-    console.log({
-      cardTitle,
-      cardDept,
-      cardSections,
-      cardType,
-      matchesDept,
-      matchesSection,
-      matchesType,
-      matchesSearch,
-      matchesDate,
-      matchesSaved,
-    });
 
     const show =
       matchesDept &&
@@ -322,7 +298,6 @@ function initializeHomePageFunctionality() {
     .getElementById("searchInput")
     ?.addEventListener("input", applyFilters);
 
-  console.log("🎯 Filter event listeners added!");
   applyFilters(); // Run filters initially (if needed)
 }
 

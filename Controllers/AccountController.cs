@@ -86,11 +86,8 @@ public async Task<IActionResult> LoginPage(string Name, string password)
 
         return RedirectToAction("HomePage", "Home");
     }
-    catch (Oracle.ManagedDataAccess.Client.OracleException ex)
+    catch (Oracle.ManagedDataAccess.Client.OracleException)
     {
-        // Log Oracle-specific error (helpful for debugging)
-        Console.WriteLine(" ORACLE ERROR: " + ex.Message);
-
         ModelState.AddModelError("", "A database error occurred. Please try again later.");
         return View("~/Views/Account/LoginPage.cshtml");
     }
@@ -108,17 +105,11 @@ public async Task<IActionResult> Logout()
         // 🔒 Sign out the user from cookie authentication
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-        // ✅ Log the logout action
-        _logger.LogInformation("User logged out successfully at {Time}", DateTime.UtcNow);
-
         // ✅ Redirect to login page
         return RedirectToAction("LoginPage", "Account");
     }
-    catch (Exception ex)
+    catch (Exception)
     {
-        // ⚠️ Log any logout errors
-        _logger.LogError(ex, "Error occurred during logout");
-        
         // Even if there's an error, clear session and redirect
         HttpContext.Session.Clear();
         return RedirectToAction("LoginPage", "Account");

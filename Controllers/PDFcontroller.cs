@@ -32,7 +32,6 @@ namespace RulesRegulation.Controllers
         [HttpGet("test")]
         public IActionResult Test()
         {
-            _logger.LogInformation("PDF Controller test endpoint called");
             return Ok(new
             {
                 message = "PDF Controller is working",
@@ -46,11 +45,8 @@ namespace RulesRegulation.Controllers
         {
             try
             {
-                _logger.LogInformation($"=== PDF Thumbnail Request Started for recordId: {recordId} ===");
-
                 if (recordId <= 0)
                 {
-                    _logger.LogWarning($"Invalid recordId: {recordId}");
                     return File(CreateErrorImageBytes("Invalid record ID"), "image/png", $"error_{recordId}.png");
                 }
 
@@ -58,7 +54,6 @@ namespace RulesRegulation.Controllers
                 var cacheKey = $"thumbnail_{recordId}";
                 if (_cache.TryGetValue(cacheKey, out byte[]? cachedThumbnail) && cachedThumbnail != null)
                 {
-                    _logger.LogInformation($"Returning cached thumbnail for recordId: {recordId}");
                     return File(cachedThumbnail, "image/png", $"thumbnail_{recordId}.png");
                 }
 
@@ -67,23 +62,18 @@ namespace RulesRegulation.Controllers
 
                 if (string.IsNullOrEmpty(pdfFilePath))
                 {
-                    _logger.LogWarning($"No PDF found in database for recordId: {recordId}");
                     return File(CreateErrorImageBytes("PDF not found for this record"), "image/png", $"error_{recordId}.png");
                 }
-
-                _logger.LogInformation($"PDF file path for recordId {recordId}: {pdfFilePath}");
 
                 // Check if file exists on server
                 if (!System.IO.File.Exists(pdfFilePath))
                 {
-                    _logger.LogWarning($"PDF file does not exist: {pdfFilePath}");
                     return File(CreateErrorImageBytes("PDF file not found on server"), "image/png", $"error_{recordId}.png");
                 }
 
                 // Check if PDF has at least 2 pages
                 if (!ValidatePdfHasSecondPage(pdfFilePath))
                 {
-                    _logger.LogWarning($"PDF has less than 2 pages: {pdfFilePath}");
                     // Let's try the first page instead
                     var firstPageThumbnail = await ConvertFirstPageToThumbnail(pdfFilePath);
                     _cache.Set(cacheKey, firstPageThumbnail, TimeSpan.FromMinutes(30));
@@ -96,12 +86,10 @@ namespace RulesRegulation.Controllers
                 // Cache for 30 minutes (reduced from 1 hour for faster updates)
                 _cache.Set(cacheKey, thumbnailBytes, TimeSpan.FromMinutes(30));
 
-                _logger.LogInformation($"Successfully generated thumbnail for recordId: {recordId}");
                 return File(thumbnailBytes, "image/png", $"thumbnail_{recordId}.png");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error generating thumbnail for recordId: {recordId}");
                 return File(CreateErrorImageBytes($"Error: {ex.Message}"), "image/png", $"error_{recordId}.png");
             }
         }
@@ -113,12 +101,10 @@ namespace RulesRegulation.Controllers
             {
                 var cacheKey = $"thumbnail_{recordId}";
                 _cache.Remove(cacheKey);
-                _logger.LogInformation($"Cleared thumbnail cache for recordId: {recordId}");
                 return Ok(new { success = true, message = $"Cache cleared for record {recordId}" });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error clearing cache for recordId: {recordId}");
                 return BadRequest(new { success = false, message = ex.Message });
             }
         }
@@ -128,8 +114,6 @@ private async Task<string> GetPdfFilePathFromDatabase(int recordId)
 {
     try
     {
-        _logger.LogInformation($"Querying database for recordId: {recordId}");
-        
         using var connection = new OracleConnection(_connectionString);
         await connection.OpenAsync();
 
@@ -139,8 +123,6 @@ private async Task<string> GetPdfFilePathFromDatabase(int recordId)
 
         var result = await command.ExecuteScalarAsync();
         var filePath = result?.ToString() ?? "";
-        
-        _logger.LogInformation($"Raw file path from database: '{filePath}'");
         
         if (string.IsNullOrEmpty(filePath))
         {
@@ -167,12 +149,10 @@ private async Task<string> GetPdfFilePathFromDatabase(int recordId)
             finalPath = Path.Combine(webRootPath, cleanPath);
         }
         
-        _logger.LogInformation($"Final file path: '{finalPath}' - Exists: {System.IO.File.Exists(finalPath)}");
         return finalPath;
     }
-    catch (Exception ex)
+    catch (Exception)
     {
-        _logger.LogError(ex, $"Error querying database for recordId: {recordId}");
         return "";
     }
 }
@@ -185,12 +165,10 @@ private async Task<string> GetPdfFilePathFromDatabase(int recordId)
 #pragma warning disable CA1416 // Validate platform compatibility
                 var pageCount = Conversion.GetPageCount(fileStream);
 #pragma warning restore CA1416 // Validate platform compatibility
-                _logger.LogInformation($"PDF {pdfFilePath} has {pageCount} pages");
                 return pageCount >= 2;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogError(ex, $"Error checking page count for: {pdfFilePath}");
                 return false;
             }
         }
@@ -202,16 +180,15 @@ private async Task<string> GetPdfFilePathFromDatabase(int recordId)
             {
                 try
                 {
-                    _logger.LogInformation($"Converting first page of PDF to thumbnail: {pdfFilePath}");
-
                     using var fileStream = new FileStream(pdfFilePath, FileMode.Open, FileAccess.Read);
+#pragma warning disable CA1416 // Validate platform compatibility
                     using var originalBitmap = Conversion.ToImage(fileStream, page: 0); // First page
+#pragma warning restore CA1416 // Validate platform compatibility
 
                     return CreateThumbnailFromBitmap(originalBitmap);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    _logger.LogError(ex, $"Error converting first page of PDF: {pdfFilePath}");
                     return CreateErrorImageBytes("PDF conversion failed");
                 }
             });
@@ -223,16 +200,12 @@ private async Task<string> GetPdfFilePathFromDatabase(int recordId)
             {
                 try
                 {
-                    _logger.LogInformation($"Converting second page of PDF to thumbnail: {pdfFilePath}");
-
                     using var fileStream = new FileStream(pdfFilePath, FileMode.Open, FileAccess.Read);
                     using var originalBitmap = Conversion.ToImage(fileStream, page: 1); // Second page
-
                     return CreateThumbnailFromBitmap(originalBitmap);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    _logger.LogError(ex, $"Error converting second page of PDF: {pdfFilePath}");
                     return CreateErrorImageBytes("PDF conversion failed");
                 }
             });

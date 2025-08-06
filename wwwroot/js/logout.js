@@ -80,12 +80,10 @@ async function logoutWithFeedback() {
             // Successful logout - redirect to login page
             window.location.replace('/Account/LoginPage');
         } else {
-            console.error('Logout failed with status:', response.status);
             // Fallback: redirect anyway for security
             window.location.replace('/Account/LoginPage');
         }
     } catch (error) {
-        console.error('Logout error:', error);
         // Fallback: redirect to login page for security
         window.location.replace('/Account/LoginPage');
     }
@@ -132,7 +130,6 @@ function checkAuthStatus() {
         }
     })
     .catch(error => {
-        console.error('Auth check failed:', error);
         // On error, redirect to login for security
         window.location.href = '/Account/LoginPage';
     });
@@ -172,7 +169,6 @@ function preventBackButtonAccess() {
             // If authenticated, allow normal back navigation
         })
         .catch(error => {
-            console.error('Auth check failed:', error);
             // On error, redirect to login for security
             window.location.replace('/Account/LoginPage');
         });

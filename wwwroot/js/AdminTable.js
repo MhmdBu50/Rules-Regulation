@@ -76,7 +76,7 @@ function showAdminRecordDetails(recordId) {
       detailsContainer.innerHTML = html;
     })
     .catch((error) => {
-      console.error("Error loading record details:", error);
+
       detailsContainer.innerHTML = `
                 <div class="alert alert-danger">
                     <i class="fas fa-exclamation-triangle me-2"></i>
@@ -87,15 +87,15 @@ function showAdminRecordDetails(recordId) {
 }
 
 function toggleEditMode(recordId) {
-  console.log("Toggle edit mode called for record ID:", recordId);
+
 
   const form = document.getElementById("recordForm_" + recordId);
   if (!form) {
-    console.error("Form not found for record ID:", recordId);
+
     return;
   }
 
-  console.log("Form found:", form);
+
 
   const inputs = form.querySelectorAll(
     'input:not([type="hidden"]):not(.contact-input), textarea:not(.contact-input), select:not(.contact-input)'
@@ -104,17 +104,17 @@ function toggleEditMode(recordId) {
   const saveBtn = form.querySelector(".save-btn");
   const cancelBtn = form.querySelector(".cancel-btn");
 
-  console.log("Found inputs:", inputs.length);
-  console.log("Edit button:", editBtn);
-  console.log("Save button:", saveBtn);
-  console.log("Cancel button:", cancelBtn);
+
+
+
+
 
   const isCurrentlyEditing = editBtn.style.display === "none";
-  console.log("Is currently editing:", isCurrentlyEditing);
+
 
   // Toggle readonly and disabled state
   inputs.forEach((input, index) => {
-    console.log("Processing input", index, ":", input);
+
     if (isCurrentlyEditing) {
       // Switch to view mode
       input.readOnly = true;
@@ -189,7 +189,7 @@ function toggleEditMode(recordId) {
     cancelBtn.style.display = "inline-block";
   }
 
-  console.log("Toggle edit mode completed");
+
 }
 
 // Function to clear pending file selections
@@ -258,7 +258,7 @@ function toggleAllCheckboxes() {
     checkbox.checked = masterCheckbox.checked;
   });
 
-  console.log(
+
     "Master checkbox toggled. All checkboxes set to:",
     masterCheckbox.checked
   );
@@ -289,7 +289,7 @@ function handleRecordCheckbox() {
     masterCheckbox.indeterminate = true;
   }
 
-  console.log("Record checkbox changed. Master checkbox state updated.");
+
 }
 
 // Function to get selected record IDs
@@ -301,7 +301,7 @@ function getSelectedRecordIds() {
     checkbox.getAttribute("data-record-id")
   );
 
-  console.log("Selected record IDs:", selectedIds);
+
   return selectedIds;
 }
 
@@ -452,11 +452,11 @@ async function uploadSingleAttachment(recordId, fileType, fileInput) {
     
     // If PDF was successfully uploaded, clear the thumbnail cache
     if (data.success && fileType.toLowerCase() === 'pdf') {
-      console.log(`PDF uploaded successfully for record ${recordId}, clearing thumbnail cache...`);
+
       try {
         await clearThumbnailCacheForRecord(recordId);
       } catch (cacheError) {
-        console.warn('Failed to clear thumbnail cache:', cacheError);
+
         // Don't fail the whole operation if cache clearing fails
       }
     }
@@ -488,7 +488,7 @@ async function clearThumbnailCacheForRecord(recordId) {
     throw new Error(result.message || 'Unknown error clearing cache');
   }
   
-  console.log(`Thumbnail cache cleared for record ${recordId}`);
+
   return result;
 }
 
@@ -533,7 +533,7 @@ async function handleFormSubmit(event, recordId) {
       alert("Error saving record. Please try again.");
     }
   } catch (error) {
-    console.error("Error:", error);
+
     alert("An error occurred while saving. Please try again.");
   } finally {
     // Restore button state
@@ -802,7 +802,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Function to close all open accordions
 function closeAllAccordions() {
-  console.log("Closing all open accordions...");
+
   
   // Get all accordion collapse elements
   const accordionCollapses = document.querySelectorAll('#regulationAccordion .accordion-collapse.show');
@@ -818,7 +818,7 @@ function closeAllAccordions() {
     }
   });
   
-  console.log(`Closed ${accordionCollapses.length} open accordions`);
+
 }
 
 // =============================================
@@ -840,7 +840,7 @@ function updateSearchAndFilter(searchTerm, type) {
 
 // Apply admin filters based on document type
 function applyAdminFilters() {
-  console.log("Applying admin filters...");
+
 
   // Close all open accordions before applying filters
   closeAllAccordions();
@@ -865,8 +865,8 @@ function applyAdminFilters() {
     ? mobileSearchInput.value.toLowerCase().trim()
     : "";
 
-  console.log("Selected document type:", selectedDocumentType);
-  console.log("Search term:", searchTerm);
+
+
 
   // Sync both dropdowns
   if (desktopDocumentFilter && mobileDocumentFilter) {
@@ -907,7 +907,7 @@ function applyAdminFilters() {
       selectedDocumentType === "all" ||
       recordDocumentType === selectedDocumentType;
 
-    console.log(
+
       "Record:",
       recordId,
       "DocumentType:",
@@ -927,7 +927,7 @@ function applyAdminFilters() {
     }
   });
 
-  console.log("Visible records after filtering:", visibleCount);
+
 
   // Show/hide no results message
   const hasActiveFilters = selectedDocumentType !== "all";
@@ -942,7 +942,7 @@ function applyAdminFilters() {
 
 // Reset admin filters
 function resetAdminFilters() {
-  console.log("Resetting admin filters...");
+
 
   // Reset dropdowns
   const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
@@ -960,18 +960,18 @@ function resetAdminFilters() {
 
 // Admin Page Search and Filter Functionality
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("AdminTable.js: DOM loaded, initializing filters...");
+
 
   const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
   const mobileDocumentFilter = document.getElementById("mobileDocumentFilter");
 
-  console.log("Desktop document filter found:", desktopDocumentFilter);
-  console.log("Mobile document filter found:", mobileDocumentFilter);
+
+
 
   // Add event listeners for desktop document filter
   if (desktopDocumentFilter) {
     desktopDocumentFilter.addEventListener("change", function () {
-      console.log("Desktop document filter changed to:", this.value);
+
       applyAdminFilters();
     });
   }
@@ -979,7 +979,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Add event listeners for mobile document filter
   if (mobileDocumentFilter) {
     mobileDocumentFilter.addEventListener("change", function () {
-      console.log("Mobile document filter changed to:", this.value);
+
       applyAdminFilters();
     });
   }
@@ -988,14 +988,14 @@ document.addEventListener("DOMContentLoaded", function () {
   if (desktopDocumentFilter) desktopDocumentFilter.value = "all";
   if (mobileDocumentFilter) mobileDocumentFilter.value = "all";
 
-  console.log("Document filters initialized successfully");
+
 });
 
 /**
  * Export all data to Excel file - shows modal for table selection
  */
 function exportData() {
-    console.log("Opening export table selection modal...");
+
     
     // Show the modal
     const exportModal = new bootstrap.Modal(document.getElementById('exportModal'));
@@ -1006,7 +1006,7 @@ function exportData() {
  * Confirm export with selected tables
  */
 function confirmExport() {
-    console.log("Starting data export with selected tables...");
+
     
     // Get selected tables
     const form = document.getElementById('exportForm');
@@ -1022,7 +1022,7 @@ function confirmExport() {
         return;
     }
     
-    console.log("Selected tables:", selectedTables);
+
     
     // Show loading state
     const exportButton = document.getElementById('confirmExportBtn');

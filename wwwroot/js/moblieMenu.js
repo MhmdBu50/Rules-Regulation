@@ -5,7 +5,6 @@
         const backdrop = document.getElementById('sidebarBackdrop');
 
         if (!sidebar || !burgerBtn || !backdrop) {
-            console.warn("Sidebar, burgerBtn, or backdrop is missing in the DOM.");
             return;
         }
 

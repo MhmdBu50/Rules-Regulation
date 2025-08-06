@@ -241,7 +241,6 @@ function DownloadPdf(id) {
             window.location.href = `/admin/DownloadPdf/${id}`;
         })
         .catch(error => {
-            console.error('Failed to record download history, but continuing with download:', error);
             // Even if history fails, still allow download
             window.location.href = `/admin/DownloadPdf/${id}`;
         });
@@ -256,7 +255,7 @@ function ViewPdf(id) {
             window.open(`/admin/ViewPdf/${id}`, '_blank');
         })
         .catch(error => {
-            console.error('Failed to record view history, but continuing with view:', error);
+
             // Even if history fails, still allow viewing
             window.open(`/admin/ViewPdf/${id}`, '_blank');
         });
@@ -277,15 +276,15 @@ function recordAction(recordId, action) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            console.log(`${action} action recorded for record ${recordId}`);
+
             return data;
         } else {
-            console.error('Failed to record action');
+
             throw new Error('Failed to record action');
         }
     })
     .catch(error => {
-        console.error('Error recording action:', error);
+
         throw error;
     });
 }
@@ -350,18 +349,18 @@ function navigateToAcademicRules(buttonElement) {
 // ==================== History Functionality ====================
 
 function navigateToHistory() {
-    console.log("🟢 navigateToHistory called");
+
     
     const recordsContainer = document.querySelector('.row.justify-content-center.g-lg-4.g-md-3.g-sm-2.g-1');
     if (recordsContainer) {
         recordsContainer.style.display = 'none';
-        console.log("🟢 Hidden main records container");
+
     }
     
     const existingHistory = document.getElementById('history-container');
     if (existingHistory) {
         existingHistory.remove();
-        console.log("🟢 Removed existing history container");
+
     }
     
     const historyContainer = document.createElement('div');
@@ -405,27 +404,27 @@ function navigateToHistory() {
     if (navigationBar) {
         // Insert the history container right after the navigation bar
         navigationBar.insertAdjacentElement('afterend', historyContainer);
-        console.log("🟢 History container added after navigation bar");
+
     } else {
         // Fallback: insert before main content
         const containerFluid = document.querySelector('.container-fluid');
         if (containerFluid) {
             containerFluid.parentNode.insertBefore(historyContainer, containerFluid);
-            console.log("🟢 History container added before container-fluid as fallback");
+
         } else {
             document.body.appendChild(historyContainer);
-            console.log("🟢 History container appended to body as last resort");
+
         }
     }
     
-    console.log("🟢 Fetching history data...");
+
     fetch('/History/GetUserHistory')
         .then(response => {
-            console.log("🟢 Response received:", response.status);
+
             return response.json();
         })
         .then(data => {
-            console.log("🟢 History data received:", data);
+
             const historyContent = document.getElementById('history-content');
             
             if (!data || data.length === 0) {
@@ -444,7 +443,7 @@ function navigateToHistory() {
                         </div>
                     </div>
                 `;
-                console.log("🟡 No history data available");
+
                 return;
             }
             
@@ -511,7 +510,7 @@ function navigateToHistory() {
                         <tbody>`;
 
             data.forEach(item => {
-                console.log("🟢 Processing item:", item);
+
                 let action, actionIcon, badgeClass;
                 
                 switch(item.action.toLowerCase()) {
@@ -560,10 +559,10 @@ function navigateToHistory() {
 
             historyHTML += '</tbody></table></div>';
             historyContent.innerHTML = historyHTML;
-            console.log("🟢 History table rendered successfully");
+
         })
         .catch(error => {
-            console.error('🔴 Error fetching history:', error);
+
             const historyContent = document.getElementById('history-content');
             if (historyContent) {
                 historyContent.innerHTML = '<div class="alert alert-danger">Error loading history</div>';

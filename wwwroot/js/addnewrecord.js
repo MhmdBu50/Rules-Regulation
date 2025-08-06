@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function validateArabicField(input, errorElementId) {
     const errorElement = document.getElementById(errorElementId);
     if (!errorElement) {
-      console.warn(`Error element with ID "${errorElementId}" not found`);
       return true; // If no error element, assume valid to avoid breaking functionality
     }
     
@@ -36,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function validateEnglishField(input, errorElementId) {
     const errorElement = document.getElementById(errorElementId);
     if (!errorElement) {
-      console.warn(`Error element with ID "${errorElementId}" not found`);
       return true; // If no error element, assume valid to avoid breaking functionality
     }
     

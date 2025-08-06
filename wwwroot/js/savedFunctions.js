@@ -55,7 +55,6 @@ function toggleBookmark(elem) {
         const text = await res.text();
 
         if (!text) {
-            console.warn("Empty response");
             return;
         }
 
@@ -63,7 +62,6 @@ function toggleBookmark(elem) {
         try {
             result = JSON.parse(text);
         } catch (err) {
-            console.error("JSON parse failed:", err);
             return;
         }
 
@@ -100,6 +98,5 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     })
     .catch(() => {
-        console.error("⚠️ Failed to load saved bookmarks.");
     });
 });

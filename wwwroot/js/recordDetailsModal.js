@@ -39,7 +39,6 @@ function displayRecordDetailsModal(recordId) {
             modalBody.innerHTML = data;
         })
         .catch(error => {
-            console.error('Error loading record details:', error);
             modalBody.innerHTML = `
                 <div class="alert alert-danger" role="alert">
                     <h6>Error Loading Details</h6>

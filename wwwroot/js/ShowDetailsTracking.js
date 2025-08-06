@@ -13,11 +13,9 @@ function logShowDetails(recordId) {
     .then(response => response.json())
     .then(data => {
         if (!data.success) {
-            console.warn('Failed to log show details:', data);
         }
     })
     .catch(error => {
-        console.error('Error logging show details:', error);
     });
 }
 

@@ -40,9 +40,8 @@ namespace RulesRegulation.Controllers
 
                 return Json(historyList);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error getting history: {ex.Message}");
                 return Json(new List<object>());
             }
         }
@@ -59,9 +58,8 @@ namespace RulesRegulation.Controllers
                 var result = _dbService.GetData($"BEGIN {query}; COMMIT; END;");
                 return Json(new { success = true });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error recording action: {ex.Message}");
                 return Json(new { success = false });
             }
         }
@@ -75,9 +73,8 @@ namespace RulesRegulation.Controllers
                 var result = _dbService.GetData(query);
                 return Json(new { success = true });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error deleting history: {ex.Message}");
                 return Json(new { success = false });
             }
         }

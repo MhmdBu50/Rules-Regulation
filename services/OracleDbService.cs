@@ -63,20 +63,12 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Oracle.ManagedDataAccess.Client.OracleException ex)
+            catch (Oracle.ManagedDataAccess.Client.OracleException)
             {
-                Console.WriteLine($"[OracleException] AddContactInfo failed. Department: {department}, Name: {name}, NameAr: {nameAr}, Email: {email}, Mobile: {mobile}, Telephone: {telephone}");
-                Console.WriteLine($"Oracle Error {ex.Number}: {ex.Message}\nStackTrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"InnerException: {ex.InnerException.Message}");
                 throw;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"[Exception] AddContactInfo failed. Department: {department}, Name: {name}, NameAr: {nameAr}, Email: {email}, Mobile: {mobile}, Telephone: {telephone}");
-                Console.WriteLine($"Exception: {ex.Message}\nStackTrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"InnerException: {ex.InnerException.Message}");
                 throw;
             }
         }
@@ -212,9 +204,8 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error getting records: {ex.Message}");
             }
             return records;
         }
@@ -353,9 +344,8 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error getting record by ID: {ex.Message}");
                 return null;
             }
         }
@@ -433,10 +423,8 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Log the actual error for debugging
-                Console.WriteLine($"Database error: {ex.Message}");
                 return false;
             }
         }
@@ -505,9 +493,8 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error updating record: {ex.Message}");
                 return false;
             }
         }
@@ -540,9 +527,8 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error deleting record: {ex.Message}");
                 return false;
             }
         }
@@ -583,9 +569,8 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error getting contacts: {ex.Message}");
                 throw; // Re-throw to let controller handle it
             }
             return contacts;
@@ -627,9 +612,8 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error getting contact by ID: {ex.Message}");
             }
             return null;
         }
@@ -663,9 +647,8 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error updating contact: {ex.Message}");
                 return false;
             }
         }
@@ -690,9 +673,8 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error deleting contact: {ex.Message}");
                 return false;
             }
         }
@@ -735,9 +717,8 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error getting contacts by department: {ex.Message}");
             }
             return contacts;
         }
@@ -886,9 +867,6 @@ namespace RulesRegulation.Services
                         cmd.Parameters.AddRange(parameters.ToArray());
 
                         // Debug logging
-                        Console.WriteLine($"Filter Query: {queryBuilder.ToString()}");
-                        Console.WriteLine($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}={p.Value}"))}");
-
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -920,9 +898,8 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error getting filtered records: {ex.Message}");
                 // Fallback to all records if filtering fails
                 return GetAllRecords();
             }
@@ -984,10 +961,9 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log error but don't throw, return empty list
-                Console.WriteLine($"Error getting attachments for record {recordId}: {ex.Message}");
             }
             return attachments;
         }
@@ -1076,9 +1052,8 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error updating attachment: {ex.Message}");
                 return false;
             }
         }
@@ -1116,9 +1091,8 @@ namespace RulesRegulation.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error deleting attachment: {ex.Message}");
                 return false;
             }
         }

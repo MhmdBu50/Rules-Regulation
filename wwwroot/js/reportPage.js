@@ -10,14 +10,13 @@ let allDocuments = []; // Store original documents data for sorting/filtering
 
 // Initialize the page when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🟢 Report page loaded');
     
     // Get chart data from the page
     const chartDataElement = document.getElementById('chartData');
     if (chartDataElement) {
         try {
             chartData = JSON.parse(chartDataElement.textContent);
-            console.log('📊 Chart data loaded:', chartData);
+
             
             // Initialize charts with accurate data
             initializeViewsDownloadsChart();
@@ -30,10 +29,10 @@ document.addEventListener('DOMContentLoaded', function() {
             initializeTableControls();
             
         } catch (error) {
-            console.error('❌ Error parsing chart data:', error);
+
         }
     } else {
-        console.error('❌ Chart data element not found');
+
     }
 });
 
@@ -43,11 +42,11 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeViewsDownloadsChart() {
     const ctx = document.getElementById('viewsDownloadsChart');
     if (!ctx) {
-        console.error('❌ Views downloads chart canvas not found');
+
         return;
     }
 
-    console.log('📊 Initializing views & downloads chart with data:', chartData.monthlyChartData);
+
 
     // Prepare data from server
     const labels = chartData.monthlyChartData.map(item => {
@@ -143,7 +142,7 @@ function initializeViewsDownloadsChart() {
     };
 
     viewsDownloadsChart = new Chart(ctx, config);
-    console.log('✅ Views & downloads chart initialized');
+
 }
 
 /**
@@ -152,11 +151,11 @@ function initializeViewsDownloadsChart() {
 function initializeTopRecordsChart() {
     const ctx = document.getElementById('topRecordsChart');
     if (!ctx) {
-        console.error('❌ Top records chart canvas not found');
+
         return;
     }
 
-    console.log('📊 Initializing top records chart with data:', chartData.topRecordsData);
+
 
     // Prepare data from server
     const labels = chartData.topRecordsData.map(item => {
@@ -254,7 +253,7 @@ function initializeTopRecordsChart() {
     };
 
     topRecordsChart = new Chart(ctx, config);
-    console.log('✅ Top records chart initialized');
+
 }
 
 /**
@@ -263,11 +262,11 @@ function initializeTopRecordsChart() {
 function initializeTopDownloadsChart() {
     const ctx = document.getElementById('topDownloadsChart');
     if (!ctx) {
-        console.error('❌ Top downloads chart canvas not found');
+
         return;
     }
 
-    console.log('📊 Initializing top downloads chart with data:', chartData.topDownloadsData);
+
 
     // Prepare data from server
     const labels = chartData.topDownloadsData.map(item => {
@@ -365,7 +364,7 @@ function initializeTopDownloadsChart() {
     };
 
     topDownloadsChart = new Chart(ctx, config);
-    console.log('✅ Top downloads chart initialized');
+
 }
 
 /**
@@ -374,11 +373,11 @@ function initializeTopDownloadsChart() {
 function initializeDocumentTypeChart() {
     const ctx = document.getElementById('documentTypeChart');
     if (!ctx) {
-        console.error('❌ Document type chart canvas not found');
+
         return;
     }
 
-    console.log('📊 Initializing document type chart with data:', chartData.documentTypes);
+
 
     // Prepare chart data
     const labels = chartData.documentTypes.map(item => item.label);
@@ -451,7 +450,7 @@ function initializeDocumentTypeChart() {
     };
 
     documentTypeChart = new Chart(ctx, config);
-    console.log('✅ Document type chart initialized');
+
 }
 
 /**
@@ -472,7 +471,7 @@ function storeDocumentsData() {
         total: parseInt(row.getAttribute('data-total')) || 0
     }));
 
-    console.log('📋 Stored documents data:', allDocuments.length, 'documents');
+
 }
 
 /**
@@ -494,14 +493,14 @@ function initializeTableControls() {
         });
     }
 
-    console.log('🔧 Table controls initialized');
+
 }
 
 /**
  * Sort table by specified criteria
  */
 function sortTable(sortBy) {
-    console.log('🔄 Sorting table by:', sortBy);
+
 
     let sortedDocuments = [...allDocuments];
 
@@ -540,7 +539,7 @@ function sortTable(sortBy) {
  * Filter table by document type
  */
 function filterTable(filterBy) {
-    console.log('🔍 Filtering table by:', filterBy);
+
 
     let filteredDocuments = [...allDocuments];
 
@@ -601,14 +600,14 @@ function renderTable(documents) {
         }, index * 50);
     });
 
-    console.log('✅ Table rendered with', documents.length, 'documents');
+
 }
 
 /**
  * Export entire report to PDF
  */
 async function exportToPDF() {
-    console.log('📄 Starting PDF export...');
+
 
     // Show loading state
     const exportBtn = document.querySelector('.export-pdf-btn');
@@ -691,7 +690,7 @@ async function exportToPDF() {
             }
 
             if (chart && chart.canvas) {
-                console.log(`📊 Adding chart: ${title}`);
+
                 await addChartToPDF(doc, chart, title, yPosition);
                 yPosition += 85;
                 
@@ -715,7 +714,7 @@ async function exportToPDF() {
                     yPosition += 10; // Extra space after percentages
                 }
             } else {
-                console.warn(`⚠️ Chart not found or not ready: ${id}`);
+
                 doc.setFontSize(10);
                 doc.setTextColor(150);
                 doc.text(`Chart not available: ${title}`, 25, yPosition);
@@ -975,10 +974,10 @@ async function exportToPDF() {
         const fileName = `Analytics_Report_${new Date().toISOString().split('T')[0]}.pdf`;
         doc.save(fileName);
 
-        console.log('✅ PDF exported successfully');
+
 
     } catch (error) {
-        console.error('❌ Error exporting PDF:', error);
+
         alert(`Error generating PDF: ${error.message}. Please try again.`);
     } finally {
         // Reset button
@@ -1009,7 +1008,7 @@ async function addChartToPDF(doc, chart, title, yPosition) {
         doc.addImage(imgData, 'PNG', 20, yPosition + 5, 170, 70);
         
     } catch (error) {
-        console.error('Error adding chart to PDF:', error);
+
         // Fallback: add placeholder text
         doc.setFontSize(10);
         doc.setTextColor(150);

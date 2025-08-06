@@ -55,29 +55,23 @@ function openPDFPreview() {
         
         showToast('Loading PDF Preview...');
     } catch (error) {
-        console.error('Error in openPDFPreview:', error);
         showToast('Error opening PDF preview');
     }
 }
 
 function testPdfApiDirect() {
-    console.log('Testing PDF API directly...');
-    
     // Test the general API endpoint first
     fetch('/api/pdf/test')
         .then(response => {
-            console.log('API test response status:', response.status);
             return response.json();
         })
         .then(data => {
-            console.log('API test success:', data);
             showToast('PDF API is working!');
             
             // Now test with a specific record ID
             testSpecificRecord();
         })
         .catch(error => {
-            console.error('PDF API test failed:', error);
             showToast('PDF API test failed');
         });
 }
@@ -86,27 +80,18 @@ function testSpecificRecord() {
     const recordId = 1; // Change this to a record ID you know exists
     const testUrl = `/api/pdf/thumbnail?recordId=${recordId}`;
     
-    console.log(`Testing specific record: ${testUrl}`);
-    
     fetch(testUrl)
         .then(response => {
-            console.log(`Record ${recordId} response status:`, response.status);
             if (response.ok) {
-                console.log('Thumbnail API is working for record', recordId);
                 showToast(`Thumbnail API working for record ${recordId}`);
             } else {
-                console.log('Thumbnail API returned error for record', recordId);
-                response.text().then(text => console.log('Error response:', text));
             }
         })
         .catch(error => {
-            console.error('Error testing specific record:', error);
         });
 }
 
 function clearThumbnailCache(recordId) {
-    console.log(`Clearing thumbnail cache for record ${recordId}`);
-    
     fetch(`/api/pdf/clear-cache?recordId=${recordId}`, {
         method: 'POST',
         headers: {
@@ -116,7 +101,6 @@ function clearThumbnailCache(recordId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            console.log(`Cache cleared for record ${recordId}`);
             showToast(`Cache cleared for record ${recordId}`);
             
             // Reload the thumbnail for this record
@@ -125,12 +109,10 @@ function clearThumbnailCache(recordId) {
                 loadThumbnailForElement(thumbnail, recordId);
             }
         } else {
-            console.error('Failed to clear cache:', data.message);
             showToast('Failed to clear cache');
         }
     })
     .catch(error => {
-        console.error('Error clearing cache:', error);
         showToast('Error clearing cache');
     });
 }
@@ -141,12 +123,9 @@ function refreshThumbnail(recordId) {
 }
 // Updated function that works directly with the new PDF API
 function loadAllThumbnails() {
-    console.log('loadAllThumbnails() called');
     const thumbnails = document.querySelectorAll('.pdf-thumbnail');
-    console.log('Found thumbnails:', thumbnails.length);
     
     if (thumbnails.length === 0) {
-        console.warn('No elements with class "pdf-thumbnail" found!');
         return;
     }
     
@@ -154,25 +133,17 @@ function loadAllThumbnails() {
         const recordId = thumbnail.dataset.recordId;
         const loadingElement = document.getElementById(`loading-${recordId}`);
         
-        console.log(`Processing thumbnail ${index + 1}:`, { 
-            recordId: recordId,
-            hasLoadingElement: !!loadingElement 
-        });
-        
         if (!recordId) {
-            console.warn('No record ID found for thumbnail', thumbnail);
             return;
         }
         
         // UPDATED: Direct call to new PDF API endpoint
         const thumbnailUrl = `/api/pdf/thumbnail?recordId=${recordId}`;
-        console.log(`Loading thumbnail directly from: ${thumbnailUrl}`);
         
         // Set the image source directly - no intermediate API call needed
         thumbnail.src = thumbnailUrl;
         
         thumbnail.onload = function() {
-            console.log(`Thumbnail loaded successfully for record ${recordId}`);
             if (loadingElement) {
                 loadingElement.style.display = 'none';
             }
@@ -181,7 +152,6 @@ function loadAllThumbnails() {
         };
         
         thumbnail.onerror = function() {
-            console.error(`Failed to load thumbnail for record ${recordId} from ${thumbnailUrl}`);
             if (loadingElement) {
                 loadingElement.innerHTML = `
                     <i class="fas fa-file-pdf" style="font-size: 48px; color: #dc3545;"></i>
@@ -358,7 +328,6 @@ document.addEventListener('touchstart', function() {}, {passive: true});
 
 // Initialize card scale on load
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, testing API and initializing thumbnails...');
     
     // Test the API first
     testPdfApiDirect();

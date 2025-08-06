@@ -59,9 +59,8 @@ public class HomeController : Controller
                 alphabetical, dateSort, fromDate, toDate);
             return View(records);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            _logger.LogError(ex, "Error loading records for homepage");
             // Return empty list if there's an error
             return View(new List<dynamic>());
         }
@@ -89,9 +88,8 @@ public class HomeController : Controller
             // Return partial view with record details
             return PartialView("_RecordDetails", record);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            _logger.LogError(ex, "Error getting record details for ID: {Id}", id);
             Response.StatusCode = 500;
             return View("Error500");
         }

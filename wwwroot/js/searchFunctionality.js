@@ -84,7 +84,6 @@ function performSearch(searchTerm) {
 
 function updateSearchResults(visible, total) {
     // You can add a results counter here if needed
-    console.log(`Showing ${visible} of ${total} records`);
 }
 
 function restoreSearchFromURL() {

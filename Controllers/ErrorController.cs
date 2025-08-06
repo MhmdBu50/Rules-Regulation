@@ -18,9 +18,6 @@ namespace RulesRegulation.Controllers
         public IActionResult HandleStatusCode(int statusCode)
         {
             var statusCodeResult = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
-            
-            _logger.LogWarning("Status code {StatusCode} occurred. Original path: {OriginalPath}", 
-                statusCode, statusCodeResult?.OriginalPath);
 
             switch (statusCode)
             {
@@ -56,7 +53,6 @@ namespace RulesRegulation.Controllers
             if (exceptionFeature != null)
             {
                 var exception = exceptionFeature.Error;
-                _logger.LogError(exception, "Unhandled exception occurred: {Message}", exception.Message);
                 
                 // Check for specific exception types
                 if (exception is InvalidOperationException)
