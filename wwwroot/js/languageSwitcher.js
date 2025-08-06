@@ -105,7 +105,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-chart-legend-student-rules3": "Student rules & regulations",
         "admin-chart-legend-student-guides3": "Student guides & templates",
         "admin-chart-title-visits": "Website visits over the past 6 months",
-        "admin-stats-total-policies": "Total Policies", // Placeholder for dynamic number
+        "admin-stats-total-policies": "Total Policies",
+        "admin-stats-most-viewed": "Most Viewed",
         "admin-button-view-report": "View Report",
         "admin-button-add-new-record": "Add New Record",
         "admin-button-export-data": "Export Data",
@@ -369,6 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-chart-legend-student-guides3": "أدلة وقوالب الطلاب",
         "admin-chart-title-visits": "زيارات الموقع خلال الستة أشهر الماضية",
         "admin-stats-total-policies": "إجمالي السياسات",
+        "admin-stats-most-viewed": "الأكثر مشاهدة",
         "admin-button-view-report": "عرض التقرير",
         "admin-button-add-new-record": "إضافة سجل جديد",
         "admin-button-export-data": "تصدير البيانات",
