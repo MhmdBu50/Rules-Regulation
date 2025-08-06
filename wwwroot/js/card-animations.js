@@ -102,7 +102,43 @@ function testSpecificRecord() {
         .catch(error => {
             console.error('Error testing specific record:', error);
         });
-    }
+}
+
+function clearThumbnailCache(recordId) {
+    console.log(`Clearing thumbnail cache for record ${recordId}`);
+    
+    fetch(`/api/pdf/clear-cache?recordId=${recordId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log(`Cache cleared for record ${recordId}`);
+            showToast(`Cache cleared for record ${recordId}`);
+            
+            // Reload the thumbnail for this record
+            const thumbnail = document.querySelector(`[data-record-id="${recordId}"]`);
+            if (thumbnail) {
+                loadThumbnailForElement(thumbnail, recordId);
+            }
+        } else {
+            console.error('Failed to clear cache:', data.message);
+            showToast('Failed to clear cache');
+        }
+    })
+    .catch(error => {
+        console.error('Error clearing cache:', error);
+        showToast('Error clearing cache');
+    });
+}
+
+function refreshThumbnail(recordId) {
+    // Clear cache and reload thumbnail
+    clearThumbnailCache(recordId);
+}
 // Updated function that works directly with the new PDF API
 function loadAllThumbnails() {
     console.log('loadAllThumbnails() called');

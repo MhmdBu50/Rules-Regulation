@@ -86,15 +86,15 @@ namespace RulesRegulation.Controllers
                     _logger.LogWarning($"PDF has less than 2 pages: {pdfFilePath}");
                     // Let's try the first page instead
                     var firstPageThumbnail = await ConvertFirstPageToThumbnail(pdfFilePath);
-                    _cache.Set(cacheKey, firstPageThumbnail, TimeSpan.FromHours(1));
+                    _cache.Set(cacheKey, firstPageThumbnail, TimeSpan.FromMinutes(30));
                     return File(firstPageThumbnail, "image/png", $"thumbnail_{recordId}.png");
                 }
 
                 // Convert second page to thumbnail
                 var thumbnailBytes = await ConvertSecondPageToThumbnail(pdfFilePath);
 
-                // Cache for 1 hour
-                _cache.Set(cacheKey, thumbnailBytes, TimeSpan.FromHours(1));
+                // Cache for 30 minutes (reduced from 1 hour for faster updates)
+                _cache.Set(cacheKey, thumbnailBytes, TimeSpan.FromMinutes(30));
 
                 _logger.LogInformation($"Successfully generated thumbnail for recordId: {recordId}");
                 return File(thumbnailBytes, "image/png", $"thumbnail_{recordId}.png");
@@ -103,6 +103,23 @@ namespace RulesRegulation.Controllers
             {
                 _logger.LogError(ex, $"Error generating thumbnail for recordId: {recordId}");
                 return File(CreateErrorImageBytes($"Error: {ex.Message}"), "image/png", $"error_{recordId}.png");
+            }
+        }
+
+        [HttpPost("clear-cache")]
+        public IActionResult ClearThumbnailCache([FromQuery] int recordId)
+        {
+            try
+            {
+                var cacheKey = $"thumbnail_{recordId}";
+                _cache.Remove(cacheKey);
+                _logger.LogInformation($"Cleared thumbnail cache for recordId: {recordId}");
+                return Ok(new { success = true, message = $"Cache cleared for record {recordId}" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error clearing cache for recordId: {recordId}");
+                return BadRequest(new { success = false, message = ex.Message });
             }
         }
 
@@ -348,73 +365,6 @@ private async Task<string> GetPdfFilePathFromDatabase(int recordId)
                 lines.Add(currentLine);
 
             return string.Join("\n", lines);
-        }
-        // Add this method to your PDFController for debugging
-        [HttpGet("debug/{recordId}")]
-        public async Task<IActionResult> DebugRecord(int recordId)
-        {
-            try
-            {
-                // Declare webRootPath at the method level so it's accessible everywhere
-                var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-                
-                using var connection = new OracleConnection(_connectionString);
-                await connection.OpenAsync();
-
-                var query = "SELECT * FROM ATTACHMENTS WHERE RECORD_ID = :recordId";
-                using var command = new OracleCommand(query, connection);
-                command.Parameters.Add(new OracleParameter("recordId", OracleDbType.Int32, recordId, System.Data.ParameterDirection.Input));
-
-                var reader = await command.ExecuteReaderAsync();
-                var attachments = new List<object>();
-
-                while (await reader.ReadAsync())
-                {
-                    var filePath = reader["FILE_PATH"]?.ToString() ?? "";
-                    
-                    // Show different path resolution attempts
-                    var pathAttempts = new List<object>();
-                    
-                    // Attempt 1: Clean path
-                    var cleanPath = filePath.Replace('/', Path.DirectorySeparatorChar)
-                                        .Replace('\\', Path.DirectorySeparatorChar)
-                                        .TrimStart('~', '/', '\\', Path.DirectorySeparatorChar);
-                    var attempt1 = Path.Combine(webRootPath, cleanPath);
-                    pathAttempts.Add(new { method = "Clean path", path = attempt1, exists = System.IO.File.Exists(attempt1) });
-                    
-                    // Attempt 2: Simple trim
-                    var attempt2 = Path.Combine(webRootPath, filePath.TrimStart('~', '/', '\\'));
-                    pathAttempts.Add(new { method = "Simple trim", path = attempt2, exists = System.IO.File.Exists(attempt2) });
-                    
-                    // Attempt 3: Direct combination
-                    var attempt3 = webRootPath + filePath.Replace('/', Path.DirectorySeparatorChar);
-                    pathAttempts.Add(new { method = "Direct combination", path = attempt3, exists = System.IO.File.Exists(attempt3) });
-
-                    attachments.Add(new
-                    {
-                        ATTACHMENT_ID = reader["ATTACHMENT_ID"],
-                        RECORD_ID = reader["RECORD_ID"],
-                        FILE_TYPE = reader["FILE_TYPE"]?.ToString(),
-                        FILE_PATH = reader["FILE_PATH"]?.ToString(),
-                        UPLOAD_DATE = reader["UPLOAD_DATE"],
-                        pathAttempts = pathAttempts,
-                        IsPdf = (reader["FILE_TYPE"]?.ToString()?.ToUpper().Contains("PDF") ?? false) || 
-                                (reader["FILE_PATH"]?.ToString()?.ToUpper().EndsWith(".PDF") ?? false)
-                    });
-                }
-
-                return Ok(new
-                {
-                    recordId = recordId,
-                    attachments = attachments,
-                    wwwrootPath = webRootPath, // Now this variable is accessible
-                    currentDirectory = Directory.GetCurrentDirectory()
-                });
-            }
-            catch (Exception ex)
-            {
-                return Ok(new { error = ex.Message, recordId = recordId });
-            }
         }
     }
 }

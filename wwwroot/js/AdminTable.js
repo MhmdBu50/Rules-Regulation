@@ -449,6 +449,18 @@ async function uploadSingleAttachment(recordId, fileType, fileInput) {
     });
 
     const data = await response.json();
+    
+    // If PDF was successfully uploaded, clear the thumbnail cache
+    if (data.success && fileType.toLowerCase() === 'pdf') {
+      console.log(`PDF uploaded successfully for record ${recordId}, clearing thumbnail cache...`);
+      try {
+        await clearThumbnailCacheForRecord(recordId);
+      } catch (cacheError) {
+        console.warn('Failed to clear thumbnail cache:', cacheError);
+        // Don't fail the whole operation if cache clearing fails
+      }
+    }
+    
     return data;
   } catch (error) {
     return {
@@ -456,6 +468,28 @@ async function uploadSingleAttachment(recordId, fileType, fileInput) {
       message: `Error uploading ${fileType} file: ${error.message}`,
     };
   }
+}
+
+// Helper function to clear thumbnail cache for a specific record
+async function clearThumbnailCacheForRecord(recordId) {
+  const response = await fetch(`/api/pdf/clear-cache?recordId=${recordId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+  
+  if (!response.ok) {
+    throw new Error(`Failed to clear cache: ${response.status}`);
+  }
+  
+  const result = await response.json();
+  if (!result.success) {
+    throw new Error(result.message || 'Unknown error clearing cache');
+  }
+  
+  console.log(`Thumbnail cache cleared for record ${recordId}`);
+  return result;
 }
 
 // Function to handle form submission with file uploads
