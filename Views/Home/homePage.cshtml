@@ -392,7 +392,7 @@ border: none;" onclick="navigateToHome(this)">
 
 
 
-<div class="container-fluid">
+<div class="container-fluid mb-footer-space">
     <div class="row justify-content-center g-lg-4 g-md-3 g-sm-2 g-1" style="margin: 0px 40px;">
 
         @if (Model != null && Model.Any())
@@ -412,7 +412,7 @@ border: none;" onclick="navigateToHome(this)">
                         <div class="bookmark-wrapper">
                             <div class="bookmark" data-record-id="@record.Id" onclick="toggleBookmark(this)"></div>
                         </div>
-                        <div class="document-icon" onclick="ViewPdf(@record.Id) title="Click to preview PDF">
+                        <div class="document-icon" onclick="ViewPdf(@record.Id)" title="Click to preview PDF">
                             <div class="pdf-thumbnail-container">
                                 <div class="thumbnail-loading" id="loading-@record.Id">
                                     <div class="spinner"></div>
