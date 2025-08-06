@@ -18,6 +18,61 @@
         ? Model.ApprovingEntityAr
         : Model.ApprovingEntity;
 
+    // Document Type translation logic
+    var displayDocumentType = Model.DocumentType;
+    if (isArabic)
+    {
+        switch (Model.DocumentType)
+        {
+            case "Student guides & templates":
+                displayDocumentType = "أدلة ونماذج الطلاب";
+                break;
+            case "Student rules & regulations":
+                displayDocumentType = "قواعد وأنظمة الطلاب";
+                break;
+            case "Employees’ rules & regulations":
+                displayDocumentType = "قواعد وأنظمة الموظفين";
+                break;
+            case "Academic rules & regulations":
+                displayDocumentType = "قواعد وأنظمة أكاديمية";
+                break;
+        }
+    }
+
+    // Department translation logic
+    var displayDepartment = Model.Department;
+    if (isArabic)
+    {
+        switch (Model.Department)
+        {
+            case "Reg and Admission":
+                displayDepartment = "التسجيل والقبول";
+                break;
+            case "CCSIT":
+                displayDepartment = "كلية علوم الحاسب وتقنية المعلومات";
+                break;
+            case "Communication and tech":
+                displayDepartment = "الاتصالات والتقنية";
+                break;
+            case "Hospital":
+                displayDepartment = "المستشفى";
+                break;
+            case "Library":
+                displayDepartment = "المكتبة";
+                break;
+            case "Students Affairs":
+                displayDepartment = "شؤون الطلاب";
+                break;
+            case "Preparetory":
+                displayDepartment = "السنة التحضيرية";
+                break;
+            case "Academic Affairs":
+                displayDepartment = "الشؤون الأكاديمية";
+                break;
+        }
+    }
+
+
 }
 
 @section Styles {
@@ -51,7 +106,7 @@
                 <div class="detail-label">
                     <i class="fas fa-building"></i> Department
                 </div>
-                <div class="detail-value">@Model.Department</div>
+                <div class="detail-value">@displayDepartment</div>
             </div>
 
             <div class="detail-card">
@@ -59,18 +114,7 @@
                     <i class="fas fa-file-alt"></i> Document Type
                 </div>
                 <div class="detail-value">
-                    @if (Model.DocumentType?.ToString().ToLower() == "guidelines")
-                    {
-                        <span class="badge bg-success">@Model.DocumentType</span>
-                    }
-                    else if (Model.DocumentType?.ToString().ToLower() == "policies")
-                    {
-                        <span class="badge bg-warning text-dark">@Model.DocumentType</span>
-                    }
-                    else
-                    {
-                        <span>@Model.DocumentType</span>
-                    }
+                        <div class="detail-value">@displayDocumentType</div>
                 </div>
             </div>
 
