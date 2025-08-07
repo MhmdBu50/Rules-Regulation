@@ -123,4 +123,4 @@ For technical support and maintenance:
 
 **Last Updated**: August 7, 2025  
 **Version**: 1.0  
-**Maintained by**: Bo50 Development Team
+**Maintained by**: Bukhamsin Development Team

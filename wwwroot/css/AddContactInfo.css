@@ -239,7 +239,6 @@ tr {
 .AddContactInfo {
     background-color: #EAE0CA;
     font-family: 'Inter', sans-serif;
-    min-height: 100vh;
     position: relative;
     z-index: 0;
 }
