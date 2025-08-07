@@ -14,7 +14,81 @@ window.addEventListener("DOMContentLoaded", function () {
     url.searchParams.delete("successMessage");
     window.history.replaceState({}, "", url);
   }
+
+  // Setup lazy loading for accordion items
+  setupAccordionLazyLoading();
 });
+
+function setupAccordionLazyLoading() {
+  // Find all accordion items
+  const accordionItems = document.querySelectorAll('.accordion-collapse');
+  
+  accordionItems.forEach(accordionItem => {
+    // Add event listener for when accordion is about to show
+    accordionItem.addEventListener('show.bs.collapse', function() {
+      const accordionBody = this.querySelector('.accordion-body');
+      
+      // Get the record ID from the accordion button's data-record-id attribute
+      const headingId = this.getAttribute('aria-labelledby');
+      const accordionButton = document.getElementById(headingId).querySelector('button[data-record-id]');
+      const recordId = accordionButton?.getAttribute('data-record-id');
+      
+      // Check if content has already been lazy loaded by checking for a marker class
+      if (recordId && !accordionBody.classList.contains('ajax-loaded')) {
+        // Mark as loading to prevent duplicate requests
+        accordionBody.classList.add('ajax-loaded');
+        
+        // Store original content for debugging purposes
+        const originalContent = accordionBody.innerHTML;
+        
+        // Show loading spinner immediately
+        accordionBody.innerHTML = `
+          <div class="d-flex justify-content-center align-items-center p-5">
+            <div class="text-center">
+              <div class="spinner-border text-primary mb-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p class="text-muted">Loading record details...</p>
+            </div>
+          </div>
+        `;
+
+        // Log the SHOW_DETAILS action
+        if (typeof logShowDetails === 'function') {
+          logShowDetails(recordId);
+        }
+        
+        // Make AJAX call to get record details
+        fetch("/Admin/GetRecordDetails?id=" + recordId)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to load record details");
+            }
+            return response.text();
+          })
+          .then((html) => {
+            // Replace the content with AJAX loaded content
+            accordionBody.innerHTML = html;
+          })
+          .catch((error) => {
+            // Show only error message, don't restore static content
+            accordionBody.innerHTML = `
+              <div class="d-flex justify-content-center align-items-center p-5">
+                <div class="text-center">
+                  <div class="alert alert-danger d-inline-block">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Failed to load record details</strong><br>
+                    <small class="text-muted">Please try refreshing the page or contact support if the problem persists.</small>
+                  </div>
+                </div>
+              </div>
+            `;
+            accordionBody.classList.remove('ajax-loaded');
+          });
+      }
+    });
+  });
+}
 
 function showSuccessAlert(message) {
   // Check if success alert already exists
