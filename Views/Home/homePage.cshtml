@@ -408,7 +408,7 @@ border: none;" onclick="navigateToHome(this)">
                     : record.RegulationName;
                 
                 <!-- Dynamic card -->
-                <div class="col-auto medium-card">
+                <div class="col-auto medium-card large-card">
                     <div class="card document-card" data-title="@displayName" data-department="@record.Department"
                         data-section="@(record.Sections != null ? string.Join(",", record.Sections) : "")"
                         data-type="@record.DocumentType" data-version-date="@record.VersionDate">
