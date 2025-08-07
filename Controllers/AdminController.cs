@@ -302,8 +302,8 @@ public class AdminController : Controller
             // Get all records from the database using Oracle service
             var records = _oracleDbService.GetAllRecords();
             
-            // Enhance records with additional information for the admin dashboard
-            // This creates an anonymous object with all record data plus contact info and attachments
+            // Enhance records with basic information only for faster page loading
+            // Contact information and attachments will be loaded via AJAX when accordion is expanded
             var enhancedRecords = records.Select(record => new
             {
                 // Basic record information
@@ -323,9 +323,9 @@ public class AdminController : Controller
                 Notes = record.Notes,
                 NotesAr = record.NotesAr,
                 CreatedAt = record.CreatedAt,
-                // Additional enhanced information
-                ContactInformation = _oracleDbService.GetContactsByDepartment(record.Department ?? ""),
-                Attachments = _oracleDbService.GetAttachmentsByRecordId(int.Parse(record.Id))
+                // Empty collections for initial load - will be populated via AJAX
+                ContactInformation = new List<dynamic>(),
+                Attachments = new List<dynamic>()
             }).ToList();
             
             return View(enhancedRecords);
