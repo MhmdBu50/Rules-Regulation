@@ -99,7 +99,7 @@ body.ltr label {
 .tooltip1 {
   position: relative;
   display: inline-block;
-  border-bottom: 1px dotted black;
+  overflow: visible;
 }
 /* Tooltip text */
 .tooltip1 .tooltiptext {
@@ -131,4 +131,21 @@ body.ltr label {
 /* Show the tooltip text when you hover over the tooltip container */
 .tooltip1:hover .tooltiptext {
   visibility: visible;
+}
+
+.tooltip1.tooltip-left .tooltiptext {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+#Logout345,
+#Language345 {
+    background-color: #0f1734;
+}
+
+/* Change tooltip background for logout only */
+#Logout345::after,
+#Language345::after {
+  border-color: transparent transparent #0f1734 transparent;
 }
