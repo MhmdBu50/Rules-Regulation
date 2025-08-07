@@ -44,9 +44,7 @@ main, .container-fluid, .main-content {
     flex-direction: column;
 }
 /* Utility class for spacing above the footer */
-.mb-footer-space {
-    margin-bottom: 2rem !important;
-}
+
 
 /* Additional spacing for card containers to prevent last row being too close to footer */
 .mb-footer-space .row {
