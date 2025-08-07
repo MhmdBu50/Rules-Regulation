@@ -68,7 +68,7 @@
           <div class="col-md-6">
             <label for="regulationName" id="label-regulationName">Regulation/Manual Name (English)</label>
             <input type="text" class="form-control" id="regulationName" name="regulationName"
-              pattern="[a-zA-Z0-9\s\.\,\:\;\!\?\@\#\$\%\^\&amp;\*\(\)\-\_\+\=،؟؛]+"
+              pattern="@Html.Raw("[a-zA-Z0-9\\s\\.\\,\\:\\;\\!\\?\\@\\#\\$\\%\\^\\&\\*\\(\\)\\[\\]\\{\\}\\/\\\\\\&lt;\\&gt;\\-\\_\\+\\=\\&quot;\\'\\|،؟؛\\n\\r]*")"
               title="Please enter only English letters, numbers, spaces, and common punctuation"
               placeholder="e.g., Student Academic Regulations" maxlength="200" required>
             <div id="regulationNameError" class="text-danger mt-1" style="display: none;"></div>
@@ -76,7 +76,7 @@
           <div class="col-md-6">
             <label for="regulationNameAr" id="label-regulationNameAr">Regulation/Manual Name (Arabic)</label>
             <input type="text" class="form-control" id="regulationNameAr" name="regulationNameAr"
-              pattern="[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF0-9\s\.\,\:\;\!\?\@\#\$\%\^\&amp;\*\(\)\-\_\+\=،؟؛]+"
+              pattern="@Html.Raw("[\\u0600-\\u06FF\\u0750-\\u077F\\u08A0-\\u08FF\\uFB50-\\uFDFF\\uFE70-\\uFEFF0-9\\s\\.\\,\\:\\;\\!\\?\\@\\#\\$\\%\\^\\&\\*\\(\\)\\[\\]\\{\\}\\/\\\\\\&lt;\\&gt;\\-\\_\\+\\=\\&quot;\\'\\|،؟؛\\n\\r]*")"
               title="Please enter Arabic text, numbers, spaces, and common punctuation"
               placeholder="مثال: لوائح الطلاب الأكاديمية 2024" maxlength="200" dir="rtl" lang="ar" required>
             <div id="regulationNameArError" class="text-danger mt-1" style="display: none;"></div>
@@ -103,7 +103,8 @@
         <div class="row mb-3">
           <div class="col-md-4">
             <label for="versionNumber" id="label-versionNumber">Version Number</label>
-            <input type="text" class="form-control" id="versionNumber" name="versionNumber" pattern="[0-9.\-_]+"
+            <input type="text" class="form-control" id="versionNumber" name="versionNumber" 
+              pattern="@Html.Raw("[0-9\\.\\-\\_]*")"
               title="Please enter only numbers, dots, hyphens, and underscores (e.g., 1.0, 2.1.3, v1-0)"
               placeholder="e.g., 1.0, 2.1.3" maxlength="20" required>
           </div>
@@ -121,7 +122,7 @@
           <div class="col-md-6">
             <label for="ApprovingEntity" id="label-approvingEntity">Approving Entity (English)</label>
             <input type="text" class="form-control" id="ApprovingEntity" name="ApprovingEntity"
-              pattern="[a-zA-Z0-9\s\.\,\:\;\!\?\@\#\$\%\^\&amp;\*\(\)\-\_\+\=،؟؛]+"
+              pattern="@Html.Raw("[a-zA-Z0-9\\s\\.\\,\\:\\;\\!\\?\\@\\#\\$\\%\\^\\&\\*\\(\\)\\[\\]\\{\\}\\/\\\\\\&lt;\\&gt;\\-\\_\\+\\=\\&quot;\\'\\|،؟؛\\n\\r]*")"
               title="Please enter only English letters, numbers, spaces, and common punctuation"
               placeholder="e.g., Academic Affairs Committee" maxlength="150" required>
             <div id="ApprovingEntityError" class="text-danger mt-1" style="display: none;"></div>
@@ -129,7 +130,7 @@
           <div class="col-md-6">
             <label for="ApprovingEntityAr" id="label-approvingEntityAr">Approving Entity (Arabic)</label>
             <input type="text" class="form-control" id="ApprovingEntityAr" name="ApprovingEntityAr"
-              pattern="[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF0-9\s\.\,\:\;\!\?\@\#\$\%\^\&amp;\*\(\)\-\_\+\=،؟؛]+"
+              pattern="@Html.Raw("[\\u0600-\\u06FF\\u0750-\\u077F\\u08A0-\\u08FF\\uFB50-\\uFDFF\\uFE70-\\uFEFF0-9\\s\\.\\,\\:\\;\\!\\?\\@\\#\\$\\%\\^\\&\\*\\(\\)\\[\\]\\{\\}\\/\\\\\\&lt;\\&gt;\\-\\_\\+\\=\\&quot;\\'\\|،؟؛\\n\\r]*")"
               title="Please enter Arabic text, numbers, spaces, and common punctuation"
               placeholder="مثال: لجنة الشؤون الأكاديمية (2024)" maxlength="150" dir="rtl" lang="ar" required>
             <div id="approvingEntityArError" class="text-danger mt-1" style="display: none;"></div>
@@ -143,9 +144,10 @@
               title="Please select a Word document (.doc or .docx file)">
           </div>
           <div class="col-md-6">
-            <label for="pdfAttachment" id="label-pdfAttachment">PDF Attachment</label>
+            <label for="pdfAttachment" id="label-pdfAttachment">PDF Attachment *</label>
             <input type="file" class="form-control" id="pdfAttachment" name="pdfAttachment" accept=".pdf"
               title="Please select a PDF document (.pdf file)" required>
+            <div id="pdfAttachmentError" class="text-danger mt-1" style="display: none;"></div>
           </div>
         </div>
 
@@ -153,7 +155,6 @@
           <div class="col-md-6">
             <label for="Description" id="label-description">Brief Description (English)</label>
             <textarea class="form-control" id="Description" name="Description" rows="3"
-              pattern="[a-zA-Z0-9\s\.\,\:\;\!\?\@\#\$\%\^\&amp;\*\(\)\-\_\+\=،؟؛\n\r]+"
               title="Please enter only English letters, numbers, spaces, and common punctuation"
               placeholder="Enter a brief description of the regulation..." maxlength="500"></textarea>
             <div id="DescriptionError" class="text-danger mt-1" style="display: none;"></div>
@@ -161,7 +162,6 @@
           <div class="col-md-6">
             <label for="DescriptionAr" id="label-descriptionAr">Brief Description (Arabic)</label>
             <textarea class="form-control" id="DescriptionAr" name="DescriptionAr" rows="3"
-              pattern="[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF0-9\s\.\,\:\;\!\?\@\#\$\%\^\&amp;\*\(\)\-\_\+\=،؟؛\n\r]+"
               title="Please enter Arabic text, numbers, spaces, and common punctuation"
               placeholder="أدخل وصفاً مختصراً للائحة مع أرقام إن لزم الأمر..." maxlength="500" dir="rtl"
               lang="ar"></textarea>
@@ -203,7 +203,7 @@
           <div class="col-md-6">
             <label for="notes" id="label-notes">Notes (English)</label>
             <input type="text" class="form-control" id="notes" name="notes"
-              pattern="[a-zA-Z0-9\s\.\,\:\;\!\?\@\#\$\%\^\&amp;\*\(\)\-\_\+\=،؟؛]*"
+              pattern="@Html.Raw("[a-zA-Z0-9\\s\\.\\,\\:\\;\\!\\?\\@\\#\\$\\%\\^\\&\\*\\(\\)\\[\\]\\{\\}\\/\\\\\\&lt;\\&gt;\\-\\_\\+\\=\\&quot;\\'\\|،؟؛\\n\\r]*")"
               title="Please enter only English letters, numbers, spaces, and common punctuation"
               placeholder="Optional notes or comments..." maxlength="250">
             <div id="notesError" class="text-danger mt-1" style="display: none;"></div>
@@ -211,7 +211,7 @@
           <div class="col-md-6">
             <label for="notesAr" id="label-notesAr">Notes (Arabic)</label>
             <input type="text" class="form-control" id="notesAr" name="notesAr"
-              pattern="[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF0-9\s\.\,\:\;\!\?\@\#\$\%\^\&amp;\*\(\)\-\_\+\=،؟؛]*"
+              pattern="@Html.Raw("[\\u0600-\\u06FF\\u0750-\\u077F\\u08A0-\\u08FF\\uFB50-\\uFDFF\\uFE70-\\uFEFF0-9\\s\\.\\,\\:\\;\\!\\?\\@\\#\\$\\%\\^\\&\\*\\(\\)\\[\\]\\{\\}\\/\\\\\\&lt;\\&gt;\\-\\_\\+\\=\\&quot;\\'\\|،؟؛\\n\\r]*")"
               title="Please enter Arabic text, numbers, spaces, and common punctuation"
               placeholder="ملاحظات أو تعليقات اختيارية مع أرقام..." maxlength="250" dir="rtl" lang="ar">
             <div id="notesArError" class="text-danger mt-1" style="display: none;"></div>
