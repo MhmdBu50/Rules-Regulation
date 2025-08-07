@@ -1,0 +1,337 @@
+@model dynamic
+@using Microsoft.AspNetCore.Localization
+
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
+    var isArabic = currentCulture == "ar-SA";
+    
+    // Document Type translation logic
+    var displayDocumentType = Model?.DocumentType?.ToString() ?? "";
+    if (isArabic && !string.IsNullOrEmpty(displayDocumentType))
+    {
+        switch (displayDocumentType)
+        {
+            case "Student guides & templates":
+                displayDocumentType = "أدلة ونماذج الطلاب";
+                break;
+            case "Student rules & regulations":
+                displayDocumentType = "قواعد وأنظمة الطلاب";
+                break;
+            case "Employees' rules & regulations":
+                displayDocumentType = "قواعد وأنظمة الموظفين";
+                break;
+            case "Academic rules & regulations":
+                displayDocumentType = "قواعد وأنظمة أكاديمية";
+                break;
+        }
+    }
+
+    // Department translation logic
+    var displayDepartment = Model?.Department?.ToString() ?? "";
+    if (isArabic && !string.IsNullOrEmpty(displayDepartment))
+    {
+        switch (displayDepartment)
+        {
+            case "Reg and Admission":
+                displayDepartment = "التسجيل والقبول";
+                break;
+            case "CCSIT":
+                displayDepartment = "كلية علوم الحاسب وتقنية المعلومات";
+                break;
+            case "Communication and tech":
+                displayDepartment = "الاتصالات والتقنية";
+                break;
+            case "Hospital":
+                displayDepartment = "المستشفى";
+                break;
+            case "Library":
+                displayDepartment = "المكتبة";
+                break;
+            case "Students Affairs":
+                displayDepartment = "شؤون الطلاب";
+                break;
+            case "Preparetory":
+                displayDepartment = "السنة التحضيرية";
+                break;
+            case "Academic Affairs":
+                displayDepartment = "الشؤون الأكاديمية";
+                break;
+        }
+    }
+}
+
+@if (Model != null)
+{
+    <div class="record-full-details">
+        <form id="recordForm_@Model.Id" method="post" action="@Url.Action("UpdateRecord", "Admin")" onsubmit="return handleFormSubmit(event, @Model.Id)">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="recordId" value="@Model.Id" />
+            
+            <div class="row mb-2">
+                <!-- left side of the accordion menu inside -->
+                <div class="col-lg-6 col-12 mb-3 mb-lg-0">
+                    <div class="table-responsive">
+                        <table class="table table-borderless mb-0">
+                            <tr>
+                                <td colspan="3">
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-regulation-name-label">Regulation/ Manual
+                                        name (English)</label>
+                                    <textarea name="regulationName" class="form-control" rows="2"
+                                readonly disabled>@Model.RegulationName</textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-brief-description-label">Brief
+                                        Description (English)</label>
+                                    <textarea name="description" class="form-control" rows="4"
+                                readonly disabled>@Model.Description</textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-approving-entity-label">Approving Entity (English)</label>
+                                    <input type="text" name="approvingEntity" class="form-control"
+                                        value="@Model.ApprovingEntity" readonly disabled>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-note-label">Note (English)</label>
+                                    <input type="text" name="notes" class="form-control mb-2"
+                                        value="@Model.Notes" readonly disabled>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-12 col-sm-4">
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-approving-date-label">Approving
+                                        Date</label>
+                                    <input type="date" name="approvalDate" class="form-control mb-2" value="@Model.ApprovalDate"
+                                        readonly disabled>
+                                </td>
+                                <td class="col-12 col-sm-4">
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-version-date-label">Version Date</label>
+                                    <input type="date" name="versionDate" class="form-control mb-2" value="@Model.VersionDate"
+                                        readonly disabled>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-version-number-label">Version
+                                        Number</label>
+                                    <input type="text" name="version" class="form-control mb-2" value="@Model.Version"
+                                        readonly disabled>
+                                </td>
+                                
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <label class="fw-bold translatable-label" data-translate-key="admin-table-form-responsible-department-label">Responsible Department</label>
+                                    <select name="department" class="form-select" disabled>
+                                        <option value="@Model.Department" selected>@displayDepartment</option>
+                                        <option value="Reg and Admission">@(isArabic ? "التسجيل والقبول" : "Reg and Admission")</option>
+                                        <option value="CCSIT">@(isArabic ? "كلية علوم الحاسب وتقنية المعلومات" : "CCSIT")</option>
+                                        <option value="Communication and tech">@(isArabic ? "الاتصالات والتقنية" : "Communication and tech")</option>
+                                        <option value="Hospital">@(isArabic ? "المستشفى" : "Hospital")</option>
+                                        <option value="Library">@(isArabic ? "المكتبة" : "Library")</option>
+                                        <option value="Students Affairs">@(isArabic ? "شؤون الطلاب" : "Students Affairs")</option>
+                                        <option value="Preparetory">@(isArabic ? "السنة التحضيرية" : "Preparetory")</option>
+                                        <option value="Academic Affairs">@(isArabic ? "الشؤون الأكاديمية" : "Academic Affairs")</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!------------------------------------------------ right side of the accordion menu inside------------------------------------------------------>
+                <div class="col-lg-6 col-12">
+                    <div class="table-responsive">
+                        <table class="table table-borderless mb-0">
+                            
+                            <tr>
+                                <td colspan="3">
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-regulation-name-ar-label">Regulation/ Manual
+                                        name (Arabic)</label>
+                                    <textarea name="regulationNameAr" class="form-control" rows="2" dir="rtl"
+                                readonly disabled>@(Model.RegulationNameAr ?? "")</textarea>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="3">
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-brief-description-ar-label">Brief
+                                        Description (Arabic)</label>
+                                    <textarea name="descriptionAr" class="form-control" rows="4" dir="rtl"
+                                readonly disabled>@(Model.DescriptionAr ?? "")</textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-approving-entity-ar-label">Approving Entity (Arabic)</label>
+                                    <input type="text" name="approvingEntityAr" class="form-control" dir="rtl"
+                                        value="@(Model.ApprovingEntityAr ?? "")" readonly disabled>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-note-ar-label">Note (Arabic)</label>
+                                    <input type="text" name="notesAr" class="form-control mb-2" dir="rtl"
+                                        value="@(Model.NotesAr ?? "")" readonly disabled>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-document-type-label">Document
+                                        Type</label>
+                                    <select name="documentType" class="form-select mb-2" disabled>
+                                        <option value="@Model.DocumentType" selected>@displayDocumentType</option>
+                                        <option value="Student guides & templates" id= "admin-chart-legend-student-guides3">@(isArabic ? "أدلة وقوالب الطلاب" : "Student guides & templates")</option>
+                                        <option value="Student rules & regulations" id="admin-chart-legend-student-rules3">@(isArabic ? "قواعد وأنظمة الطلاب" : "Student rules & regulations")</option>
+                                        <option value="Employees' rules & regulations" id="admin-chart-legend-employment-rules3">@(isArabic ? "قواعد وأنظمة الموظفين" : "Employees' rules & regulations")</option>
+                                        <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules3">@(isArabic ? "قواعد وأنظمة أكاديمية" : "Academic rules & regulations")</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-attach-word-label">Attach word file</label>
+                                    @{
+                                        var wordAttachment = ((IEnumerable<dynamic>)Model.Attachments)?.FirstOrDefault(a => a.FileType?.ToString()?.ToLower() == "word" || a.FileType?.ToString()?.ToLower() == "docx");
+                                    }
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control attachment-display" 
+                                               id="wordDisplay_@Model.Id"
+                                               value="@(wordAttachment?.OriginalFileName ?? "")" 
+                                               readonly disabled>
+                                        <input type="file" id="wordFile_@Model.Id" class="d-none" accept=".doc,.docx" 
+                                               onchange="handleFileSelection(@Model.Id, 'word', this)" disabled>
+                                        <span class="input-group-text attachment-upload-btn" 
+                                              id="wordUploadBtn_@Model.Id"
+                                              style="cursor: not-allowed; opacity: 0.6;" 
+                                              title="Click Edit to enable file upload">
+                                            <i class="bi bi-paperclip">
+                                                <img src="~/svgs/admin/upload-file.svg" alt="upload-file" />
+                                            </i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-attach-pdf-label">Attach PDF file</label>
+                                    @{
+                                        var pdfAttachment = ((IEnumerable<dynamic>)Model.Attachments)?.FirstOrDefault(a => a.FileType?.ToString()?.ToLower() == "pdf");
+                                    }
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control attachment-display" 
+                                               id="pdfDisplay_@Model.Id"
+                                               value="@(pdfAttachment?.OriginalFileName ?? "")" 
+                                               readonly disabled>
+                                        <input type="file" id="pdfFile_@Model.Id" class="d-none" accept=".pdf" 
+                                               onchange="handleFileSelection(@Model.Id, 'pdf', this)" disabled>
+                                        <span class="input-group-text attachment-upload-btn" 
+                                              id="pdfUploadBtn_@Model.Id"
+                                              style="cursor: not-allowed; opacity: 0.6;" 
+                                              title="Click Edit to enable file upload">
+                                            <i class="bi bi-paperclip">
+                                                <img src="~/svgs/admin/upload-file.svg" alt="upload-file" />
+                                            </i>
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information Section - Full Width -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-responsible-contact-label">Responsible Department contact information:</label>
+                    @if (Model.ContactInformation != null && ((IEnumerable<dynamic>)Model.ContactInformation).Any())
+                    {
+                        <div class="row">
+                            @foreach (var contact in Model.ContactInformation)
+                            {
+                                <div class="col-12 col-md-12 col-lg-6 col-xl-4 mb-3">
+                                    <div class="p-3 border rounded h-100">
+                                        <div class="mb-2">
+                                            <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-name-en-label">Name (English)</label>
+                                            <input type="text" class="form-control contact-input"
+                                                value="@contact.Name" readonly disabled>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-name-ar-label">Name (Arabic)</label>
+                                            <input type="text" class="form-control contact-input" dir="rtl"
+                                                value="@(contact.NameAr ?? "")" readonly disabled>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
+                                        {
+                                            <div class="mb-2">
+                                                <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-email-label">Email</label>
+                                                <input type="email" class="form-control contact-input"
+                                                    value="@contact.Email" readonly disabled>
+                                            </div>
+                                        }  
+                                        @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()) || !string.IsNullOrEmpty(contact.Mobile?.ToString()))
+                                        {
+                                            <div class="mb-2">
+                                                <div class="row">
+                                                    @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
+                                                    {
+                                                        <div class="col-6">
+                                                            <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-telephone-label">Telephone number</label>
+                                                            <input type="text" class="form-control contact-input" value="@contact.Telephone"
+                                                                readonly disabled>
+                                                        </div>
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
+                                                    {
+                                                        <div class="col-6">
+                                                            <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-mobile-label">Mobile number</label>
+                                                            <input type="text" class="form-control contact-input" value="@contact.Mobile"
+                                                                readonly disabled>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mb-3">
+                            <p class="text-muted" id="admin-table-form-no-contact-info">No contact information available for this department.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="d-flex flex-wrap justify-content-end gap-2">
+                        <button type="button" class="btn btn-danger translatable-label" data-translate-key="admin-table-delete-button" onclick="deleteRecord(@Model.Id)">Delete</button>
+                        <button type="button" class="btn btn-secondary edit-btn translatable-label" data-translate-key="admin-table-edit-button" onclick="toggleEditMode(@Model.Id)">Edit</button>
+                        <button type="submit" class="btn btn-success save-btn translatable-label" data-translate-key="admin-table-save-button" style="display: none;">Save</button>
+                        <button type="button" class="btn btn-outline-secondary cancel-btn translatable-label" data-translate-key="admin-table-cancel-button" style="display: none;" onclick="cancelEdit(@Model.Id)">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        Record details could not be loaded.
+    </div>
+}
