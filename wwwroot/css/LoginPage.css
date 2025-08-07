@@ -7,6 +7,54 @@ body {
     height: 100vh;
 }
 
+/* Language Toggle Button for Login Page */
+.language-toggle-btn {
+    position: absolute;
+    top: 50%;
+    right: -25px;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, #2E4B8B, #1a2b52);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 15px 10px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(46, 75, 139, 0.3);
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.language-toggle-btn:hover {
+    background: linear-gradient(135deg, #1a2b52, #2E4B8B);
+    transform: translateY(-50%) translateX(5px);
+    box-shadow: 0 6px 16px rgba(46, 75, 139, 0.4);
+}
+
+.language-toggle-btn i {
+    font-size: 18px;
+}
+
+.language-toggle-btn span {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* RTL adjustments for language button */
+body.rtl .language-toggle-btn {
+    right: auto;
+    left: -25px;
+}
+
+body.rtl .language-toggle-btn:hover {
+    transform: translateY(-50%) translateX(-5px);
+}
+
 body::before {
     content: "";
     position: absolute;
