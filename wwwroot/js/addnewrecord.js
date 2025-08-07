@@ -5,57 +5,138 @@ function confirmCancel() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Arabic validation pattern
-  const arabicPattern = /^[\u0600-\u06FF\s\u060C\u061B\u061F\u0640]*$/;
+  // Arabic validation pattern (comprehensive Unicode with extensive punctuation)
+  const arabicPattern = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF0-9\s\.\,\:\;\!\?\@\#\$\%\^\&\*\(\)\[\]\{\}\/\\\<\>\-\_\+\=\"\'\|،؟؛\n\r]+$/;
   
   // English validation pattern
-  const englishPattern = /^[a-zA-Z0-9\s\-.,'()&]+$/;
+  const englishPattern = /^[a-zA-Z0-9\s\.\,\:\;\!\?\@\#\$\%\^\&\*\(\)\[\]\{\}\/\\\<\>\-\_\+\=\"\'\|،؟؛\n\r]*$/;
   
-  // Arabic validation function
-  function validateArabicField(input, errorElementId) {
-    const errorElement = document.getElementById(errorElementId);
-    if (!errorElement) {
-      return true; // If no error element, assume valid to avoid breaking functionality
-    }
+  // Version number validation pattern (numbers, dots, hyphens, underscores)
+  const versionPattern = /^[0-9.\-_]+$/;
+  
+  // Version number validation function
+  function validateVersionNumber(input) {
+    const value = input.value.trim();
+    const errorElement = document.getElementById(input.id + 'Error');
     
-    if (input.value.trim() && !arabicPattern.test(input.value)) {
-      errorElement.textContent = "This field must contain only Arabic text.";
-      errorElement.style.display = "block";
+    if (value && !versionPattern.test(value)) {
+      input.setCustomValidity("Please enter only numbers, dots, hyphens, and underscores (e.g., 1.0, 2.1.3, v1-0)");
       input.classList.add('is-invalid');
+      if (errorElement) {
+        errorElement.textContent = "Please enter only numbers, dots, hyphens, and underscores (e.g., 1.0, 2.1.3, v1-0)";
+        errorElement.style.display = 'block';
+      }
       return false;
     } else {
-      errorElement.textContent = "";
-      errorElement.style.display = "none";
+      input.setCustomValidity("");
       input.classList.remove('is-invalid');
+      if (errorElement) {
+        errorElement.textContent = "";
+        errorElement.style.display = 'none';
+      }
+      return true;
+    }
+  }
+  
+  // PDF attachment validation function
+  function validatePdfAttachment(input) {
+    const files = input.files;
+    const errorElement = document.getElementById('pdfAttachmentError');
+    
+    if (!files || files.length === 0) {
+      input.setCustomValidity("Please select a PDF file");
+      input.classList.add('is-invalid');
+      if (errorElement) {
+        errorElement.textContent = "Please select a PDF file";
+        errorElement.style.display = 'block';
+      }
+      return false;
+    }
+    
+    const file = files[0];
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+      input.setCustomValidity("Please select a valid PDF file");
+      input.classList.add('is-invalid');
+      if (errorElement) {
+        errorElement.textContent = "Please select a valid PDF file";
+        errorElement.style.display = 'block';
+      }
+      return false;
+    }
+    
+    input.setCustomValidity("");
+    input.classList.remove('is-invalid');
+    if (errorElement) {
+      errorElement.textContent = "";
+      errorElement.style.display = 'none';
+    }
+    return true;
+  }
+  
+  // Arabic validation function
+  function validateArabicField(input) {
+    const value = input.value.trim();
+    let errorElementId = input.id + 'Error';
+    
+    // Fix error element IDs for specific fields
+    if (input.id === 'ApprovingEntityAr') {
+      errorElementId = 'approvingEntityArError';
+    } else if (input.id === 'DescriptionAr') {
+      errorElementId = 'descriptionArError';
+    }
+    
+    const errorElement = document.getElementById(errorElementId);
+    
+    if (value && !arabicPattern.test(value)) {
+      input.setCustomValidity("Please enter Arabic text, numbers, spaces, and common punctuation");
+      input.classList.add('is-invalid');
+      if (errorElement) {
+        errorElement.textContent = "Please enter Arabic text, numbers, spaces, and common punctuation";
+        errorElement.style.display = 'block';
+      }
+      return false;
+    } else {
+      input.setCustomValidity("");
+      input.classList.remove('is-invalid');
+      if (errorElement) {
+        errorElement.textContent = "";
+        errorElement.style.display = 'none';
+      }
       return true;
     }
   }
 
   // English validation function
-  function validateEnglishField(input, errorElementId) {
-    const errorElement = document.getElementById(errorElementId);
-    if (!errorElement) {
-      return true; // If no error element, assume valid to avoid breaking functionality
-    }
-    
+  function validateEnglishField(input) {
     const value = input.value.trim();
+    const errorElement = document.getElementById(input.id + 'Error');
     
     // Skip validation if field is optional and empty
     if ((input.id === 'notes' || input.id === 'Description') && value === '') {
-      errorElement.style.display = 'none';
+      input.setCustomValidity("");
       input.classList.remove('is-invalid');
+      if (errorElement) {
+        errorElement.textContent = "";
+        errorElement.style.display = 'none';
+      }
       return true;
     }
     
     if (value && !englishPattern.test(value)) {
-      errorElement.textContent = "This field must contain only English text.";
-      errorElement.style.display = "block";
+      input.setCustomValidity("Please enter only English letters, numbers, spaces, and common punctuation");
       input.classList.add('is-invalid');
+      if (errorElement) {
+        errorElement.textContent = "Please enter only English letters, numbers, spaces, and common punctuation";
+        errorElement.style.display = 'block';
+      }
       return false;
     } else {
-      errorElement.textContent = "";
-      errorElement.style.display = "none";
+      input.setCustomValidity("");
       input.classList.remove('is-invalid');
+      if (errorElement) {
+        errorElement.textContent = "";
+        errorElement.style.display = 'none';
+      }
       return true;
     }
   }
@@ -69,78 +150,97 @@ document.addEventListener('DOMContentLoaded', function () {
   const descriptionAr = document.getElementById('DescriptionAr');
   const notes = document.getElementById('notes');
   const notesAr = document.getElementById('notesAr');
+  const versionNumber = document.getElementById('versionNumber');
+  const pdfAttachment = document.getElementById('pdfAttachment');
 
   // Real-time validation for English fields
   if (regulationName) {
     regulationName.addEventListener('input', function() {
-      validateEnglishField(this, 'regulationNameError');
+      validateEnglishField(this);
     });
     regulationName.addEventListener('blur', function() {
-      validateEnglishField(this, 'regulationNameError');
+      validateEnglishField(this);
     });
   }
 
   if (approvingEntity) {
     approvingEntity.addEventListener('input', function() {
-      validateEnglishField(this, 'ApprovingEntityError');
+      validateEnglishField(this);
     });
     approvingEntity.addEventListener('blur', function() {
-      validateEnglishField(this, 'ApprovingEntityError');
+      validateEnglishField(this);
     });
   }
 
   if (description) {
     description.addEventListener('input', function() {
-      validateEnglishField(this, 'DescriptionError');
+      validateEnglishField(this);
     });
     description.addEventListener('blur', function() {
-      validateEnglishField(this, 'DescriptionError');
+      validateEnglishField(this);
     });
   }
 
   if (notes) {
     notes.addEventListener('input', function() {
-      validateEnglishField(this, 'notesError');
+      validateEnglishField(this);
     });
     notes.addEventListener('blur', function() {
-      validateEnglishField(this, 'notesError');
+      validateEnglishField(this);
+    });
+  }
+
+  // Version number validation
+  if (versionNumber) {
+    versionNumber.addEventListener('input', function() {
+      validateVersionNumber(this);
+    });
+    versionNumber.addEventListener('blur', function() {
+      validateVersionNumber(this);
+    });
+  }
+
+  // PDF attachment validation
+  if (pdfAttachment) {
+    pdfAttachment.addEventListener('change', function() {
+      validatePdfAttachment(this);
     });
   }
 
   // Real-time validation for Arabic fields
   if (regulationNameAr) {
     regulationNameAr.addEventListener('input', function() {
-      validateArabicField(this, 'regulationNameArError');
+      validateArabicField(this);
     });
     regulationNameAr.addEventListener('blur', function() {
-      validateArabicField(this, 'regulationNameArError');
+      validateArabicField(this);
     });
   }
 
   if (approvingEntityAr) {
     approvingEntityAr.addEventListener('input', function() {
-      validateArabicField(this, 'approvingEntityArError');
+      validateArabicField(this);
     });
     approvingEntityAr.addEventListener('blur', function() {
-      validateArabicField(this, 'approvingEntityArError');
+      validateArabicField(this);
     });
   }
 
   if (descriptionAr) {
     descriptionAr.addEventListener('input', function() {
-      validateArabicField(this, 'descriptionArError');
+      validateArabicField(this);
     });
     descriptionAr.addEventListener('blur', function() {
-      validateArabicField(this, 'descriptionArError');
+      validateArabicField(this);
     });
   }
 
   if (notesAr) {
     notesAr.addEventListener('input', function() {
-      validateArabicField(this, 'notesArError');
+      validateArabicField(this);
     });
     notesAr.addEventListener('blur', function() {
-      validateArabicField(this, 'notesArError');
+      validateArabicField(this);
     });
   }
 
@@ -151,38 +251,48 @@ document.addEventListener('DOMContentLoaded', function () {
       let isValid = true;
       
       // Validate required English fields
-      if (regulationName && !validateEnglishField(regulationName, 'regulationNameError')) {
+      if (regulationName && !validateEnglishField(regulationName)) {
         isValid = false;
       }
       
-      if (approvingEntity && !validateEnglishField(approvingEntity, 'ApprovingEntityError')) {
+      if (approvingEntity && !validateEnglishField(approvingEntity)) {
         isValid = false;
       }
       
       // Validate optional English fields if they have content
-      if (description && description.value.trim() && !validateEnglishField(description, 'DescriptionError')) {
+      if (description && description.value.trim() && !validateEnglishField(description)) {
         isValid = false;
       }
       
-      if (notes && notes.value.trim() && !validateEnglishField(notes, 'notesError')) {
+      if (notes && notes.value.trim() && !validateEnglishField(notes)) {
+        isValid = false;
+      }
+      
+      // Validate version number field
+      if (versionNumber && !validateVersionNumber(versionNumber)) {
+        isValid = false;
+      }
+      
+      // Validate PDF attachment (mandatory)
+      if (pdfAttachment && !validatePdfAttachment(pdfAttachment)) {
         isValid = false;
       }
       
       // Validate required Arabic fields
-      if (regulationNameAr && !validateArabicField(regulationNameAr, 'regulationNameArError')) {
+      if (regulationNameAr && !validateArabicField(regulationNameAr)) {
         isValid = false;
       }
       
-      if (approvingEntityAr && !validateArabicField(approvingEntityAr, 'approvingEntityArError')) {
+      if (approvingEntityAr && !validateArabicField(approvingEntityAr)) {
         isValid = false;
       }
       
       // Validate optional Arabic fields if they have content
-      if (descriptionAr && descriptionAr.value.trim() && !validateArabicField(descriptionAr, 'descriptionArError')) {
+      if (descriptionAr && descriptionAr.value.trim() && !validateArabicField(descriptionAr)) {
         isValid = false;
       }
       
-      if (notesAr && notesAr.value.trim() && !validateArabicField(notesAr, 'notesArError')) {
+      if (notesAr && notesAr.value.trim() && !validateArabicField(notesAr)) {
         isValid = false;
       }
 

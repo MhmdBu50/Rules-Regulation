@@ -1111,11 +1111,12 @@ namespace RulesRegulation.Services
             if (string.IsNullOrWhiteSpace(text))
                 return true; // Empty text is considered valid
 
-            // Enhanced Arabic regex pattern that includes:
-            // - Arabic letters (U+0600-U+06FF)
-            // - Spaces
+            // Enhanced Arabic regex pattern that matches JavaScript pattern:
+            // - Arabic letters (comprehensive Unicode ranges)
+            // - Regular digits (0-9)
+            // - Spaces and extensive punctuation
             // - Arabic punctuation marks
-            var arabicPattern = new System.Text.RegularExpressions.Regex(@"^[\u0600-\u06FF\s\u060C\u061B\u061F\u0640]*$");
+            var arabicPattern = new System.Text.RegularExpressions.Regex(@"^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF0-9\s\.\,\:\;\!\?\@\#\$\%\^\&\*\(\)\[\]\{\}\/\\\<\>\-_\+\=\""\'\|،؟؛]+$");
             return arabicPattern.IsMatch(text);
         }
 
