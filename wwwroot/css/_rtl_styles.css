@@ -96,3 +96,56 @@ body.ltr textarea,
 body.ltr label {
     text-align: start !important;
 }
+.tooltip1 {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+}
+/* Tooltip text */
+.tooltip1 .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  height: fit-content;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: 150%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip1 .tooltiptext::after {    
+  content: " ";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+}
+/* Show the tooltip text when you hover over the tooltip container */
+.tooltip1:hover .tooltiptext {
+  visibility: visible;
+}
+
+.tooltip1.tooltip-left .tooltiptext {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+#Logout345,
+#Language345 {
+    background-color: #0f1734;
+}
+
+/* Change tooltip background for logout only */
+#Logout345::after,
+#Language345::after {
+  border-color: transparent transparent #0f1734 transparent;
+}

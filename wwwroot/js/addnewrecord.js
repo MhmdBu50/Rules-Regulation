@@ -38,6 +38,41 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
   
+  // PDF attachment validation function
+  function validatePdfAttachment(input) {
+    const files = input.files;
+    const errorElement = document.getElementById('pdfAttachmentError');
+    
+    if (!files || files.length === 0) {
+      input.setCustomValidity("Please select a PDF file");
+      input.classList.add('is-invalid');
+      if (errorElement) {
+        errorElement.textContent = "Please select a PDF file";
+        errorElement.style.display = 'block';
+      }
+      return false;
+    }
+    
+    const file = files[0];
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+      input.setCustomValidity("Please select a valid PDF file");
+      input.classList.add('is-invalid');
+      if (errorElement) {
+        errorElement.textContent = "Please select a valid PDF file";
+        errorElement.style.display = 'block';
+      }
+      return false;
+    }
+    
+    input.setCustomValidity("");
+    input.classList.remove('is-invalid');
+    if (errorElement) {
+      errorElement.textContent = "";
+      errorElement.style.display = 'none';
+    }
+    return true;
+  }
+  
   // Arabic validation function
   function validateArabicField(input) {
     const value = input.value.trim();
@@ -116,6 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const notes = document.getElementById('notes');
   const notesAr = document.getElementById('notesAr');
   const versionNumber = document.getElementById('versionNumber');
+  const pdfAttachment = document.getElementById('pdfAttachment');
 
   // Real-time validation for English fields
   if (regulationName) {
@@ -161,6 +197,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     versionNumber.addEventListener('blur', function() {
       validateVersionNumber(this);
+    });
+  }
+
+  // PDF attachment validation
+  if (pdfAttachment) {
+    pdfAttachment.addEventListener('change', function() {
+      validatePdfAttachment(this);
     });
   }
 
@@ -227,6 +270,11 @@ document.addEventListener('DOMContentLoaded', function () {
       
       // Validate version number field
       if (versionNumber && !validateVersionNumber(versionNumber)) {
+        isValid = false;
+      }
+      
+      // Validate PDF attachment (mandatory)
+      if (pdfAttachment && !validatePdfAttachment(pdfAttachment)) {
         isValid = false;
       }
       

@@ -80,6 +80,7 @@
                                 navigateToHistory();
                             }
                             break;
+                            
                     }
                     
                     // Clean up the URL by removing the filter parameter
@@ -105,14 +106,15 @@
                     <div class="d-none d-lg-block d-xl-block">
                         <form method="post" action="@Url.Action("Logout", "Account")" style="margin: 0">
                             @Html.AntiForgeryToken()
-                            <button class="desktop-logo logo" type="submit" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
+                            <button class="desktop-logo logo tooltip1" type="submit" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
                                 <img src="~/svgs/navigation/logout.svg" alt="Menu" width="36" height="36" />
+                                <span class="tooltiptext" id="Logout345"></span>
                             </button>
                         </form>
                     </div>
 
                     <div class="language-switcher-container d-none d-lg-block d-xl-block">
-                        <button id="language-toggle" class="language-toggle-btn">
+                        <button id="language-toggle" class="language-toggle-btn tooltip1">
                             <svg class="desktop-logo logo" width="33" height="33" viewBox="0 0 40 40" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path d="M20.0002 39.1668C17.3807 39.1668 14.905 38.6637 12.5731 37.6575C10.2411 36.6512 8.20468 35.2776 6.4637 33.5366C4.72273 31.7957 3.34912 29.7592 2.34287 27.4272C1.33662 25.0953 0.833496 22.6196 0.833496 20.0002C0.833496 17.3488 1.33662 14.8651 2.34287 
@@ -121,6 +123,7 @@
 23.8335ZM28.3377 23.8335H34.8543C35.0141 23.1946 35.1338 22.5637 35.2137 21.9408C35.2936 21.3179 35.3335 20.671 35.3335 20.0002C35.3335 19.3293 35.2936 18.6825 35.2137 18.0595C35.1338 17.4366 35.0141 16.8057 34.8543 16.1668H28.3377C28.4335 16.8057 28.5054 17.4366 28.5533 18.0595C28.6012 18.6825 28.6252 19.3293 28.6252 20.0002C28.6252 20.671 28.6012 21.3179 28.5533 21.9408C28.5054 22.5637 28.4335 23.1946 28.3377 23.8335ZM27.571 12.3335H33.2252C32.2988 10.7363 31.1408 9.34669 29.7512 8.16475C28.3616 6.9828 26.7724 6.10433 24.9835 5.52933C25.5585 6.5835 26.0616 7.67759 26.4929 8.81162C26.9241 9.94565 27.2835 11.1196 27.571 12.3335ZM16.3585 12.3335H23.6418C23.2585 10.9279 22.7634 9.60225 22.1564 8.35641C21.5495 7.11058 20.8307 5.91266 20.0002 4.76266C19.1696 5.91266 18.4509 7.11058 17.8439 8.35641C17.237 9.60225 16.7418 10.9279 16.3585 12.3335ZM6.77516 12.3335H12.4293C12.7168 11.1196 13.0762 9.94565 13.5075 8.81162C13.9387 7.67759 14.4418 6.5835 15.0168 5.52933C13.2279 6.10433 11.6387 6.9828 10.2491 8.16475C8.85954 
 9.34669 7.70155 10.7363 6.77516 12.3335Z" fill="#CFEFFF"></path>
                             </svg>
+                            <span class="tooltiptext" id="Language345"></span>
                         </button>
                     </div>
                 </div>
@@ -405,7 +408,7 @@ border: none;" onclick="navigateToHome(this)">
                     : record.RegulationName;
                 
                 <!-- Dynamic card -->
-                <div class="col-auto medium-card">
+                <div class="col-auto medium-card large-card">
                     <div class="card document-card" data-title="@displayName" data-department="@record.Department"
                         data-section="@(record.Sections != null ? string.Join(",", record.Sections) : "")"
                         data-type="@record.DocumentType" data-version-date="@record.VersionDate">

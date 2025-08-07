@@ -336,6 +336,7 @@ box-shadow: 0px 10px 30px rgba(138, 197, 62, 0.4);
   flex: 1;
   display: flex;
   gap: 0;
+  height: 258px;
 }
 
 .charts-section .row {
@@ -394,6 +395,17 @@ box-shadow: 0px 10px 30px rgba(138, 197, 62, 0.4);
     margin-bottom: 20px;
   }
 
+  .chart-canvas-container {
+    width: 80% !important;
+    max-width: 300px !important;
+    margin: 0 auto;
+  }
+  
+  .chart-canvas-container canvas {
+    width: 100% !important;
+    max-width: 300px !important;
+  }
+
   .chart-section:first-child {
     border-right: none;
     margin-right: 0;
@@ -423,6 +435,28 @@ box-shadow: 0px 10px 30px rgba(138, 197, 62, 0.4);
   }
 }
 
+/* Extra small devices (phones, 440px and down) */
+@media (max-width: 440px) {
+  .chart-canvas-container {
+    width: 90% !important;
+    max-width: 280px !important;
+  }
+  
+  .chart-canvas-container canvas {
+    width: 100% !important;
+    max-width: 280px !important;
+  }
+  
+  .chart-title {
+    font-size: 11px;
+    margin-bottom: 15px;
+  }
+  
+  .legendToggler {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+}
 
 /*---------------------------- Search, Section and Document type Bar ----------------------------*/
 
