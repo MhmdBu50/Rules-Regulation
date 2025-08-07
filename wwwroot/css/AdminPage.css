@@ -336,6 +336,7 @@ box-shadow: 0px 10px 30px rgba(138, 197, 62, 0.4);
   flex: 1;
   display: flex;
   gap: 0;
+  height: 258px;
 }
 
 .charts-section .row {
