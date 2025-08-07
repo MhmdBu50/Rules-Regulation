@@ -267,7 +267,48 @@ document.addEventListener("DOMContentLoaded", () => {
     "label-telephone-90201": "Telephone number",
     "label-mobile-90201": "Mobile number",
     "btn-update-90201": "Update Contact Info",
-    "btn-cancel-90201": "Cancel"
+    "btn-cancel-90201": "Cancel",
+    //report page translations
+    "btn-back-admin": "Back to Admin",
+    "dashboard-title": "Analytics Dashboard",
+    "dashboard-subtitle": "Comprehensive system statistics and insights",
+    "btn-export-pdf": "Export PDF",
+
+    "stat-total-documents": "Total Documents",
+    "stat-total-users": "Registered Users",
+    "stat-total-downloads": "Total Downloads",
+    "stat-total-views": "Total Views",
+
+    "chart-views-downloads": "Views & Downloads over Time",
+    "chart-top-viewed": "Top 5 Most Viewed Records",
+    "chart-top-downloaded": "Top 5 Most Downloaded Records",
+    "chart-type-distribution": "Document Type Distribution",
+
+    "list-top-downloaded": "Top Downloaded",
+    "list-top-viewed": "Top Viewed",
+    "list-most-details": "Most Details Shown",
+    "msg-no-download-data": "No download data available",
+    "msg-no-view-data": "No view data available",
+    "msg-no-details-data": "No details data available",
+
+    "table-title": "Document Statistics",
+    "sort-total": "Sort by Total Interactions",
+    "sort-downloads": "Sort by Downloads",
+    "sort-views": "Sort by Views",
+    "sort-details": "Sort by Details Shown",
+    "sort-name": "Sort by Name",
+    "sort-type": "Sort by Document Type",
+
+    "filter-all-types": "All Document Types",
+
+    "th-record-id": "Record ID",
+    "th-doc-name": "Document Name",
+    "th-type": "Type",
+    "th-department": "Department",
+    "th-downloads": "Downloads",
+    "th-views": "Views",
+    "th-details": "Details",
+    "th-total": "Total"
 
         },
         "ar": {
@@ -285,7 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Home page elements
             "admin-view-button": "عرض كمسؤول",
-            "searchInput": "... ابحث",
+            "searchInput": " ابحث...",
 
             // Filter Section
             "filter-sections-heading": "الأقسام",
@@ -328,7 +369,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Chatbot Section
             "chatbot-name": "الدردشة مع السيد كبسة",
             "chatbot-initial-message": "مرحباً، كيف يمكنني مساعدتك اليوم؟",
-            "message-input": "... اكتب رسالتك",
+            "message-input": " اكتب رسالتك...",
 
             // Modal elements
             "modal-title-regulation-details": "تفاصيل اللائحة",
@@ -378,7 +419,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-button-export-data": "تصدير البيانات",
         "admin-button-manage-contact-info": "إدارة معلومات الاتصال",
         "visitToggler": "الزيارات الشهرية",
-        "desktopSearchInput": "...البحث بالاسم/رقم السجل",
+        "desktopSearchInput":"البحث بالاسم/رقم السجل...",
         "admin-clear-search-title": "مسح البحث",    
         "admin-section-filter-all": "جميع الأقسام",
         "admin-section-filter-students": "الطلاب",
@@ -411,7 +452,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-table-form-document-type-label": "نوع المستند",
         "admin-table-form-section-label": "القسم",
         "admin-table-form-attach-word-label": "إرفاق ملف وورد",
-        "admin-table-form-attach-pdf-label": "PDF إرفاق ملف",
+        "admin-table-form-attach-pdf-label": "إرفاق ملف PDF",
         "admin-table-form-upload-file-title": "انقر على تحرير لتمكين تحميل الملف",
         "admin-table-form-responsible-contact-label": ":معلومات الاتصال بالقسم المسؤول",
         "admin-table-form-contact-name-label": "الاسم",
@@ -535,7 +576,49 @@ document.addEventListener("DOMContentLoaded", () => {
     "label-telephone-90201": "رقم الهاتف",
     "label-mobile-90201": "رقم الجوال",
     "btn-update-90201": "تحديث المعلومات",
-    "btn-cancel-90201": "إلغاء"
+    "btn-cancel-90201": "إلغاء",
+    //report page translations
+    "btn-back-admin": "العودة إلى لوحة التحكم",
+    "dashboard-title": "لوحة تحكم التحليلات",
+    "dashboard-subtitle": "إحصائيات ورؤى شاملة للنظام",
+    "btn-export-pdf": "  تصدير ملف PDF",
+
+    "stat-total-documents": "إجمالي الوثائق",
+    "stat-total-users": "المستخدمون المسجلون",
+    "stat-total-downloads": "إجمالي التنزيلات",
+    "stat-total-views": "إجمالي المشاهدات",
+
+    "chart-views-downloads": "اجمالي المشاهدات والتنزيلات",
+    "chart-top-viewed": "أكثر 5 وثائق مشاهدة",
+    "chart-top-downloaded": "أكثر 5 وثائق تحميلًا",
+    "chart-type-distribution": "توزيع أنواع الوثائق",
+
+    "list-top-downloaded": "الأكثر تحميلًا",
+    "list-top-viewed": "الأكثر مشاهدة",
+    "list-most-details": "الأكثر عرضًا للتفاصيل",
+    "msg-no-download-data": "لا توجد بيانات تحميل متاحة",
+    "msg-no-view-data": "لا توجد بيانات مشاهدة متاحة",
+    "msg-no-details-data": "لا توجد بيانات تفاصيل متاحة",
+
+    "table-title": "إحصائيات الوثائق",
+    "sort-total": "الترتيب حسب إجمالي التفاعلات",
+    "sort-downloads": "الترتيب حسب التنزيلات",
+    "sort-views": "الترتيب حسب المشاهدات",
+    "sort-details": "الترتيب حسب عرض التفاصيل",
+    "sort-name": "الترتيب حسب الاسم",
+    "sort-type": "الترتيب حسب نوع الوثيقة",
+
+    "filter-all-types": "كل أنواع الوثائق",
+
+    "th-record-id": "معرف السجل",
+    "th-doc-name": "اسم الوثيقة",
+    "th-type": "النوع",
+    "th-department": "القسم",
+    "th-downloads": "التنزيلات",
+    "th-views": "المشاهدات",
+    "th-details": "التفاصيل",
+    "th-total": "الإجمالي"
+
         }
     };
 
