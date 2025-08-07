@@ -708,19 +708,19 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                     <div class="mb-2">
                                                                         <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-name-en-label">Name (English)</label>
                                                                         <input type="text" class="form-control contact-input"
-                                                                            value="@contact.Name" readonly>
+                                                                            value="@contact.Name" readonly disabled>
                                                                     </div>
                                                                     <div class="mb-2">
                                                                         <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-name-ar-label">Name (Arabic)</label>
                                                                         <input type="text" class="form-control contact-input" dir="rtl"
-                                                                            value="@(contact.NameAr ?? "")" readonly>
+                                                                            value="@(contact.NameAr ?? "")" readonly disabled>
                                                                     </div>
                                                                     @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
                                                                     {
                                                                         <div class="mb-2">
                                                                             <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-email-label">Email</label>
                                                                             <input type="email" class="form-control contact-input"
-                                                                                value="@contact.Email" readonly>
+                                                                                value="@contact.Email" readonly disabled>
                                                                         </div>
                                                                     }  
                                                                     @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()) || !string.IsNullOrEmpty(contact.Mobile?.ToString()))
@@ -732,7 +732,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                                     <div class="col-6">
                                                                                         <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-telephone-label">Telephone number</label>
                                                                                         <input type="text" class="form-control contact-input" value="@contact.Telephone"
-                                                                                            readonly>
+                                                                                            readonly disabled>
                                                                                     </div>
                                                                                 }
                                                                                 @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
@@ -740,7 +740,7 @@ there's also many filtering options to find the policy and other adminstrative s
                                                                                     <div class="col-6">
                                                                                         <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-mobile-label">Mobile number</label>
                                                                                         <input type="text" class="form-control contact-input" value="@contact.Mobile"
-                                                                                            readonly>
+                                                                                            readonly disabled>
                                                                                     </div>
                                                                                 }
                                                                             </div>
