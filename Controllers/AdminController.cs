@@ -34,7 +34,7 @@ namespace RulesRegulation.Controllers;
  * - OracleDbService: Custom service for Oracle database operations
  * - DatabaseConnection: Direct database connection for complex operations
  */
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,Editor")]
 [SecurePage]
 [NoCache]
 public class AdminController : Controller
@@ -371,6 +371,264 @@ public class AdminController : Controller
     public IActionResult AddNewContactInfo()
     {
         return View();
+    }
+
+    /**
+     * AssignNewEditor (GET) - Display the editor role management page
+     * 
+     * Shows all users with ability to promote/demote editor roles
+     * Includes search functionality and pagination
+     * Only accessible by Admins
+     * 
+     * @param searchTerm - Optional search term to filter users
+     * @return View with list of users and their role information
+     */
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public IActionResult AssignNewEditor(string searchTerm = "")
+    {
+        try
+        {
+            // Get all users from database using direct Oracle connection
+            var users = new List<dynamic>();
+            
+            using (var connection = new OracleConnection(_connectionString))
+            {
+                connection.Open();
+                
+                var sql = @"SELECT USER_ID, NAME, EMAIL, PHONE_NUMBER, ROLE, CREATED_AT, UPDATED_AT 
+                           FROM USERS 
+                           ORDER BY NAME";
+                
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    sql = @"SELECT USER_ID, NAME, EMAIL, PHONE_NUMBER, ROLE, CREATED_AT, UPDATED_AT 
+                           FROM USERS 
+                           WHERE UPPER(NAME) LIKE UPPER(:searchTerm) OR UPPER(EMAIL) LIKE UPPER(:searchTerm)
+                           ORDER BY NAME";
+                }
+                
+                using (var command = new OracleCommand(sql, connection))
+                {
+                    if (!string.IsNullOrWhiteSpace(searchTerm))
+                    {
+                        command.Parameters.Add(":searchTerm", $"%{searchTerm}%");
+                    }
+                    
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var role = reader.IsDBNull("ROLE") ? "User" : reader.GetString("ROLE");
+                            users.Add(new
+                            {
+                                UserId = reader.GetInt32("USER_ID"),
+                                Name = reader.IsDBNull("NAME") ? "N/A" : reader.GetString("NAME"),
+                                Email = reader.IsDBNull("EMAIL") ? "N/A" : reader.GetString("EMAIL"),
+                                PhoneNumber = reader.IsDBNull("PHONE_NUMBER") ? "N/A" : reader.GetString("PHONE_NUMBER"),
+                                Role = role,
+                                IsAdmin = role.Equals("Admin", StringComparison.OrdinalIgnoreCase),
+                                IsEditor = role.Equals("Editor", StringComparison.OrdinalIgnoreCase),
+                                IsUser = role.Equals("User", StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(role),
+                                CreatedAt = reader.IsDBNull("CREATED_AT") ? DateTime.MinValue : reader.GetDateTime("CREATED_AT")
+                            });
+                        }
+                    }
+                }
+            }
+            
+            ViewBag.SearchTerm = searchTerm ?? "";
+            ViewBag.TotalUsers = users.Count;
+            ViewBag.AdminCount = users.Count(u => ((dynamic)u).IsAdmin);
+            ViewBag.EditorCount = users.Count(u => ((dynamic)u).IsEditor);
+            ViewBag.UserCount = users.Count(u => ((dynamic)u).IsUser);
+            
+            return View(users);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading users for editor assignment");
+            TempData["ErrorMessage"] = "An error occurred while loading users.";
+            return View(new List<dynamic>());
+        }
+    }
+
+    /**
+     * PromoteToEditor (POST) - Promote a user to Editor role
+     * 
+     * Updates user's role to "Editor" and logs the action
+     * Only accessible by Admins
+     * 
+     * @param userId - ID of user to promote
+     * @return JSON result with success status
+     */
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> PromoteToEditor(int userId)
+    {
+        try
+        {
+            using (var connection = new OracleConnection(_connectionString))
+            {
+                connection.Open();
+                
+                // Check if user exists and get current info
+                var checkSql = "SELECT NAME, ROLE FROM USERS WHERE USER_ID = :userId";
+                string userName = "";
+                string currentRole = "";
+                
+                using (var checkCmd = new OracleCommand(checkSql, connection))
+                {
+                    checkCmd.Parameters.Add(":userId", userId);
+                    using (var reader = checkCmd.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                        {
+                            return Json(new { success = false, message = "User not found." });
+                        }
+                        
+                        userName = reader.IsDBNull("NAME") ? "Unknown" : reader.GetString("NAME");
+                        currentRole = reader.IsDBNull("ROLE") ? "User" : reader.GetString("ROLE");
+                    }
+                }
+                
+                if (currentRole.Equals("Editor", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Json(new { success = false, message = "User is already an editor." });
+                }
+                
+                if (currentRole.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Json(new { success = false, message = "Cannot change admin role through this interface." });
+                }
+                
+                // Update user role to Editor
+                var updateSql = "UPDATE USERS SET ROLE = :role, UPDATED_AT = :updatedAt WHERE USER_ID = :userId";
+                
+                using (var updateCmd = new OracleCommand(updateSql, connection))
+                {
+                    updateCmd.Parameters.Add(":role", "Editor");
+                    updateCmd.Parameters.Add(":updatedAt", DateTime.UtcNow);
+                    updateCmd.Parameters.Add(":userId", userId);
+                    
+                    var rowsAffected = await updateCmd.ExecuteNonQueryAsync();
+                    
+                    if (rowsAffected > 0)
+                    {
+                        // Log the promotion action
+                        _logger.LogInformation($"User {userName} (ID: {userId}) promoted to Editor by admin user.");
+                        
+                        return Json(new { 
+                            success = true, 
+                            message = $"User {userName} has been promoted to Editor successfully." 
+                        });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Failed to update user role." });
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error promoting user {userId} to editor");
+            return Json(new { success = false, message = "An error occurred while promoting the user." });
+        }
+    }
+
+    /**
+     * DemoteToUser (POST) - Demote an editor to regular User role
+     * 
+     * Updates user's role to "User" and logs the action
+     * Only accessible by Admins
+     * 
+     * @param userId - ID of user to demote
+     * @return JSON result with success status
+     */
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DemoteToUser(int userId)
+    {
+        try
+        {
+            // Prevent demoting yourself (safety check)
+            var currentUserId = HttpContext.Session.GetInt32("UserId");
+            if (currentUserId == userId)
+            {
+                return Json(new { success = false, message = "You cannot demote yourself." });
+            }
+            
+            using (var connection = new OracleConnection(_connectionString))
+            {
+                connection.Open();
+                
+                // Check if user exists and get current info
+                var checkSql = "SELECT NAME, ROLE FROM USERS WHERE USER_ID = :userId";
+                string userName = "";
+                string currentRole = "";
+                
+                using (var checkCmd = new OracleCommand(checkSql, connection))
+                {
+                    checkCmd.Parameters.Add(":userId", userId);
+                    using (var reader = checkCmd.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                        {
+                            return Json(new { success = false, message = "User not found." });
+                        }
+                        
+                        userName = reader.IsDBNull("NAME") ? "Unknown" : reader.GetString("NAME");
+                        currentRole = reader.IsDBNull("ROLE") ? "User" : reader.GetString("ROLE");
+                    }
+                }
+                
+                // Only allow demotion of Editors (Admins cannot be demoted through this interface)
+                if (currentRole.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Json(new { success = false, message = "Cannot demote admin through this interface." });
+                }
+                
+                if (!currentRole.Equals("Editor", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Json(new { success = false, message = "User is not an editor." });
+                }
+                
+                // Update user role to User
+                var updateSql = "UPDATE USERS SET ROLE = :role, UPDATED_AT = :updatedAt WHERE USER_ID = :userId";
+                
+                using (var updateCmd = new OracleCommand(updateSql, connection))
+                {
+                    updateCmd.Parameters.Add(":role", "User");
+                    updateCmd.Parameters.Add(":updatedAt", DateTime.UtcNow);
+                    updateCmd.Parameters.Add(":userId", userId);
+                    
+                    var rowsAffected = await updateCmd.ExecuteNonQueryAsync();
+                    
+                    if (rowsAffected > 0)
+                    {
+                        // Log the demotion action
+                        _logger.LogInformation($"Editor {userName} (ID: {userId}) demoted to User by admin user.");
+                        
+                        return Json(new { 
+                            success = true, 
+                            message = $"Editor {userName} has been demoted to User successfully." 
+                        });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Failed to update user role." });
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error demoting editor {userId} to user");
+            return Json(new { success = false, message = "An error occurred while demoting the user." });
+        }
     }
 
     /**

@@ -326,6 +326,18 @@ box-shadow: 0px 10px 30px rgba(138, 197, 62, 0.4);
   box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
 }
 
+.btn-warning-custom {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  color: white;
+  border: none;
+}
+
+.btn-warning-custom:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(243, 156, 18, 0.4);
+  color: white;
+}
+
 /* Main row layout */
 .main-row {
   display: flex;

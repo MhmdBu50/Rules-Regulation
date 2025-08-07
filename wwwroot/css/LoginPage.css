@@ -8,10 +8,14 @@ body {
 }
 
 /* Language Toggle Button for Login Page */
+.card-container-wrapper {
+    position: relative;
+}
+
 .language-toggle-btn {
     position: absolute;
     top: 50%;
-    right: -25px;
+    right: -30px;
     transform: translateY(-50%);
     background: linear-gradient(135deg, #2E4B8B, #1a2b52);
     color: white;
@@ -48,11 +52,29 @@ body {
 /* RTL adjustments for language button */
 body.rtl .language-toggle-btn {
     right: auto;
-    left: -25px;
+    left: -30px;
 }
 
 body.rtl .language-toggle-btn:hover {
     transform: translateY(-50%) translateX(-5px);
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .language-toggle-btn {
+        right: -20px;
+        padding: 12px 8px;
+        font-size: 14px;
+    }
+    
+    .language-toggle-btn span:first-child {
+        font-size: 16px;
+    }
+    
+    body.rtl .language-toggle-btn {
+        left: -20px;
+        right: auto;
+    }
 }
 
 body::before {

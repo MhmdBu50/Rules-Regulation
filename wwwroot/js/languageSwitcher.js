@@ -16,11 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
             // General page elements
             "page-title": "Home Page",
             "welcome-message": "Welcome to our platform. Please navigate through the sections below.",
-            "dashboard-heading": "Admin Dashboard",
+            "dashboard-heading": "Editor Dashboard",
             "user-list-label": "List of Users",
             
             // Home page elements
-            "admin-view-button": "view as Admin",
+            "admin-view-button": "view as Editor",
             "searchInput": "Search ...", // This is the placeholder for the search input
 
             // Filter Section
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "record-details-no-description": "No description available",
             "record-details-contact-info-title": "Department Contacts",
             // START Admin Page Translations
-        "admin-exit-view-button": "Exit Admin view",
+        "admin-exit-view-button": "Exit Editor view",
         "admin-chart-title-overview": "University Rules and Guidelines Overview",
         "admin-chart-legend-academic-rules": "Academic rules & regulations",
         "admin-chart-legend-employment-rules": "Employment rules & regulations",
@@ -284,11 +284,11 @@ document.addEventListener("DOMContentLoaded", () => {
             // General page elements
             "page-title": "الرئيسية",
             "welcome-message": "مرحباً بك في منصتنا. يرجى التنقل عبر الأقسام أدناه.",
-            "dashboard-heading": "لوحة تحكم المسؤول",
+            "dashboard-heading": "لوحة تحكم المحرر",
             "user-list-label": "قائمة المستخدمين",
 
             // Home page elements
-            "admin-view-button": "عرض كمسؤول",
+            "admin-view-button": "عرض كمحرر",
             "searchInput": "... ابحث",
 
             // Filter Section
@@ -356,7 +356,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "record-details-description-label": "الوصف",
             "record-details-no-description": "لا يوجد وصف متاح",
             "record-details-contact-info-title": "جهات الاتصال بالقسم",
-        "admin-exit-view-button": "الخروج من عرض المسؤول",
+        "admin-exit-view-button": "الخروج من عرض المحرر",
         "admin-chart-title-overview": "نظرة عامة على قواعد وإرشادات الجامعة",
         "admin-chart-legend-academic-rules": "القواعد واللوائح الأكاديمية",
         "admin-chart-legend-employment-rules": "قواعد وأنظمة الموظفين",

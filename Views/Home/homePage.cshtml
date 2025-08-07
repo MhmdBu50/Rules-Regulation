@@ -162,10 +162,10 @@
                         </svg>
                     </button>
                 </div>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
                 {
                     <button class="adminButton ms-2 me-2 px-3 py-1 d-none d-lg-flex"
-                        onclick="location.href='@Url.Action("AdminPage", "Admin")'" id="admin-view-button">view as Admin
+                        onclick="location.href='@Url.Action("AdminPage", "Admin")'" id="admin-view-button">view as Editor
 
                     </button>
                 }

@@ -60,11 +60,11 @@ there's also many filtering options to find the policy and other adminstrative s
 </div>      </div>
             </div>
 
-            <!-- Middle Section - Exit Admin view -->
+            <!-- Middle Section - Exit Editor view -->
             <div class="col flex-nowrap align-items-center">
                 <div class=" d-flex align-items-center  justify-content-center" style="postion: absolute;">
                     <button class="exit-admin-btn" id="admin-exit-view-button" onclick="location.href='@Url.Action("homePage", "Home")'">
-                        Exit Admin view
+                        Exit Editor view
                     </button>
                 </div>
             </div>
@@ -202,6 +202,15 @@ there's also many filtering options to find the policy and other adminstrative s
                             onclick="location.href='@Url.Action("ManageContactInfo", "Admin")'">
                             Manage Contact Info
                         </button>
+
+                        <!-- Assign New Editor Button - Only visible to Admins -->
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <button class="btn-custom btn-warning-custom" id="admin-button-assign-editor"
+                                onclick="location.href='@Url.Action("AssignNewEditor", "Admin")'">
+                                Assign New Editor
+                            </button>
+                        }
                     </div>
                 </div>
             </div>

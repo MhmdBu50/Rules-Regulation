@@ -6,7 +6,7 @@ using RulesRegulation.Services;
 
 namespace RulesRegulation.Controllers
 {
-    // [Authorize(Roles = "Admin")] // Temporarily commented for testing
+    [Authorize(Roles = "Admin,Editor")]
     public class ReportsController : Controller
     {
         private readonly string _connectionString;

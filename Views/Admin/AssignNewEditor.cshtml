@@ -1,0 +1,603 @@
+@model List<dynamic>
+@using Microsoft.AspNetCore.Localization
+
+@{
+    ViewData["Title"] = "Assign New Editor";
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
+    var isArabic = currentCulture == "ar-SA";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/addContactInfo.css">
+    <link rel="stylesheet" href="~/css/_rtl_Styles.css">
+    <style>
+        .user-card {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .user-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-color: #007bff;
+        }
+
+        .user-info h5 {
+            color: #343a40;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .user-info p {
+            color: #6c757d;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        .editor-badge {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-badge {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-promote {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-promote:hover {
+            background: linear-gradient(135deg, #218838, #1c9f7a);
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .btn-demote {
+            background: linear-gradient(135deg, #ffc107, #e0a800);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-demote:hover {
+            background: linear-gradient(135deg, #e0a800, #d39e00);
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .btn-admin {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .search-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stats-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .no-users-message {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        /* RTL Support */
+        .rtl .action-buttons {
+            flex-direction: row-reverse;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="~/js/bootstrap.js"></script>
+    <script>
+        // CSRF token for all AJAX requests
+        const token = $('input[name="__RequestVerificationToken"]').val();
+        
+        // Loading overlay functions
+        function showLoading() {
+            $('.loading-overlay').css('display', 'flex');
+        }
+        
+        function hideLoading() {
+            $('.loading-overlay').hide();
+        }
+        
+        // Show success/error messages
+        function showMessage(message, isSuccess = true) {
+            const alertClass = isSuccess ? 'alert-success' : 'alert-danger';
+            const alertHtml = `
+                <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            $('.message-container').html(alertHtml);
+            
+            // Auto-dismiss after 5 seconds
+            setTimeout(() => {
+                $('.alert').alert('close');
+            }, 5000);
+        }
+        
+        // Confirmation modal
+        function showConfirmationModal(title, message, onConfirm) {
+            const modalHtml = `
+                <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmationModalLabel">${title}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ${message}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" id="confirmAction">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Remove existing modal if any
+            $('#confirmationModal').remove();
+            
+            // Add modal to body
+            $('body').append(modalHtml);
+            
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+            modal.show();
+            
+            // Handle confirmation
+            $('#confirmAction').on('click', function() {
+                modal.hide();
+                onConfirm();
+            });
+        }
+        
+        // Promote user to editor
+        function promoteUser(userId, userName) {
+            showConfirmationModal(
+                'Promote to Editor',
+                `Are you sure you want to promote <strong>${userName}</strong> to Editor role?<br><br>This will give them administrative access to most system features.`,
+                function() {
+                    showLoading();
+                    
+                    $.ajax({
+                        url: '@Url.Action("PromoteToEditor", "Admin")',
+                        type: 'POST',
+                        data: {
+                            userId: userId,
+                            __RequestVerificationToken: token
+                        },
+                        success: function(response) {
+                            hideLoading();
+                            if (response.success) {
+                                showMessage(response.message, true);
+                                // Reload page after 2 seconds
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 2000);
+                            } else {
+                                showMessage(response.message, false);
+                            }
+                        },
+                        error: function() {
+                            hideLoading();
+                            showMessage('An error occurred while promoting the user.', false);
+                        }
+                    });
+                }
+            );
+        }
+        
+        // Demote editor to user
+        function demoteUser(userId, userName) {
+            showConfirmationModal(
+                'Demote to User',
+                `Are you sure you want to demote editor <strong>${userName}</strong> to regular User role?<br><br>This will remove their editorial privileges.`,
+                function() {
+                    showLoading();
+                    
+                    $.ajax({
+                        url: '@Url.Action("DemoteToUser", "Admin")',
+                        type: 'POST',
+                        data: {
+                            userId: userId,
+                            __RequestVerificationToken: token
+                        },
+                        success: function(response) {
+                            hideLoading();
+                            if (response.success) {
+                                showMessage(response.message, true);
+                                // Reload page after 2 seconds
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 2000);
+                            } else {
+                                showMessage(response.message, false);
+                            }
+                        },
+                        error: function() {
+                            hideLoading();
+                            showMessage('An error occurred while demoting the user.', false);
+                        }
+                    });
+                }
+            );
+        }
+        
+        // Auto-submit search form on input
+        $(document).ready(function() {
+            let searchTimeout;
+            $('#searchInput').on('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    $('#searchForm').submit();
+                }, 500);
+            });
+        });
+    </script>
+}
+
+<!-- Loading Overlay -->
+<div class="loading-overlay">
+    <div class="loading-spinner">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="mt-2">Processing...</div>
+    </div>
+</div>
+
+<!-- Hidden CSRF Token -->
+@Html.AntiForgeryToken()
+
+<!-- Main Content -->
+<div class="AddContactInfo mb-footer-space @(isArabic ? "rtl" : "ltr")">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <!-- Back Button -->
+        <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"> 
+            <img src="@Url.Content("~/svgs/admin/backButton.svg")"> 
+            <span>Back</span> 
+        </a>
+
+        <!-- Logout Button -->
+        <form method="post" action="@Url.Action("Logout", "Account")" style="display: inline;">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
+                <span>Logout</span> 
+                <img src="@Url.Content("~/svgs/admin/logOut.svg")">
+            </button>
+        </form>
+    </div>
+
+    <!-- Logo -->
+    <div class="container logo-container">
+        <img class="header-logo mx-auto d-block" src="~/imgs/IAU Logo (Horizontal).png" alt="IAU Logo">
+    </div>
+
+    <!-- Header -->
+    <div class="main-header">
+        <div class="container text-center d-flex flex-column align-items-center justify-content-center">
+            <h1 class="display-5 fw-semibold mb-2">Assign New Editor</h1>
+            <p class="subtitle text-white-50 mb-4">Manage user roles and editor privileges</p>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Message Container -->
+        <div class="message-container">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="stat-item">
+                        <div class="stat-number">@ViewBag.TotalUsers</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-item">
+                        <div class="stat-number">@ViewBag.AdminCount</div>
+                        <div class="stat-label">Admins</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-item">
+                        <div class="stat-number">@ViewBag.EditorCount</div>
+                        <div class="stat-label">Editors</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-item">
+                        <div class="stat-number">@(ViewBag.TotalUsers - ViewBag.AdminCount - ViewBag.EditorCount)</div>
+                        <div class="stat-label">Regular Users</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Container -->
+        <div class="search-container">
+            <form method="get" action="@Url.Action("AssignNewEditor", "Admin")" id="searchForm">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                </svg>
+                            </span>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="searchInput"
+                                   name="searchTerm" 
+                                   value="@ViewBag.SearchTerm" 
+                                   placeholder="Search by name or email..." 
+                                   autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="me-2">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg>
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Users List -->
+        <div class="form-wrapper">
+            @if (Model != null && Model.Any())
+            {
+                <div class="row">
+                    @foreach (var user in Model)
+                    {
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="user-card">
+                                <div class="user-info">
+                                    <!-- Role Badge -->
+                                    @if (user.Role == "Admin")
+                                    {
+                                        <span class="admin-badge">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16" class="me-1">
+                                                <path d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1z"/>
+                                            </svg>
+                                            Admin
+                                        </span>
+                                    }
+                                    else if (user.Role == "Editor")
+                                    {
+                                        <span class="editor-badge">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16" class="me-1">
+                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                            </svg>
+                                            Editor
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="user-badge">
+                                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16" class="me-1">
+                                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                                            </svg>
+                                            User
+                                        </span>
+                                    }
+
+                                    <!-- User Details -->
+                                    <h5>@user.Name</h5>
+                                    <p>
+                                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="me-1">
+                                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
+                                        </svg>
+                                        @user.Email
+                                    </p>
+                                    
+                                    @if (!string.IsNullOrEmpty(user.PhoneNumber) && user.PhoneNumber != "N/A")
+                                    {
+                                        <p>
+                                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="me-1">
+                                                <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+                                            </svg>
+                                            @user.PhoneNumber
+                                        </p>
+                                    }
+
+                                    <p class="text-muted">
+                                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="me-1">
+                                            <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+                                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+                                        </svg>
+                                        Joined: @(user.CreatedAt != DateTime.MinValue ? user.CreatedAt.ToString("MMM dd, yyyy") : "Unknown")
+                                    </p>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="action-buttons">
+                                    @if (user.Role == "Admin")
+                                    {
+                                        <button type="button" 
+                                                class="btn btn-admin flex-fill"
+                                                disabled>
+                                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="me-1">
+                                                <path d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1z"/>
+                                            </svg>
+                                            System Admin
+                                        </button>
+                                    }
+                                    else if (user.Role == "Editor")
+                                    {
+                                        <button type="button" 
+                                                class="btn btn-demote flex-fill"
+                                                onclick="demoteUser(@user.UserId, '@Html.Raw(Html.Encode(user.Name))')">
+                                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="me-1">
+                                                <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 0 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+                                            </svg>
+                                            Demote to User
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" 
+                                                class="btn btn-promote flex-fill"
+                                                onclick="promoteUser(@user.UserId, '@Html.Raw(Html.Encode(user.Name))')">
+                                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="me-1">
+                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                            </svg>
+                                            Promote to Editor
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="no-users-message">
+                    <svg width="64" height="64" fill="#6c757d" viewBox="0 0 16 16" class="mb-3">
+                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                    </svg>
+                    <h4>No Users Found</h4>
+                    <p>@(string.IsNullOrEmpty(ViewBag.SearchTerm) ? "No users are currently registered in the system." : "No users match your search criteria.")</p>
+                    @if (!string.IsNullOrEmpty(ViewBag.SearchTerm))
+                    {
+                        <a href="@Url.Action("AssignNewEditor", "Admin")" class="btn btn-outline-primary">
+                            Clear Search
+                        </a>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

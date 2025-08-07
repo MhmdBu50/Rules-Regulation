@@ -22,7 +22,7 @@
             </div>
         </a>
 
-        @if (User.IsInRole("admin") || User.IsInRole("Admin"))
+        @if (User.IsInRole("admin") || User.IsInRole("Admin") || User.IsInRole("Editor"))
         {
             <a class="text-white d-block py-2 mobile-menu-section"
                 onclick="alter(this); location.href='@Url.Action("AdminPage", "Admin")'" data-id="AdminViewM"
@@ -31,7 +31,7 @@
                     <div class="svg-container">
 
                     </div>
-                    <span id="mobile-admin-view"> view as Admin </span>
+                    <span id="mobile-admin-view"> view as Editor </span>
                 </div>
             </a>
         }
