@@ -52,8 +52,8 @@ main, .container-fluid, .main-content {
 }
 
 /* Ensure cards in the last row have proper spacing */
-.mb-footer-space .card,
-.mb-footer-space .document-card {
+.mb-footer-space,
+.mb-footer-space{
     margin-bottom: 1.5rem;
 }
 

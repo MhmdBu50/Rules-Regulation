@@ -130,7 +130,7 @@ body {
 .chart-section:last-child {
   margin-inline-start: 0px;
   padding: 5px !important;
-  height: 259px;
+  height: 273px;
   }
 
 .chart-title {
@@ -628,7 +628,7 @@ box-shadow: 0px 10px 30px rgba(138, 197, 62, 0.4);
 
 #delete-btn-mobile {
   height: 50px !important;
-  margin-bottom: 0px !important;
+  margin-bottom: 10px !important;
   border: 2px solid whitesmoke !important;
   border-radius: 8px !important;
 }
@@ -894,13 +894,6 @@ input[type="checkbox"]:focus {
   .small-font-size {
     font-size: 18px !important;
   }
-}
-
-#delete-btn-mobile {
-  height: 50px !important;
-  margin-bottom: 0px !important;
-  border: 2px solid whitesmoke !important;
-  border-radius: 8px !important;
 }
 
 @media (max-width: 992px) {
