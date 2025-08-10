@@ -921,5 +921,6 @@ function updateChartLegends(targetLang) {
 // Export functions for use in other scripts
 window.translateDocumentType = translateDocumentType;
 window.updateChartLegends = updateChartLegends;
+window.translations = translations;
 
 });

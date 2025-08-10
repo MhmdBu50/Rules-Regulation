@@ -69,6 +69,24 @@ function setupAccordionLazyLoading() {
           .then((html) => {
             // Replace the content with AJAX loaded content
             accordionBody.innerHTML = html;
+            
+            // Apply translations to the newly loaded content
+            setTimeout(() => {
+              const currentLang = document.body.classList.contains('rtl') ? 'ar' : 'en';
+              
+              // Handle translatable labels with data-translate-key attribute within the element
+              const translatableLabels = accordionBody.querySelectorAll('.translatable-label[data-translate-key]');
+              
+              // Get translations from the global object
+              if (window.translations && window.translations[currentLang]) {
+                translatableLabels.forEach(label => {
+                  const translateKey = label.getAttribute('data-translate-key');
+                  if (window.translations[currentLang][translateKey]) {
+                    label.textContent = window.translations[currentLang][translateKey];
+                  }
+                });
+              }
+            }, 100);
           })
           .catch((error) => {
             // Show only error message, don't restore static content
