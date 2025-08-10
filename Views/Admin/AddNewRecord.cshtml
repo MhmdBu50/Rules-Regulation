@@ -98,8 +98,18 @@
               <option value="Academic Affairs" id="option-dept-academic">Academic Affairs</option>
             </select>
           </div>
+          <div class="col-md-6">
+            <!--page number-->
+            <label for="pageNumber" id="label-pageNumber"></label>
+            <input type="text" class="form-control" name="pageNumber"
+              pattern="@Html.Raw("[0-9]+")"
+              title="Please enter only numbers" 
+              id="placeholder-pageNumber" maxlength="3" required>
+            <div id="pageNumberError" class="text-danger mt-1" style="display: none;"></div>
+          </div>
         </div>
 
+        
         <div class="row mb-3">
           <div class="col-md-4">
             <label for="versionNumber" id="label-versionNumber">Version Number</label>
