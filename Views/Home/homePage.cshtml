@@ -183,107 +183,110 @@
             </div>
 
         </div>
+
+        <div id="filter-panel" class="filter-panel poppins-regular d-none">
+            <div class="filter-column" style="border-inline-start: none;">
+                <h3 id="filter-alphabetical-heading">Alphabetical filter</h3>
+                <label><input type="radio" name="alpha" class="form-check-input" id="azFilter" value="A-Z"> <span
+                        id="filter-az">A-Z</span></label>
+                <label><input type="radio" name="alpha" class="form-check-input" id="zaFilter" value="Z-A"> <span
+                        id="filter-za">Z-A</span></label>
+            </div>
+
+            <div class="filter-column">
+                <h3 id="filter-issue-date-heading">Issue Date</h3>
+
+                <label><input type="radio" name="dateOption" value="newest" class="form-check-input">
+                    <span id="filter-newest-oldest">Newest-Oldest</span></label><br>
+                <label><input type="radio" name="dateOption" value="oldest" class="form-check-input">
+                    <span id="filter-oldest-newest">Oldest-Newest</span></label><br>
+
+
+                <label><input type="radio" name="dateOption" id="specifyRange" value="range" class="form-check-input">
+                    <span id="filter-specify-range">Specify Range:</span></label><br>
+
+                <div id="dateRangeFields" style="display: none;
+        margin-top: 10px;">
+                    <div>
+                        <label for="fromDate" id="filter-from-label">From:</label>
+                        <input class="form-control" type="date" id="fromDate">
+                    </div>
+                    <div>
+
+                        <label for="toDate" id="filter-to-label">To:</label>
+                        <input class="form-control" type="date" id="toDate">
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-column">
+                <h3>Department</h3>
+                <div class="multi-select-dropdown-container">
+                    <div class="multi-select-dropdown">
+                        <div class="multi-select-button" id="departmentMultiSelectButton">
+                            Select Departments <span class="caret">▼</span>
+                        </div>
+                        <div class="multi-select-dropdown-content" id="departmentDropdownContent">
+                            <label><input type="checkbox" class="form-check-input department-option" value=""> All
+                                Departments</label>
+                            <label><input type="checkbox" class="form-check-input department-option" value="Reg and Admission">
+                                Reg and Admission</label>
+                            <label><input type="checkbox" class="form-check-input department-option" value="CCSIT">
+                                CCSIT</label>
+                            <label><input type="checkbox" class="form-check-input department-option"
+                                    value="Communication and tech"> Communication and tech</label>
+                            <label><input type="checkbox" class="form-check-input department-option" value="Hospital">
+                                Hospital</label>
+                            <label><input type="checkbox" class="form-check-input department-option" value="Library">
+                                Library</label>
+                            <label><input type="checkbox" class="form-check-input department-option" value="Students Affairs">
+                                Students Affairs</label>
+                            <label><input type="checkbox" class="form-check-input department-option" value="Preparetory">
+                                Preparetory</label>
+                            <label><input type="checkbox" class="form-check-input department-option" value="Academic Affairs">
+                                Academic Affairs</label>
+                        </div>
+                    </div>
+                    <input type="hidden" id="departmentFilter" value="">
+                </div>
+            </div>
+
+
+            <div class="filter-column">
+                <h3 id="filter-type-heading">Type</h3>
+
+
+                <label><input type="checkbox" class="form-check-input" id="regulationsFilter"
+                        value="Student guides & templates"> <span id="nav-student-guides-label">Student guides &
+                        templates</span></label>
+
+                <label><input type="checkbox" class="form-check-input" id="guidelinesFilter"
+                        value="Student rules & regulations"> <span id="nav-student-rules-label">Student rules &
+                        regulations</span></label>
+
+                <label><input type="checkbox" class="form-check-input" id="policiesFilter"
+                        value="Employees’ rules & regulations"> <span id="nav-employee-rules-label">Employees’ rules &
+                        regulations</span></label>
+
+                <label><input type="checkbox" class="form-check-input" id="academicFilter" value="Academic rules & regulations">
+                    <span id="nav-academic-rules-label"></span></label>
+
+
+                <div style="margin-top: 15px;
+        display: flex;">
+                    <button type="button" class="apply-btn" onclick="applyFilters()" id="filter-apply-btn">Apply</button>
+                    <button type="button" class="apply-btn" onclick="clearFilters()" style="background-color: #6c757d; margin: 0 10px;">Clear</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </header>
 @await Html.PartialAsync("_moblieMenu")
 
 
-<div id="filter-panel" class="filter-panel poppins-regular d-none">
-    <div class="filter-column" style="border-inline-start: none;">
-        <h3 id="filter-alphabetical-heading">Alphabetical filter</h3>
-        <label><input type="radio" name="alpha" class="form-check-input" id="azFilter" value="A-Z"> <span
-                id="filter-az">A-Z</span></label>
-        <label><input type="radio" name="alpha" class="form-check-input" id="zaFilter" value="Z-A"> <span
-                id="filter-za">Z-A</span></label>
-    </div>
 
-    <div class="filter-column">
-        <h3 id="filter-issue-date-heading">Issue Date</h3>
-
-        <label><input type="radio" name="dateOption" value="newest" class="form-check-input">
-            <span id="filter-newest-oldest">Newest-Oldest</span></label><br>
-        <label><input type="radio" name="dateOption" value="oldest" class="form-check-input">
-            <span id="filter-oldest-newest">Oldest-Newest</span></label><br>
-
-
-        <label><input type="radio" name="dateOption" id="specifyRange" value="range" class="form-check-input">
-            <span id="filter-specify-range">Specify Range:</span></label><br>
-
-        <div id="dateRangeFields" style="display: none;
-margin-top: 10px;">
-            <div>
-                <label for="fromDate" id="filter-from-label">From:</label>
-                <input class="form-control" type="date" id="fromDate">
-            </div>
-            <div>
-
-                <label for="toDate" id="filter-to-label">To:</label>
-                <input class="form-control" type="date" id="toDate">
-            </div>
-        </div>
-    </div>
-
-    <div class="filter-column">
-        <h3>Department</h3>
-        <div class="multi-select-dropdown-container">
-            <div class="multi-select-dropdown">
-                <div class="multi-select-button" id="departmentMultiSelectButton">
-                    Select Departments <span class="caret">▼</span>
-                </div>
-                <div class="multi-select-dropdown-content" id="departmentDropdownContent">
-                    <label><input type="checkbox" class="form-check-input department-option" value=""> All
-                        Departments</label>
-                    <label><input type="checkbox" class="form-check-input department-option" value="Reg and Admission">
-                        Reg and Admission</label>
-                    <label><input type="checkbox" class="form-check-input department-option" value="CCSIT">
-                        CCSIT</label>
-                    <label><input type="checkbox" class="form-check-input department-option"
-                            value="Communication and tech"> Communication and tech</label>
-                    <label><input type="checkbox" class="form-check-input department-option" value="Hospital">
-                        Hospital</label>
-                    <label><input type="checkbox" class="form-check-input department-option" value="Library">
-                        Library</label>
-                    <label><input type="checkbox" class="form-check-input department-option" value="Students Affairs">
-                        Students Affairs</label>
-                    <label><input type="checkbox" class="form-check-input department-option" value="Preparetory">
-                        Preparetory</label>
-                    <label><input type="checkbox" class="form-check-input department-option" value="Academic Affairs">
-                        Academic Affairs</label>
-                </div>
-            </div>
-            <input type="hidden" id="departmentFilter" value="">
-        </div>
-    </div>
-
-
-    <div class="filter-column">
-        <h3 id="filter-type-heading">Type</h3>
-
-
-        <label><input type="checkbox" class="form-check-input" id="regulationsFilter"
-                value="Student guides & templates"> <span id="nav-student-guides-label">Student guides &
-                templates</span></label>
-
-        <label><input type="checkbox" class="form-check-input" id="guidelinesFilter"
-                value="Student rules & regulations"> <span id="nav-student-rules-label">Student rules &
-                regulations</span></label>
-
-        <label><input type="checkbox" class="form-check-input" id="policiesFilter"
-                value="Employees’ rules & regulations"> <span id="nav-employee-rules-label">Employees’ rules &
-                regulations</span></label>
-
-        <label><input type="checkbox" class="form-check-input" id="academicFilter" value="Academic rules & regulations">
-            <span id="nav-academic-rules-label"></span></label>
-
-
-        <div style="margin-top: 15px;
-display: flex;">
-            <button type="button" class="apply-btn" onclick="applyFilters()" id="filter-apply-btn">Apply</button>
-            <button type="button" class="apply-btn" onclick="clearFilters()" style="background-color: #6c757d; margin: 0 10px;">Clear</button>
-        </div>
-    </div>
-</div>
 
 <div class="navigation-bar d-none d-lg-flex">
 
@@ -396,7 +399,8 @@ border: none;" onclick="navigateToHome(this)">
 
 
 <div class="container-fluid mb-footer-space">
-    <div class="row justify-content-center g-lg-4 g-md-3 g-sm-2 g-1" style="margin: 0px 40px;">
+    <div class="row justify-content-center g-lg-4 g-sm-2 g-1 cards-container" 
+    style="margin:1rem max(10px, calc(40px - 2vw)) 3rem max(10px, calc(40px - 2vw)) !important">
 
         @if (Model != null && Model.Any())
 
