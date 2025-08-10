@@ -316,8 +316,54 @@ document.addEventListener("DOMContentLoaded", () => {
     "th-downloads": "Downloads",
     "th-views": "Views",
     "th-details": "Details",
-    "th-total": "Total"
+    "th-total": "Total",
 
+    // ==================== HISTORY PAGE TRANSLATIONS (ENGLISH) ====================
+    // These translation keys were added to support Arabic-English language switching
+    // for the history page functionality. Each key corresponds to a specific UI element.
+    
+    // Main page header elements - displayed at the top of history page
+    "history-activity-title": "Your Activity History", // Main title shown in page header
+    "history-track-activity": "Track your recent views and downloads", // Subtitle description
+    
+    // View toggle buttons - allow users to switch between table and card layouts
+    "history-table-btn": "Table", // Button text for table view mode
+    "history-cards-btn": "Cards", // Button text for card view mode
+    
+    // Card view elements - used in card display mode
+    "history-action-status": "Action Status", // Header for action status section in cards
+    
+    // Table column headers - displayed in table view mode
+    "history-record-name": "RECORD NAME", // Column header for document names
+    "history-all-actions": "ALL ACTIONS", // Column header showing all user actions
+    "history-last-action": "LAST ACTION", // Column header for most recent action
+    "history-timestamp": "TIMESTAMP", // Column header for action date/time
+    
+    // Action type labels - used in badges and status indicators
+    "history-view": "View", // Label for document viewing action
+    "history-download": "Download", // Label for document download action
+    "history-show-details": "Show Details", // Label for viewing details action
+    
+    // Action status indicators - show completion status of actions
+    "history-viewed": "Viewed", // Status indicating document was viewed
+    "history-downloaded": "Downloaded", // Status indicating document was downloaded
+    "history-not-performed": "Not performed", // Status for actions not yet taken
+    "history-no-actions": "No actions yet", // Message when no actions exist
+    
+    // Empty state messages - displayed when user has no history
+    "history-no-history": "No History Yet", // Main message for empty history
+    "history-start-viewing": "Start viewing or downloading records to see your activity here!", // Instructional text
+    
+    // Category labels for action grouping - used in informational displays
+    "history-view-actions": "View actions", // Label for view action category
+    "history-download-actions": "Download actions", // Label for download action category
+    "history-details-actions": "Show details actions", // Label for details action category
+    
+    // Status and loading indicators
+    "history-action-status": "Action Status", // Header for action status section
+    "history-loading": "Loading...", // Generic loading message
+    "history-loading-text": "Loading your history..." // Specific loading message for history
+    
         },
         "ar": {
             "Language345": "English",
@@ -633,7 +679,53 @@ document.addEventListener("DOMContentLoaded", () => {
     "th-downloads": "التنزيلات",
     "th-views": "المشاهدات",
     "th-details": "التفاصيل",
-    "th-total": "الإجمالي"
+    "th-total": "الإجمالي",
+
+    // ==================== HISTORY PAGE TRANSLATIONS (ARABIC) ====================
+    // Arabic translations for history page elements - mirror of English translations above
+    // Each key provides the Arabic equivalent for seamless language switching
+    
+    // Main page header elements - العناصر الرئيسية لرأس الصفحة
+    "history-activity-title": "سجل أنشطتك", // Main title - العنوان الرئيسي
+    "history-track-activity": "تتبع مشاهداتك وتحميلاتك الأخيرة", // Subtitle - العنوان الفرعي
+    
+    // View toggle buttons - أزرار التبديل بين طرق العرض
+    "history-table-btn": "جدول", // Table view button - زر عرض الجدول
+    "history-cards-btn": "بطاقات", // Card view button - زر عرض البطاقات
+    
+    // Card view elements - عناصر عرض البطاقات
+    "history-action-status": "آخر العمليات", // Action status header in cards - رأس حالة الإجراءات في البطاقات
+    
+    // Table column headers - رؤوس أعمدة الجدول
+    "history-record-name": "اسم السجل", // Record name column - عمود اسم السجل
+    "history-all-actions": "جميع الإجراءات", // All actions column - عمود جميع الإجراءات
+    "history-last-action": "آخر إجراء", // Last action column - عمود آخر إجراء
+    "history-timestamp": "الوقت والتاريخ", // Timestamp column - عمود الوقت والتاريخ
+    
+    // Action type labels - تسميات أنواع الإجراءات
+    "history-view": "عرض", // View action - إجراء العرض
+    "history-download": "تحميل", // Download action - إجراء التحميل
+    "history-show-details": "إظهار التفاصيل", // Show details action - إجراء إظهار التفاصيل
+    
+    // Action status indicators - مؤشرات حالة الإجراءات
+    "history-viewed": "تم العرض", // Viewed status - حالة تم العرض
+    "history-downloaded": "تم التحميل", // Downloaded status - حالة تم التحميل
+    "history-not-performed": "لم يتم التنفيذ", // Not performed status - حالة لم يتم التنفيذ
+    "history-no-actions": "لا توجد إجراءات بعد", // No actions message - رسالة عدم وجود إجراءات
+    
+    // Empty state messages - رسائل الحالة الفارغة
+    "history-no-history": "لا يوجد تاريخ بعد", // No history main message - الرسالة الرئيسية لعدم وجود تاريخ
+    "history-start-viewing": "ابدأ بعرض أو تحميل السجلات لرؤية نشاطك هنا!", // Instructional text - النص التوجيهي
+    
+    // Category labels for action grouping - تسميات فئات تجميع الإجراءات
+    "history-view-actions": "إجراءات العرض", // View actions category - فئة إجراءات العرض
+    "history-download-actions": "إجراءات التحميل", // Download actions category - فئة إجراءات التحميل
+    "history-details-actions": "إجراءات إظهار التفاصيل", // Details actions category - فئة إجراءات إظهار التفاصيل
+    
+    // Status and loading indicators - مؤشرات الحالة والتحميل
+    "history-action-status": "حالة الإجراء", // Action status header - رأس حالة الإجراء
+    "history-loading": "جارٍ التحميل...", // Generic loading message - رسالة التحميل العامة
+    "history-loading-text": "جارٍ تحميل تاريخك..." // Specific loading message - رسالة التحميل المحددة
         }
     };
 
