@@ -1,7 +1,41 @@
 @model RulesRegulation.Controllers.ReportViewModel
+@using Microsoft.AspNetCore.Localization
 
 @{
     ViewData["Title"] = "Analytics Dashboard";
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
+    var isArabic = currentCulture == "ar-SA";
+}
+
+@functions {
+    private string GetDocumentTypeTranslation(string documentType)
+    {
+        return documentType switch
+        {
+            "Student guides & templates" => "أدلة ونماذج الطلاب",
+            "Student rules & regulations" => "قواعد وأنظمة الطلاب",
+           "Employees’ rules & regulations" => "قواعد وأنظمة الموظفين",
+            "Academic rules & regulations" => "قواعد وأنظمة أكاديمية",
+            _ => documentType ?? ""
+        };
+    }
+    
+    private string GetDepartmentTranslation(string department)
+    {
+        return department switch
+        {
+            "Reg and Admission" => "التسجيل والقبول",
+            "CCSIT" => "كلية علوم الحاسب وتقنية المعلومات",
+            "Communication and tech" => "الاتصالات والتقنية",
+            "Hospital" => "المستشفى",
+            "Library" => "المكتبة",
+            "Students Affairs" => "شؤون الطلاب",
+            "Preparetory" => "السنة التحضيرية",
+            "Academic Affairs" => "الشؤون الأكاديمية",
+            _ => department ?? ""
+        };
+    }
 }
 
 @section Styles {
@@ -191,12 +225,18 @@
                             @for (int i = 0; i < Model.TopDownloaded.Take(5).Count(); i++)
                             {
                                 var doc = Model.TopDownloaded.Skip(i).First();
+                                
+                                // Use Arabic name if available and language is Arabic
+                                var displayName = isArabic && !string.IsNullOrEmpty(doc.RegulationNameAr) 
+                                    ? doc.RegulationNameAr 
+                                    : doc.RegulationName;
+                                
                                 <div class="top-item">
                                     <div class="ranking-badge ranking-@(i + 1)">
                                         @(i + 1)
                                     </div>
                                     <div class="top-item-content">
-                                        <span class="top-item-name" title="@doc.RegulationName">@doc.RegulationName</span>
+                                        <span class="top-item-name" title="@displayName">@displayName</span>
                                         <span class="top-item-count">@doc.Count downloads</span>
                                     </div>
                                 </div>
@@ -223,12 +263,18 @@
                             @for (int i = 0; i < Model.TopViewed.Take(5).Count(); i++)
                             {
                                 var doc = Model.TopViewed.Skip(i).First();
+                                
+                                // Use Arabic name if available and language is Arabic
+                                var displayName = isArabic && !string.IsNullOrEmpty(doc.RegulationNameAr) 
+                                    ? doc.RegulationNameAr 
+                                    : doc.RegulationName;
+                                
                                 <div class="top-item">
                                     <div class="ranking-badge ranking-@(i + 1)">
                                         @(i + 1)
                                     </div>
                                     <div class="top-item-content">
-                                        <span class="top-item-name" title="@doc.RegulationName">@doc.RegulationName</span>
+                                        <span class="top-item-name" title="@displayName">@displayName</span>
                                         <span class="top-item-count">@doc.Count views</span>
                                     </div>
                                 </div>
@@ -256,12 +302,18 @@
                             @for (int i = 0; i < Model.MostDetailsShown.Take(5).Count(); i++)
                             {
                                 var doc = Model.MostDetailsShown.Skip(i).First();
+                                
+                                // Use Arabic name if available and language is Arabic
+                                var displayName = isArabic && !string.IsNullOrEmpty(doc.RegulationNameAr) 
+                                    ? doc.RegulationNameAr 
+                                    : doc.RegulationName;
+                                
                                 <div class="top-item">
                                     <div class="ranking-badge ranking-@(i + 1)">
                                         @(i + 1)
                                     </div>
                                     <div class="top-item-content">
-                                        <span class="top-item-name" title="@doc.RegulationName">@doc.RegulationName</span>
+                                        <span class="top-item-name" title="@displayName">@displayName</span>
                                         <span class="top-item-count">@doc.Count details</span>
                                     </div>
                                 </div>
@@ -304,7 +356,8 @@
                                 <option value="" id="filter-all-types"></option>
                                 @foreach (var docType in Model.DocumentTypeDistribution)
                                 {
-                                    <option value="@docType.DocumentType">@docType.DocumentType</option>
+                                    var displayType = isArabic ? GetDocumentTypeTranslation(docType.DocumentType) : docType.DocumentType;
+                                    <option value="@docType.DocumentType">@displayType</option>
                                 }
                             </select>
                         </div>
@@ -330,11 +383,18 @@
                         <tbody>
                             @foreach (var doc in Model.DocumentStats)
                             {
+                                var displayName = isArabic && !string.IsNullOrEmpty(doc.RegulationNameAr) 
+                                    ? doc.RegulationNameAr 
+                                    : doc.RegulationName;
+                                
+                                var displayType = isArabic ? GetDocumentTypeTranslation(doc.DocumentType) : doc.DocumentType;
+                                var displayDepartment = isArabic ? GetDepartmentTranslation(doc.Department) : doc.Department;
+
                                 <tr data-type="@doc.DocumentType" data-downloads="@doc.DownloadCount" data-views="@doc.ViewCount" data-details="@doc.DetailsCount" data-total="@doc.TotalInteractions" data-name="@doc.RegulationName">
                                     <td><span class="badge bg-secondary">@doc.RecordId</span></td>
-                                    <td class="document-name" title="@doc.RegulationName">@doc.RegulationName</td>
-                                    <td>@doc.DocumentType</td>
-                                    <td>@doc.Department</td>
+                                    <td class="document-name" title="@displayName">@displayName</td>
+                                    <td>@displayType</td>
+                                    <td>@displayDepartment</td>
                                     <td><span class="badge bg-success">@doc.DownloadCount</span></td>
                                     <td><span class="badge bg-info">@doc.ViewCount</span></td>
                                     <td><span class="badge bg-warning">@doc.DetailsCount</span></td>
@@ -352,7 +412,11 @@
 <!-- Hidden data for JavaScript -->
 <script type="application/json" id="chartData">
 {
-    "documentTypes": @Html.Raw(Json.Serialize(Model.DocumentTypeDistribution.Select(d => new { label = d.DocumentType, value = d.Count, percentage = d.Percentage }))),
+    "documentTypes": @Html.Raw(Json.Serialize(Model.DocumentTypeDistribution.Select(d => new { 
+        label = isArabic ? GetDocumentTypeTranslation(d.DocumentType) : d.DocumentType, 
+        value = d.Count, 
+        percentage = d.Percentage 
+    }))),
     "monthlyStats": @Html.Raw(Json.Serialize(Model.MonthlyStats.Select(m => new { 
         month = m.MonthYear, 
         downloads = m.Downloads, 

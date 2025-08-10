@@ -131,6 +131,7 @@ namespace RulesRegulation.Controllers
                 SELECT 
                     R.RECORD_ID as RECORD_ID,
                     R.REGULATION_NAME,
+                    R.REGULATION_NAME_AR,
                     R.DOCUMENT_TYPE,
                     R.DEPARTMENT,
                     NVL(downloads.download_count, 0) as DOWNLOAD_COUNT,
@@ -168,6 +169,7 @@ namespace RulesRegulation.Controllers
                 {
                     RecordId = reader.GetInt32("RECORD_ID"),
                     RegulationName = reader.GetString("REGULATION_NAME"),
+                    RegulationNameAr = reader.IsDBNull("REGULATION_NAME_AR") ? "" : reader.GetString("REGULATION_NAME_AR"),
                     DocumentType = reader.IsDBNull("DOCUMENT_TYPE") ? "" : reader.GetString("DOCUMENT_TYPE"),
                     Department = reader.IsDBNull("DEPARTMENT") ? "" : reader.GetString("DEPARTMENT"),
                     DownloadCount = reader.GetInt32("DOWNLOAD_COUNT"),
@@ -189,11 +191,12 @@ namespace RulesRegulation.Controllers
                 SELECT * FROM (
                     SELECT 
                         R.REGULATION_NAME,
+                        R.REGULATION_NAME_AR,
                         COUNT(*) as ACTION_COUNT
                     FROM USER_HISTORY H
                     JOIN RECORDS R ON H.RECORD_ID = R.RECORD_ID
                     WHERE UPPER(H.ACTION) = '{actionType.ToUpper()}'
-                    GROUP BY R.REGULATION_NAME
+                    GROUP BY R.REGULATION_NAME, R.REGULATION_NAME_AR
                     ORDER BY COUNT(*) DESC
                 ) WHERE ROWNUM <= 5";
 
@@ -206,6 +209,7 @@ namespace RulesRegulation.Controllers
                 topDocs.Add(new TopDocumentStat
                 {
                     RegulationName = reader.GetString("REGULATION_NAME"),
+                    RegulationNameAr = reader.IsDBNull("REGULATION_NAME_AR") ? "" : reader.GetString("REGULATION_NAME_AR"),
                     Count = reader.GetInt32("ACTION_COUNT"),
                     ActionType = actionType
                 });
@@ -445,6 +449,7 @@ namespace RulesRegulation.Controllers
     {
         public int RecordId { get; set; }
         public string RegulationName { get; set; } = "";
+        public string RegulationNameAr { get; set; } = "";
         public string DocumentType { get; set; } = "";
         public string Department { get; set; } = "";
         public int DownloadCount { get; set; }
@@ -456,6 +461,7 @@ namespace RulesRegulation.Controllers
     public class TopDocumentStat
     {
         public string RegulationName { get; set; } = "";
+        public string RegulationNameAr { get; set; } = "";
         public int Count { get; set; }
         public string ActionType { get; set; } = "";
     }
