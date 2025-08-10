@@ -367,10 +367,11 @@ namespace RulesRegulation.Controllers
                     SELECT 
                         R.RECORD_ID as RECORD_ID,
                         R.REGULATION_NAME,
+                        R.REGULATION_NAME_AR,
                         COUNT(CASE WHEN UPPER(H.ACTION) = 'VIEW' THEN 1 END) as VIEW_COUNT
                     FROM RECORDS R
                     LEFT JOIN USER_HISTORY H ON R.RECORD_ID = H.RECORD_ID
-                    GROUP BY R.RECORD_ID, R.REGULATION_NAME
+                    GROUP BY R.RECORD_ID, R.REGULATION_NAME, R.REGULATION_NAME_AR
                     ORDER BY VIEW_COUNT DESC
                 ) WHERE ROWNUM <= 5";
 
@@ -384,6 +385,7 @@ namespace RulesRegulation.Controllers
                 {
                     RecordId = reader.GetInt32("RECORD_ID"),
                     Title = reader.IsDBNull("REGULATION_NAME") ? "Unknown" : reader.GetString("REGULATION_NAME"),
+                    TitleAr = reader.IsDBNull("REGULATION_NAME_AR") ? "" : reader.GetString("REGULATION_NAME_AR"),
                     ViewCount = reader.GetInt32("VIEW_COUNT")
                 });
             }
@@ -401,10 +403,11 @@ namespace RulesRegulation.Controllers
                     SELECT 
                         R.RECORD_ID as RECORD_ID,
                         R.REGULATION_NAME,
+                        R.REGULATION_NAME_AR,
                         COUNT(CASE WHEN UPPER(H.ACTION) = 'DOWNLOAD' THEN 1 END) as DOWNLOAD_COUNT
                     FROM RECORDS R
                     LEFT JOIN USER_HISTORY H ON R.RECORD_ID = H.RECORD_ID
-                    GROUP BY R.RECORD_ID, R.REGULATION_NAME
+                    GROUP BY R.RECORD_ID, R.REGULATION_NAME, R.REGULATION_NAME_AR
                     ORDER BY DOWNLOAD_COUNT DESC
                 ) WHERE ROWNUM <= 5";
 
@@ -418,6 +421,7 @@ namespace RulesRegulation.Controllers
                 {
                     RecordId = reader.GetInt32("RECORD_ID"),
                     Title = reader.IsDBNull("REGULATION_NAME") ? "Unknown" : reader.GetString("REGULATION_NAME"),
+                    TitleAr = reader.IsDBNull("REGULATION_NAME_AR") ? "" : reader.GetString("REGULATION_NAME_AR"),
                     DownloadCount = reader.GetInt32("DOWNLOAD_COUNT")
                 });
             }
@@ -504,6 +508,7 @@ namespace RulesRegulation.Controllers
     {
         public int RecordId { get; set; }
         public string Title { get; set; } = "";
+        public string TitleAr { get; set; } = "";
         public int ViewCount { get; set; }
     }
 
@@ -511,6 +516,7 @@ namespace RulesRegulation.Controllers
     {
         public int RecordId { get; set; }
         public string Title { get; set; } = "";
+        public string TitleAr { get; set; } = "";
         public int DownloadCount { get; set; }
     }
 }

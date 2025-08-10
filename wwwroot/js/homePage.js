@@ -372,7 +372,7 @@ function navigateToHistory() {
         <div class="row justify-content-center g-lg-4 g-md-3 g-sm-2 g-1" style="margin: 0px 40px;">
             <div class="col-12">
                 <!-- Header with title and toggle buttons outside table -->
-                <div class="d-flex justify-content-between align-items-center mb-4" style="padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
+                <div class="d-flex justify-content-between align-items-center mb-5" style="padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
                     <div>
                         <h3 class="mb-0">
                             <i class="fas fa-history me-3"></i>
@@ -618,80 +618,161 @@ function renderTableView() {
                 <thead>
                     <tr>
                         <th><i class="fas fa-file-alt me-2"></i>Record Name</th>
-                        <th><i class="fas fa-bolt me-2"></i>Action</th>
+                        <th><i class="fas fa-bolt me-2"></i>All Actions</th>
+                        <th><i class="fas fa-star me-2"></i>Last Action</th>
                         <th><i class="fas fa-clock me-2"></i>Timestamp</th>
                     </tr>
                 </thead>
                 <tbody>`;
 
     // Loop through each record and its actions
-    Object.keys(historyData).forEach(recordId => {
+    // First, create an array of records with their latest action dates for sorting
+    const recordsArray = Object.keys(historyData).map(recordId => {
         const record = historyData[recordId];
-        const recordName = record.recordName || 'Unknown Record';
         
-        // Find the most recent action overall for the main display
-        let latestAction = null;
+        // Find the most recent action overall for sorting
         let latestDate = null;
-        
         ['view', 'download', 'show_details'].forEach(actionType => {
             if (record[actionType]) {
                 const actionDate = new Date(record[actionType].actionDate);
                 if (!latestDate || actionDate > latestDate) {
                     latestDate = actionDate;
-                    latestAction = record[actionType];
                 }
             }
         });
         
-        if (latestAction) {
-            let action, actionIcon, badgeClass;
+        return {
+            recordId: recordId,
+            record: record,
+            latestDate: latestDate
+        };
+    });
+    
+    // Sort records by latest action date (most recent first)
+    recordsArray.sort((a, b) => {
+        if (!a.latestDate && !b.latestDate) return 0;
+        if (!a.latestDate) return 1;
+        if (!b.latestDate) return -1;
+        return new Date(b.latestDate) - new Date(a.latestDate);
+    });
+    
+    // Now loop through the sorted records
+    recordsArray.forEach(item => {
+        const recordId = item.recordId;
+        const record = item.record;
+        const recordName = record.recordName || 'Unknown Record';
+        
+        // Find the most recent action overall for timestamp display
+        let latestDate = null;
+        ['view', 'download', 'show_details'].forEach(actionType => {
+            if (record[actionType]) {
+                const actionDate = new Date(record[actionType].actionDate);
+                if (!latestDate || actionDate > latestDate) {
+                    latestDate = actionDate;
+                }
+            }
+        });
+        
+        const latestTimestamp = latestDate ? latestDate.toLocaleString('en-US') : '';
+        
+        // Find the most recent action for the "Last Action" column
+        let lastActionInfo = null;
+        ['view', 'download', 'show_details'].forEach(actionType => {
+            if (record[actionType]) {
+                const actionDate = new Date(record[actionType].actionDate);
+                if (!lastActionInfo || actionDate > new Date(lastActionInfo.actionDate)) {
+                    lastActionInfo = record[actionType];
+                }
+            }
+        });
+        
+        // Generate last action badge
+        let lastActionBadge = '';
+        if (lastActionInfo) {
+            let actionName, actionIcon, actionStyle;
             
-            switch(latestAction.action.toLowerCase()) {
-                case 'download':
-                    action = 'Download';
-                    actionIcon = 'fas fa-download';
-                    badgeClass = 'bg-success text-white';
-                    break;
+            switch(lastActionInfo.action.toLowerCase()) {
                 case 'view':
-                    action = 'View';
+                    actionName = 'View';
                     actionIcon = 'fas fa-eye';
-                    badgeClass = 'bg-info text-white';
+                    actionStyle = 'background-color: #0dcaf0; color: white;';
+                    break;
+                case 'download':
+                    actionName = 'Download';
+                    actionIcon = 'fas fa-download';
+                    actionStyle = 'background-color: #198754; color: white;';
                     break;
                 case 'show_details':
-                    action = 'Show details';
+                    actionName = 'Show Details';
                     actionIcon = 'fas fa-info-circle';
-                    badgeClass = 'bg-warning text-dark';
+                    actionStyle = 'background-color: #ffc107; color: #212529;';
                     break;
                 default:
-                    action = latestAction.action;
+                    actionName = lastActionInfo.action;
                     actionIcon = 'fas fa-question-circle';
-                    badgeClass = 'bg-secondary text-white';
+                    actionStyle = 'background-color: #6c757d; color: white;';
             }
             
-            const timestamp = new Date(latestAction.actionDate).toLocaleString('en-US');
-            
-            // Count how many action types exist for this record
-            const actionCount = ['view', 'download', 'show_details'].filter(type => record[type]).length;
-            
-            historyHTML += `
-                <tr>
-                    <td class="record-name">
-                        <i class="fas fa-file-pdf text-danger me-2"></i>
-                        ${recordName}
-                    </td>
-                    <td>
-                        <span class="action-badge ${badgeClass}">
-                            <i class="${actionIcon} me-2"></i>${action}
-                        </span>
-                        ${actionCount > 1 ? `<small class="text-muted d-block mt-1">${actionCount} action types</small>` : ''}
-                    </td>
-                    <td class="timestamp-text">
-                        <i class="fas fa-calendar-alt me-2"></i>
-                        ${timestamp}
-                    </td>
-                </tr>
+            lastActionBadge = `
+                <span class="action-badge d-inline-block" style="padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; ${actionStyle}">
+                    <i class="${actionIcon} me-1"></i>${actionName}
+                </span>
             `;
+        } else {
+            lastActionBadge = '<span class="text-muted">No actions yet</span>';
         }
+        
+        // Generate badges for all three action types
+        const actionTypes = [
+            { key: 'view', name: 'View', icon: 'fas fa-eye', style: 'background-color: #0dcaf0; color: white;' },
+            { key: 'download', name: 'Download', icon: 'fas fa-download', style: 'background-color: #198754; color: white;' },
+            { key: 'show_details', name: 'Show Details', icon: 'fas fa-info-circle', style: 'background-color: #ffc107; color: #212529;' }
+        ];
+        
+        let actionBadgesHTML = '';
+        actionTypes.forEach(actionType => {
+            if (record[actionType.key]) {
+                const actionTimestamp = new Date(record[actionType.key].actionDate).toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                actionBadgesHTML += `
+                    <span class="action-badge me-2 mb-1 d-inline-block" style="padding: 6px 12px; border-radius: 15px; font-size: 0.75rem; font-weight: 600; ${actionType.style}">
+                        <i class="${actionType.icon} me-1"></i>${actionType.name}
+                        <small class="d-block" style="font-size: 0.65rem; opacity: 0.8;">${actionTimestamp}</small>
+                    </span>
+                `;
+            } else {
+                actionBadgesHTML += `
+                    <span class="action-badge me-2 mb-1 d-inline-block" style="padding: 6px 12px; border-radius: 15px; font-size: 0.75rem; font-weight: 600; ${actionType.style} opacity: 0.4;">
+                        <i class="${actionType.icon} me-1"></i>${actionType.name}
+                        <small class="d-block" style="font-size: 0.65rem; opacity: 0.8;">Not performed</small>
+                    </span>
+                `;
+            }
+        });
+        
+        historyHTML += `
+            <tr>
+                <td class="record-name">
+                    <i class="fas fa-file-pdf text-danger me-2"></i>
+                    ${recordName}
+                </td>
+                <td>
+                    ${actionBadgesHTML}
+                </td>
+                <td>
+                    ${lastActionBadge}
+                </td>
+                <td class="timestamp-text">
+                    <i class="fas fa-calendar-alt me-2"></i>
+                    ${latestTimestamp}
+                </td>
+            </tr>
+        `;
     });
 
     historyHTML += '</tbody></table></div>';
@@ -723,9 +804,86 @@ function renderCardView() {
     
     let historyHTML = '<div class="row justify-content-center g-lg-4 g-md-3 g-sm-2 g-1">';
 
+    // Add CSS to make action status sections scale with cards
+    historyHTML += `
+        <style>
+            .action-status-section {
+                transition: transform 0.3s ease;
+                box-sizing: border-box !important;
+            }
+            
+            .action-status-section .row {
+                width: 100% !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+            
+            .action-status-section .col {
+                padding-left: 5px !important;
+                padding-right: 5px !important;
+            }
+            
+            @media (max-width: 1024px) {
+                .large-card .action-status-section {
+                    transform: scale(1) !important;
+                }
+            }
+            
+            @media (min-width: 1024px) {
+                .large-card .action-status-section {
+                    transform: scale(1.1) !important;
+                }
+            }
+            
+            @media (min-width: 1300px) {
+                .large-card .action-status-section {
+                    transform: scale(1.23) !important;
+                }
+            }
+            
+            @media (min-width: 1600px) {
+                .large-card .action-status-section {
+                    transform: scale(1.3) !important;
+                }
+            }
+        </style>
+    `;
+
     // Loop through each record and its actions
-    Object.keys(historyData).forEach(recordId => {
+    // First, create an array of records with their latest action dates for sorting
+    const recordsArray = Object.keys(historyData).map(recordId => {
         const record = historyData[recordId];
+        
+        // Find the most recent action overall for sorting
+        let latestDate = null;
+        ['view', 'download', 'show_details'].forEach(actionType => {
+            if (record[actionType]) {
+                const actionDate = new Date(record[actionType].actionDate);
+                if (!latestDate || actionDate > latestDate) {
+                    latestDate = actionDate;
+                }
+            }
+        });
+        
+        return {
+            recordId: recordId,
+            record: record,
+            latestDate: latestDate
+        };
+    });
+    
+    // Sort records by latest action date (most recent first)
+    recordsArray.sort((a, b) => {
+        if (!a.latestDate && !b.latestDate) return 0;
+        if (!a.latestDate) return 1;
+        if (!b.latestDate) return -1;
+        return new Date(b.latestDate) - new Date(a.latestDate);
+    });
+    
+    // Now loop through the sorted records
+    recordsArray.forEach(item => {
+        const recordId = item.recordId;
+        const record = item.record;
         const recordName = record.recordName || 'Unknown Record';
         
         // Find the most recent action overall for timestamp display
@@ -752,9 +910,9 @@ function renderCardView() {
         
         // Always show these three action types in order
         const actionTypes = [
-            { key: 'view', name: 'Viewed', icon: 'fas fa-eye', class: 'text-white', style: 'background-color: #2c3e50;' },
-            { key: 'download', name: 'Downloaded', icon: 'fas fa-download', class: 'text-white', style: 'background-color: #2c3e50;' },
-            { key: 'show_details', name: 'Show Details', icon: 'fas fa-info-circle', class: 'text-white', style: 'background-color: #2c3e50;' }
+            { key: 'view', name: 'Viewed', icon: 'fas fa-eye', class: 'text-white', style: 'background-color: #0dcaf0;' }, // bg-info color
+            { key: 'download', name: 'Downloaded', icon: 'fas fa-download', class: 'text-white', style: 'background-color: #198754;' }, // bg-success color
+            { key: 'show_details', name: 'Show Details', icon: 'fas fa-info-circle', class: 'text-dark', style: 'background-color: #ffc107;' } // bg-warning color
         ];
         
         actionTypes.forEach(actionType => {
@@ -780,7 +938,7 @@ function renderCardView() {
                 // Show placeholder for actions that haven't been performed
                 actionBadgesHTML += `
                     <div class="col text-center">
-                        <div class="badge rounded-pill px-3 py-2 mb-2" style="font-size: 0.7rem; font-weight: 600; width: 100%; background-color: #2c3e50 !important; color: white !important;">
+                        <div class="badge rounded-pill px-3 py-2 mb-2" style="font-size: 0.7rem; font-weight: 600; width: 100%; ${actionType.style} opacity: 0.5;">
                             <i class="${actionType.icon} me-1"></i>${actionType.name}
                         </div>
                         <div class="text-muted" style="font-size: 0.6rem; font-weight: 500;">
@@ -792,8 +950,8 @@ function renderCardView() {
         });
         
         historyHTML += `
-            <div class="col-3 medium-card" style="display: flex; flex-direction: column;">
-                <div class="card document-card" data-title="${recordName}" data-department="History" data-section="" data-type="History Record" data-version-date="${latestTimestamp}" style="flex-grow: 1; width: 100%; height: 100%;">
+            <div class="col-auto medium-card large-card" style="display: flex; flex-direction: column; align-items: center;">
+                <div class="card document-card" data-title="${recordName}" data-department="History" data-section="" data-type="History Record" data-version-date="${latestTimestamp}">
                     <div class="bookmark-wrapper">
                         <div class="bookmark" data-record-id="${recordId}" onclick="toggleBookmark(this)" style="background: rgba(255, 255, 255, 0.9);">
                         </div>
@@ -809,7 +967,7 @@ function renderCardView() {
                     </div>
                     <h2 class="card-title">${recordName}</h2>
 
-                    <div class="info-footer" style="margin-top: auto;">
+                    <div class="info-footer">
                         <div class="action-buttons">
                             <button class="action-btn" onclick="DownloadPdf(${recordId})" title="Download">
                                 <i class="fas fa-download">
@@ -834,7 +992,7 @@ function renderCardView() {
                 </div>
                 
                 <!-- History badges section outside and below the card -->
-                <div class="history-badges mt-3" style="background: white; padding: 15px; border-radius: 10px; border: 1px solid #e9ecef; flex-shrink: 0; width: 100%;">
+                <div class="mt-3 mb-5" style="background: white; padding: 15px; border-radius: 10px; border: 1px solid #e9ecef; flex-shrink: 0; width: 300px; max-width: 300px; min-width: 300px; box-sizing: border-box; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);">
                     <h6 class="text-muted mb-3 text-center" style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
                         <i class="fas fa-list-check me-2"></i>Action Status
                     </h6>

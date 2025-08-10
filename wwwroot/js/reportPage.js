@@ -10,14 +10,12 @@ let allDocuments = []; // Store original documents data for sorting/filtering
 
 // Initialize the page when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    
     // Get chart data from the page
     const chartDataElement = document.getElementById('chartData');
     if (chartDataElement) {
         try {
             chartData = JSON.parse(chartDataElement.textContent);
 
-            
             // Initialize charts with accurate data
             initializeViewsDownloadsChart();
             initializeTopRecordsChart();
@@ -27,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // Initialize table functionality
             storeDocumentsData();
             initializeTableControls();
-            
         } catch (error) {
 
         }
@@ -46,13 +43,14 @@ function initializeViewsDownloadsChart() {
         return;
     }
 
-
+    const isAr = !!(chartData && chartData.isArabic);
 
     // Prepare data from server
     const labels = chartData.monthlyChartData.map(item => {
         const [year, month] = item.monthYear.split('-');
         const date = new Date(year, month - 1);
-        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        const locale = isAr ? 'ar-SA' : 'en-US';
+        return date.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
     });
     
     const viewsData = chartData.monthlyChartData.map(item => item.views);
@@ -63,7 +61,7 @@ function initializeViewsDownloadsChart() {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Views',
+                label: isAr ? 'المشاهدات' : 'Views',
                 data: viewsData,
                 borderColor: '#3498db',
                 backgroundColor: 'rgba(52, 152, 219, 0.1)',
@@ -75,7 +73,7 @@ function initializeViewsDownloadsChart() {
                 pointBorderWidth: 2,
                 pointRadius: 6
             }, {
-                label: 'Downloads',
+                label: isAr ? 'التنزيلات' : 'Downloads',
                 data: downloadsData,
                 borderColor: '#e74c3c',
                 backgroundColor: 'rgba(231, 76, 60, 0.1)',
@@ -94,7 +92,7 @@ function initializeViewsDownloadsChart() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Views & Downloads Trend (Last 6 Months)',
+                    text: isAr ? 'اتجاه المشاهدات والتنزيلات (آخر 6 أشهر)' : 'Views & Downloads Trend (Last 6 Months)',
                     font: {
                         size: 16,
                         weight: 'bold'
@@ -155,7 +153,7 @@ function initializeTopRecordsChart() {
         return;
     }
 
-
+    const isAr = !!(chartData && chartData.isArabic);
 
     // Prepare data from server
     const labels = chartData.topRecordsData.map(item => {
@@ -169,7 +167,7 @@ function initializeTopRecordsChart() {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Views',
+                label: isAr ? 'المشاهدات' : 'Views',
                 data: data,
                 backgroundColor: [
                     'rgba(52, 152, 219, 0.8)',
@@ -196,7 +194,7 @@ function initializeTopRecordsChart() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Top 5 Most Viewed Records',
+                    text: isAr ? 'أكثر 5 وثائق مشاهدة' : 'Top 5 Most Viewed Records',
                     font: {
                         size: 16,
                         weight: 'bold'
@@ -213,7 +211,9 @@ function initializeTopRecordsChart() {
                         },
                         label: function(context) {
                             const recordId = chartData.topRecordsData[context.dataIndex].recordId;
-                            return `Record ID: ${recordId} - Views: ${context.parsed.y}`;
+                            return isAr
+                                ? `المعرف: ${recordId} - المشاهدات: ${context.parsed.y}`
+                                : `Record ID: ${recordId} - Views: ${context.parsed.y}`;
                         }
                     }
                 }
@@ -266,7 +266,7 @@ function initializeTopDownloadsChart() {
         return;
     }
 
-
+    const isAr = !!(chartData && chartData.isArabic);
 
     // Prepare data from server
     const labels = chartData.topDownloadsData.map(item => {
@@ -280,7 +280,7 @@ function initializeTopDownloadsChart() {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Downloads',
+                label: isAr ? 'التنزيلات' : 'Downloads',
                 data: data,
                 backgroundColor: [
                     'rgba(231, 76, 60, 0.8)',
@@ -307,7 +307,7 @@ function initializeTopDownloadsChart() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Top 5 Most Downloaded Records',
+                    text: isAr ? 'أكثر 5 وثائق تحميلاً' : 'Top 5 Most Downloaded Records',
                     font: {
                         size: 16,
                         weight: 'bold'
@@ -324,7 +324,9 @@ function initializeTopDownloadsChart() {
                         },
                         label: function(context) {
                             const recordId = chartData.topDownloadsData[context.dataIndex].recordId;
-                            return `Record ID: ${recordId} - Downloads: ${context.parsed.y}`;
+                            return isAr
+                                ? `المعرف: ${recordId} - التنزيلات: ${context.parsed.y}`
+                                : `Record ID: ${recordId} - Downloads: ${context.parsed.y}`;
                         }
                     }
                 }
@@ -377,7 +379,7 @@ function initializeDocumentTypeChart() {
         return;
     }
 
-
+    const isAr = !!(chartData && chartData.isArabic);
 
     // Prepare chart data
     const labels = chartData.documentTypes.map(item => item.label);
@@ -386,7 +388,7 @@ function initializeDocumentTypeChart() {
 
     // Generate colors
     const colors = [
-        '#4facfe', '#43e97b', '#fa709a', '#a855f7', '#feca57',
+        '#2E8B57', '#8B4513',  '#4682B4', '#DAA520', '#feca57',
         '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7'
     ];
 
@@ -408,7 +410,7 @@ function initializeDocumentTypeChart() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Document Type Distribution',
+                    text: isAr ? 'توزيع أنواع الوثائق' : 'Document Type Distribution',
                     font: {
                         size: 16,
                         weight: 'bold'
@@ -431,7 +433,9 @@ function initializeDocumentTypeChart() {
                             const label = context.label || '';
                             const value = context.parsed;
                             const percentage = percentages[context.dataIndex];
-                            return `${label}: ${value} documents (${percentage}%)`;
+                            return isAr
+                                ? `${label}: ${value} وثائق (${percentage}%)`
+                                : `${label}: ${value} documents (${percentage}%)`;
                         }
                     },
                     backgroundColor: 'rgba(0,0,0,0.8)',
@@ -673,11 +677,12 @@ async function exportToPDF() {
         yPosition += 15;
 
         // Add all 4 charts with better error handling and spacing
+        const isAr = !!(chartData && chartData.isArabic);
         const charts = [
-            { chart: viewsDownloadsChart, title: 'Views & Downloads Trend Over Time', id: 'viewsDownloadsChart' },
-            { chart: topRecordsChart, title: 'Top 5 Most Viewed Records', id: 'topRecordsChart' },
-            { chart: topDownloadsChart, title: 'Top 5 Most Downloaded Records', id: 'topDownloadsChart' },
-            { chart: documentTypeChart, title: 'Document Type Distribution', id: 'documentTypeChart' }
+            { chart: viewsDownloadsChart, title: isAr ? 'اتجاه المشاهدات والتنزيلات مع الوقت' : 'Views & Downloads Trend Over Time', id: 'viewsDownloadsChart' },
+            { chart: topRecordsChart, title: isAr ? 'أكثر 5 وثائق مشاهدة' : 'Top 5 Most Viewed Records', id: 'topRecordsChart' },
+            { chart: topDownloadsChart, title: isAr ? 'أكثر 5 وثائق تحميلاً' : 'Top 5 Most Downloaded Records', id: 'topDownloadsChart' },
+            { chart: documentTypeChart, title: isAr ? 'توزيع أنواع الوثائق' : 'Document Type Distribution', id: 'documentTypeChart' }
         ];
 
         for (let i = 0; i < charts.length; i++) {

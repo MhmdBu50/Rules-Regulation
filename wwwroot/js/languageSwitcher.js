@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "user-list-label": "List of Users",
             
             // Home page elements
-            "admin-view-button": "view as Editor",
+            "admin-view-button": "Editor view",
             "searchInput": "Search ...", // This is the placeholder for the search input
 
             // Filter Section
@@ -171,6 +171,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "label-regulationName": "Regulation/Manual Name (English)",
         "label-regulationNameAr": "Regulation/Manual Name (Arabic)",
         "label-relevantDepartment": "Relevant Department",
+        "label-pageNumber": "Page Number",
+        "placeholder-pageNumber": "Enter a page number for the thumbnail",
         "label-versionNumber": "Version Number",
         "label-versionDate": "Version Date",
         "label-approvingDate": "Approving Date",
@@ -333,7 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "user-list-label": "قائمة المستخدمين",
 
             // Home page elements
-            "admin-view-button": "عرض كمحرر",
+            "admin-view-button": "عرض المحرر",
             "searchInput": "... ابحث",
 
             // Filter Section
@@ -424,6 +426,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-stats-most-viewed": "الأكثر مشاهدة",
         "admin-stats-viewed-text": "مشاهدات",
         "admin-stats-times-text": "مرة",
+        "label-pageNumber":"رقم الصفحة",
+        "placeholder-pageNumber": "أدخل رقم الصفحة للصورة المصغرة",
         "admin-button-view-report": "عرض التقرير",
         "admin-button-add-new-record": "إضافة سجل جديد",
         "admin-button-export-data": "تصدير البيانات",
