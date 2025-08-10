@@ -123,7 +123,6 @@
 }
 
 .stat-icon {
-    position: absolute;
     top: 1.5rem;
     right: 1.5rem;
     width: 60px;
@@ -133,12 +132,21 @@
     align-items: center;
     justify-content: center;
     background: var(--card-accent);
-    opacity: 0.1;
+    opacity: 1;
 }
 
 .stat-icon i {
     font-size: 1.5rem;
-    color: var(--card-accent);
+    color: white;
+    z-index: 1;
+}
+
+.stat-number-overlay {
+    position: absolute;
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    z-index: 2;
 }
 
 .stat-content h3 {
