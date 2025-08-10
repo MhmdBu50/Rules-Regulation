@@ -388,7 +388,7 @@ function initializeDocumentTypeChart() {
 
     // Generate colors
     const colors = [
-        '#4facfe', '#43e97b', '#fa709a', '#a855f7', '#feca57',
+        '#2E8B57', '#8B4513',  '#4682B4', '#DAA520', '#feca57',
         '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7'
     ];
 
