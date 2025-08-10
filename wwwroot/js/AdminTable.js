@@ -649,11 +649,21 @@ function performSearch(searchTerm) {
   // Get current filter settings
   const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
   const mobileDocumentFilter = document.getElementById("mobileDocumentFilter");
-  const selectedDocumentType = desktopDocumentFilter
-    ? desktopDocumentFilter.value
-    : mobileDocumentFilter
-    ? mobileDocumentFilter.value
-    : "all";
+  
+  let selectedDocumentType = "all";
+  if (desktopDocumentFilter && desktopDocumentFilter.offsetParent !== null) {
+    // Desktop filter is visible
+    selectedDocumentType = desktopDocumentFilter.value;
+  } else if (mobileDocumentFilter && mobileDocumentFilter.offsetParent !== null) {
+    // Mobile filter is visible
+    selectedDocumentType = mobileDocumentFilter.value;
+  } else if (desktopDocumentFilter) {
+    // Fallback to desktop
+    selectedDocumentType = desktopDocumentFilter.value;
+  } else if (mobileDocumentFilter) {
+    // Fallback to mobile
+    selectedDocumentType = mobileDocumentFilter.value;
+  }
 
   let visibleCount = 0;
 
@@ -932,21 +942,41 @@ function applyAdminFilters() {
   const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
   const mobileDocumentFilter = document.getElementById("mobileDocumentFilter");
 
-  // Use desktop filter as primary, fallback to mobile
-  const selectedDocumentType = desktopDocumentFilter
-    ? desktopDocumentFilter.value
-    : mobileDocumentFilter
-    ? mobileDocumentFilter.value
-    : "all";
+  // Check which filter is currently visible/available
+  let selectedDocumentType = "all";
+  
+  if (desktopDocumentFilter && desktopDocumentFilter.offsetParent !== null) {
+    // Desktop filter is visible
+    selectedDocumentType = desktopDocumentFilter.value;
+  } else if (mobileDocumentFilter && mobileDocumentFilter.offsetParent !== null) {
+    // Mobile filter is visible
+    selectedDocumentType = mobileDocumentFilter.value;
+  } else if (desktopDocumentFilter) {
+    // Fallback to desktop
+    selectedDocumentType = desktopDocumentFilter.value;
+  } else if (mobileDocumentFilter) {
+    // Fallback to mobile
+    selectedDocumentType = mobileDocumentFilter.value;
+  }
 
   // Get current search term
   const desktopSearchInput = document.getElementById("desktopSearchInput");
   const mobileSearchInput = document.getElementById("mobileSearchInput");
-  const searchTerm = desktopSearchInput
-    ? desktopSearchInput.value.toLowerCase().trim()
-    : mobileSearchInput
-    ? mobileSearchInput.value.toLowerCase().trim()
-    : "";
+  
+  let searchTerm = "";
+  if (desktopSearchInput && desktopSearchInput.offsetParent !== null) {
+    // Desktop search is visible
+    searchTerm = desktopSearchInput.value.toLowerCase().trim();
+  } else if (mobileSearchInput && mobileSearchInput.offsetParent !== null) {
+    // Mobile search is visible
+    searchTerm = mobileSearchInput.value.toLowerCase().trim();
+  } else if (desktopSearchInput) {
+    // Fallback to desktop
+    searchTerm = desktopSearchInput.value.toLowerCase().trim();
+  } else if (mobileSearchInput) {
+    // Fallback to mobile
+    searchTerm = mobileSearchInput.value.toLowerCase().trim();
+  }
 
   // Sync both dropdowns
   if (desktopDocumentFilter && mobileDocumentFilter) {
