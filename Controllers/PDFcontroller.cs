@@ -32,6 +32,7 @@ namespace RulesRegulation.Controllers
         [HttpGet("test")]
         public IActionResult Test()
         {
+            _logger.LogInformation("PDF Controller test endpoint called");
             return Ok(new
             {
                 message = "PDF Controller is working",
@@ -45,119 +46,167 @@ namespace RulesRegulation.Controllers
         {
             try
             {
+                _logger.LogInformation($"=== PDF Thumbnail Request Started for recordId: {recordId} ===");
+
                 if (recordId <= 0)
                 {
+                    _logger.LogWarning($"Invalid recordId: {recordId}");
                     return File(CreateErrorImageBytes("Invalid record ID"), "image/png", $"error_{recordId}.png");
                 }
 
-                // Check cache first
-                var cacheKey = $"thumbnail_{recordId}";
-                if (_cache.TryGetValue(cacheKey, out byte[]? cachedThumbnail) && cachedThumbnail != null)
-                {
-                    return File(cachedThumbnail, "image/png", $"thumbnail_{recordId}.png");
-                }
-
-                // Get PDF file path from database
-                var pdfFilePath = await GetPdfFilePathFromDatabase(recordId);
+                // Get PDF file path and page number from database
+                var (pdfFilePath, pageNumber) = await GetPdfFilePathAndPageFromDatabase(recordId);
 
                 if (string.IsNullOrEmpty(pdfFilePath))
                 {
+                    _logger.LogWarning($"No PDF found in database for recordId: {recordId}");
                     return File(CreateErrorImageBytes("PDF not found for this record"), "image/png", $"error_{recordId}.png");
+                }
+
+                _logger.LogInformation($"PDF file path for recordId {recordId}: {pdfFilePath}, Page: {pageNumber}");
+
+                // Check cache first (include page number in cache key)
+                var cacheKey = $"thumbnail_{recordId}_page_{pageNumber}";
+                if (_cache.TryGetValue(cacheKey, out byte[]? cachedThumbnail) && cachedThumbnail != null)
+                {
+                    _logger.LogInformation($"Returning cached thumbnail for recordId: {recordId}, page: {pageNumber}");
+                    return File(cachedThumbnail, "image/png", $"thumbnail_{recordId}_page_{pageNumber}.png");
                 }
 
                 // Check if file exists on server
                 if (!System.IO.File.Exists(pdfFilePath))
                 {
+                    _logger.LogWarning($"PDF file does not exist: {pdfFilePath}");
                     return File(CreateErrorImageBytes("PDF file not found on server"), "image/png", $"error_{recordId}.png");
                 }
 
-                // Check if PDF has at least 2 pages
-                if (!ValidatePdfHasSecondPage(pdfFilePath))
+                // Validate that the PDF has the requested page
+                var totalPages = GetPdfPageCount(pdfFilePath);
+                if (totalPages == 0)
                 {
-                    // Let's try the first page instead
-                    var firstPageThumbnail = await ConvertFirstPageToThumbnail(pdfFilePath);
-                    _cache.Set(cacheKey, firstPageThumbnail, TimeSpan.FromMinutes(30));
-                    return File(firstPageThumbnail, "image/png", $"thumbnail_{recordId}.png");
+                    _logger.LogWarning($"Unable to read PDF or PDF has no pages: {pdfFilePath}");
+                    return File(CreateErrorImageBytes("Unable to read PDF file"), "image/png", $"error_{recordId}.png");
                 }
 
-                // Convert second page to thumbnail
-                var thumbnailBytes = await ConvertSecondPageToThumbnail(pdfFilePath);
+                // Adjust page number if it's out of range
+                var targetPage = Math.Max(1, Math.Min(pageNumber, totalPages));
+                if (targetPage != pageNumber)
+                {
+                    _logger.LogWarning($"Requested page {pageNumber} is out of range for PDF with {totalPages} pages. Using page {targetPage}.");
+                }
 
-                // Cache for 30 minutes (reduced from 1 hour for faster updates)
+                // Convert specified page to thumbnail (convert to 0-based index for PDFtoImage library)
+                var thumbnailBytes = await ConvertPageToThumbnail(pdfFilePath, targetPage - 1);
+
+                // Cache for 30 minutes (include page number in cache key)
                 _cache.Set(cacheKey, thumbnailBytes, TimeSpan.FromMinutes(30));
 
-                return File(thumbnailBytes, "image/png", $"thumbnail_{recordId}.png");
+                _logger.LogInformation($"Successfully generated thumbnail for recordId: {recordId}, page: {targetPage}");
+                return File(thumbnailBytes, "image/png", $"thumbnail_{recordId}_page_{targetPage}.png");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error generating thumbnail for recordId: {recordId}");
                 return File(CreateErrorImageBytes($"Error: {ex.Message}"), "image/png", $"error_{recordId}.png");
             }
         }
 
         [HttpPost("clear-cache")]
-        public IActionResult ClearThumbnailCache([FromQuery] int recordId)
+        public IActionResult ClearThumbnailCache([FromQuery] int recordId, [FromQuery] int? pageNumber = null)
         {
             try
             {
-                var cacheKey = $"thumbnail_{recordId}";
-                _cache.Remove(cacheKey);
-                return Ok(new { success = true, message = $"Cache cleared for record {recordId}" });
+                if (pageNumber.HasValue)
+                {
+                    // Clear cache for specific page
+                    var cacheKey = $"thumbnail_{recordId}_page_{pageNumber.Value}";
+                    _cache.Remove(cacheKey);
+                    _logger.LogInformation($"Cleared thumbnail cache for recordId: {recordId}, page: {pageNumber.Value}");
+                    return Ok(new { success = true, message = $"Cache cleared for record {recordId}, page {pageNumber.Value}" });
+                }
+                else
+                {
+                    // Clear cache for all pages of this record (this is more complex, would require tracking all cached pages)
+                    // For now, we'll just clear the old cache key format for backward compatibility
+                    var oldCacheKey = $"thumbnail_{recordId}";
+                    _cache.Remove(oldCacheKey);
+                    _logger.LogInformation($"Cleared thumbnail cache for recordId: {recordId} (old format)");
+                    return Ok(new { success = true, message = $"Cache cleared for record {recordId}" });
+                }
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error clearing cache for recordId: {recordId}");
                 return BadRequest(new { success = false, message = ex.Message });
             }
         }
 
-
-private async Task<string> GetPdfFilePathFromDatabase(int recordId)
-{
-    try
-    {
-        using var connection = new OracleConnection(_connectionString);
-        await connection.OpenAsync();
-
-        var query = "SELECT FILE_PATH FROM ATTACHMENTS WHERE RECORD_ID = :recordId AND (UPPER(FILE_TYPE) LIKE '%PDF%' OR UPPER(FILE_PATH) LIKE '%.PDF')";
-        using var command = new OracleCommand(query, connection);
-        command.Parameters.Add(new OracleParameter("recordId", OracleDbType.Int32, recordId, System.Data.ParameterDirection.Input));
-
-        var result = await command.ExecuteScalarAsync();
-        var filePath = result?.ToString() ?? "";
-        
-        if (string.IsNullOrEmpty(filePath))
+        private async Task<(string filePath, int pageNumber)> GetPdfFilePathAndPageFromDatabase(int recordId)
         {
-            return "";
-        }
-        
-        // Fix the path resolution
-        string finalPath = "";
-        
-        if (Path.IsPathRooted(filePath))
-        {
-            // It's an absolute path, use as-is
-            finalPath = filePath;
-        }
-        else
-        {
-            // It's a relative path, combine with wwwroot
-            // First, normalize the path separators and remove leading slashes/tildes
-            var cleanPath = filePath.Replace('/', Path.DirectorySeparatorChar)
-                                  .Replace('\\', Path.DirectorySeparatorChar)
-                                  .TrimStart('~', '/', '\\');
-            
-            var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-            finalPath = Path.Combine(webRootPath, cleanPath);
-        }
-        
-        return finalPath;
-    }
-    catch (Exception)
-    {
-        return "";
-    }
-}
+            try
+            {
+                _logger.LogInformation($"Querying database for recordId: {recordId}");
+                
+                using var connection = new OracleConnection(_connectionString);
+                await connection.OpenAsync();
 
-        private bool ValidatePdfHasSecondPage(string pdfFilePath)
+                var query = @"SELECT FILE_PATH, 
+                                    COALESCE(TN_PAGE_NO, 2) as TN_PAGE_NO 
+                             FROM ATTACHMENTS 
+                             WHERE RECORD_ID = :recordId 
+                             AND (UPPER(FILE_TYPE) LIKE '%PDF%' OR UPPER(FILE_PATH) LIKE '%.PDF')";
+                
+                using var command = new OracleCommand(query, connection);
+                command.Parameters.Add(new OracleParameter("recordId", OracleDbType.Int32, recordId, System.Data.ParameterDirection.Input));
+
+                using var reader = await command.ExecuteReaderAsync();
+                
+                if (await reader.ReadAsync())
+                {
+                    var filePath = reader["FILE_PATH"]?.ToString() ?? "";
+                    var pageNumber = Convert.ToInt32(reader["TN_PAGE_NO"]);
+                    
+                    _logger.LogInformation($"Raw file path from database: '{filePath}', Page: {pageNumber}");
+                    
+                    if (string.IsNullOrEmpty(filePath))
+                    {
+                        return ("", 1);
+                    }
+                    
+                    // Fix the path resolution
+                    string finalPath = "";
+                    
+                    if (Path.IsPathRooted(filePath))
+                    {
+                        // It's an absolute path, use as-is
+                        finalPath = filePath;
+                    }
+                    else
+                    {
+                        // It's a relative path, combine with wwwroot
+                        // First, normalize the path separators and remove leading slashes/tildes
+                        var cleanPath = filePath.Replace('/', Path.DirectorySeparatorChar)
+                                              .Replace('\\', Path.DirectorySeparatorChar)
+                                              .TrimStart('~', '/', '\\');
+                        
+                        var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                        finalPath = Path.Combine(webRootPath, cleanPath);
+                    }
+                    
+                    _logger.LogInformation($"Final file path: '{finalPath}' - Exists: {System.IO.File.Exists(finalPath)}, Page: {pageNumber}");
+                    return (finalPath, pageNumber);
+                }
+                
+                return ("", 1);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error querying database for recordId: {recordId}");
+                return ("", 1);
+            }
+        }
+
+        private int GetPdfPageCount(string pdfFilePath)
         {
             try
             {
@@ -165,50 +214,51 @@ private async Task<string> GetPdfFilePathFromDatabase(int recordId)
 #pragma warning disable CA1416 // Validate platform compatibility
                 var pageCount = Conversion.GetPageCount(fileStream);
 #pragma warning restore CA1416 // Validate platform compatibility
-                return pageCount >= 2;
+                _logger.LogInformation($"PDF {pdfFilePath} has {pageCount} pages");
+                return pageCount;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return false;
+                _logger.LogError(ex, $"Error checking page count for: {pdfFilePath}");
+                return 0;
             }
         }
 
-        // Add method for first page as fallback
-        private async Task<byte[]> ConvertFirstPageToThumbnail(string pdfFilePath)
+        private async Task<byte[]> ConvertPageToThumbnail(string pdfFilePath, int pageIndex)
         {
             return await Task.Run(() =>
             {
                 try
                 {
+                    _logger.LogInformation($"Converting page {pageIndex + 1} of PDF to thumbnail: {pdfFilePath}");
+
                     using var fileStream = new FileStream(pdfFilePath, FileMode.Open, FileAccess.Read);
-#pragma warning disable CA1416 // Validate platform compatibility
-                    using var originalBitmap = Conversion.ToImage(fileStream, page: 0); // First page
-#pragma warning restore CA1416 // Validate platform compatibility
+                    using var originalBitmap = Conversion.ToImage(fileStream, page: pageIndex);
 
                     return CreateThumbnailFromBitmap(originalBitmap);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    return CreateErrorImageBytes("PDF conversion failed");
+                    _logger.LogError(ex, $"Error converting page {pageIndex + 1} of PDF: {pdfFilePath}");
+                    return CreateErrorImageBytes($"PDF conversion failed for page {pageIndex + 1}");
                 }
             });
+        }
+
+        // Keep these methods for backward compatibility
+        private bool ValidatePdfHasSecondPage(string pdfFilePath)
+        {
+            return GetPdfPageCount(pdfFilePath) >= 2;
+        }
+
+        private async Task<byte[]> ConvertFirstPageToThumbnail(string pdfFilePath)
+        {
+            return await ConvertPageToThumbnail(pdfFilePath, 0);
         }
 
         private async Task<byte[]> ConvertSecondPageToThumbnail(string pdfFilePath)
         {
-            return await Task.Run(() =>
-            {
-                try
-                {
-                    using var fileStream = new FileStream(pdfFilePath, FileMode.Open, FileAccess.Read);
-                    using var originalBitmap = Conversion.ToImage(fileStream, page: 1); // Second page
-                    return CreateThumbnailFromBitmap(originalBitmap);
-                }
-                catch (Exception)
-                {
-                    return CreateErrorImageBytes("PDF conversion failed");
-                }
-            });
+            return await ConvertPageToThumbnail(pdfFilePath, 1);
         }
 
         // Helper method to reduce code duplication
