@@ -57,20 +57,6 @@ function openPDFPreview() {
     }
 }
 
-function testPdfApiDirect() {
-    // Test the general API endpoint first
-    fetch('/api/pdf/test')
-        .then(response => {
-            return response.json();
-        })
-        .then(data => {
-            
-            // Now test with a specific record ID
-            testSpecificRecord();
-        })
-        
-}
-
 
 function clearThumbnailCache(recordId) {
     fetch(`/api/pdf/clear-cache?recordId=${recordId}`, {
@@ -292,6 +278,12 @@ window.addEventListener('orientationchange', function() {
 // Function to update card scale based on screen size
 function updateCardScale() {
     const card = document.querySelector('.document-card');
+    
+    // Check if card element exists before trying to modify it
+    if (!card) {
+        return; // Exit early if no card element is found
+    }
+    
     const screenWidth = window.innerWidth;
     
     let scale = 1;
@@ -309,9 +301,6 @@ document.addEventListener('touchstart', function() {}, {passive: true});
 
 // Initialize card scale on load
 document.addEventListener('DOMContentLoaded', function() {
-    
-    // Test the API first
-    testPdfApiDirect();
     
     // Initialize card scale
     updateCardScale();

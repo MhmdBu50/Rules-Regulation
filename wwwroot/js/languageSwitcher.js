@@ -426,6 +426,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-button-manage-contact-info": "إدارة معلومات الاتصال",
         "visitToggler": "الزيارات الشهرية",
         "desktopSearchInput": "...البحث بالاسم/رقم السجل",
+        "mobileSearchInput": "...البحث بالاسم/رقم السجل",
         "admin-clear-search-title": "مسح البحث",    
         "admin-section-filter-all": "جميع الأقسام",
         "admin-section-filter-students": "الطلاب",
@@ -921,5 +922,6 @@ function updateChartLegends(targetLang) {
 // Export functions for use in other scripts
 window.translateDocumentType = translateDocumentType;
 window.updateChartLegends = updateChartLegends;
+window.translations = translations;
 
 });
