@@ -237,7 +237,7 @@
                                     </div>
                                     <div class="top-item-content">
                                         <span class="top-item-name" title="@displayName">@displayName</span>
-                                        <span class="top-item-count">@doc.Count downloads</span>
+                                        <span class="top-item-count">@doc.Count @(isArabic ? "التنزيلات" : "downloads")</span>
                                     </div>
                                 </div>
                             }
@@ -275,7 +275,7 @@
                                     </div>
                                     <div class="top-item-content">
                                         <span class="top-item-name" title="@displayName">@displayName</span>
-                                        <span class="top-item-count">@doc.Count views</span>
+                                        <span class="top-item-count">@doc.Count @(isArabic ? "المشاهدات" : "views")</span>
                                     </div>
                                 </div>
                             }
@@ -314,7 +314,7 @@
                                     </div>
                                     <div class="top-item-content">
                                         <span class="top-item-name" title="@displayName">@displayName</span>
-                                        <span class="top-item-count">@doc.Count details</span>
+                                        <span class="top-item-count">@doc.Count @(isArabic ? "التفاصيل" : "details")</span>
                                     </div>
                                 </div>
                             }
@@ -412,6 +412,7 @@
 <!-- Hidden data for JavaScript -->
 <script type="application/json" id="chartData">
 {
+    "isArabic": @(isArabic.ToString().ToLower()),
     "documentTypes": @Html.Raw(Json.Serialize(Model.DocumentTypeDistribution.Select(d => new { 
         label = isArabic ? GetDocumentTypeTranslation(d.DocumentType) : d.DocumentType, 
         value = d.Count, 
@@ -432,12 +433,12 @@
     }))),
     "topRecordsData": @Html.Raw(Json.Serialize(Model.TopRecordsChartData.Select(r => new {
         recordId = r.RecordId,
-        title = r.Title,
+        title = (isArabic && !string.IsNullOrEmpty(r.TitleAr)) ? r.TitleAr : r.Title,
         viewCount = r.ViewCount
     }))),
     "topDownloadsData": @Html.Raw(Json.Serialize(Model.TopDownloadsChartData.Select(d => new {
         recordId = d.RecordId,
-        title = d.Title,
+        title = (isArabic && !string.IsNullOrEmpty(d.TitleAr)) ? d.TitleAr : d.Title,
         downloadCount = d.DownloadCount
     })))
 }
