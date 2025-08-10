@@ -93,28 +93,68 @@ body {
   stroke-width: 1.5px; /* Change to a lighter color */
   transition: stroke 0.3s ease-in-out; /* Smooth transition */
 }
+
+.header-nav{
+  background: none;
+  border: none; 
+  padding: 0; 
+  cursor: pointer;
+}
+
+.header-nav span {
+  line-height: var(--logo-height) !important;
+  color: rgb(216, 233, 255);
+  margin-inline-start: .5rem !important;
+}
+
+#admin-view-button {
+  background: linear-gradient(45.26deg, #FFE075 7.77%, #FFFFFF 93.85%);
+  background-clip: border-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+
+
 .logo {
   transform: scale(1.02);
   transition: transform 0.08s ease-in-out;
-  width: 38px !important;
-  height: 38px !important;
+  --logo-height: 38px;
+  height: var(--logo-height) !important;
   max-width: none !important; /* Kill Bootstrap's max-width */
-  flex-shrink: 0 !important; /* Prevent shrinking */
-}
-.logo:hover {
-  transform: scale(1.04);
-}
-.logo:hover svg path {
-  transition: stroke 0.3s ease-in-out; /* Smooth transition */
-}
-.logo:active {
-  transition: transform ease;
-  transform: scale(1.06);
+  align-items: center;
 }
 
-.logo:active svg path {
-  stroke-width: 5.5px; /* Change to a lighter color */
-  transition: stroke 0.3s ease-in-out; /* Smooth transition */
+.desktop-logo img{
+  height: calc(18px + 0.6vw);
+}
+
+.logo::before {
+  content: "";
+  position: absolute;
+  top: -4px;    /* how far above the text */
+  bottom: -4px; /* how far below */
+  left: -5px;   /* left space */
+  right: -5px;  /* right space */
+  border-radius: 8px;
+  background-color: transparent;
+  transition: background-color 0.08s ease-in-out;
+  z-index: -1; /* behind the text/icon */
+}
+
+.logo:hover::before {
+  background-color: #2f3e5f;
+}
+
+.logo:hover {
+  background-color: #2f3e5f;
+  border-radius: 5px;
+}
+
+.logo:active {
+  background-color: #2f3e5f;
 }
 
 .search {

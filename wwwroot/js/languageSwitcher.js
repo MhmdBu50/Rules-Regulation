@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "user-list-label": "List of Users",
             
             // Home page elements
-            "admin-view-button": "view as Editor",
+            "admin-view-button": "Editor view",
             "searchInput": "Search ...", // This is the placeholder for the search input
 
             // Filter Section
@@ -331,7 +331,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "user-list-label": "قائمة المستخدمين",
 
             // Home page elements
-            "admin-view-button": "عرض كمحرر",
+            "admin-view-button": "عرض المحرر",
             "searchInput": "... ابحث",
 
             // Filter Section
