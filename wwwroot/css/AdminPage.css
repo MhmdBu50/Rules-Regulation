@@ -102,7 +102,15 @@ body {
 
 .dashboard-container {
   max-width: 1415px;
-  margin: 0 auto;
+  left: 50%;
+  position: relative;
+  transform: translateX(-50%);
+}
+
+[dir="rtl"] .dashboard-container {
+  left: auto;
+  right: 50%;
+  transform: translateX(50%);
 }
 
 /* Main Rectangle Container */
@@ -366,6 +374,7 @@ box-shadow: 0px 10px 30px rgba(138, 197, 62, 0.4);
 @media (min-width: 1200px) {
   .stats-card {
     max-width: 198px;
+    min-width: 180px;
   }
 
   #admin-stats-most-viewed {
