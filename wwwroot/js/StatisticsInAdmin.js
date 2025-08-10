@@ -9,6 +9,32 @@
     // <script src="js/StatisticsInAdmin.js"></script>
     // Initialize charts when page loads
 
+// Helper function to detect current language
+function isCurrentLanguageArabic() {
+    return document.body.classList.contains('rtl') || 
+           document.body.dir === 'rtl' || 
+           document.body.lang === 'ar' ||
+           document.documentElement.dir === 'rtl';
+}
+
+// Helper function to get current language code
+function getCurrentLanguage() {
+    return isCurrentLanguageArabic() ? 'ar' : 'en';
+}
+
+// Helper function to get translated text
+function getTranslatedText(key, fallbackEn = '', fallbackAr = '', lang = null) {
+    const currentLang = lang || getCurrentLanguage();
+    if (window.translations && window.translations[currentLang] && window.translations[currentLang][key]) {
+        return window.translations[currentLang][key];
+    }
+    // Fallback to provided defaults
+    return currentLang === 'ar' ? fallbackAr : fallbackEn;
+}
+
+// Global variable to store most viewed data for language switching
+let mostViewedData = null;
+
 document.addEventListener('DOMContentLoaded', function () {
     
     fetch('/Admin/GetDashboardStats')
@@ -23,14 +49,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 totalPoliciesElem.textContent = stats.totalPolicies;
             }
 
+            // Store most viewed data for language switching
+            if (stats.mostViewed) {
+                mostViewedData = stats.mostViewed;
+            }
+
             const mostViewedSubtitle = document.querySelector('.stats-card-green .subtitle');
-            if (mostViewedSubtitle && stats.mostViewed && stats.mostViewed.name) {
-                mostViewedSubtitle.textContent = stats.mostViewed.name;
+            if (mostViewedSubtitle && stats.mostViewed && (stats.mostViewed.name || stats.mostViewed.nameAr)) {
+                // Check current language to display appropriate name
+                const isArabic = isCurrentLanguageArabic();
+                const displayName = isArabic && stats.mostViewed.nameAr && stats.mostViewed.nameAr !== "N/A" 
+                    ? stats.mostViewed.nameAr 
+                    : stats.mostViewed.name;
+                mostViewedSubtitle.textContent = displayName || "N/A";
             }
             
             const mostViewedText = document.querySelector('.stats-card-green .viewed-text');
             if (mostViewedText && stats.mostViewed && stats.mostViewed.views !== undefined) {
-                mostViewedText.textContent = `Viewed: ${stats.mostViewed.views} times`;
+                // Get translated text using the same system as other components
+                const viewedText = getTranslatedText('admin-stats-viewed-text', 'Viewed', 'مشاهدات');
+                const timesText = getTranslatedText('admin-stats-times-text', 'times', 'مرة');
+                mostViewedText.textContent = `${viewedText}: ${stats.mostViewed.views} ${timesText}`;
             }
 
             // Donut Chart (Pie Chart)
@@ -64,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     callbacks: {
                                         label: function (tooltipItem) {
                                             const index = tooltipItem.dataIndex;
-                                            const currentLang = document.body.classList.contains('rtl') ? 'ar' : 'en';
+                                            const currentLang = getCurrentLanguage();
                                             const translatedLabel = window.translateDocumentType ? 
                                                 window.translateDocumentType(donutLabels[index], currentLang) : donutLabels[index];
                                             return `${translatedLabel}: ${donutValues[index]} (${donutPercentages[index]}%)`;
@@ -114,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             const value = item.value || item.count || 0;
                             
                             // Get current language and translate if needed
-                            const currentLang = document.body.classList.contains('rtl') ? 'ar' : 'en';
+                            const currentLang = getCurrentLanguage();
                             const translatedLabel = window.translateDocumentType ? 
                                 window.translateDocumentType(item.label, currentLang) : item.label;
                             
@@ -202,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         legendText.style.fontWeight = '500';
                                         
                                         // Get current language and translate if needed
-                                        const currentLang = document.body.classList.contains('rtl') ? 'ar' : 'en';
+                                        const currentLang = getCurrentLanguage();
                                         const translatedLabel = window.translateDocumentType ? 
                                             window.translateDocumentType(item.label, currentLang) : item.label;
                                         
@@ -243,11 +282,30 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     );
     
-    // Listen for language changes to update chart legends
+    // Listen for language changes to update chart legends and most viewed text
     document.addEventListener('languageChanged', function(event) {
         const newLang = event.detail.language;
         if (typeof updateChartLegends === 'function') {
             updateChartLegends(newLang);
+        }
+        
+        // Update the "Most Viewed" card when language changes
+        if (mostViewedData) {
+            const mostViewedSubtitle = document.querySelector('.stats-card-green .subtitle');
+            if (mostViewedSubtitle) {
+                const isArabic = newLang === 'ar';
+                const displayName = isArabic && mostViewedData.nameAr && mostViewedData.nameAr !== "N/A" 
+                    ? mostViewedData.nameAr 
+                    : mostViewedData.name;
+                mostViewedSubtitle.textContent = displayName || "N/A";
+            }
+            
+            const mostViewedText = document.querySelector('.stats-card-green .viewed-text');
+            if (mostViewedText && mostViewedData.views !== undefined) {
+                const viewedText = getTranslatedText('admin-stats-viewed-text', 'Viewed', 'مشاهدات', newLang);
+                const timesText = getTranslatedText('admin-stats-times-text', 'times', 'مرة', newLang);
+                mostViewedText.textContent = `${viewedText}: ${mostViewedData.views} ${timesText}`;
+            }
         }
     });
     }

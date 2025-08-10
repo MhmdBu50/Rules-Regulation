@@ -34,10 +34,11 @@ there's also many filtering options to find the policy and other adminstrative s
             <!-- Left Section - Logo/Hamburger -->
             <div class="col-auto">
                 <div class="d-flex align-items-center">
-                     <div>
+                    <div>
                         <form method="post" action="@Url.Action("Logout", "Account")" style="margin: 0;">
                             @Html.AntiForgeryToken()
-                            <button type="submit" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
+                            <button type="submit"
+                                style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
                                 <img src="@Url.Content("~/svgs/admin/logOut.svg")">
                                 <span style="color: white;">logout</span>
                             </button>
@@ -45,24 +46,26 @@ there's also many filtering options to find the policy and other adminstrative s
                     </div>
 
                     <!-- Language Logo -->
-<div class="language-switcher-container">
-    <button id="language-toggle" class="language-toggle-btn">
-        <svg class="desktop-logo logo" width="33" height="33" viewBox="0 0 40 40" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path d="M20.0002 39.1668C17.3807 39.1668 14.905 38.6637 12.5731 37.6575C10.2411 36.6512 8.20468 35.2776 6.4637 33.5366C4.72273 31.7957 3.34912 29.7592 2.34287 27.4272C1.33662 25.0953 0.833496 22.6196 0.833496 20.0002C0.833496 17.3488 1.33662 14.8651 2.34287 
+                    <div class="language-switcher-container">
+                        <button id="language-toggle" class="language-toggle-btn">
+                            <svg class="desktop-logo logo" width="33" height="33" viewBox="0 0 40 40" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20.0002 39.1668C17.3807 39.1668 14.905 38.6637 12.5731 37.6575C10.2411 36.6512 8.20468 35.2776 6.4637 33.5366C4.72273 31.7957 3.34912 29.7592 2.34287 27.4272C1.33662 25.0953 0.833496 22.6196 0.833496 20.0002C0.833496 17.3488 1.33662 14.8651 2.34287 
 12.5491C3.34912 10.2331 4.72273 8.20468 6.4637 6.4637C8.20468 4.72273 10.2411 3.34912 12.5731 2.34287C14.905 1.33662 17.3807 0.833496 20.0002 0.833496C22.6516 0.833496 25.1352 1.33662 27.4512 2.34287C29.7672 3.34912 31.7957 4.72273 33.5366 6.4637C35.2776 8.20468 36.6512 10.2331 37.6575 12.5491C38.6637 14.8651 39.1668 17.3488 39.1668 20.0002C39.1668 22.6196 38.6637 25.0953 37.6575 27.4272C36.6512 29.7592 35.2776 31.7957 33.5366 33.5366C31.7957 35.2776 29.7672 36.6512 27.4512 37.6575C25.1352 38.6637 22.6516 39.1668 20.0002 39.1668ZM20.0002 35.2377C20.8307 34.0877 21.5495 32.8897 22.1564 31.6439C22.7634 30.3981 23.2585 29.0724 23.6418 27.6668H16.3585C16.7418 29.0724 17.237 30.3981 17.8439 31.6439C18.4509 32.8897 19.1696 34.0877 20.0002 35.2377ZM15.0168 34.471C14.4418 33.4168 13.9387 32.3227 13.5075 31.1887C13.0762 30.0547 12.7168 28.8807 12.4293 27.6668H6.77516C7.70155 29.2641 8.85954 30.6536 10.2491 31.8356C11.6387 33.0175 13.2279 33.896 15.0168 34.471ZM24.9835 34.471C26.7724 33.896 
 28.3616 33.0175 29.7512 31.8356C31.1408 30.6536 32.2988 29.2641 33.2252 27.6668H27.571C27.2835 28.8807 26.9241 30.0547 26.4929 31.1887C26.0616 32.3227 25.5585 33.4168 24.9835 34.471ZM5.146 23.8335H11.6627C11.5668 23.1946 11.495 22.5637 11.447 21.9408C11.3991 21.3179 11.3752 20.671 11.3752 20.0002C11.3752 19.3293 11.3991 18.6825 11.447 18.0595C11.495 17.4366 11.5668 16.8057 11.6627 16.1668H5.146C4.98627 16.8057 4.86648 17.4366 4.78662 18.0595C4.70676 18.6825 4.66683 19.3293 4.66683 20.0002C4.66683 20.671 4.70676 21.3179 4.78662 21.9408C4.86648 22.5637 4.98627 23.1946 5.146 23.8335ZM15.496 23.8335H24.5043C24.6002 23.1946 24.672 22.5637 24.72 21.9408C24.7679 21.3179 24.7918 20.671 24.7918 20.0002C24.7918 19.3293 24.7679 18.6825 24.72 18.0595C24.672 17.4366 24.6002 16.8057 24.5043 16.1668H15.496C15.4002 16.8057 15.3283 17.4366 15.2804 18.0595C15.2325 18.6825 15.2085 19.3293 15.2085 20.0002C15.2085 20.671 15.2325 21.3179 15.2804 21.9408C15.3283 22.5637 15.4002 23.1946 15.496 
 23.8335ZM28.3377 23.8335H34.8543C35.0141 23.1946 35.1338 22.5637 35.2137 21.9408C35.2936 21.3179 35.3335 20.671 35.3335 20.0002C35.3335 19.3293 35.2936 18.6825 35.2137 18.0595C35.1338 17.4366 35.0141 16.8057 34.8543 16.1668H28.3377C28.4335 16.8057 28.5054 17.4366 28.5533 18.0595C28.6012 18.6825 28.6252 19.3293 28.6252 20.0002C28.6252 20.671 28.6012 21.3179 28.5533 21.9408C28.5054 22.5637 28.4335 23.1946 28.3377 23.8335ZM27.571 12.3335H33.2252C32.2988 10.7363 31.1408 9.34669 29.7512 8.16475C28.3616 6.9828 26.7724 6.10433 24.9835 5.52933C25.5585 6.5835 26.0616 7.67759 26.4929 8.81162C26.9241 9.94565 27.2835 11.1196 27.571 12.3335ZM16.3585 12.3335H23.6418C23.2585 10.9279 22.7634 9.60225 22.1564 8.35641C21.5495 7.11058 20.8307 5.91266 20.0002 4.76266C19.1696 5.91266 18.4509 7.11058 17.8439 8.35641C17.237 9.60225 16.7418 10.9279 16.3585 12.3335ZM6.77516 12.3335H12.4293C12.7168 11.1196 13.0762 9.94565 13.5075 8.81162C13.9387 7.67759 14.4418 6.5835 15.0168 5.52933C13.2279 6.10433 11.6387 6.9828 10.2491 8.16475C8.85954 
 9.34669 7.70155 10.7363 6.77516 12.3335Z" fill="#CFEFFF"></path>
-        </svg>
-    </button>
-</div>      </div>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- Middle Section - Exit Editor view -->
             <div class="col flex-nowrap align-items-center">
                 <div class=" d-flex align-items-center  justify-content-center" style="postion: absolute;">
-                    <button class="exit-admin-btn" id="admin-exit-view-button" onclick="location.href='@Url.Action("homePage", "Home")'">
+                    <button class="exit-admin-btn" id="admin-exit-view-button"
+                        onclick="location.href='@Url.Action("homePage", "Home")'">
                         Exit Editor view
                     </button>
                 </div>
@@ -114,7 +117,8 @@ there's also many filtering options to find the policy and other adminstrative s
                     <!-- Donut Chart -->
                     <div class="col-12 col-md-6 col-xl-6">
                         <div class="chart-section">
-                            <div id="admin-chart-title-overview" class="chart-title">University Rules and Guidelines Overview</div>
+                            <div id="admin-chart-title-overview" class="chart-title">University Rules and Guidelines
+                                Overview</div>
                             <div class="donut-chart-container">
                                 <div class="donut-chart-canvas">
                                     <canvas id="chartCanvas"></canvas>
@@ -122,22 +126,26 @@ there's also many filtering options to find the policy and other adminstrative s
                                 <div class="legend-container">
                                     <div class="legend-item">
                                         <div class="legend-color" style="background-color: #8B4513;"></div>
-                                        <span  id="admin-chart-legend-academic-rules" class="legend-text">Academic rules</span>
+                                        <span id="admin-chart-legend-academic-rules" class="legend-text">Academic
+                                            rules</span>
                                         <span class="legend-percentage">40%</span>
                                     </div>
                                     <div class="legend-item">
                                         <div class="legend-color" style="background-color: #2E8B57;"></div>
-                                        <span id="admin-chart-legend-employment-rules" class="legend-text">Employment rules & regulations</span>
+                                        <span id="admin-chart-legend-employment-rules" class="legend-text">Employment
+                                            rules & regulations</span>
                                         <span class="legend-percentage">30%</span>
                                     </div>
                                     <div class="legend-item">
                                         <div class="legend-color" style="background-color: #4682B4;"></div>
-                                        <span id="admin-chart-legend-student-rules" class="legend-text">Student rules & regulations</span>
+                                        <span id="admin-chart-legend-student-rules" class="legend-text">Student rules &
+                                            regulations</span>
                                         <span class="legend-percentage">25%</span>
                                     </div>
                                     <div class="legend-item">
                                         <div class="legend-color" style="background-color: #DAA520;"></div>
-                                        <span id="admin-chart-legend-student-guides" class="legend-text">Student rules & regulations</span>
+                                        <span id="admin-chart-legend-student-guides" class="legend-text">Student rules &
+                                            regulations</span>
                                         <span class="legend-percentage">15%</span>
                                     </div>
                                 </div>
@@ -148,14 +156,15 @@ there's also many filtering options to find the policy and other adminstrative s
                     <!-- Bar Chart -->
                     <div class="col-12 col-md-6 col-xl-6">
                         <div class="chart-section">
-                            <div id="admin-chart-title-visits" class="chart-title">Website visits over the past 6 months</div>
+                            <div id="admin-chart-title-visits" class="chart-title">Website visits over the past 6 months
+                            </div>
                             <div id="visitToggler" class="legendToggler"> Monthly Visits </div>
                             <div class="chart-canvas-container">
                                 <canvas id="barChartCanvas"></canvas>
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
             <!-- Right Sidebar -->
@@ -170,17 +179,18 @@ there's also many filtering options to find the policy and other adminstrative s
                         </div>
 
                         <!-- Most Viewed Card -->
-                        <div  class="stats-card stats-card-green">
+                        <div class="stats-card stats-card-green">
                             <h6 id="admin-stats-most-viewed">Most Viewed</h6>
-                            <div class="subtitle">Student Code of Conduct</div>
-                            <div class="viewed-text">Viewed: 785 times</div>
+                            <div class="subtitle">Loading...</div>
+                            <div class="viewed-text">Viewed: 0 times</div>
                         </div>
                     </div>
 
                     <!-- Buttons Section -->
                     <div class="sidebar-buttons">
                         <!-- View Report Button -->
-                        <button class="btn-custom btn-primary-custom" id="admin-button-view-report" onclick="location.href='@Url.Action("ViewReport", "Admin")'">
+                        <button class="btn-custom btn-primary-custom" id="admin-button-view-report"
+                            onclick="location.href='@Url.Action("ViewReport", "Admin")'">
                             View Report
                         </button>
 
@@ -195,7 +205,7 @@ there's also many filtering options to find the policy and other adminstrative s
                             Export Data
                         </button>
 
-                       
+
 
                         <button class="btn-custom btn-success-custom" id="admin-button-manage-contact-info"
                             onclick="location.href='@Url.Action("ManageContactInfo", "Admin")'">
@@ -222,7 +232,7 @@ there's also many filtering options to find the policy and other adminstrative s
 
 <!------- Search, Section and Document type Bar ------->
 <div class="container my-4">
-   <section>
+    <section>
         <div class="container">
             <table class="w-100">
                 <thead class="text-center">
@@ -234,14 +244,13 @@ there's also many filtering options to find the policy and other adminstrative s
                                         <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon"
                                             width="44" height="44" />
                                     </button>
-                                    <input id="desktopSearchInput" class="search poppins-regular flex-grow-1 small-font-size" type="text"
+                                    <input id="desktopSearchInput"
+                                        class="search poppins-regular flex-grow-1 small-font-size" type="text"
                                         placeholder="Search by Name/ID..."
-                                        style="color: #ABB7C2; background: transparent; border: none; padding-right: 30px;"
-                                        oninput="updateSearchAndFilter(this.value, 'desktop')">
-                                    <button id="desktopClearBtn" class="position-absolute" 
-                                        style="right: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ABB7C2; font-size: 18px; cursor: pointer; display: none;"
-                                        onclick="clearSearchInput('desktop')"
-                                        title="Clear search">
+                                        style="color: #ABB7C2; background: transparent; border: none; padding-inline-end: 30px;">
+                                    <button id="desktopClearBtn" class="position-absolute"
+                                        style="inset-inline-end: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ABB7C2; font-size: 18px; cursor: pointer; display: none;"
+                                        onclick="clearSearchInput('desktop')" title="Clear search">
                                         ×
                                     </button>
                                 </div>
@@ -252,13 +261,20 @@ there's also many filtering options to find the policy and other adminstrative s
                         <th class="col-4 d-none d-md-table-cell padding-between-search-filter">
                             <div class="col flex-nowrap align-items-center">
                                 <div class="search-container d-flex align-items-center px-2" id="document-search">
-                                    <select id="adminDocumentFilter" class="search poppins-regular flex-grow-1 small-font-size"
+                                    <select id="adminDocumentFilter"
+                                        class="search poppins-regular flex-grow-1 small-font-size"
                                         style="color: #ABB7C2; border: none;">
-                                        <option value="all" id ="admin-document-filter-all">All Documents</option>
-                                        <option value="Student guides & templates" id = "admin-chart-legend-student-guides2">Student guides & templates</option>
-                                        <option value="Student rules & regulations" id = "admin-chart-legend-student-rules2">Student rules & regulations</option>
-                                        <option value="Employees’ rules & regulations" id = "admin-chart-legend-employment-rules2">Employees’ rules & regulations</option>
-                                        <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules2">Academic rules & regulations</option>
+                                        <option value="all" id="admin-document-filter-all">All Documents</option>
+                                        <option value="Student guides & templates"
+                                            id="admin-chart-legend-student-guides2">Student guides & templates</option>
+                                        <option value="Student rules & regulations"
+                                            id="admin-chart-legend-student-rules2">Student rules & regulations</option>
+                                        <option value="Employees’ rules & regulations"
+                                            id="admin-chart-legend-employment-rules2">Employees’ rules & regulations
+                                        </option>
+                                        <option value="Academic rules & regulations"
+                                            id="admin-chart-legend-academic-rules2">Academic rules & regulations
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -292,32 +308,36 @@ there's also many filtering options to find the policy and other adminstrative s
                             <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon" width="44"
                                 height="44" />
                         </button>
-                        <input id="mobileSearchInput" class="search poppins-regular flex-grow-1" type="text" placeholder="Search by Name/ID..."
-                            style="color: #ABB7C2; border: none; background: transparent; padding-right: 30px;"
-                            oninput="updateSearchAndFilter(this.value, 'mobile')">
-                        <button id="mobileClearBtn" class="position-absolute" 
-                            style="right: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ABB7C2; font-size: 18px; cursor: pointer; display: none;"
-                            onclick="clearSearchInput('mobile')"
-                            title="Clear search">
+                        <input id="mobileSearchInput" class="search poppins-regular flex-grow-1" type="text"
+                            placeholder="Search by Name/ID..."
+                            style="color: #ABB7C2; border: none; background: transparent; padding-inline-end: 30px;">
+                        <button id="mobileClearBtn" class="position-absolute"
+                            style="inset-inline-end: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ABB7C2; font-size: 18px; cursor: pointer; display: none;"
+                            onclick="clearSearchInput('mobile')" title="Clear search">
                             ×
                         </button>
                     </div>
 
-                    
+
                 </div>
 
                 <!-- Section and Document Type Dropdowns (Visible only on small screens, hidden on larger screens) -->
                 <div class="col-12 d-md-none d-flex align-items-center" style="gap: 10px;">
-                
+
                     <!-- Document Type Dropdown -->
                     <div class="d-flex align-items-center p-0 flex-grow-1" style="margin-bottom: 10px;">
                         <div class="search-container d-flex align-items-center w-100" id="section-document-search-2">
-                            <select id="mobileDocumentFilter" class="search poppins-regular flex-grow-1" style="color: #ABB7C2;">
-                                <option value="all" id ="admin-document-filter-all1">All Documents</option>
-                                <option value="Student guides & templates" id = "admin-chart-legend-student-guides1">Student guides & templates</option>
-                                <option value="Student rules & regulations" id = "admin-chart-legend-student-rules1">Student rules & regulations</option>
-                                <option value="Employees’ rules & regulations" id = "admin-chart-legend-employment-rules1">Employees’ rules & regulations</option>
-                                <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules1">Academic rules & regulations</option>
+                            <select id="mobileDocumentFilter" class="search poppins-regular flex-grow-1"
+                                style="color: #ABB7C2;">
+                                <option value="all" id="admin-document-filter-all1">All Documents</option>
+                                <option value="Student guides & templates" id="admin-chart-legend-student-guides1">
+                                    Student guides & templates</option>
+                                <option value="Student rules & regulations" id="admin-chart-legend-student-rules1">
+                                    Student rules & regulations</option>
+                                <option value="Employees’ rules & regulations"
+                                    id="admin-chart-legend-employment-rules1">Employees’ rules & regulations</option>
+                                <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules1">
+                                    Academic rules & regulations</option>
                             </select>
                         </div>
                     </div>
@@ -340,7 +360,8 @@ there's also many filtering options to find the policy and other adminstrative s
         <div class="accordion">
             <div class="accordion-item position-relative">
                 <!-- Master Checkbox positioned outside accordion button -->
-                <div class="position-absolute field-padding" style="inset-inline-start: 20px; top: 50%; transform: translateY(-50%); z-index: 10;">
+                <div class="position-absolute field-padding"
+                    style="inset-inline-start: 20px; top: 50%; transform: translateY(-50%); z-index: 10;">
                     <input type="checkbox" id="masterCheckbox" onchange="toggleAllCheckboxes()" />
                 </div>
                 <h2>
@@ -351,20 +372,24 @@ there's also many filtering options to find the policy and other adminstrative s
                             <thead class="text-center">
                                 <tr>
                                     <th class="custom-col field-padding"></th>
-                                        <!-- Space -->
+                                    <!-- Space -->
                                     </th>
                                     <th class="custom-col field-padding" id="admin-table-header-id">
                                         ID
                                     </th>
-                                    <th
-                                        class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size  field-padding" id="admin-table-header-regulation-name">
+                                    <th class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size  field-padding"
+                                        id="admin-table-header-regulation-name">
                                         Regulation/ Manual name</th>
-                                    <th class="col-2 d-none d-md-table-cell field-padding" id="admin-table-header-documentType">Document Type</th>
-                                    <th class="col-2 d-none d-md-table-cell field-padding" id="admin-table-header-version-number">Version Number
+                                    <th class="col-2 d-none d-md-table-cell field-padding"
+                                        id="admin-table-header-documentType">Document Type</th>
+                                    <th class="col-2 d-none d-md-table-cell field-padding"
+                                        id="admin-table-header-version-number">Version Number
                                     </th>
-                                    <th class="col-2 d-none d-lg-table-cell field-padding" id="admin-table-header-approving-date">Approving Date
+                                    <th class="col-2 d-none d-lg-table-cell field-padding"
+                                        id="admin-table-header-approving-date">Approving Date
                                     </th>
-                                    <th class="col-3 d-none d-lg-table-cell field-padding" id="admin-table-header-responsible-entity">Responsible
+                                    <th class="col-3 d-none d-lg-table-cell field-padding"
+                                        id="admin-table-header-responsible-entity">Responsible
                                         Entity</th>
                                 </tr>
                             </thead>
@@ -398,22 +423,24 @@ there's also many filtering options to find the policy and other adminstrative s
                 @if (Model != null && Model.Any())
                 {
                     <div class="accordion" id="regulationAccordion">
-                        @{ int i = 0; }
+                        @{
+                            int i = 0;
+                        }
                         @foreach (var record in Model)
                         {
                             i++;
                             var itemNumber = i;
                             var headingId = "heading" + itemNumber;
                             var collapseId = "collapse" + itemNumber;
-                            
-                            var displayName = isArabic && !string.IsNullOrEmpty(record.RegulationNameAr) 
-                                ? record.RegulationNameAr 
-                                : record.RegulationName;
-                            
-                            var displayApprovingEntity = isArabic && !string.IsNullOrEmpty(record.ApprovingEntityAr) 
-                                ? record.ApprovingEntityAr 
-                                : record.ApprovingEntity;
-                            
+
+                            var displayName = isArabic && !string.IsNullOrEmpty(record.RegulationNameAr)
+                            ? record.RegulationNameAr
+                            : record.RegulationName;
+
+                            var displayApprovingEntity = isArabic && !string.IsNullOrEmpty(record.ApprovingEntityAr)
+                            ? record.ApprovingEntityAr
+                            : record.ApprovingEntity;
+
                             // Document Type translation logic
                             var displayDocumentType = record.DocumentType;
                             if (isArabic)
@@ -467,12 +494,15 @@ there's also many filtering options to find the policy and other adminstrative s
                                         break;
                                 }
                             }
-                            
+
                             <!-- Accordion Item 1 -->
-                            <div class="accordion-item position-relative" data-section="@(record.Sections ?? "")" data-document-type="@(record.DocumentType ?? "")">
+                            <div class="accordion-item position-relative" data-section="@(record.Sections ?? "")"
+                                data-document-type="@(record.DocumentType ?? "")">
                                 <!-- Checkbox positioned outside accordion button -->
-                                <div class="position-absolute field-padding" style="inset-inline-start: 20px; top: 50%; transform: translateY(-50%); z-index: 10;">
-                                    <input type="checkbox" class="record-checkbox" data-record-id="@record.Id" onclick="handleRecordCheckbox()" />
+                                <div class="position-absolute field-padding"
+                                    style="inset-inline-start: 20px; top: 50%; transform: translateY(-50%); z-index: 10;">
+                                    <input type="checkbox" class="record-checkbox" data-record-id="@record.Id"
+                                        onclick="handleRecordCheckbox()" />
                                 </div>
                                 <h2 class="accordion-header" id="@headingId">
                                     <button class="accordion-button collapsed custom-acc-btn" type="button"
@@ -488,25 +518,24 @@ there's also many filtering options to find the policy and other adminstrative s
                                                     <th class="custom-col field-padding">
                                                         @record.Id
                                                     </th>
-                                                    <th
-                                                        class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size field-padding" 
+                                                    <th class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size field-padding"
                                                         style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
                                                         title="@displayName">
                                                         @displayName</th>
-                                                    <th class="col-2 d-none d-md-table-cell field-padding" 
+                                                    <th class="col-2 d-none d-md-table-cell field-padding"
                                                         style="max-width: 111px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
                                                         title="@displayDocumentType">
                                                         @displayDocumentType</th>
-                                                    <th class="col-2 d-none d-md-table-cell field-padding" 
+                                                    <th class="col-2 d-none d-md-table-cell field-padding"
                                                         style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
                                                         title="@record.Version">
                                                         @record.Version
                                                     </th>
-                                                    <th class="col-2 d-none d-lg-table-cell field-padding" 
+                                                    <th class="col-2 d-none d-lg-table-cell field-padding"
                                                         style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
                                                         title="@record.ApprovalDate">
                                                         @record.ApprovalDate</th>
-                                                    <th class="col-3 d-none d-lg-table-cell field-padding" 
+                                                    <th class="col-3 d-none d-lg-table-cell field-padding"
                                                         style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
                                                         title="@displayApprovingEntity">
                                                         @displayApprovingEntity</th>
@@ -532,10 +561,11 @@ there's also many filtering options to find the policy and other adminstrative s
                 {
                     <!-- No records message for admin -->
                     <div class="alert alert-info text-center">
-                        <h4 id= "admin-no-records-heading" dir="rtl">No Records Found</h4>
-                        <p id= "admin-no-records-message" dir="rtl">No rules and regulations are currently available in the database</p>
+                        <h4 id="admin-no-records-heading" dir="rtl">No Records Found</h4>
+                        <p id="admin-no-records-message" dir="rtl">No rules and regulations are currently available in the
+                            database</p>
                         <a href="@Url.Action("AddNewRecord", "Admin")" class="btn btn-primary">
-                            <i class="fas fa-plus me-2" id= "admin-add-new-record-button"></i>
+                            <i class="fas fa-plus me-2" id="admin-add-new-record-button"></i>
                         </a>
                     </div>
                 }
@@ -548,76 +578,91 @@ there's also many filtering options to find the policy and other adminstrative s
 <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="border-radius: 15px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-            <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px 15px 0 0;">
+            <div class="modal-header"
+                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px 15px 0 0;">
                 <h5 class="modal-title fw-bold" id="exportModalLabel">
                     <i class="fas fa-file-excel me-2"></i>Select Tables to Export
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <p class="text-muted mb-4">
                     <i class="fas fa-info-circle me-2"></i>Choose which database tables to include in your Excel export:
                 </p>
-                
+
                 <form id="exportForm" method="POST" action="/Admin/ExportAllDataToExcel">
                     @Html.AntiForgeryToken()
-                    
+
                     <!-- Select All Option -->
-                    <div class="form-check mb-3 p-3" style="background: #f8f9fa; border-radius: 10px; border-left: 4px solid #6c757d;">
-                        <input class="form-check-input" type="checkbox" id="selectAll" name="tables" value="all" checked>
+                    <div class="form-check mb-3 p-3"
+                        style="background: #f8f9fa; border-radius: 10px; border-left: 4px solid #6c757d;">
+                        <input class="form-check-input" type="checkbox" id="selectAll" name="tables" value="all"
+                            checked>
                         <label class="form-check-label fw-bold" for="selectAll">
                             <i class="fas fa-database me-2 text-secondary"></i>All Tables
                         </label>
                         <small class="d-block text-muted mt-1">Export all available database tables</small>
                     </div>
-                    
+
                     <hr class="my-3">
-                    
+
                     <!-- Individual Table Options -->
                     <div class="row g-3">
                         <div class="col-12">
-                            <div class="form-check p-3" style="background: #f0f8ff; border-radius: 10px; border-left: 4px solid #17a2b8;">
-                                <input class="form-check-input table-checkbox" type="checkbox" id="recordsTable" name="tables" value="records" checked>
+                            <div class="form-check p-3"
+                                style="background: #f0f8ff; border-radius: 10px; border-left: 4px solid #17a2b8;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="recordsTable"
+                                    name="tables" value="records" checked>
                                 <label class="form-check-label" for="recordsTable">
                                     <i class="fas fa-file-alt me-2 text-info"></i><strong>Records</strong>
                                 </label>
                                 <small class="d-block text-muted mt-1">All regulation and policy records</small>
                             </div>
                         </div>
-                        
+
                         <div class="col-12">
-                            <div class="form-check p-3" style="background: #e8f5e8; border-radius: 10px; border-left: 4px solid #28a745;">
-                                <input class="form-check-input table-checkbox" type="checkbox" id="usersTable" name="tables" value="users" checked>
+                            <div class="form-check p-3"
+                                style="background: #e8f5e8; border-radius: 10px; border-left: 4px solid #28a745;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="usersTable"
+                                    name="tables" value="users" checked>
                                 <label class="form-check-label" for="usersTable">
                                     <i class="fas fa-users me-2 text-success"></i><strong>Users</strong>
                                 </label>
                                 <small class="d-block text-muted mt-1">All registered users information</small>
                             </div>
                         </div>
-                        
+
                         <div class="col-12">
-                            <div class="form-check p-3" style="background: #fff5e6; border-radius: 10px; border-left: 4px solid #ffc107;">
-                                <input class="form-check-input table-checkbox" type="checkbox" id="contactTable" name="tables" value="contact" checked>
+                            <div class="form-check p-3"
+                                style="background: #fff5e6; border-radius: 10px; border-left: 4px solid #ffc107;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="contactTable"
+                                    name="tables" value="contact" checked>
                                 <label class="form-check-label" for="contactTable">
-                                    <i class="fas fa-address-book me-2 text-warning"></i><strong>Contact Information</strong>
+                                    <i class="fas fa-address-book me-2 text-warning"></i><strong>Contact
+                                        Information</strong>
                                 </label>
                                 <small class="d-block text-muted mt-1">Department contact details</small>
                             </div>
                         </div>
-                        
+
                         <div class="col-12">
-                            <div class="form-check p-3" style="background: #ffeaea; border-radius: 10px; border-left: 4px solid #dc3545;">
-                                <input class="form-check-input table-checkbox" type="checkbox" id="attachmentsTable" name="tables" value="attachments" checked>
+                            <div class="form-check p-3"
+                                style="background: #ffeaea; border-radius: 10px; border-left: 4px solid #dc3545;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="attachmentsTable"
+                                    name="tables" value="attachments" checked>
                                 <label class="form-check-label" for="attachmentsTable">
                                     <i class="fas fa-paperclip me-2 text-danger"></i><strong>Attachments</strong>
                                 </label>
                                 <small class="d-block text-muted mt-1">File attachments and documents</small>
                             </div>
                         </div>
-                        
+
                         <div class="col-12">
-                            <div class="form-check p-3" style="background: #f0f0ff; border-radius: 10px; border-left: 4px solid #6f42c1;">
-                                <input class="form-check-input table-checkbox" type="checkbox" id="historyTable" name="tables" value="history" checked>
+                            <div class="form-check p-3"
+                                style="background: #f0f0ff; border-radius: 10px; border-left: 4px solid #6f42c1;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="historyTable"
+                                    name="tables" value="history" checked>
                                 <label class="form-check-label" for="historyTable">
                                     <i class="fas fa-history me-2 text-primary"></i><strong>User History</strong>
                                 </label>
