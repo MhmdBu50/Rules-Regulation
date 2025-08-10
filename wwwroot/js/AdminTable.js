@@ -69,6 +69,24 @@ function setupAccordionLazyLoading() {
           .then((html) => {
             // Replace the content with AJAX loaded content
             accordionBody.innerHTML = html;
+            
+            // Apply translations to the newly loaded content
+            setTimeout(() => {
+              const currentLang = document.body.classList.contains('rtl') ? 'ar' : 'en';
+              
+              // Handle translatable labels with data-translate-key attribute within the element
+              const translatableLabels = accordionBody.querySelectorAll('.translatable-label[data-translate-key]');
+              
+              // Get translations from the global object
+              if (window.translations && window.translations[currentLang]) {
+                translatableLabels.forEach(label => {
+                  const translateKey = label.getAttribute('data-translate-key');
+                  if (window.translations[currentLang][translateKey]) {
+                    label.textContent = window.translations[currentLang][translateKey];
+                  }
+                });
+              }
+            }, 100);
           })
           .catch((error) => {
             // Show only error message, don't restore static content
@@ -626,16 +644,26 @@ function performSearch(searchTerm) {
   const accordionItems = document.querySelectorAll(
     "#regulationAccordion .accordion-item"
   );
-  const searchTermLower = searchTerm.toLowerCase().trim();
+  const searchTermLower = searchTerm.toLowerCase();
 
   // Get current filter settings
   const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
   const mobileDocumentFilter = document.getElementById("mobileDocumentFilter");
-  const selectedDocumentType = desktopDocumentFilter
-    ? desktopDocumentFilter.value
-    : mobileDocumentFilter
-    ? mobileDocumentFilter.value
-    : "all";
+  
+  let selectedDocumentType = "all";
+  if (desktopDocumentFilter && desktopDocumentFilter.offsetParent !== null) {
+    // Desktop filter is visible
+    selectedDocumentType = desktopDocumentFilter.value;
+  } else if (mobileDocumentFilter && mobileDocumentFilter.offsetParent !== null) {
+    // Mobile filter is visible
+    selectedDocumentType = mobileDocumentFilter.value;
+  } else if (desktopDocumentFilter) {
+    // Fallback to desktop
+    selectedDocumentType = desktopDocumentFilter.value;
+  } else if (mobileDocumentFilter) {
+    // Fallback to mobile
+    selectedDocumentType = mobileDocumentFilter.value;
+  }
 
   let visibleCount = 0;
 
@@ -651,10 +679,15 @@ function performSearch(searchTerm) {
     // Get document type for filtering
     const recordDocumentType = item.getAttribute("data-document-type") || "";
 
-    // Search in both ID and Regulation Name
-    const matchesId = recordId.includes(searchTermLower);
-    const matchesName = regulationName.includes(searchTermLower);
-    const matchesSearch = searchTermLower === "" || matchesId || matchesName;
+    // Check search criteria - support multi-word search
+    let matchesSearch = true;
+    if (searchTermLower !== "") {
+      // Split search term by spaces and check if all words are found
+      const searchWords = searchTermLower.split(/\s+/).filter(word => word.length > 0);
+      const searchText = `${recordId} ${regulationName}`.toLowerCase();
+      
+      matchesSearch = searchWords.every(word => searchText.includes(word));
+    }
 
     // Check document type filter
     const matchesFilter =
@@ -762,8 +795,8 @@ function hasActiveSearchTerm() {
   const mobileSearch = document.getElementById("mobileSearchInput");
 
   return (
-    (desktopSearch && desktopSearch.value.trim() !== "") ||
-    (mobileSearch && mobileSearch.value.trim() !== "")
+    (desktopSearch && desktopSearch.value !== "") ||
+    (mobileSearch && mobileSearch.value !== "")
   );
 }
 
@@ -914,21 +947,46 @@ function applyAdminFilters() {
   const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
   const mobileDocumentFilter = document.getElementById("mobileDocumentFilter");
 
-  // Use desktop filter as primary, fallback to mobile
-  const selectedDocumentType = desktopDocumentFilter
-    ? desktopDocumentFilter.value
-    : mobileDocumentFilter
-    ? mobileDocumentFilter.value
-    : "all";
+  // Check which filter is currently visible/available
+  let selectedDocumentType = "all";
+  
+  if (desktopDocumentFilter && desktopDocumentFilter.offsetParent !== null) {
+    // Desktop filter is visible
+    selectedDocumentType = desktopDocumentFilter.value;
+  } else if (mobileDocumentFilter && mobileDocumentFilter.offsetParent !== null) {
+    // Mobile filter is visible
+    selectedDocumentType = mobileDocumentFilter.value;
+  } else if (desktopDocumentFilter) {
+    // Fallback to desktop
+    selectedDocumentType = desktopDocumentFilter.value;
+  } else if (mobileDocumentFilter) {
+    // Fallback to mobile
+    selectedDocumentType = mobileDocumentFilter.value;
+  }
 
   // Get current search term
   const desktopSearchInput = document.getElementById("desktopSearchInput");
   const mobileSearchInput = document.getElementById("mobileSearchInput");
-  const searchTerm = desktopSearchInput
-    ? desktopSearchInput.value.toLowerCase().trim()
-    : mobileSearchInput
-    ? mobileSearchInput.value.toLowerCase().trim()
-    : "";
+  
+  let searchTerm = "";
+  let originalSearchTerm = "";
+  if (desktopSearchInput && desktopSearchInput.offsetParent !== null) {
+    // Desktop search is visible
+    originalSearchTerm = desktopSearchInput.value;
+    searchTerm = desktopSearchInput.value.toLowerCase();
+  } else if (mobileSearchInput && mobileSearchInput.offsetParent !== null) {
+    // Mobile search is visible
+    originalSearchTerm = mobileSearchInput.value;
+    searchTerm = mobileSearchInput.value.toLowerCase();
+  } else if (desktopSearchInput) {
+    // Fallback to desktop
+    originalSearchTerm = desktopSearchInput.value;
+    searchTerm = desktopSearchInput.value.toLowerCase();
+  } else if (mobileSearchInput) {
+    // Fallback to mobile
+    originalSearchTerm = mobileSearchInput.value;
+    searchTerm = mobileSearchInput.value.toLowerCase();
+  }
 
   // Sync both dropdowns
   if (desktopDocumentFilter && mobileDocumentFilter) {
@@ -936,10 +994,15 @@ function applyAdminFilters() {
     mobileDocumentFilter.value = selectedDocumentType;
   }
 
-  // Sync both search inputs
+  // Sync both search inputs with original value (preserving spaces)
   if (desktopSearchInput && mobileSearchInput) {
-    desktopSearchInput.value = searchTerm;
-    mobileSearchInput.value = searchTerm;
+    if (desktopSearchInput.offsetParent !== null) {
+      // Desktop is visible, sync mobile with desktop
+      mobileSearchInput.value = originalSearchTerm;
+    } else if (mobileSearchInput.offsetParent !== null) {
+      // Mobile is visible, sync desktop with mobile  
+      desktopSearchInput.value = originalSearchTerm;
+    }
   }
 
   const accordionItems = document.querySelectorAll(
@@ -959,10 +1022,15 @@ function applyAdminFilters() {
       ? regulationNameElement.textContent.toLowerCase()
       : "";
 
-    // Check search criteria
-    const matchesId = recordId.includes(searchTerm);
-    const matchesName = regulationName.includes(searchTerm);
-    const matchesSearch = searchTerm === "" || matchesId || matchesName;
+    // Check search criteria - support multi-word search
+    let matchesSearch = true;
+    if (searchTerm !== "") {
+      // Split search term by spaces and check if all words are found
+      const searchWords = searchTerm.split(/\s+/).filter(word => word.length > 0);
+      const searchText = `${recordId} ${regulationName}`.toLowerCase();
+      
+      matchesSearch = searchWords.every(word => searchText.includes(word));
+    }
 
     // Check document type filter
     const matchesFilter =
@@ -1011,6 +1079,39 @@ function resetAdminFilters() {
 document.addEventListener("DOMContentLoaded", function () {
   const desktopDocumentFilter = document.getElementById("adminDocumentFilter");
   const mobileDocumentFilter = document.getElementById("mobileDocumentFilter");
+
+  // Fix for search input space issue and add proper event listeners
+  const searchInputs = document.querySelectorAll('#desktopSearchInput, #mobileSearchInput');
+  searchInputs.forEach(input => {
+    if (input) {
+      // Add input event listener with timeout (like searchFunctionality.js)
+      let searchTimeout;
+      input.addEventListener('input', function() {
+        // Update clear button visibility
+        const type = this.id.includes('desktop') ? 'desktop' : 'mobile';
+        toggleClearButton(type);
+        
+        // Clear previous timeout and set new one
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          applyAdminFilters();
+        }, 300); // Wait 300ms after user stops typing
+      });
+      
+      // Add keypress event for Enter key
+      input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          clearTimeout(searchTimeout);
+          applyAdminFilters();
+        }
+      });
+      
+      // Ensure the input can receive focus and text properly
+      input.addEventListener('focus', function() {
+        this.style.pointerEvents = 'auto';
+      });
+    }
+  });
 
   // Add event listeners for desktop document filter
   if (desktopDocumentFilter) {

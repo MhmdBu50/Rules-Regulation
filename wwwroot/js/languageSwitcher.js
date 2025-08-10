@@ -109,6 +109,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-chart-title-visits": "Website visits over the past 6 months",
         "admin-stats-total-policies": "Total Policies",
         "admin-stats-most-viewed": "Most Viewed",
+        "admin-stats-viewed-text": "Viewed",
+        "admin-stats-times-text": "times",
         "admin-button-view-report": "View Report",
         "admin-button-add-new-record": "Add New Record",
         "admin-button-export-data": "Export Data",
@@ -420,12 +422,15 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-chart-title-visits": "زيارات الموقع خلال الستة أشهر الماضية",
         "admin-stats-total-policies": "إجمالي السياسات",
         "admin-stats-most-viewed": "الأكثر مشاهدة",
+        "admin-stats-viewed-text": "مشاهدات",
+        "admin-stats-times-text": "مرة",
         "admin-button-view-report": "عرض التقرير",
         "admin-button-add-new-record": "إضافة سجل جديد",
         "admin-button-export-data": "تصدير البيانات",
         "admin-button-manage-contact-info": "إدارة معلومات الاتصال",
         "visitToggler": "الزيارات الشهرية",
         "desktopSearchInput": "...البحث بالاسم/رقم السجل",
+        "mobileSearchInput": "...البحث بالاسم/رقم السجل",
         "admin-clear-search-title": "مسح البحث",    
         "admin-section-filter-all": "جميع الأقسام",
         "admin-section-filter-students": "الطلاب",
@@ -921,5 +926,6 @@ function updateChartLegends(targetLang) {
 // Export functions for use in other scripts
 window.translateDocumentType = translateDocumentType;
 window.updateChartLegends = updateChartLegends;
+window.translations = translations;
 
 });

@@ -105,27 +105,31 @@ public class AdminController : Controller
 
             // Query USER_HISTORY for most viewed record
             string mostViewedName = "N/A";
+            string mostViewedNameAr = "N/A";
             int mostViewedViews = 0;
             using (var conn = new Oracle.ManagedDataAccess.Client.OracleConnection(_connectionString))
             {
                 conn.Open();
-                string sql = @"SELECT r.REGULATION_NAME, COUNT(*) AS views
+                string sql = @"SELECT * FROM (
+                               SELECT r.REGULATION_NAME, r.REGULATION_NAME_AR, COUNT(*) AS views
                                FROM USER_HISTORY h
                                LEFT JOIN RECORDS r ON h.RECORD_ID = r.RECORD_ID
-                               WHERE h.ACTION = 'view'
-                               GROUP BY r.REGULATION_NAME
-                               ORDER BY views DESC";
+                               WHERE h.ACTION = 'view' AND r.REGULATION_NAME IS NOT NULL
+                               GROUP BY r.REGULATION_NAME, r.REGULATION_NAME_AR
+                               ORDER BY views DESC
+                               ) WHERE ROWNUM = 1";
                 using (var cmd = new Oracle.ManagedDataAccess.Client.OracleCommand(sql, conn))
                 using (var reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
                     {
                         mostViewedName = reader["REGULATION_NAME"]?.ToString() ?? "N/A";
+                        mostViewedNameAr = reader["REGULATION_NAME_AR"]?.ToString() ?? "N/A";
                         mostViewedViews = Convert.ToInt32(reader["views"] ?? 0);
                     }
                 }
             }
-            var mostViewedPolicy = new { name = mostViewedName, views = mostViewedViews };
+            var mostViewedPolicy = new { name = mostViewedName, nameAr = mostViewedNameAr, views = mostViewedViews };
 
             // Fetch dynamic donut chart data from the database
             var donutData = new List<object>();
@@ -198,7 +202,7 @@ public class AdminController : Controller
             // Return default values to prevent frontend errors
             return Json(new {
                 totalPolicies = 0,
-                mostViewed = new { name = "N/A", views = 0 },
+                mostViewed = new { name = "N/A", nameAr = "N/A", views = 0 },
                 donutData = new[] {
                     new { label = "Academic rules", value = 5, percentage = 45.5 },
                     new { label = "Student rules & regulations", value = 3, percentage = 27.3 },
@@ -225,7 +229,7 @@ public class AdminController : Controller
     {
         return Json(new {
             totalPolicies = 42,
-            mostViewed = new { name = "Test Policy", views = 123 },
+            mostViewed = new { name = "Test Policy", nameAr = "سياسة اختبار", views = 123 },
             message = "API is working"
         });
     }
