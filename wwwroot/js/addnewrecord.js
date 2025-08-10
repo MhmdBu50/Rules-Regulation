@@ -244,8 +244,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Form submission validation
-  const form = document.querySelector('form');
+  // Form submission validation - target only the main AddNewRecord form, not the logout form
+  const form = document.querySelector('form[method="post"][enctype="multipart/form-data"]');
   if (form) {
     form.addEventListener('submit', function(e) {
       let isValid = true;
