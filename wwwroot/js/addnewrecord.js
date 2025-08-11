@@ -14,6 +14,31 @@ document.addEventListener('DOMContentLoaded', function () {
   // Version number validation pattern (numbers, dots, hyphens, underscores)
   const versionPattern = /^[0-9.\-_]+$/;
   
+  // Page number validation function
+  function validatePageNumber(input) {
+    const value = input.value.trim();
+    const errorElement = document.getElementById('pageNumberError');
+    const pageNum = parseInt(value);
+    
+    if (!value || pageNum < 1 || pageNum > 999 || isNaN(pageNum)) {
+      input.setCustomValidity("Please enter a valid page number between 1 and 999");
+      input.classList.add('is-invalid');
+      if (errorElement) {
+        errorElement.textContent = "Please enter a valid page number between 1 and 999";
+        errorElement.style.display = 'block';
+      }
+      return false;
+    } else {
+      input.setCustomValidity("");
+      input.classList.remove('is-invalid');
+      if (errorElement) {
+        errorElement.textContent = "";
+        errorElement.style.display = 'none';
+      }
+      return true;
+    }
+  }
+  
   // Version number validation function
   function validateVersionNumber(input) {
     const value = input.value.trim();
@@ -151,6 +176,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const notes = document.getElementById('notes');
   const notesAr = document.getElementById('notesAr');
   const versionNumber = document.getElementById('versionNumber');
+  const pageNumber = document.getElementById('pageNumber');
   const pdfAttachment = document.getElementById('pdfAttachment');
 
   // Real-time validation for English fields
@@ -197,6 +223,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     versionNumber.addEventListener('blur', function() {
       validateVersionNumber(this);
+    });
+  }
+
+  // Page number validation
+  if (pageNumber) {
+    pageNumber.addEventListener('input', function() {
+      validatePageNumber(this);
+    });
+    pageNumber.addEventListener('blur', function() {
+      validatePageNumber(this);
     });
   }
 
@@ -270,6 +306,11 @@ document.addEventListener('DOMContentLoaded', function () {
       
       // Validate version number field
       if (versionNumber && !validateVersionNumber(versionNumber)) {
+        isValid = false;
+      }
+      
+      // Validate page number field
+      if (pageNumber && !validatePageNumber(pageNumber)) {
         isValid = false;
       }
       

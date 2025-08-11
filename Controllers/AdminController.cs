@@ -1251,16 +1251,17 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
                 {
                     try
                     {
-                        // SQL to insert PDF attachment metadata
-                        var insertPdfSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) " +
-                                        "VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME)";
+                        // SQL to insert PDF attachment metadata with thumbnail page number
+                        var insertPdfSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME, TN_PAGE_NO) " +
+                                        "VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME, :pageNumber)";
 
-                        // Execute attachment insert with proper parameters
+                        // Execute attachment insert with proper parameters including page number
                         await _db.ExecuteNonQueryAsync(insertPdfSql,
                             new OracleParameter("id", newId),
                             new OracleParameter("fileType", "PDF"),
                             new OracleParameter("path", pdfPath),
-                            new OracleParameter("ORIGINAL_NAME", model.PdfAttachment.FileName));
+                            new OracleParameter("ORIGINAL_NAME", model.PdfAttachment.FileName),
+                            new OracleParameter("pageNumber", model.PageNumber > 0 ? model.PageNumber : 2)); // Default to page 2 if invalid
                     }
                     catch (Exception)
                     {
