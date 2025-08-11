@@ -7,6 +7,15 @@
     var isArabic = currentCulture == "ar-SA";
 }
 
+<!-- This File is about@model IEnumerable<dynamic>
+@using Microsoft.AspNetCore.Localization
+
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
+    var isArabic = currentCulture == "ar-SA";
+}
+
 <!-- This File is about the admin page that controls what to be added, wheather its a new record or contact. in this page you can edit and delete.
 there's also many filtering options to find the policy and other adminstrative stuff-->
 @section Styles {
@@ -673,7 +682,7 @@ there's also many filtering options to find the policy and other adminstrative s
 
                     <!-- Select All Option -->
                     <div class="form-check mb-3 p-3"
-                        style="background: #f8f9fa; border-radius: 10px; border-inline-start: 4px solid #6c757d;">
+                        style="background: #f8f9fa; border-radius: 10px; border-left: 4px solid #6c757d;">
                         <input class="form-check-input" type="checkbox" id="selectAll" name="tables" value="all"
                             checked>
                         <label class="form-check-label fw-bold" for="selectAll">
@@ -688,7 +697,7 @@ there's also many filtering options to find the policy and other adminstrative s
                     <div class="row g-3">
                         <div class="col-12">
                             <div class="form-check p-3"
-                                style="background: #f0f8ff; border-radius: 10px; border-inline-start: 4px solid #17a2b8;">
+                                style="background: #f0f8ff; border-radius: 10px; border-left: 4px solid #17a2b8;">
                                 <input class="form-check-input table-checkbox" type="checkbox" id="recordsTable"
                                     name="tables" value="records" checked>
                                 <label class="form-check-label" for="recordsTable">
@@ -700,7 +709,7 @@ there's also many filtering options to find the policy and other adminstrative s
 
                         <div class="col-12">
                             <div class="form-check p-3"
-                                style="background: #e8f5e8; border-radius: 10px; border-inline-start: 4px solid #28a745;">
+                                style="background: #e8f5e8; border-radius: 10px; border-left: 4px solid #28a745;">
                                 <input class="form-check-input table-checkbox" type="checkbox" id="usersTable"
                                     name="tables" value="users" checked>
                                 <label class="form-check-label" for="usersTable">
@@ -712,7 +721,7 @@ there's also many filtering options to find the policy and other adminstrative s
 
                         <div class="col-12">
                             <div class="form-check p-3"
-                                style="background: #fff5e6; border-radius: 10px; border-inline-start: 4px solid #ffc107;">
+                                style="background: #fff5e6; border-radius: 10px; border-left: 4px solid #ffc107;">
                                 <input class="form-check-input table-checkbox" type="checkbox" id="contactTable"
                                     name="tables" value="contact" checked>
                                 <label class="form-check-label" for="contactTable">
@@ -725,7 +734,7 @@ there's also many filtering options to find the policy and other adminstrative s
 
                         <div class="col-12">
                             <div class="form-check p-3"
-                                style="background: #ffeaea; border-radius: 10px; border-inline-start: 4px solid #dc3545;">
+                                style="background: #ffeaea; border-radius: 10px; border-left: 4px solid #dc3545;">
                                 <input class="form-check-input table-checkbox" type="checkbox" id="attachmentsTable"
                                     name="tables" value="attachments" checked>
                                 <label class="form-check-label" for="attachmentsTable">
@@ -737,7 +746,7 @@ there's also many filtering options to find the policy and other adminstrative s
 
                         <div class="col-12">
                             <div class="form-check p-3"
-                                style="background: #f0f0ff; border-radius: 10px; border-inline-start: 4px solid #6f42c1;">
+                                style="background: #f0f0ff; border-radius: 10px; border-left: 4px solid #6f42c1;">
                                 <input class="form-check-input table-checkbox" type="checkbox" id="historyTable"
                                     name="tables" value="history" checked>
                                 <label class="form-check-label" for="historyTable">
@@ -755,6 +764,792 @@ there's also many filtering options to find the policy and other adminstrative s
                 </button>
                 <button type="button" class="btn btn-primary" onclick="confirmExport()" id="confirmExportBtn">
                     <i class="fas fa-download me-2"></i>Export Selected Tables
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_Footer") the admin page that controls what to be added, wheather its a new record or contact.
+in this page you can edit and delete.
+there's also many filtering options to find the policy and other adminstrative stuff-->
+@section Styles {
+    <link rel="stylesheet" href="~/css/AdminPage.css">
+    <link rel="stylesheet" href="~/css/_rtl_Styles.css">
+    <link rel="stylesheet" href="~/css/AdminPageCustom.css">
+}
+<!-- Scripts for the admin page -->
+@section Scripts {
+    <script src="@Url.Content("~/js/card-animations.js")"></script>
+    <script src="@Url.Content("https://cdn.jsdelivr.net/npm/fitty@2.3.6/dist/fitty.min.js")"></script>
+    <script src="@Url.Content("https://cdn.jsdelivr.net/npm/chart.js")"></script>
+    <script src="@Url.Content("~/js/StatisticsInAdmin.js")"></script>
+    <script src="~/js/ShowDetailsTracking.js"></script>
+    <script src="@Url.Content("~/js/AdminTable.js")"></script>
+    <script src="@Url.Content("~/js/adminVisitChart.js")"></script>
+    <script src="@Url.Content("~/js/adminPageValidation.js")"></script>
+    <script src="@Url.Content("~/js/languageSwitcher.js")"></script>
+    <script src="@Url.Content("~/js/moblieMenu.js")"></script>
+
+    <script>
+        // Mobile menu functionality with RTL support
+        document.addEventListener('DOMContentLoaded', function () {
+            const burgerBtn = document.getElementById('burgerBtn');
+            const sideNavBar = document.getElementById('sideNavBar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+
+            if (burgerBtn && sideNavBar && backdrop) {
+                burgerBtn.addEventListener('click', function () {
+                    const isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+
+                    if (isRTL) {
+                        sideNavBar.style.right = '0';
+                        sideNavBar.style.left = 'auto';
+                    } else {
+                        sideNavBar.style.left = '0';
+                        sideNavBar.style.right = 'auto';
+                    }
+                    backdrop.style.display = 'block';
+                });
+
+                backdrop.addEventListener('click', function () {
+                    const isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+
+                    if (isRTL) {
+                        sideNavBar.style.right = '-100%';
+                    } else {
+                        sideNavBar.style.left = '-100%';
+                    }
+                    backdrop.style.display = 'none';
+                });
+            }
+        });
+    </script>
+}
+
+<!-- This is the header section of the admin page -->
+<header class="menu">
+
+    <div class="container-fluid h-100 bootstrap-wrapper">
+        <div class="row align-items-center h-100 g-0">
+            <div class="col-auto">
+                <div class="d-flex align-items-center justify-content-around ms-3 gap-3 me-3 ">
+
+                    <button id="burgerBtn" class="navbar-toggler d-lg-none me-2" style="margin-left: 15px;"
+                        type="button">
+                        <img src="~/svgs/navigation/hamburger-menu.svg" alt="Menu" width="36" height="36" />
+                    </button>
+
+                    <!------------------- Logout Button ------------------->
+                    <div class="d-none d-lg-block d-xl-block">
+                        <form method="post" action="@Url.Action("Logout", "Account")" style="margin: 0">
+                            @Html.AntiForgeryToken()
+                            <button class="desktop-logo d-flex logo header-nav" type="submit" style="">
+                                <img src="~/svgs/navigation/logout.svg" alt="Menu" width="36px" height="36px" />
+                                <span class="poppins-regular" id="Logout345"></span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-------- Vertical Divider -------->
+                    <div class="vr d-none d-lg-block d-xl-block" style="color: aliceblue; opacity: 0.75;"></div>
+                    <!-------- Vertical Divider -------->
+
+                    <!-------------------- Language Switcher ------------------->
+                    <div class="language-switcher-container d-none d-lg-block d-xl-block">
+                        <button id="language-toggle" class="language-toggle-btn desktop-logo logo header-nav">
+                            <img src="~/svgs/navigation/language.svg" alt="Language" width="36px" height="36px" />
+                            <span class="poppins-regular" id="Language345"></span>
+                        </button>
+                    </div>
+
+                    <!-------- Vertical Divider ------>
+                    <div class="vr d-none d-lg-block d-xl-block" style="color: aliceblue; opacity: 0.75;"></div>
+                    <!-------- Vertical Divider ------>
+
+                    <!--------------------- Exit Edit Mode Button ------------------->
+                    <div class="d-none d-lg-block d-xl-block">
+                        <button class="desktop-logo logo header-nav d-none d-lg-flex"
+                            onclick="location.href='@Url.Action("homePage", "Home")'">
+                            <img src="~/svgs/nav-buttons/Normal-AdminView.svg" alt="Exit" width="36" height="36" />
+                            <span class="poppins-regular" id="admin-exit-view-button">Exit edit mode</span>
+
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col d-flex flex-nowrap align-items-center justify-content-center">
+                <!-- Search section removed as requested -->
+            </div>
+
+            <div class="col-auto flex-nowrap">
+                <div>
+
+                    <img class="profile-icon d-xl-block" src="~/imgs/B&W IAU Logo (Horizontal).png" alt="IAU Logo">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</header>
+
+<!-- Mobile Menu Sidebar -->
+<div id="sideNavBar" class="custom-sidebar sideNav text-white" dir="@(isArabic ? "rtl" : "ltr")">
+    <div>
+        <!-- Exit Edit Mode Button -->
+        <a class="text-white d-block py-2 mobile-menu-section"
+            onclick="alter(this); location.href='@Url.Action("homePage", "Home")'" style="background-color: #A6832C; ">
+            <div style="display: flex; align-items: center; gap: 5px;">
+                <img src="~/svgs/nav-buttons/Normal-AdminView.svg" alt="Exit" width="16" height="16"
+                    style="margin-right: 5px;" />
+                <span id="mobile-exit-edit-text">Exit edit mode</span>
+            </div>
+        </a>
+
+        <!-- Language Switcher -->
+        <a class="text-white d-block py-2 mobile-menu-section"
+            onclick="alter(this); document.getElementById('language-toggle')?.click();" data-id="languageM">
+            <div style="display: flex; align-items: center; gap: 5px;">
+                <svg width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M20.0002 39.1668C17.3807 39.1668 14.905 38.6637 12.5731 37.6575C10.2411 36.6512 8.20468 35.2776 6.4637 33.5366C4.72273 31.7957 3.34912 29.7592 2.34287 27.4272C1.33662 25.0953 0.833496 22.6196 0.833496 20.0002C0.833496 17.3488 1.33662 14.8651 2.34287 12.5491C3.34912 10.2331 4.72273 8.20468 6.4637 6.4637C8.20468 4.72273 10.2411 3.34912 12.5731 2.34287C14.905 1.33662 17.3807 0.833496 20.0002 0.833496C22.6516 0.833496 25.1352 1.33662 27.4512 2.34287C29.7672 3.34912 31.7957 4.72273 33.5366 6.4637C35.2776 8.20468 36.6512 10.2331 37.6575 12.5491C38.6637 14.8651 39.1668 17.3488 39.1668 20.0002C39.1668 22.6196 38.6637 25.0953 37.6575 27.4272C36.6512 29.7592 35.2776 31.7957 33.5366 33.5366C31.7957 35.2776 29.7672 36.6512 27.4512 37.6575C25.1352 38.6637 22.6516 39.1668 20.0002 39.1668ZM20.0002 35.2377C20.8307 34.0877 21.5495 32.8897 22.1564 31.6439C22.7634 30.3981 23.2585 29.0724 23.6418 27.6668H16.3585C16.7418 29.0724 17.237 30.3981 17.8439 31.6439C18.4509 32.8897 19.1696 34.0877 20.0002 35.2377ZM15.0168 34.471C14.4418 33.4168 13.9387 32.3227 13.5075 31.1887C13.0762 30.0547 12.7168 28.8807 12.4293 27.6668H6.77516C7.70155 29.2641 8.85954 30.6536 10.2491 31.8356C11.6387 33.0175 13.2279 33.896 15.0168 34.471ZM24.9835 34.471C26.7724 33.896 28.3616 33.0175 29.7512 31.8356C31.1408 30.6536 32.2988 29.2641 33.2252 27.6668H27.571C27.2835 28.8807 26.9241 30.0547 26.4929 31.1887C26.0616 32.3227 25.5585 33.4168 24.9835 34.471ZM5.146 23.8335H11.6627C11.5668 23.1946 11.495 22.5637 11.447 21.9408C11.3991 21.3179 11.3752 20.671 11.3752 20.0002C11.3752 19.3293 11.3991 18.6825 11.447 18.0595C11.495 17.4366 11.5668 16.8057 11.6627 16.1668H5.146C4.98627 16.8057 4.86648 17.4366 4.78662 18.0595C4.70676 18.6825 4.66683 19.3293 4.66683 20.0002C4.66683 20.671 4.70676 21.3179 4.78662 21.9408C4.86648 22.5637 4.98627 23.1946 5.146 23.8335ZM15.496 23.8335H24.5043C24.6002 23.1946 24.672 22.5637 24.72 21.9408C24.7679 21.3179 24.7918 20.671 24.7918 20.0002C24.7918 19.3293 24.7679 18.6825 24.72 18.0595C24.672 17.4366 24.6002 16.8057 24.5043 16.1668H15.496C15.4002 16.8057 15.3283 17.4366 15.2804 18.0595C15.2325 18.6825 15.2085 19.3293 15.2085 20.0002C15.2085 20.671 15.2325 21.3179 15.2804 21.9408C15.3283 22.5637 15.4002 23.1946 15.496 23.8335ZM28.3377 23.8335H34.8543C35.0141 23.1946 35.1338 22.5637 35.2137 21.9408C35.2936 21.3179 35.3335 20.671 35.3335 20.0002C35.3335 19.3293 35.2936 18.6825 35.2137 18.0595C35.1338 17.4366 35.0141 16.8057 34.8543 16.1668H28.3377C28.4335 16.8057 28.5054 17.4366 28.5533 18.0595C28.6012 18.6825 28.6252 19.3293 28.6252 20.0002C28.6252 20.671 28.6012 21.3179 28.5533 21.9408C28.5054 22.5637 28.4335 23.1946 28.3377 23.8335ZM27.571 12.3335H33.2252C32.2988 10.7363 31.1408 9.34669 29.7512 8.16475C28.3616 6.9828 26.7724 6.10433 24.9835 5.52933C25.5585 6.5835 26.0616 7.67759 26.4929 8.81162C26.9241 9.94565 27.2835 11.1196 27.571 12.3335ZM16.3585 12.3335H23.6418C23.2585 10.9279 22.7634 9.60225 22.1564 8.35641C21.5495 7.11058 20.8307 5.91266 20.0002 4.76266C19.1696 5.91266 18.4509 7.11058 17.8439 8.35641C17.237 9.60225 16.7418 10.9279 16.3585 12.3335ZM6.77516 12.3335H12.4293C12.7168 11.1196 13.0762 9.94565 13.5075 8.81162C13.9387 7.67759 14.4418 6.5835 15.0168 5.52933C13.2279 6.10433 11.6387 6.9828 10.2491 8.16475C8.85954 9.34669 7.70155 10.7363 6.77516 12.3335Z"
+                        fill="#CFEFFF"></path>
+                </svg>
+                <span id="mobile-language-text">Language</span>
+            </div>
+        </a>
+
+        <!-- Logout Button -->
+        <form method="post" action="@Url.Action("Logout", "Account")" style="margin: 0;">
+            @Html.AntiForgeryToken()
+            <button type="submit"
+                class="text-white d-block py-2 mobile-menu-section border-0 bg-transparent w-100 text-start"
+                style="cursor: pointer;">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <img src="@Url.Content("~/svgs/navigation/logout.svg")" width="16" height="16"
+                        style="margin-right: 5px;">
+                    <span id="mobile-logout">Logout</span>
+                </div>
+            </button>
+        </form>
+    </div>
+</div>
+
+<div id="sidebarBackdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+     background: rgba(0,0,0,0.5); z-index: 1061; cursor: pointer;"></div>
+
+<!-- Success/Error Messages -->
+<div class="container mt-3">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>
+
+<!--the statistics part of the admin page-->
+<div class="dashboard-container">
+    <!-- Main Rectangle Container -->
+    <div class="dashboard-rectangle mb-footer-space">
+        <div class="main-row d-flex flex-xl-row flex-column">
+            <!-- Left Section - Charts -->
+            <div class="charts-section">
+                <div class="row g-0 flex-fill">
+                    <!-- Donut Chart -->
+                    <div class="col-12 col-md-6 col-xl-6">
+                        <div class="chart-section">
+                            <div id="admin-chart-title-overview" class="chart-title">University Rules and Guidelines
+                                Overview</div>
+                            <div class="donut-chart-container">
+                                <div class="donut-chart-canvas">
+                                    <canvas id="chartCanvas"></canvas>
+                                </div>
+                                <div class="legend-container">
+                                    <div class="legend-item">
+                                        <div class="legend-color" style="background-color: #8B4513;"></div>
+                                        <span id="admin-chart-legend-academic-rules" class="legend-text">Academic
+                                            rules</span>
+                                        <span class="legend-percentage">40%</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-color" style="background-color: #2E8B57;"></div>
+                                        <span id="admin-chart-legend-employment-rules" class="legend-text">Employment
+                                            rules & regulations</span>
+                                        <span class="legend-percentage">30%</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-color" style="background-color: #4682B4;"></div>
+                                        <span id="admin-chart-legend-student-rules" class="legend-text">Student rules &
+                                            regulations</span>
+                                        <span class="legend-percentage">25%</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-color" style="background-color: #DAA520;"></div>
+                                        <span id="admin-chart-legend-student-guides" class="legend-text">Student rules &
+                                            regulations</span>
+                                        <span class="legend-percentage">15%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bar Chart -->
+                    <div class="col-12 col-md-6 col-xl-6">
+                        <div class="chart-section">
+                            <div id="admin-chart-title-visits" class="chart-title">Website visits over the past 6 months
+                            </div>
+                            <div id="visitToggler" class="legendToggler"> Monthly Visits </div>
+                            <div class="chart-canvas-container">
+                                <canvas id="barChartCanvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Right Sidebar -->
+            <div class="sidebar-section col-12 col-xl-auto">
+                <div class="sidebar-container">
+                    <!-- Cards Section -->
+                    <div class="sidebar-cards">
+                        <!-- Total Records Card -->
+                        <div class="stats-card stats-card-blue">
+                            <h6 id="admin-stats-total-policies">Total Records</h6>
+                            <div class="number">30</div>
+                        </div>
+
+                        <!-- Most Viewed Card -->
+                        <div class="stats-card stats-card-green">
+                            <h6 id="admin-stats-most-viewed">Most Viewed</h6>
+                            <div class="subtitle">Loading...</div>
+                            <div class="viewed-text">Viewed: 0 times</div>
+                        </div>
+                    </div>
+
+                    <!-- Buttons Section -->
+                    <div class="sidebar-buttons">
+                        <!-- View Report Button -->
+                        <button class="btn-custom btn-primary-custom" id="admin-button-view-report"
+                            onclick="location.href='@Url.Action("ViewReport", "Admin")'">
+                            View Report
+                        </button>
+
+                        <!-- Add New Record Button -->
+                        <button class="btn-custom btn-dark-custom" id="admin-button-add-new-record"
+                            onclick="location.href='@Url.Action("AddNewRecord", "Admin")'">
+                            add new record
+                        </button>
+
+                        <!-- Export Data Button -->
+                        <button class="btn-custom btn-dark-custom" id="admin-button-export-data" onclick="exportData()">
+                            Export Data
+                        </button>
+
+
+
+                        <button class="btn-custom btn-success-custom" id="admin-button-manage-contact-info"
+                            onclick="location.href='@Url.Action("ManageContactInfo", "Admin")'">
+                            Manage Contact Info
+                        </button>
+
+                        <!-- Assign New Editor Button - Only visible to Admins -->
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <button class="btn-custom btn-warning-custom" id="admin-button-assign-editor"
+                                onclick="location.href='@Url.Action("AssignNewEditor", "Admin")'">
+                                Assign New Editor
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--------------------- the table part of the admin page ---------------------->
+
+<!------- Search, Section and Document type Bar ------->
+<div class="container my-4">
+    <section>
+        <div class="container">
+            <table class="w-100">
+                <thead class="text-center">
+                    <tr>
+                        <th class="col-8 d-none d-md-table-cell padding-between-search-filter">
+                            <div class="col flex-nowrap align-items-center">
+                                <div class="search-container d-flex align-items-center position-relative">
+                                    <button class="search-and-filter-buttons">
+                                        <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon"
+                                            width="44" height="44" />
+                                    </button>
+                                    <input id="desktopSearchInput"
+                                        class="search poppins-regular flex-grow-1 small-font-size" type="text"
+                                        placeholder="Search by Name/ID..."
+                                        style="color: #ABB7C2; background: transparent; border: none; padding-inline-end: 30px;">
+                                    <button id="desktopClearBtn" class="position-absolute"
+                                        style="inset-inline-end: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ABB7C2; font-size: 18px; cursor: pointer; display: none;"
+                                        onclick="clearSearchInput('desktop')" title="Clear search">
+                                        ×
+                                    </button>
+                                </div>
+                            </div>
+                        </th>
+
+
+                        <th class="col-4 d-none d-md-table-cell padding-between-search-filter">
+                            <div class="col flex-nowrap align-items-center">
+                                <div class="search-container d-flex align-items-center px-2" id="document-search">
+                                    <select id="adminDocumentFilter"
+                                        class="search poppins-regular flex-grow-1 small-font-size"
+                                        style="color: #ABB7C2; border: none;">
+                                        <option value="all" id="admin-document-filter-all">All Documents</option>
+                                        <option value="Student guides & templates"
+                                            id="admin-chart-legend-student-guides2">Student guides & templates</option>
+                                        <option value="Student rules & regulations"
+                                            id="admin-chart-legend-student-rules2">Student rules & regulations</option>
+                                        <option value="Employees’ rules & regulations"
+                                            id="admin-chart-legend-employment-rules2">Employees’ rules & regulations
+                                        </option>
+                                        <option value="Academic rules & regulations"
+                                            id="admin-chart-legend-academic-rules2">Academic rules & regulations
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </th>
+
+                        <!-- #region  delete button -->
+                        <th class="col d-none d-md-table-cell padding-between-search-filter">
+                            <div class="delete-btn-container d-flex align-items-center px-2">
+                                <button class="search-and-filter-buttons" onclick="deleteSelectedRecords()">
+                                    <img src="~/svgs/admin/Delete-Button.svg" alt="Delete btn" />
+                                </button>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </section>
+
+    <!------- Mobile Search and Filter Section ------->
+    <section>
+        <div class="container">
+            <!-- Wrapper with background color -->
+            <div class="row gy-3 mb-3 mt-1" style="background-color: #2f3e5f; border-radius: 12px;">
+                <!-- Search by Name/ID (Visible only on small screens, hidden on larger screens) -->
+                <div class="col-12 d-md-none d-flex align-items-center" style="margin-top: 10px; gap: 10px;">
+                    <!-- Search Container (Take remaining space) -->
+                    <div class="search-container d-flex align-items-center flex-grow-1 position-relative"
+                        style="border: 2px solid whitesmoke; border-radius: 8px;">
+                        <button class="search-and-filter-buttons">
+                            <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon" width="44"
+                                height="44" />
+                        </button>
+                        <input id="mobileSearchInput" class="search poppins-regular flex-grow-1" type="text"
+                            placeholder="Search by Name/ID..."
+                            style="color: #ABB7C2; border: none; background: transparent; padding-inline-end: 30px;">
+                        <button id="mobileClearBtn" class="position-absolute"
+                            style="inset-inline-end: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ABB7C2; font-size: 18px; cursor: pointer; display: none;"
+                            onclick="clearSearchInput('mobile')" title="Clear search">
+                            ×
+                        </button>
+                    </div>
+
+
+                </div>
+
+                <!-- Section and Document Type Dropdowns (Visible only on small screens, hidden on larger screens) -->
+                <div class="col-12 d-md-none d-flex align-items-center" style="gap: 10px;">
+
+                    <!-- Document Type Dropdown -->
+                    <div class="d-flex align-items-center p-0 flex-grow-1" style="margin-bottom: 10px;">
+                        <div class="search-container d-flex align-items-center w-100" id="section-document-search-2">
+                            <select id="mobileDocumentFilter" class="search poppins-regular flex-grow-1"
+                                style="color: #ABB7C2;">
+                                <option value="all" id="admin-document-filter-all1">All Documents</option>
+                                <option value="Student guides & templates" id="admin-chart-legend-student-guides1">
+                                    Student guides & templates</option>
+                                <option value="Student rules & regulations" id="admin-chart-legend-student-rules1">
+                                    Student rules & regulations</option>
+                                <option value="Employees’ rules & regulations"
+                                    id="admin-chart-legend-employment-rules1">Employees’ rules & regulations</option>
+                                <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules1">
+                                    Academic rules & regulations</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Delete Button (Fixed width) -->
+                    <div class="delete-btn-container d-flex align-items-center p-0 justify-content-center"
+                        id="delete-btn-mobile">
+                        <button class="search-and-filter-buttons" onclick="deleteSelectedRecords()">
+                            <img src="~/svgs/admin/Delete-Button.svg" alt="Delete btn" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!------- base Record ------->
+    <div class="container">
+        <div class="accordion">
+            <div class="accordion-item position-relative">
+                <!-- Master Checkbox positioned outside accordion button -->
+                <div class="position-absolute field-padding"
+                    style="inset-inline-start: 20px; top: 50%; transform: translateY(-50%); z-index: 10;">
+                    <input type="checkbox" id="masterCheckbox" onchange="toggleAllCheckboxes()" />
+                </div>
+                <h2>
+                    <button class="accordion-button collapsed custom-header-btn" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseHeader" aria-expanded="false" aria-controls="collapseHeader"
+                        id="headerAccordion" disabled style="padding-inline-start: 50px;">
+                        <table class="table-responsive w-100">
+                            <thead class="text-center">
+                                <tr>
+                                    <th class="custom-col field-padding"></th>
+                                    <!-- Space -->
+                                    </th>
+                                    <th class="custom-col field-padding" id="admin-table-header-id">
+                                        ID
+                                    </th>
+                                    <th class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size  field-padding"
+                                        id="admin-table-header-regulation-name">
+                                        Regulation/ Manual name</th>
+                                    <th class="col-2 d-none d-md-table-cell field-padding"
+                                        id="admin-table-header-documentType">Document Type</th>
+                                    <th class="col-2 d-none d-md-table-cell field-padding"
+                                        id="admin-table-header-version-number">Version Number
+                                    </th>
+                                    <th class="col-2 d-none d-lg-table-cell field-padding"
+                                        id="admin-table-header-approving-date">Approving Date
+                                    </th>
+                                    <th class="col-3 d-none d-lg-table-cell field-padding"
+                                        id="admin-table-header-responsible-entity">Responsible
+                                        Entity</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </button>
+                </h2>
+                <div id="collapseHeader" class="accordion-collapse collapse" aria-labelledby="headingHeader"
+                    data-bs-parent="#headerAccordion">
+                    <!-- يمكنك إضافة محتوى إضافي هنا إذا لزم الأمر -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="container">
+        <!-- The red line!! -->
+        <div class="red-line"></div>
+    </div>
+
+
+
+
+    <!-- Accordion Menu -->
+    <div class="container">
+        <div class="row" g-4>
+            <!-- سيتم وضع كل عنصر أكورديون داخل col-12, max size for col is 12 -->
+            <div class="col-12">
+                @if (Model != null && Model.Any())
+                {
+                    <div class="accordion" id="regulationAccordion">
+                        @{
+                            int i = 0;
+                        }
+                        @foreach (var record in Model)
+                        {
+                            i++;
+                            var itemNumber = i;
+                            var headingId = "heading" + itemNumber;
+                            var collapseId = "collapse" + itemNumber;
+
+                            var displayName = isArabic && !string.IsNullOrEmpty(record.RegulationNameAr)
+                            ? record.RegulationNameAr
+                            : record.RegulationName;
+
+                            var displayApprovingEntity = isArabic && !string.IsNullOrEmpty(record.ApprovingEntityAr)
+                            ? record.ApprovingEntityAr
+                            : record.ApprovingEntity;
+
+                            // Document Type translation logic
+                            var displayDocumentType = record.DocumentType;
+                            if (isArabic)
+                            {
+                                switch (record.DocumentType)
+                                {
+                                    case "Student guides & templates":
+                                        displayDocumentType = "أدلة ونماذج الطلاب";
+                                        break;
+                                    case "Student rules & regulations":
+                                        displayDocumentType = "قواعد وأنظمة الطلاب";
+                                        break;
+                                    case "Employees’ rules & regulations":
+                                        displayDocumentType = "قواعد وأنظمة الموظفين";
+                                        break;
+                                    case "Academic rules & regulations":
+                                        displayDocumentType = "قواعد وأنظمة أكاديمية";
+                                        break;
+                                }
+                            }
+
+                            // Department translation logic
+                            var displayDepartment = record.Department;
+                            if (isArabic)
+                            {
+                                switch (record.Department)
+                                {
+                                    case "Reg and Admission":
+                                        displayDepartment = "التسجيل والقبول";
+                                        break;
+                                    case "CCSIT":
+                                        displayDepartment = "كلية علوم الحاسب وتقنية المعلومات";
+                                        break;
+                                    case "Communication and tech":
+                                        displayDepartment = "الاتصالات والتقنية";
+                                        break;
+                                    case "Hospital":
+                                        displayDepartment = "المستشفى";
+                                        break;
+                                    case "Library":
+                                        displayDepartment = "المكتبة";
+                                        break;
+                                    case "Students Affairs":
+                                        displayDepartment = "شؤون الطلاب";
+                                        break;
+                                    case "Preparetory":
+                                        displayDepartment = "السنة التحضيرية";
+                                        break;
+                                    case "Academic Affairs":
+                                        displayDepartment = "الشؤون الأكاديمية";
+                                        break;
+                                }
+                            }
+
+                            <!-- Accordion Item 1 -->
+                            <div class="accordion-item position-relative" data-section="@(record.Sections ?? "")"
+                                data-document-type="@(record.DocumentType ?? "")">
+                                <!-- Checkbox positioned outside accordion button -->
+                                <div class="position-absolute field-padding"
+                                    style="inset-inline-start: 20px; top: 50%; transform: translateY(-50%); z-index: 10;">
+                                    <input type="checkbox" class="record-checkbox" data-record-id="@record.Id"
+                                        onclick="handleRecordCheckbox()" />
+                                </div>
+                                <h2 class="accordion-header" id="@headingId">
+                                    <button class="accordion-button collapsed custom-acc-btn" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false"
+                                        aria-controls="@collapseId" data-record-id="@record.Id"
+                                        style="padding-inline-start: 50px;">
+                                        <table class=" w-100">
+                                            <thead class="text-center">
+                                                <tr>
+                                                    <th class="custom-col field-padding">
+                                                        <!-- Space -->
+                                                    </th>
+                                                    <th class="custom-col field-padding">
+                                                        @record.Id
+                                                    </th>
+                                                    <th class="col-3 d-table-cell d-sm-table-cell Regulation-Manual-size field-padding"
+                                                        style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                                        title="@displayName">
+                                                        @displayName</th>
+                                                    <th class="col-2 d-none d-md-table-cell field-padding"
+                                                        style="max-width: 111px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                                        title="@displayDocumentType">
+                                                        @displayDocumentType</th>
+                                                    <th class="col-2 d-none d-md-table-cell field-padding"
+                                                        style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                                        title="@record.Version">
+                                                        @record.Version
+                                                    </th>
+                                                    <th class="col-2 d-none d-lg-table-cell field-padding"
+                                                        style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                                        title="@record.ApprovalDate">
+                                                        @record.ApprovalDate</th>
+                                                    <th class="col-3 d-none d-lg-table-cell field-padding"
+                                                        style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                                        title="@displayApprovingEntity">
+                                                        @displayApprovingEntity</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="@collapseId" class="accordion-collapse collapse" aria-labelledby="@headingId"
+                                data-bs-parent="#regulationAccordion">
+                                <!-- content of accordion -->
+                                <div class="accordion-body">
+                                    <!-- Content will be loaded dynamically via AJAX -->
+                                </div>
+                            </div>
+
+                            <div class="mb-4"></div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <!-- No records message for admin -->
+                    <div class="alert alert-info text-center">
+                        <h4 id="admin-no-records-heading" dir="rtl">No Records Found</h4>
+                        <p id="admin-no-records-message" dir="rtl">No rules and regulations are currently available in the
+                            database</p>
+                        <a href="@Url.Action("AddNewRecord", "Admin")" class="btn btn-primary">
+                            <i class="fas fa-plus me-2" id="admin-add-new-record-button"></i>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export Table Selection Modal -->
+<div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 15px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <div class="modal-header"
+                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px 15px 0 0;">
+                <h5 class="modal-title fw-bold" id="exportModalLabel">
+                    <!-- select tables to export -->
+                    <span class="fas fa-file-excel me-2" id="export-modal-title"></span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="text-muted mb-4">
+                    <!-- choose which database tables to include in your Excel export -->
+                    <span class="fas fa-info-circle me-2" id="export-modal-description"></span>
+                </p>
+
+                <form id="exportForm" method="POST" action="/Admin/ExportAllDataToExcel">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Select All Option -->
+                    <div class="form-check mb-3 p-3"
+                        style="background: #f8f9fa; border-radius: 10px; border-inline-start: 4px solid #6c757d;">
+                        <input class="form-check-input" type="checkbox" id="selectAll" name="tables" value="all"
+                            checked>
+                        <label class="form-check-label fw-bold" for="selectAll">
+                            <!-- all tables -->
+                            <span class="fas fa-database me-2 text-secondary" id="export-option-all-tables"></span>
+                        </label>
+                        <!-- Export all available database tables -->
+                        <small class="d-block text-muted mt-1" id="export-option-all-tables-desc"></small>
+                    </div>
+
+                    <hr class="my-3">
+
+                    <!-- Individual Table Options -->
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="form-check p-3"
+                                style="background: #f0f8ff; border-radius: 10px; border-inline-start: 4px solid #17a2b8;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="recordsTable"
+                                    name="tables" value="records" checked>
+                                <label class="form-check-label" for="recordsTable">
+                                    <!-- Records -->
+                                    <span class="fas fa-file-alt me-2 text-info"
+                                        id="export-option-records"><strong></strong></span>
+                                </label>
+                                <!-- All regulation and policy records -->
+                                <small class="d-block text-muted mt-1" id="export-option-records-desc"></small>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-check p-3"
+                                style="background: #e8f5e8; border-radius: 10px; border-inline-start: 4px solid #28a745;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="usersTable"
+                                    name="tables" value="users" checked>
+                                <label class="form-check-label" for="usersTable">
+                                    <!-- Users -->
+                                    <span class="fas fa-users me-2 text-success"
+                                        id="export-option-users"><strong></strong></span>
+                                </label>
+                                <!-- All registered users information -->
+                                <small class="d-block text-muted mt-1" id="export-option-users-desc"></small>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-check p-3"
+                                style="background: #fff5e6; border-radius: 10px; border-inline-start: 4px solid #ffc107;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="contactTable"
+                                    name="tables" value="contact" checked>
+                                <label class="form-check-label" for="contactTable">
+                                    <!-- Contact Information -->
+                                    <span class="fas fa-address-book me-2 text-warning"
+                                        id="export-option-contact"><strong>
+                                        </strong></span </label>
+                                    <!-- Department contact details -->
+                                    <small class="d-block text-muted mt-1" id="export-option-contact-desc"></small>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-check p-3"
+                                style="background: #ffeaea; border-radius: 10px; border-inline-start: 4px solid #dc3545;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="attachmentsTable"
+                                    name="tables" value="attachments" checked>
+                                <label class="form-check-label" for="attachmentsTable">
+                                    <!-- Attachments -->
+                                    <span class="fas fa-paperclip me-2 text-danger"
+                                        id="export-option-attachments"><strong></strong></span>
+                                </label>
+                                <!-- File attachments and documents -->
+                                <small class="d-block text-muted mt-1" id="export-option-attachments-desc"></small>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-check p-3"
+                                style="background: #f0f0ff; border-radius: 10px; border-inline-start: 4px solid #6f42c1;">
+                                <input class="form-check-input table-checkbox" type="checkbox" id="historyTable"
+                                    name="tables" value="history" checked>
+                                <label class="form-check-label" for="historyTable">
+                                    <!-- User History -->
+                                    <span class="fas fa-history me-2 text-primary"
+                                        id="export-option-history"><strong></strong></span>
+                                </label>
+                                <!-- User activity and action logs -->
+                                <small class="d-block text-muted mt-1" id="export-option-history-desc"></small>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-light" style="border-radius: 0 0 15px 15px;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <!-- Cancel button -->
+                    <span class="fas fa-times me-2" id="export-button-cancel"></span>
+                </button>
+                <button type="button" class="btn btn-primary" onclick="confirmExport()" id="confirmExportBtn">
+                    <!-- confirm Export button -->
+                    <span class="fas fa-download me-2" id="export-button-confirm"></span>
                 </button>
             </div>
         </div>

@@ -6,7 +6,7 @@
             font-family: "Poppins", sans-serif;
             font-weight: 400;
             font-style: normal;
-            font-size: calc(0.75rem + .6vw);
+            font-size: clamp(12px,calc(0.75rem + .6vw), 30px);
             /*line-height: 36px;*/
             text-align: start;
          }
@@ -206,6 +206,19 @@
           */
 
 
+        @media (min-width: 1700px) {
+          .search-container {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+          [dir="rtl"] .search-container {
+            left: auto;
+            right: 50%;
+            transform: translateX(50%);
+          }
+        }
+
         @media (max-width: 1130px) {
           .bar-button label {
             display: none !important;
@@ -244,36 +257,36 @@
           font-size: calc(0.75rem + 0.6vw) !important;
         }
 
-        @media (max-width: 576px) {
-    .filter-panel {
-        margin-top: 0;
-        width: 100%;
-        left: 0;
-        transform: none;
-        border-radius: 0;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        height: max-content;
-        font-size: calc(0.7rem + .6vw);
-    }
-    
-    .filter-column {
-        width: 100%;
-        border-left: none;
-        border-bottom: 1px solid #bdc3c7;
-        margin-bottom: 5px;
-    }
+    @media (max-width: 576px) {
+      .filter-panel {
+          margin-top: 0;
+          width: 100%;
+          left: 0;
+          transform: none;
+          border-radius: 0;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+          height: max-content;
+          font-size: calc(0.7rem + .6vw);
+      }
+      
+      .filter-column {
+          width: 100%;
+          border-left: none;
+          border-bottom: 1px solid #bdc3c7;
+          margin-bottom: 5px;
+      }
 
-    .form-control {
-      padding:.25rem .5rem;
+      .form-control {
+        padding:.25rem .5rem;
+      }
+      
+      .filter-column:last-child {
+          border-bottom: none;
+          margin-bottom: 0;
+      }
     }
-    
-    .filter-column:last-child {
-        border-bottom: none;
-        margin-bottom: 0;
-    }
-}
 
 /*chatbot styles*/
 
