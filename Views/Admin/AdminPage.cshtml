@@ -28,7 +28,7 @@ there's also many filtering options to find the policy and other adminstrative s
     <script src="@Url.Content("~/js/moblieMenu.js")"></script>
 
     <script>
-        // Mobile menu functionality - same as homepage
+        // Mobile menu functionality with RTL support
         document.addEventListener('DOMContentLoaded', function () {
             const burgerBtn = document.getElementById('burgerBtn');
             const sideNavBar = document.getElementById('sideNavBar');
@@ -36,12 +36,26 @@ there's also many filtering options to find the policy and other adminstrative s
 
             if (burgerBtn && sideNavBar && backdrop) {
                 burgerBtn.addEventListener('click', function () {
-                    sideNavBar.style.left = '0';
+                    const isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+
+                    if (isRTL) {
+                        sideNavBar.style.right = '0';
+                        sideNavBar.style.left = 'auto';
+                    } else {
+                        sideNavBar.style.left = '0';
+                        sideNavBar.style.right = 'auto';
+                    }
                     backdrop.style.display = 'block';
                 });
 
                 backdrop.addEventListener('click', function () {
-                    sideNavBar.style.left = '-100%';
+                    const isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+
+                    if (isRTL) {
+                        sideNavBar.style.right = '-100%';
+                    } else {
+                        sideNavBar.style.left = '-100%';
+                    }
                     backdrop.style.display = 'none';
                 });
             }
@@ -117,9 +131,8 @@ there's also many filtering options to find the policy and other adminstrative s
 
 </header>
 
-
 <!-- Mobile Menu Sidebar -->
-<div id="sideNavBar" class="custom-sidebar sideNav text-white">
+<div id="sideNavBar" class="custom-sidebar sideNav text-white" dir="@(isArabic ? "rtl" : "ltr")">
     <div>
         <!-- Exit Edit Mode Button -->
         <a class="text-white d-block py-2 mobile-menu-section"

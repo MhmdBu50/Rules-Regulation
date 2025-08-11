@@ -402,6 +402,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     "admin-button-assign-editor": "Manage Editor",
     
+
+    // Mobile Menu Translations
+    "mobile-home": "Home",
+    "mobile-admin-view": "view as Admin",
+    "mobile-student-guides": "Student Guides & Templates",
+    "mobile-student-rules": "Student Rules & Regulations",
+    "mobile-employee-rules": "Employees' Rules & Regulations",
+    "mobile-academic-rules": "Academic Rules & Regulations",
+    "mobile-saved-rules": "Saved Rules & Regulations",
+    "mobile-history": "History",
+    "mobile-language-text": "العربية",
+    "mobile-logout": "logout",
+    "mobile-exit-edit-text": "Exit edit mode"
         },
         "ar": {
             "Language345": "English",
@@ -801,7 +814,20 @@ document.addEventListener("DOMContentLoaded", () => {
     "export-option-history-desc": "سجلات أنشطة المستخدم وإجراءاته",
     "export-button-cancel": "إلغاء",
     "export-button-confirm": "تصدير الجداول المحددة",
-    "admin-button-assign-editor": "إدارة محرر",
+    "admin-button-assign-editor": "إدارة المحررين",
+
+    // Mobile Menu Translations
+    "mobile-home": "الرئيسية",
+    "mobile-admin-view": "عرض المحرر",
+    "mobile-student-guides": "أدلة وقوالب الطلاب",
+    "mobile-student-rules": "قواعد وأنظمة الطلاب",
+    "mobile-employee-rules": "قواعد وأنظمة الموظفين",
+    "mobile-academic-rules": "قواعد وأنظمة أكاديمية",
+    "mobile-saved-rules": "القواعد واللوائح المحفوظة",
+    "mobile-history": "السجل",
+    "mobile-language-text": "English",
+    "mobile-logout": "تسجيل الخروج",
+    "mobile-exit-edit-text": "الخروج من وضع التحرير"
         }
     };
 
