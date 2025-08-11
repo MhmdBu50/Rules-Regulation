@@ -107,7 +107,7 @@ body {
   margin-inline-start: .5rem !important;
 }
 
-#admin-view-button {
+#admin-view-button, #admin-exit-view-button {
   background: linear-gradient(45.26deg, #FFE075 7.77%, #FFFFFF 93.85%);
   background-clip: border-box;
   -webkit-background-clip: text;
@@ -115,6 +115,8 @@ body {
   background-clip: text;
   color: transparent;
 }
+
+
 
 
 
