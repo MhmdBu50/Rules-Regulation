@@ -190,14 +190,16 @@
         <!-- Back Button -->
         <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"> 
             <img src="@Url.Content("~/svgs/admin/backButton.svg")"> 
-            <span>Back</span> 
+            <!-- back button -->
+            <span id="btn-back"></span> 
         </a>
 
         <!-- Logout Button -->
         <form method="post" action="@Url.Action("Logout", "Account")" style="display: inline;">
             @Html.AntiForgeryToken()
             <button type="submit" class="btn" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
-                <span>Logout</span> 
+                <!-- logout button -->
+                <span id="btn-logout"></span> 
                 <img src="@Url.Content("~/svgs/admin/logOut.svg")">
             </button>
         </form>
