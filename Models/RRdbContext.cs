@@ -14,6 +14,7 @@ namespace RulesRegulation.Models
         public DbSet<Users> Users { get; set; }
         public DbSet<SavedRecord> SavedRecords { get; set; }
         public DbSet<Visit> Visits { get; set; }
+        public DbSet<ActivityLog> ActivityLogs { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -127,6 +128,33 @@ namespace RulesRegulation.Models
                 entity.Property(e => e.UserId).HasColumnName("USER_ID");
                 entity.Property(e => e.IPAddress).HasColumnName("IP_ADDRESS");
                 entity.Property(e => e.VisitTimestamp).HasColumnName("VISIT_TIMESTAMP");
+            });
+
+            modelBuilder.Entity<ActivityLog>(entity =>
+            {
+                entity.ToTable("ACTIVITY_LOGS");
+                entity.HasKey(e => e.LogId);
+                entity.Property(e => e.LogId).HasColumnName("LOG_ID");
+                entity.Property(e => e.ActionType).HasColumnName("ACTION_TYPE").HasMaxLength(50).IsRequired();
+                entity.Property(e => e.EntityType).HasColumnName("ENTITY_TYPE").HasMaxLength(50).IsRequired();
+                entity.Property(e => e.EntityId).HasColumnName("ENTITY_ID");
+                entity.Property(e => e.EntityName).HasColumnName("ENTITY_NAME").HasMaxLength(500);
+                entity.Property(e => e.UserId).HasColumnName("USER_ID").IsRequired();
+                entity.Property(e => e.UserName).HasColumnName("USER_NAME").HasMaxLength(200).IsRequired();
+                entity.Property(e => e.UserRole).HasColumnName("USER_ROLE").HasMaxLength(50).IsRequired();
+                entity.Property(e => e.OldValues).HasColumnName("OLD_VALUES");
+                entity.Property(e => e.NewValues).HasColumnName("NEW_VALUES");
+                entity.Property(e => e.ChangesSummary).HasColumnName("CHANGES_SUMMARY").HasMaxLength(1000);
+                entity.Property(e => e.ActionTimestamp).HasColumnName("ACTION_TIMESTAMP").IsRequired();
+                entity.Property(e => e.IpAddress).HasColumnName("IP_ADDRESS").HasMaxLength(50);
+                entity.Property(e => e.Details).HasColumnName("DETAILS");
+
+                // Foreign key relationship to Users
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .HasConstraintName("FK_ACTIVITY_LOGS_USERS")
+                    .OnDelete(DeleteBehavior.Restrict);
             });
         }   
     }
