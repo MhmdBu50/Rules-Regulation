@@ -45,6 +45,7 @@ function navigateToStudentRules(btn) {
   applyFilters();
 }
 
+
 // Employee Rules button: members + all types
 function navigateToEmployeeRules(btn) {
   alter(btn);
