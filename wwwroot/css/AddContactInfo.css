@@ -6,7 +6,6 @@
     border-radius: 12px;
     box-shadow: 0 0 8px rgba(0,0,0,0.5);
     overflow-x: auto;
-    margin-bottom: 1.5rem;
 }
 
 .table thead {
@@ -236,7 +235,7 @@ tr {
 
 
 /* ===================== Scoped Styles for Add Contact Info Page ===================== */
-.AddContactInfo {
+body, .AddContactInfo {
     background-color: #EAE0CA;
     font-family: 'Inter', sans-serif;
     position: relative;
@@ -339,7 +338,7 @@ tr {
 .AddContactInfo .form-control,
 .AddContactInfo .form-select,
 .AddContactInfo textarea {
-    background: #fff;
+    /*background: #fff;*/
     border-radius: 4px;
     box-shadow: 0 3px 8.9px rgba(0, 0, 0, 0.3);
 }

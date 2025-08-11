@@ -68,7 +68,7 @@
             font-family: 'Inter';
             font-style: normal;
             font-weight: 600;
-            font-size: calc(1rem + .6vw);
+            font-size: clamp(0.75rem, calc(1rem + .6vw), 2.5rem);
             line-height: 120%;
             /* identical to box height, or 29px */
             letter-spacing: -0.02em;
@@ -76,6 +76,7 @@
             justify-content: center;
             margin-bottom: 10px;
             border-bottom: 1px solid white;
+            padding-bottom: 0.35rem;
         }
 
         label {
