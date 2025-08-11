@@ -126,22 +126,24 @@
                         </button>
                     </div>
 
+                @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
+                    {
                 <!-------- Vertical Divider ------>
                     <div class="vr d-none d-lg-block d-xl-block" style="color: aliceblue; opacity: 0.75;"></div>
                 <!-------- Vertical Divider ------>
 
     <!--------------------- Admin Button ------------------->
                     <div class="d-none d-lg-block d-xl-block">
-                    @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
-                    {
+                    
                         <button class="desktop-logo logo header-nav d-none d-lg-flex"
                             onclick="location.href='@Url.Action("AdminPage", "Admin")'" >
                             <img src="~/svgs/nav-buttons/Normal-AdminView.svg" alt="Admin" width="36" height="36" />
                             <span class="poppins-regular" id="admin-view-button">view as Editor</span>
 
                         </button>
-                    }
+                    
                     </div>
+                    }
                 </div>
             </div>
 
