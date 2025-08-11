@@ -735,30 +735,7 @@ body {
   stroke-width: 1.5px; /* Change to a lighter color */
   transition: stroke 0.3s ease-in-out; /* Smooth transition */
 }
-.logo {
-  margin: 0 10px 0 15px;
-  transform: scale(1.02);
-  transition: transform 0.08s ease-in-out;
-  width: 38px !important;
-  height: 38px !important;
-  max-width: none !important; /* Kill Bootstrap's max-width */
-  flex-shrink: 0 !important; /* Prevent shrinking */
-}
-.logo:hover {
-  transform: scale(1.04);
-}
-.logo:hover svg path {
-  transition: stroke 0.3s ease-in-out; /* Smooth transition */
-}
-.logo:active {
-  transition: transform ease;
-  transform: scale(1.06);
-}
 
-.logo:active svg path {
-  stroke-width: 5.5px; /* Change to a lighter color */
-  transition: stroke 0.3s ease-in-out; /* Smooth transition */
-}
 
 .search {
   width: 100% !important;

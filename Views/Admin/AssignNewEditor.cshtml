@@ -211,8 +211,10 @@
     <!-- Header -->
     <div class="main-header">
         <div class="container text-center d-flex flex-column align-items-center justify-content-center">
-            <h1 class="display-5 fw-semibold mb-2">Assign New Editor</h1>
-            <p class="subtitle text-white-50 mb-4">Manage user roles and editor privileges</p>
+            <!-- assign new editor -->
+            <h1 class="display-5 fw-semibold mb-2" id= "assign-editor-page-title-452"></h1>
+            <!-- manage user roles and editor privileges -->
+            <p class="subtitle text-white-50 mb-4" id="assign-editor-page-subtitle-453"></p>
         </div>
     </div>
 
@@ -243,25 +245,29 @@
                 <div class="col-md-4">
                     <div class="stat-item">
                         <div class="stat-number">@ViewBag.TotalUsers</div>
-                        <div class="stat-label">Total Users</div>
+                        <!-- Total Users -->
+                        <div class="stat-label" id="stat-total-users"></div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="stat-item">
                         <div class="stat-number">@ViewBag.AdminCount</div>
-                        <div class="stat-label">Admins</div>
+                        <!-- Total Admins -->
+                        <div class="stat-label" id= "stats-label-admins-455"> </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="stat-item">
                         <div class="stat-number">@ViewBag.EditorCount</div>
-                        <div class="stat-label">Editors</div>
+                        <!-- editors -->
+                        <div class="stat-label" id="stats-label-editors-456"></div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="stat-item">
                         <div class="stat-number">@(ViewBag.TotalUsers - ViewBag.AdminCount - ViewBag.EditorCount)</div>
-                        <div class="stat-label">Regular Users</div>
+                        <!-- Regular Users -->
+                        <div class="stat-label" id= "stats-label-regular-users-457"></div>
                     </div>
                 </div>
             </div>
@@ -287,12 +293,13 @@
                                    autocomplete="off">
                         </div>
                     </div>
+                    <!-- Search Button -->
                     <div class="col-md-4">
                         <button type="submit" class="btn btn-primary w-100">
                             <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="me-2">
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                             </svg>
-                            Search
+                            
                         </button>
                     </div>
                 </div>
@@ -312,26 +319,26 @@
                                     <!-- Role Badge -->
                                     @if (user.Role == "Admin")
                                     {
-                                        <span class="admin-badge">
+                                        <span class="admin-badge" id="role-badge-admin-460">
                                             <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16" class="me-1">
                                                 <path d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1z"/>
                                             </svg>
-                                            Admin
+                                            
                                         </span>
                                     }
                                     else if (user.Role == "Editor")
                                     {
-                                        <span class="editor-badge">
+                                        <span class="editor-badge" id="role-badge-editor-461">
                                             <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16" class="me-1">
                                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                                             </svg>
-                                            Editor
+                                            
                                         </span>
                                     }
                                     else
                                     {
-                                        <span class="user-badge">
+                                        <span class="user-badge" id="role-badge-user-462">
                                             <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16" class="me-1">
                                                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
                                             </svg>
@@ -368,7 +375,8 @@
                                 </div>
 
                                 <!-- Action Buttons -->
-                                <div class="action-buttons">
+                                <!-- System Admin Actions -->
+                                <div class="action-buttons" id="system-admin-463">
                                     @if (user.Role == "Admin")
                                     {
                                         <button type="button" 
@@ -377,30 +385,30 @@
                                             <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="me-1">
                                                 <path d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1z"/>
                                             </svg>
-                                            System Admin
+                                            
                                         </button>
                                     }
                                     else if (user.Role == "Editor")
                                     {
                                         <button type="button" 
-                                                class="btn btn-demote flex-fill"
+                                                class="btn btn-demote flex-fill" id="demote-modal-title-464"
                                                 onclick="demoteUser(@user.UserId, '@Html.Raw(Html.Encode(user.Name))')">
                                             <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="me-1">
                                                 <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 0 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
                                             </svg>
-                                            Demote to User
+                                            
                                         </button>
                                     }
                                     else
                                     {
                                         <button type="button" 
-                                                class="btn btn-promote flex-fill"
+                                                class="btn btn-promote flex-fill" id="promote-modal-title-463"
                                                 onclick="promoteUser(@user.UserId, '@Html.Raw(Html.Encode(user.Name))')">
                                             <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="me-1">
                                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                                             </svg>
-                                            Promote to Editor
+                                            
                                         </button>
                                     }
                                 </div>
@@ -415,12 +423,12 @@
                     <svg width="64" height="64" fill="#6c757d" viewBox="0 0 16 16" class="mb-3">
                         <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
                     </svg>
-                    <h4>No Users Found</h4>
+                    <h4 id="alert-no-userfound-467"></h4>
                     <p>@(string.IsNullOrEmpty(ViewBag.SearchTerm) ? "No users are currently registered in the system." : "No users match your search criteria.")</p>
                     @if (!string.IsNullOrEmpty(ViewBag.SearchTerm))
                     {
-                        <a href="@Url.Action("AssignNewEditor", "Admin")" class="btn btn-outline-primary">
-                            Clear Search
+                        <a href="@Url.Action("AssignNewEditor", "Admin")" class="btn btn-outline-primary" id="clear-search-button-468">
+                           
                         </a>
                     }
                 </div>

@@ -218,7 +218,7 @@ namespace RulesRegulation.Services
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-                    string query = @"SELECT r.*, a.FILE_PATH, a.FILE_TYPE, a.ORIGINAL_NAME 
+                    string query = @"SELECT r.*, a.FILE_PATH, a.FILE_TYPE, a.ORIGINAL_NAME, a.TN_PAGE_NO 
                         FROM RECORDS r 
                         LEFT JOIN ATTACHMENTS a ON r.RECORD_ID = a.RECORD_ID 
                         WHERE r.RECORD_ID = :recordId";
@@ -230,11 +230,18 @@ namespace RulesRegulation.Services
                         {
                             var attachments = new List<dynamic>();
                             dynamic? record = null;
+                            int? pageNumber = null;
 
                             while (reader.Read())
                             {
                                 if (record == null)
                                 {
+                                    // Get page number from PDF attachment if available
+                                    if (reader["TN_PAGE_NO"] != DBNull.Value && reader["FILE_TYPE"]?.ToString()?.ToLower() == "pdf")
+                                    {
+                                        pageNumber = Convert.ToInt32(reader["TN_PAGE_NO"]);
+                                    }
+
                                     record = new
                                     {
                                         Id = reader["RECORD_ID"]?.ToString(),
@@ -254,10 +261,40 @@ namespace RulesRegulation.Services
                                             Convert.ToDateTime(reader["VERSION_DATE"]).ToString("yyyy-MM-dd") : "",
                                         Notes = reader["NOTES"]?.ToString(),
                                         NotesAr = reader["NOTES_AR"]?.ToString(),
+                                        PageNumber = pageNumber?.ToString() ?? "2", // Default to "2" if no page number found
                                         CreatedAt = reader["CREATED_AT"] != DBNull.Value ?
                                             Convert.ToDateTime(reader["CREATED_AT"]).ToString("yyyy-MM-dd") : "",
                                         UserId = reader["USER_ID"]?.ToString(),
                                         Attachments = attachments
+                                    };
+                                }
+                                else if (reader["TN_PAGE_NO"] != DBNull.Value && reader["FILE_TYPE"]?.ToString()?.ToLower() == "pdf" && pageNumber == null)
+                                {
+                                    // Update page number if we find a PDF attachment with page number and haven't set it yet
+                                    pageNumber = Convert.ToInt32(reader["TN_PAGE_NO"]);
+                                    // We need to recreate the record object with the updated page number
+                                    var existingRecord = (dynamic)record;
+                                    record = new
+                                    {
+                                        Id = existingRecord.Id,
+                                        RegulationName = existingRecord.RegulationName,
+                                        RegulationNameAr = existingRecord.RegulationNameAr,
+                                        Sections = existingRecord.Sections,
+                                        Version = existingRecord.Version,
+                                        ApprovalDate = existingRecord.ApprovalDate,
+                                        ApprovingEntity = existingRecord.ApprovingEntity,
+                                        ApprovingEntityAr = existingRecord.ApprovingEntityAr,
+                                        Department = existingRecord.Department,
+                                        DocumentType = existingRecord.DocumentType,
+                                        Description = existingRecord.Description,
+                                        DescriptionAr = existingRecord.DescriptionAr,
+                                        VersionDate = existingRecord.VersionDate,
+                                        Notes = existingRecord.Notes,
+                                        NotesAr = existingRecord.NotesAr,
+                                        PageNumber = pageNumber.ToString(),
+                                        CreatedAt = existingRecord.CreatedAt,
+                                        UserId = existingRecord.UserId,
+                                        Attachments = existingRecord.Attachments
                                     };
                                 }
 
@@ -266,16 +303,32 @@ namespace RulesRegulation.Services
                                     var filePath = reader["FILE_PATH"]?.ToString();
                                     var originalName = reader["ORIGINAL_NAME"]?.ToString() ?? "";
                                     var fileName = !string.IsNullOrEmpty(filePath) ? Path.GetFileName(filePath) : "";
+                                    var fileType = reader["FILE_TYPE"]?.ToString()?.ToLower();
                                     
                                     // Use ORIGINAL_NAME if available, otherwise fall back to filename from path
                                     var displayName = !string.IsNullOrEmpty(originalName) ? originalName : fileName;
 
-                                    attachments.Add(new
+                                    // For PDF files, include page number information
+                                    if (fileType == "pdf" && reader["TN_PAGE_NO"] != DBNull.Value)
                                     {
-                                        FileName = fileName,
-                                        OriginalFileName = displayName,
-                                        FileType = reader["FILE_TYPE"]?.ToString()?.ToLower()
-                                    });
+                                        attachments.Add(new
+                                        {
+                                            FileName = fileName,
+                                            OriginalFileName = displayName,
+                                            FileType = fileType,
+                                            PageNumber = Convert.ToInt32(reader["TN_PAGE_NO"])
+                                        });
+                                    }
+                                    else
+                                    {
+                                        attachments.Add(new
+                                        {
+                                            FileName = fileName,
+                                            OriginalFileName = displayName,
+                                            FileType = fileType,
+                                            PageNumber = (int?)null
+                                        });
+                                    }
                                 }
                             }
 
@@ -305,6 +358,7 @@ namespace RulesRegulation.Services
                                         VersionDate = record.VersionDate,
                                         Notes = record.Notes,
                                         NotesAr = record.NotesAr,
+                                        PageNumber = record.PageNumber, // Include PageNumber
                                         CreatedAt = record.CreatedAt,
                                         UserId = record.UserId,
                                         Attachments = record.Attachments,
@@ -331,6 +385,7 @@ namespace RulesRegulation.Services
                                         VersionDate = record.VersionDate,
                                         Notes = record.Notes,
                                         NotesAr = record.NotesAr,
+                                        PageNumber = record.PageNumber, // Include PageNumber
                                         CreatedAt = record.CreatedAt,
                                         UserId = record.UserId,
                                         Attachments = record.Attachments,
@@ -445,51 +500,82 @@ namespace RulesRegulation.Services
             string documentType,
             string sections,
             string notes,
-            string? notesAr)
+            string? notesAr,
+            int? pageNumber = null)
         {
             try
             {
                 using (var conn = new OracleConnection(_connectionString))
                 {
                     conn.Open();
-
-                    string query = @"UPDATE RECORDS 
-                                    SET REGULATION_NAME = :regulationName,
-                                        REGULATION_NAME_AR = :regulationNameAr,
-                                        DEPARTMENT = :department,
-                                        VERSION = :version,
-                                        VERSION_DATE = :versionDate,
-                                        APPROVAL_DATE = :approvalDate,
-                                        APPROVING_ENTITY = :approvingEntity,
-                                        APPROVING_ENTITY_AR = :approvingEntityAr,
-                                        DESCRIPTION = :description,
-                                        DESCRIPTION_AR = :descriptionAr,
-                                        DOCUMENT_TYPE = :documentType,
-                                        SECTIONS = :sections,
-                                        NOTES = :notes,
-                                        NOTES_AR = :notesAr
-                                    WHERE RECORD_ID = :recordId";
-
-                    using (var cmd = new OracleCommand(query, conn))
+                    using (var transaction = conn.BeginTransaction())
                     {
-                        cmd.Parameters.Add(":regulationName", regulationName);
-                        cmd.Parameters.Add(":regulationNameAr", regulationNameAr ?? (object)DBNull.Value);
-                        cmd.Parameters.Add(":department", department);
-                        cmd.Parameters.Add(":version", version);
-                        cmd.Parameters.Add(":versionDate", versionDate);
-                        cmd.Parameters.Add(":approvalDate", approvalDate);
-                        cmd.Parameters.Add(":approvingEntity", approvingEntity);
-                        cmd.Parameters.Add(":approvingEntityAr", approvingEntityAr ?? (object)DBNull.Value);
-                        cmd.Parameters.Add(":description", description);
-                        cmd.Parameters.Add(":descriptionAr", descriptionAr ?? (object)DBNull.Value);
-                        cmd.Parameters.Add(":documentType", documentType);
-                        cmd.Parameters.Add(":sections", sections);
-                        cmd.Parameters.Add(":notes", notes);
-                        cmd.Parameters.Add(":notesAr", notesAr ?? (object)DBNull.Value);
-                        cmd.Parameters.Add(":recordId", recordId);
+                        try
+                        {
+                            // Update the main record
+                            string recordQuery = @"UPDATE RECORDS 
+                                            SET REGULATION_NAME = :regulationName,
+                                                REGULATION_NAME_AR = :regulationNameAr,
+                                                DEPARTMENT = :department,
+                                                VERSION = :version,
+                                                VERSION_DATE = :versionDate,
+                                                APPROVAL_DATE = :approvalDate,
+                                                APPROVING_ENTITY = :approvingEntity,
+                                                APPROVING_ENTITY_AR = :approvingEntityAr,
+                                                DESCRIPTION = :description,
+                                                DESCRIPTION_AR = :descriptionAr,
+                                                DOCUMENT_TYPE = :documentType,
+                                                SECTIONS = :sections,
+                                                NOTES = :notes,
+                                                NOTES_AR = :notesAr
+                                            WHERE RECORD_ID = :recordId";
 
-                        int result = cmd.ExecuteNonQuery();
-                        return result > 0;
+                            using (var cmd = new OracleCommand(recordQuery, conn))
+                            {
+                                cmd.Transaction = transaction;
+                                cmd.Parameters.Add(":regulationName", regulationName);
+                                cmd.Parameters.Add(":regulationNameAr", regulationNameAr ?? (object)DBNull.Value);
+                                cmd.Parameters.Add(":department", department);
+                                cmd.Parameters.Add(":version", version);
+                                cmd.Parameters.Add(":versionDate", versionDate);
+                                cmd.Parameters.Add(":approvalDate", approvalDate);
+                                cmd.Parameters.Add(":approvingEntity", approvingEntity);
+                                cmd.Parameters.Add(":approvingEntityAr", approvingEntityAr ?? (object)DBNull.Value);
+                                cmd.Parameters.Add(":description", description);
+                                cmd.Parameters.Add(":descriptionAr", descriptionAr ?? (object)DBNull.Value);
+                                cmd.Parameters.Add(":documentType", documentType);
+                                cmd.Parameters.Add(":sections", sections);
+                                cmd.Parameters.Add(":notes", notes);
+                                cmd.Parameters.Add(":notesAr", notesAr ?? (object)DBNull.Value);
+                                cmd.Parameters.Add(":recordId", recordId);
+
+                                int recordResult = cmd.ExecuteNonQuery();
+                                
+                                // Update page number for PDF attachments if provided
+                                if (pageNumber.HasValue && pageNumber.Value > 0)
+                                {
+                                    string attachmentQuery = @"UPDATE ATTACHMENTS 
+                                                             SET TN_PAGE_NO = :pageNumber 
+                                                             WHERE RECORD_ID = :recordId AND UPPER(FILE_TYPE) = 'PDF'";
+                                    
+                                    using (var attachCmd = new OracleCommand(attachmentQuery, conn))
+                                    {
+                                        attachCmd.Transaction = transaction;
+                                        attachCmd.Parameters.Add(":pageNumber", pageNumber.Value);
+                                        attachCmd.Parameters.Add(":recordId", recordId);
+                                        attachCmd.ExecuteNonQuery();
+                                    }
+                                }
+                                
+                                transaction.Commit();
+                                return recordResult > 0;
+                            }
+                        }
+                        catch
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
                     }
                 }
             }

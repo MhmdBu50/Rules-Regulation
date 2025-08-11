@@ -199,6 +199,12 @@ function toggleEditMode(recordId) {
       // Switch to view mode
       input.readOnly = true;
       input.disabled = true;
+      
+      // Reset page number field styling if switching to view mode
+      if (input.name === 'pageNumber') {
+        input.style.backgroundColor = '';
+        input.title = 'Page number for PDF thumbnail generation';
+      }
     } else {
       // Switch to edit mode
       input.readOnly = false;
@@ -256,6 +262,12 @@ function toggleEditMode(recordId) {
     editBtn.style.display = "inline-block";
     saveBtn.style.display = "none";
     cancelBtn.style.display = "none";
+
+    if (saveBtn) {
+      saveBtn.style.backgroundColor = '';
+      saveBtn.style.borderColor = '';
+      saveBtn.innerHTML = '<span class="translatable-label" data-translate-key="admin-table-save-button">Save</span>';
+    }
 
     // Clear any pending file selections
     clearPendingFileSelections(recordId);
@@ -1222,3 +1234,63 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Page Number Change Handler for Thumbnail Updates
+function handlePageNumberChange(recordId, newPageNumber) {
+    // Validate page number
+    const pageNum = parseInt(newPageNumber);
+    if (!pageNum || pageNum < 1 || pageNum > 999) {
+        alert('Please enter a valid page number between 1 and 999.');
+        return;
+    }
+    
+    // Show visual feedback that page number changed
+    const pageNumberInput = document.getElementById(`pageNumber_${recordId}`);
+    if (pageNumberInput) {
+        pageNumberInput.style.backgroundColor = '#fff3cd'; // Light yellow to indicate change
+        pageNumberInput.title = `Page number changed to ${pageNum}. Save the record to update the thumbnail.`;
+    }
+}
+
+// Clear thumbnail cache for a specific record and page
+async function clearThumbnailCache(recordId, pageNumber) {
+    try {
+        const response = await fetch(`/api/pdf/clear-cache?recordId=${recordId}&pageNumber=${pageNumber}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        if (response.ok) {
+            console.log(`Thumbnail cache cleared for record ${recordId}, page ${pageNumber}`);
+            return true;
+        } else {
+            console.warn(`Failed to clear thumbnail cache: ${response.status}`);
+            return false;
+        }
+    } catch (error) {
+        console.error('Error clearing thumbnail cache:', error);
+        return false;
+    }
+}
+
+// Preview thumbnail for new page number (optional enhancement)
+async function previewThumbnailForPage(recordId, pageNumber) {
+    try {
+        // Clear any existing cache first
+        await clearThumbnailCache(recordId, pageNumber);
+        
+        // Generate new thumbnail by calling the API
+        const thumbnailUrl = `/api/pdf/thumbnail?recordId=${recordId}`;
+        
+        // You could show a preview modal or update an existing thumbnail display
+        // For now, we'll just log success
+        console.log(`Thumbnail preview available at: ${thumbnailUrl}`);
+        
+        return thumbnailUrl;
+    } catch (error) {
+        console.error('Error generating thumbnail preview:', error);
+        return null;
+    }
+}
