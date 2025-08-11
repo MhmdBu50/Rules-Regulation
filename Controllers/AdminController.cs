@@ -1520,7 +1520,7 @@ public async Task<IActionResult> ViewPdf(int id)
      */
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult UpdateRecord(
+    public async Task<IActionResult> UpdateRecord(
         int recordId,
         string regulationName,
         string? regulationNameAr,
@@ -1535,7 +1535,8 @@ public async Task<IActionResult> ViewPdf(int id)
         string documentType,
         string sections,
         string notes,
-        string? notesAr)
+        string? notesAr,
+        int? pageNumber = null)
     {
         try
         {
@@ -1575,10 +1576,29 @@ public async Task<IActionResult> ViewPdf(int id)
             bool success = _oracleDbService.UpdateRecord(
                 recordId, regulationName, regulationNameAr, department, version, versionDate,
                 approvalDate, approvingEntity, approvingEntityAr, description, descriptionAr, 
-                documentType, sections, notes, notesAr);
+                documentType, sections, notes, notesAr, pageNumber);
 
             if (success)
             {
+                // Clear thumbnail cache if page number was updated
+                if (pageNumber.HasValue)
+                {
+                    try
+                    {
+                        // Clear the specific thumbnail cache for this record and page
+                        using (var httpClient = new HttpClient())
+                        {
+                            var clearCacheUrl = $"{Request.Scheme}://{Request.Host}/api/pdf/clear-cache?recordId={recordId}&pageNumber={pageNumber.Value}";
+                            await httpClient.PostAsync(clearCacheUrl, null);
+                        }
+                    }
+                    catch
+                    {
+                        // Cache clearing failed, but record update was successful
+                        // This is not critical, so we just continue
+                    }
+                }
+                
                 // Update successful: set success message
                 TempData["SuccessMessage"] = $"Record #{recordId} has been updated successfully!";
             }

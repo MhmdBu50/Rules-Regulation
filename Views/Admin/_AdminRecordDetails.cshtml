@@ -260,6 +260,27 @@
                                     </div>
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-page-number-label">Page Number</label>
+                                    @{
+                                        string pageNumberValue = "";
+                                        try 
+                                        {
+                                            pageNumberValue = Model?.PageNumber?.ToString() ?? "2";
+                                        }
+                                        catch 
+                                        {
+                                            pageNumberValue = "2"; // Default fallback
+                                        }
+                                    }
+                                    <input type="number" name="pageNumber" class="form-control" min="1" max="999"
+                                        value="@pageNumberValue" readonly disabled id="pageNumber_@(Model?.Id ?? "")"
+                                        onchange="handlePageNumberChange(@(Model?.Id ?? ""), this.value)"
+                                        title="Page number for PDF thumbnail generation">
+                                    <small class="form-text text-muted translatable-label" data-translate-key="admin-table-form-page-number-help">Page number used for PDF thumbnail generation</small>
+                                </td>
+                            </tr>
                             
                         </table>
                     </div>
