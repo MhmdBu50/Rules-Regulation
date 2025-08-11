@@ -74,6 +74,11 @@
   font-weight: 600;
 }
 
+.form-check .form-check-input {
+  float: none;
+  margin-inline-end: 0;
+}
+
 .AddNewRecord .form-control,
 .AddNewRecord .form-select,
 .AddNewRecord textarea {

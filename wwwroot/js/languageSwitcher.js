@@ -150,6 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-table-form-section-label": "Section",
         "admin-table-form-attach-word-label": "Attach word file",
         "admin-table-form-attach-pdf-label": "Attach PDF file",
+        "admin-table-form-page-number-label":"Thumbnail page number",
         "admin-table-form-upload-file-title": "Click Edit to enable file upload",
         "admin-table-form-responsible-contact-label": "Responsible Department contact information:",
         "admin-table-form-contact-name-label": "Name",
@@ -362,8 +363,25 @@ document.addEventListener("DOMContentLoaded", () => {
     // Status and loading indicators
     "history-action-status": "Action Status", // Header for action status section
     "history-loading": "Loading...", // Generic loading message
-    "history-loading-text": "Loading your history..." // Specific loading message for history
-    
+    "history-loading-text": "Loading your history...", // Specific loading message for history
+    // assign new editor translations
+    "assign-editor-page-title-452": "Assign New Editor",
+    "assign-editor-page-subtitle-453": "Manage user roles and editor privileges",
+    "loading-text-processing-454": "Processing...",
+    "stats-label-admins-455": "Admins",
+    "stats-label-editors-456": "Editors",
+    "stats-label-regular-users-457": "Regular Users",
+    "search-button-459": "Search",
+    "role-badge-admin-460": "Admin",
+    "role-badge-editor-461": "Editor",
+    "role-badge-user-462": "User",
+    "system-admin-463": "System Admin",
+    "promote-modal-title-463": "Promote to Editor",
+    "demote-modal-title-464": "Demote to User",
+    "confirmation-modal-confirm-465": "Confirm",
+    "alert-close-button-466": "Close",
+    "alert-no-userfound-467": "No user found",
+    "clear-search-button-468": "Clear Search",
         },
         "ar": {
             "Language345": "English",
@@ -514,6 +532,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-table-form-section-label": "القسم",
         "admin-table-form-attach-word-label": "إرفاق ملف وورد",
         "admin-table-form-attach-pdf-label": "PDF إرفاق ملف",
+        "admin-table-form-page-number-label":"رقم صورة العرض",
         "admin-table-form-upload-file-title": "انقر على تحرير لتمكين تحميل الملف",
         "admin-table-form-responsible-contact-label": ":معلومات الاتصال بالقسم المسؤول",
         "admin-table-form-contact-name-label": "الاسم",
@@ -725,7 +744,26 @@ document.addEventListener("DOMContentLoaded", () => {
     // Status and loading indicators - مؤشرات الحالة والتحميل
     "history-action-status": "حالة الإجراء", // Action status header - رأس حالة الإجراء
     "history-loading": "جارٍ التحميل...", // Generic loading message - رسالة التحميل العامة
-    "history-loading-text": "جارٍ تحميل تاريخك..." // Specific loading message - رسالة التحميل المحددة
+    "history-loading-text": "جارٍ تحميل تاريخك...", // Specific loading message - رسالة التحميل المحددة
+    // assign new editor translations 
+    "assign-editor-page-title-452": "تعيين محرر جديد",
+    "assign-editor-page-subtitle-453": "إدارة أدوار المستخدمين وامتيازات المحرر",
+    "loading-text-processing-454": "جاري المعالجة...",
+    "stats-label-admins-455": "المشرفون",
+    "stats-label-editors-456": "المحررون",
+    "stats-label-regular-users-457": "المستخدمون العاديون",
+    "search-placeholder-name-email-458": "ابحث بالاسم أو البريد الإلكتروني...",
+    "search-button-459": "بحث",
+    "role-badge-admin-460": "مشرف",
+    "role-badge-editor-461": "محرر",
+    "role-badge-user-462": "مستخدم",
+    "system-admin-463": "مشرف النظام",
+    "promote-modal-title-463": "ترقية إلى محرر",
+    "demote-modal-title-464": "إخفاظ إلى مستخدم",
+    "confirmation-modal-confirm-465": "تأكيد",
+    "alert-close-button-466": "إغلاق",
+    "alert-no-userfound-467": "لم يتم العثور على مستخدم",
+    "clear-search-button-468": "مسح البحث",
         }
     };
 

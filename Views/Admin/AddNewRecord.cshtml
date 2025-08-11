@@ -104,11 +104,13 @@
             <!--page number-->
             <label for="pageNumber" id="label-pageNumber">Thumbnail Page Number</label>
             <input type="number" class="form-control" name="PageNumber"
-              min="1" max="999" value="2"
+              min="1" max="999" value="2" step="1"
+              pattern="[0-9]+" inputmode="numeric"
               title="Please enter the page number to use for PDF thumbnail (1-999)" 
-              id="pageNumber" placeholder="2" required>
+              id="pageNumber" placeholder="2" required
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57">
             <div id="pageNumberError" class="text-danger mt-1" style="display: none;"></div>
-            <small class="form-text text-muted">Page number to use for generating PDF thumbnail (default: 2)</small>
           </div>
         </div>
 

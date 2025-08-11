@@ -387,7 +387,7 @@ function navigateToHistory() {
             <div class="col-12">
                 <!-- Header with title and toggle buttons outside table -->
                 <!-- Uses gradient background and responsive design for visual appeal -->
-                <div class="d-flex justify-content-between align-items-center mb-5" style="padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
+                <div class="d-flex justify-content-between align-items-center mb-5" style="padding: 20px; background: linear-gradient(135deg, #1b2751 0%, #3d517d 100%); border-radius: 15px; color: white;">
                     <div>
                         <!-- Main title with icon and dynamic translation -->
                         <h3 class="mb-0">
@@ -416,7 +416,7 @@ function navigateToHistory() {
                 
                 <!-- Table container - initially visible, shows tabular data -->
                 <div id="table-container" class="card shadow-lg border-0" style="border-radius: 15px; display: block;">
-                    <div class="card-body p-4" style="background: rgba(255,255,255,0.95); border-radius: 15px;">
+                    <div class="card-body p-4" style="background: aliceblue; border-radius: 15px;">
                         <div id="history-table-content">
                             <!-- Loading state while fetching data from backend -->
                             <div class="text-center py-4">
@@ -626,7 +626,7 @@ function renderTableView() {
                 box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Subtle shadow for depth */
             }
             .history-table thead th {
-                background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%); /* Gradient header background */
+                background: linear-gradient(135deg, #13204c -200%, #37528d 100%); /* Gradient header background */
                 color: white; /* White text for contrast */
                 border: none; /* Remove default borders */
                 font-weight: 600; /* Semi-bold text */
