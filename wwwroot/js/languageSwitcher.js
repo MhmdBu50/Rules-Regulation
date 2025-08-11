@@ -382,6 +382,24 @@ document.addEventListener("DOMContentLoaded", () => {
     "alert-close-button-466": "Close",
     "alert-no-userfound-467": "No user found",
     "clear-search-button-468": "Clear Search",
+    //export data translations
+    "export-modal-title": "Select Tables to Export",
+    "export-modal-description": "Choose which database tables to include in your Excel export:",
+    "export-option-all-tables": "All Tables",
+    "export-option-all-tables-desc": "Export all available database tables",
+    "export-option-records": "Records",
+    "export-option-records-desc": "All regulation and policy records",
+    "export-option-users": "Users",
+    "export-option-users-desc": "All registered users information",
+    "export-option-contact": "Contact Information",
+    "export-option-contact-desc": "Department contact details",
+    "export-option-attachments": "Attachments",
+    "export-option-attachments-desc": "File attachments and documents",
+    "export-option-history": "User History",
+    "export-option-history-desc": "User activity and action logs",
+    "export-button-cancel": "Cancel",
+    "export-button-confirm": "Export Selected Tables"
+    
         },
         "ar": {
             "Language345": "English",
@@ -764,6 +782,23 @@ document.addEventListener("DOMContentLoaded", () => {
     "alert-close-button-466": "إغلاق",
     "alert-no-userfound-467": "لم يتم العثور على مستخدم",
     "clear-search-button-468": "مسح البحث",
+    // Export data translations
+    "export-modal-title": "حدد الجداول للتصدير",
+    "export-modal-description": "اختر جداول قاعدة البيانات التي تريد تضمينها في ملف Excel الذي ستقوم بتصديره:",
+    "export-option-all-tables": "جميع الجداول",
+    "export-option-all-tables-desc": "تصدير جميع جداول قاعدة البيانات المتاحة",
+    "export-option-records": "السجلات",
+    "export-option-records-desc": "جميع سجلات اللوائح والسياسات",
+    "export-option-users": "المستخدمون",
+    "export-option-users-desc": "جميع معلومات المستخدمين المسجلين",
+    "export-option-contact": "معلومات الاتصال",
+    "export-option-contact-desc": "تفاصيل الاتصال بالقسم",
+    "export-option-attachments": "المرفقات",
+    "export-option-attachments-desc": "مرفقات الملفات والمستندات",
+    "export-option-history": "سجل المستخدم",
+    "export-option-history-desc": "سجلات أنشطة المستخدم وإجراءاته",
+    "export-button-cancel": "إلغاء",
+    "export-button-confirm": "تصدير الجداول المحددة"
         }
     };
 
