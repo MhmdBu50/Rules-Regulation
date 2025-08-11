@@ -193,6 +193,9 @@
         .bar-button.active label {
             display: block !important;
         }
+        .hidden-card {
+            display: none !important;
+        }
 
 
         /*@media (min-width: 1400px){

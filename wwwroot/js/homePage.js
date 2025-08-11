@@ -357,6 +357,7 @@ function navigateToHistory() {
     // Hide the main records container to show history page instead
     // This provides a smooth transition from main page to history view
     const recordsContainer = document.querySelector('.row.justify-content-center.g-lg-4.g-md-3.g-sm-2.g-1');
+    document.querySelectorAll('.medium-card').forEach(card => card.style.display = 'none');
     if (recordsContainer) {
         recordsContainer.style.display = 'none'; // Hide main content
     }
