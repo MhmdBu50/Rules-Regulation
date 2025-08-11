@@ -79,6 +79,16 @@ builder.Services.AddScoped<DatabaseConnection>(provider =>
     return new DatabaseConnection(connectionString);
 });
 
+builder.Services.AddScoped<ActivityLogService>(provider =>
+{
+    var config = provider.GetRequiredService<IConfiguration>();
+    var connectionString = config.GetConnectionString("OracleConnection");
+    if (string.IsNullOrWhiteSpace(connectionString))
+        throw new InvalidOperationException("Connection string 'OracleConnection' not found.");
+    var logger = provider.GetRequiredService<ILogger<ActivityLogService>>();
+    return new ActivityLogService(connectionString, logger);
+});
+
 var app = builder.Build();
 
 //  Middleware pipeline

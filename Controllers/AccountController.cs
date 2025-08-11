@@ -54,8 +54,10 @@ public async Task<IActionResult> LoginPage(string Name, string password)
             return View("~/Views/Account/LoginPage.cshtml");
         }
 
-        // Save UserId to session
+        // Save complete user info to session
         HttpContext.Session.SetInt32("UserId", user.UserId);
+        HttpContext.Session.SetString("UserName", user.Name ?? "Unknown");
+        HttpContext.Session.SetString("UserRole", user.Role ?? "User");
 
         // Set up claims for authentication
         var claims = new List<System.Security.Claims.Claim>

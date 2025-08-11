@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Activity Logging</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; margin: 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin: 10px 0; padding: 10px; background: #f8f9fa; border: 1px solid #dee2e6; }
+    </style>
+</head>
+<body>
+    <h1>Test Activity Logging</h1>
+    
+    <div class="section">
+        <h2>Step 1: Login</h2>
+        <p>First, login with a valid user:</p>
+        <a href="http://localhost:5100/Account/LoginPage" target="_blank">Login Page</a>
+        <p>Use credentials: <strong>Azzam / 12345</strong> (Admin)</p>
+    </div>
+    
+    <div class="section">
+        <h2>Step 2: Test Activity Logging</h2>
+        <button onclick="testLogging()">Test Activity Logging</button>
+        <div id="testResult" class="result" style="display: none;"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Step 3: Add a Contact (Real Action)</h2>
+        <p>Try adding a real contact to test if it gets logged:</p>
+        <a href="http://localhost:5100/Admin/AddNewContactInfo" target="_blank">Add Contact</a>
+    </div>
+    
+    <div class="section">
+        <h2>Step 4: Check Activity Log</h2>
+        <a href="http://localhost:5100/Admin/ActivityLog" target="_blank">View Activity Log</a>
+    </div>
+
+    <script>
+        async function testLogging() {
+            const resultDiv = document.getElementById('testResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                const response = await fetch('http://localhost:5100/Admin/TestActivityLogging', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `<strong>Success!</strong> ${result.message}<br>
+                                         User: ${JSON.stringify(result.user)}`;
+                    resultDiv.style.background = '#d4edda';
+                    resultDiv.style.borderColor = '#c3e6cb';
+                } else {
+                    resultDiv.innerHTML = `<strong>Error:</strong> ${result.message}`;
+                    resultDiv.style.background = '#f8d7da';
+                    resultDiv.style.borderColor = '#f5c6cb';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                resultDiv.style.background = '#f8d7da';
+                resultDiv.style.borderColor = '#f5c6cb';
+            }
+        }
+    </script>
+</body>
+</html>
