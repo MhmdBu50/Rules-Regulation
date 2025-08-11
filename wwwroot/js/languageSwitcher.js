@@ -398,7 +398,9 @@ document.addEventListener("DOMContentLoaded", () => {
     "export-option-history": "User History",
     "export-option-history-desc": "User activity and action logs",
     "export-button-cancel": "Cancel",
-    "export-button-confirm": "Export Selected Tables"
+    "export-button-confirm": "Export Selected Tables",
+
+    "admin-button-assign-editor": "Manage Editor",
     
         },
         "ar": {
@@ -777,7 +779,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "role-badge-user-462": "مستخدم",
     "system-admin-463": "مشرف النظام",
     "promote-modal-title-463": "ترقية إلى محرر",
-    "demote-modal-title-464": "إخفاظ إلى مستخدم",
+    "demote-modal-title-464": "خفض إلى مستخدم",
     "confirmation-modal-confirm-465": "تأكيد",
     "alert-close-button-466": "إغلاق",
     "alert-no-userfound-467": "لم يتم العثور على مستخدم",
@@ -798,7 +800,8 @@ document.addEventListener("DOMContentLoaded", () => {
     "export-option-history": "سجل المستخدم",
     "export-option-history-desc": "سجلات أنشطة المستخدم وإجراءاته",
     "export-button-cancel": "إلغاء",
-    "export-button-confirm": "تصدير الجداول المحددة"
+    "export-button-confirm": "تصدير الجداول المحددة",
+    "admin-button-assign-editor": "إدارة محرر",
         }
     };
 
