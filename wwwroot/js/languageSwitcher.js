@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "user-list-label": "List of Users",
             
             // Home page elements
-            "admin-view-button": "view as Editor",
+            "admin-view-button": "Editor view",
             "searchInput": "Search ...", // This is the placeholder for the search input
 
             // Filter Section
@@ -150,6 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-table-form-section-label": "Section",
         "admin-table-form-attach-word-label": "Attach word file",
         "admin-table-form-attach-pdf-label": "Attach PDF file",
+        "admin-table-form-page-number-label":"Thumbnail page number",
         "admin-table-form-upload-file-title": "Click Edit to enable file upload",
         "admin-table-form-responsible-contact-label": "Responsible Department contact information:",
         "admin-table-form-contact-name-label": "Name",
@@ -316,8 +317,104 @@ document.addEventListener("DOMContentLoaded", () => {
     "th-downloads": "Downloads",
     "th-views": "Views",
     "th-details": "Details",
-    "th-total": "Total"
+    "th-total": "Total",
 
+    // ==================== HISTORY PAGE TRANSLATIONS (ENGLISH) ====================
+    // These translation keys were added to support Arabic-English language switching
+    // for the history page functionality. Each key corresponds to a specific UI element.
+    
+    // Main page header elements - displayed at the top of history page
+    "history-activity-title": "Your Activity History", // Main title shown in page header
+    "history-track-activity": "Track your recent views and downloads", // Subtitle description
+    
+    // View toggle buttons - allow users to switch between table and card layouts
+    "history-table-btn": "Table", // Button text for table view mode
+    "history-cards-btn": "Cards", // Button text for card view mode
+    
+    // Card view elements - used in card display mode
+    "history-action-status": "Action Status", // Header for action status section in cards
+    
+    // Table column headers - displayed in table view mode
+    "history-record-name": "RECORD NAME", // Column header for document names
+    "history-all-actions": "ALL ACTIONS", // Column header showing all user actions
+    "history-last-action": "LAST ACTION", // Column header for most recent action
+    "history-timestamp": "TIMESTAMP", // Column header for action date/time
+    
+    // Action type labels - used in badges and status indicators
+    "history-view": "View", // Label for document viewing action
+    "history-download": "Download", // Label for document download action
+    "history-show-details": "Show Details", // Label for viewing details action
+    
+    // Action status indicators - show completion status of actions
+    "history-viewed": "Viewed", // Status indicating document was viewed
+    "history-downloaded": "Downloaded", // Status indicating document was downloaded
+    "history-not-performed": "Not performed", // Status for actions not yet taken
+    "history-no-actions": "No actions yet", // Message when no actions exist
+    
+    // Empty state messages - displayed when user has no history
+    "history-no-history": "No History Yet", // Main message for empty history
+    "history-start-viewing": "Start viewing or downloading records to see your activity here!", // Instructional text
+    
+    // Category labels for action grouping - used in informational displays
+    "history-view-actions": "View actions", // Label for view action category
+    "history-download-actions": "Download actions", // Label for download action category
+    "history-details-actions": "Show details actions", // Label for details action category
+    
+    // Status and loading indicators
+    "history-action-status": "Action Status", // Header for action status section
+    "history-loading": "Loading...", // Generic loading message
+    "history-loading-text": "Loading your history...", // Specific loading message for history
+    // assign new editor translations
+    "assign-editor-page-title-452": "Assign New Editor",
+    "assign-editor-page-subtitle-453": "Manage user roles and editor privileges",
+    "loading-text-processing-454": "Processing...",
+    "stats-label-admins-455": "Admins",
+    "stats-label-editors-456": "Editors",
+    "stats-label-regular-users-457": "Regular Users",
+    "search-button-459": "Search",
+    "role-badge-admin-460": "Admin",
+    "role-badge-editor-461": "Editor",
+    "role-badge-user-462": "User",
+    "system-admin-463": "System Admin",
+    "promote-modal-title-463": "Promote to Editor",
+    "demote-modal-title-464": "Demote to User",
+    "confirmation-modal-confirm-465": "Confirm",
+    "alert-close-button-466": "Close",
+    "alert-no-userfound-467": "No user found",
+    "clear-search-button-468": "Clear Search",
+    //export data translations
+    "export-modal-title": "Select Tables to Export",
+    "export-modal-description": "Choose which database tables to include in your Excel export:",
+    "export-option-all-tables": "All Tables",
+    "export-option-all-tables-desc": "Export all available database tables",
+    "export-option-records": "Records",
+    "export-option-records-desc": "All regulation and policy records",
+    "export-option-users": "Users",
+    "export-option-users-desc": "All registered users information",
+    "export-option-contact": "Contact Information",
+    "export-option-contact-desc": "Department contact details",
+    "export-option-attachments": "Attachments",
+    "export-option-attachments-desc": "File attachments and documents",
+    "export-option-history": "User History",
+    "export-option-history-desc": "User activity and action logs",
+    "export-button-cancel": "Cancel",
+    "export-button-confirm": "Export Selected Tables",
+
+    "admin-button-assign-editor": "Manage Editor",
+    
+
+    // Mobile Menu Translations
+    "mobile-home": "Home",
+    "mobile-admin-view": "view as Admin",
+    "mobile-student-guides": "Student Guides & Templates",
+    "mobile-student-rules": "Student Rules & Regulations",
+    "mobile-employee-rules": "Employees' Rules & Regulations",
+    "mobile-academic-rules": "Academic Rules & Regulations",
+    "mobile-saved-rules": "Saved Rules & Regulations",
+    "mobile-history": "History",
+    "mobile-language-text": "العربية",
+    "mobile-logout": "logout",
+    "mobile-exit-edit-text": "Exit edit mode"
         },
         "ar": {
             "Language345": "English",
@@ -335,7 +432,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "user-list-label": "قائمة المستخدمين",
 
             // Home page elements
-            "admin-view-button": "عرض كمحرر",
+            "admin-view-button": "عرض المحرر",
             "searchInput": "... ابحث",
 
             // Filter Section
@@ -468,6 +565,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-table-form-section-label": "القسم",
         "admin-table-form-attach-word-label": "إرفاق ملف وورد",
         "admin-table-form-attach-pdf-label": "PDF إرفاق ملف",
+        "admin-table-form-page-number-label":"رقم صورة العرض",
         "admin-table-form-upload-file-title": "انقر على تحرير لتمكين تحميل الملف",
         "admin-table-form-responsible-contact-label": ":معلومات الاتصال بالقسم المسؤول",
         "admin-table-form-contact-name-label": "الاسم",
@@ -633,7 +731,103 @@ document.addEventListener("DOMContentLoaded", () => {
     "th-downloads": "التنزيلات",
     "th-views": "المشاهدات",
     "th-details": "التفاصيل",
-    "th-total": "الإجمالي"
+    "th-total": "الإجمالي",
+
+    // ==================== HISTORY PAGE TRANSLATIONS (ARABIC) ====================
+    // Arabic translations for history page elements - mirror of English translations above
+    // Each key provides the Arabic equivalent for seamless language switching
+    
+    // Main page header elements - العناصر الرئيسية لرأس الصفحة
+    "history-activity-title": "سجل أنشطتك", // Main title - العنوان الرئيسي
+    "history-track-activity": "تتبع مشاهداتك وتحميلاتك الأخيرة", // Subtitle - العنوان الفرعي
+    
+    // View toggle buttons - أزرار التبديل بين طرق العرض
+    "history-table-btn": "جدول", // Table view button - زر عرض الجدول
+    "history-cards-btn": "بطاقات", // Card view button - زر عرض البطاقات
+    
+    // Card view elements - عناصر عرض البطاقات
+    "history-action-status": "آخر العمليات", // Action status header in cards - رأس حالة الإجراءات في البطاقات
+    
+    // Table column headers - رؤوس أعمدة الجدول
+    "history-record-name": "اسم السجل", // Record name column - عمود اسم السجل
+    "history-all-actions": "جميع الإجراءات", // All actions column - عمود جميع الإجراءات
+    "history-last-action": "آخر إجراء", // Last action column - عمود آخر إجراء
+    "history-timestamp": "الوقت والتاريخ", // Timestamp column - عمود الوقت والتاريخ
+    
+    // Action type labels - تسميات أنواع الإجراءات
+    "history-view": "عرض", // View action - إجراء العرض
+    "history-download": "تحميل", // Download action - إجراء التحميل
+    "history-show-details": "إظهار التفاصيل", // Show details action - إجراء إظهار التفاصيل
+    
+    // Action status indicators - مؤشرات حالة الإجراءات
+    "history-viewed": "تم العرض", // Viewed status - حالة تم العرض
+    "history-downloaded": "تم التحميل", // Downloaded status - حالة تم التحميل
+    "history-not-performed": "لم يتم التنفيذ", // Not performed status - حالة لم يتم التنفيذ
+    "history-no-actions": "لا توجد إجراءات بعد", // No actions message - رسالة عدم وجود إجراءات
+    
+    // Empty state messages - رسائل الحالة الفارغة
+    "history-no-history": "لا يوجد تاريخ بعد", // No history main message - الرسالة الرئيسية لعدم وجود تاريخ
+    "history-start-viewing": "ابدأ بعرض أو تحميل السجلات لرؤية نشاطك هنا!", // Instructional text - النص التوجيهي
+    
+    // Category labels for action grouping - تسميات فئات تجميع الإجراءات
+    "history-view-actions": "إجراءات العرض", // View actions category - فئة إجراءات العرض
+    "history-download-actions": "إجراءات التحميل", // Download actions category - فئة إجراءات التحميل
+    "history-details-actions": "إجراءات إظهار التفاصيل", // Details actions category - فئة إجراءات إظهار التفاصيل
+    
+    // Status and loading indicators - مؤشرات الحالة والتحميل
+    "history-action-status": "حالة الإجراء", // Action status header - رأس حالة الإجراء
+    "history-loading": "جارٍ التحميل...", // Generic loading message - رسالة التحميل العامة
+    "history-loading-text": "جارٍ تحميل تاريخك...", // Specific loading message - رسالة التحميل المحددة
+    // assign new editor translations 
+    "assign-editor-page-title-452": "تعيين محرر جديد",
+    "assign-editor-page-subtitle-453": "إدارة أدوار المستخدمين وامتيازات المحرر",
+    "loading-text-processing-454": "جاري المعالجة...",
+    "stats-label-admins-455": "المشرفون",
+    "stats-label-editors-456": "المحررون",
+    "stats-label-regular-users-457": "المستخدمون العاديون",
+    "search-placeholder-name-email-458": "ابحث بالاسم أو البريد الإلكتروني...",
+    "search-button-459": "بحث",
+    "role-badge-admin-460": "مشرف",
+    "role-badge-editor-461": "محرر",
+    "role-badge-user-462": "مستخدم",
+    "system-admin-463": "مشرف النظام",
+    "promote-modal-title-463": "ترقية إلى محرر",
+    "demote-modal-title-464": "خفض إلى مستخدم",
+    "confirmation-modal-confirm-465": "تأكيد",
+    "alert-close-button-466": "إغلاق",
+    "alert-no-userfound-467": "لم يتم العثور على مستخدم",
+    "clear-search-button-468": "مسح البحث",
+    // Export data translations
+    "export-modal-title": "حدد الجداول للتصدير",
+    "export-modal-description": "اختر جداول قاعدة البيانات التي تريد تضمينها في ملف Excel الذي ستقوم بتصديره:",
+    "export-option-all-tables": "جميع الجداول",
+    "export-option-all-tables-desc": "تصدير جميع جداول قاعدة البيانات المتاحة",
+    "export-option-records": "السجلات",
+    "export-option-records-desc": "جميع سجلات اللوائح والسياسات",
+    "export-option-users": "المستخدمون",
+    "export-option-users-desc": "جميع معلومات المستخدمين المسجلين",
+    "export-option-contact": "معلومات الاتصال",
+    "export-option-contact-desc": "تفاصيل الاتصال بالقسم",
+    "export-option-attachments": "المرفقات",
+    "export-option-attachments-desc": "مرفقات الملفات والمستندات",
+    "export-option-history": "سجل المستخدم",
+    "export-option-history-desc": "سجلات أنشطة المستخدم وإجراءاته",
+    "export-button-cancel": "إلغاء",
+    "export-button-confirm": "تصدير الجداول المحددة",
+    "admin-button-assign-editor": "إدارة المحررين",
+
+    // Mobile Menu Translations
+    "mobile-home": "الرئيسية",
+    "mobile-admin-view": "عرض المحرر",
+    "mobile-student-guides": "أدلة وقوالب الطلاب",
+    "mobile-student-rules": "قواعد وأنظمة الطلاب",
+    "mobile-employee-rules": "قواعد وأنظمة الموظفين",
+    "mobile-academic-rules": "قواعد وأنظمة أكاديمية",
+    "mobile-saved-rules": "القواعد واللوائح المحفوظة",
+    "mobile-history": "السجل",
+    "mobile-language-text": "English",
+    "mobile-logout": "تسجيل الخروج",
+    "mobile-exit-edit-text": "الخروج من وضع التحرير"
         }
     };
 

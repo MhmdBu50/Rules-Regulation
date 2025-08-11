@@ -106,39 +106,54 @@
     background: var(--card-accent);
 }
 
-.stat-card-blue {
-    --card-accent: #4facfe;
+.stat-card-one {
+    --card-accent: #2E8B57;
 }
 
-.stat-card-green {
-    --card-accent: #43e97b;
+.stat-card-two {
+    --card-accent: #db3d1a;
 }
 
-.stat-card-orange {
-    --card-accent: #fa709a;
+.stat-card-three {
+    --card-accent: #4682B4;
 }
 
-.stat-card-purple {
-    --card-accent: #a855f7;
+.stat-card-four {
+    --card-accent: #DAA520;
 }
 
 .stat-icon {
     position: absolute;
-    top: 1.5rem;
+    top: 1.05rem;
     right: 1.5rem;
-    width: 60px;
-    height: 60px;
+    min-width: 60px;
+    min-height: 60px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--card-accent);
-    opacity: 0.1;
+    opacity: 1;
+    padding: 0.5rem;
 }
 
 .stat-icon i {
     font-size: 1.5rem;
-    color: var(--card-accent);
+    color: white;
+    z-index: 1;
+    position: absolute;
+    opacity: 0.3;
+}
+
+.stat-number-overlay {
+    position: relative;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    z-index: 2;
+    white-space: nowrap;
+    text-align: center;
+    line-height: 1;
 }
 
 .stat-content h3 {

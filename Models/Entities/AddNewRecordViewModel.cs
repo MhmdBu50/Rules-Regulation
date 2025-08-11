@@ -28,4 +28,7 @@ public class AddNewRecordViewModel
     // Notes in both languages
     public string? Notes { get; set; }
     public string? NotesAr { get; set; }
+    
+    // Page number for PDF thumbnail generation
+    public int PageNumber { get; set; } = 2; // Default to page 2 as per PDFController logic
 }

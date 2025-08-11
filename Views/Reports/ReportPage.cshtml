@@ -100,50 +100,51 @@
     <div class="container-fluid mb-5">
         <div class="row g-4">
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="stat-card stat-card-blue">
-                    <div class="stat-icon">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
+                <div class="stat-card stat-card-one d-flex align-items-center justify-content-between">
+                    
                     <div class="stat-content">
-                        <h3>@Model.TotalDocuments</h3>
                         <!-- Total Documents -->
                         <p id="stat-total-documents"></p>
                     </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-file-alt"></i>
+                        <span class="stat-number-overlay">@Model.TotalDocuments</span>
+                    </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="stat-card stat-card-green">
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
+                <div class="stat-card stat-card-two d-flex align-items-center justify-content-between">
                     <div class="stat-content">
-                        <h3>@Model.TotalUsers</h3>
                         <!--Registered Users-->
                         <p id="stat-total-users"></p>
                     </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                        <span class="stat-number-overlay">@Model.TotalUsers</span>
+                    </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="stat-card stat-card-orange" data-stat="downloads">
-                    <div class="stat-icon">
-                        <i class="fas fa-download"></i>
-                    </div>
+                <div class="stat-card stat-card-three d-flex align-items-center justify-content-between" data-stat="downloads">
                     <div class="stat-content">
-                        <h3 class="stat-number">@Model.TotalDownloads</h3>
                         <!-- Total Downloads -->
                         <p id="stat-total-downloads"></p>
                     </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-download"></i>
+                        <span class="stat-number-overlay">@Model.TotalDownloads</span>
+                    </div>
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="stat-card stat-card-purple" data-stat="views">
-                    <div class="stat-icon">
-                        <i class="fas fa-eye"></i>
-                    </div>
+                <div class="stat-card stat-card-four d-flex align-items-center justify-content-between" data-stat="views">
                     <div class="stat-content">
-                        <h3 class="stat-number">@Model.TotalViews</h3>
                         <!-- Total Views -->
                         <p id="stat-total-views"></p>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-eye"></i>
+                        <span class="stat-number-overlay">@Model.TotalViews</span>
                     </div>
                 </div>
             </div>

@@ -1371,16 +1371,17 @@ public IActionResult AddNewContactInfo(string Department, string Name, string? N
                 {
                     try
                     {
-                        // SQL to insert PDF attachment metadata
-                        var insertPdfSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME) " +
-                                        "VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME)";
+                        // SQL to insert PDF attachment metadata with thumbnail page number
+                        var insertPdfSql = "INSERT INTO ATTACHMENTS (ATTACHMENT_ID, RECORD_ID, FILE_TYPE, FILE_PATH, ORIGINAL_NAME, TN_PAGE_NO) " +
+                                        "VALUES (ATTACHMENTS_SEQ.NEXTVAL, :id, :fileType, :path, :ORIGINAL_NAME, :pageNumber)";
 
-                        // Execute attachment insert with proper parameters
+                        // Execute attachment insert with proper parameters including page number
                         await _db.ExecuteNonQueryAsync(insertPdfSql,
                             new OracleParameter("id", newId),
                             new OracleParameter("fileType", "PDF"),
                             new OracleParameter("path", pdfPath),
-                            new OracleParameter("ORIGINAL_NAME", model.PdfAttachment.FileName));
+                            new OracleParameter("ORIGINAL_NAME", model.PdfAttachment.FileName),
+                            new OracleParameter("pageNumber", model.PageNumber > 0 ? model.PageNumber : 2)); // Default to page 2 if invalid
                     }
                     catch (Exception)
                     {
@@ -1677,7 +1678,7 @@ public async Task<IActionResult> ViewPdf(int id)
      */
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult UpdateRecord(
+    public async Task<IActionResult> UpdateRecord(
         int recordId,
         string regulationName,
         string? regulationNameAr,
@@ -1692,7 +1693,8 @@ public async Task<IActionResult> ViewPdf(int id)
         string documentType,
         string sections,
         string notes,
-        string? notesAr)
+        string? notesAr,
+        int? pageNumber = null)
     {
         try
         {
@@ -1753,10 +1755,29 @@ public async Task<IActionResult> ViewPdf(int id)
             bool success = _oracleDbService.UpdateRecord(
                 recordId, regulationName, regulationNameAr, department, version, versionDate,
                 approvalDate, approvingEntity, approvingEntityAr, description, descriptionAr, 
-                documentType, sections, notes, notesAr);
+                documentType, sections, notes, notesAr, pageNumber);
 
             if (success)
             {
+                // Clear thumbnail cache if page number was updated
+                if (pageNumber.HasValue)
+                {
+                    try
+                    {
+                        // Clear the specific thumbnail cache for this record and page
+                        using (var httpClient = new HttpClient())
+                        {
+                            var clearCacheUrl = $"{Request.Scheme}://{Request.Host}/api/pdf/clear-cache?recordId={recordId}&pageNumber={pageNumber.Value}";
+                            await httpClient.PostAsync(clearCacheUrl, null);
+                        }
+                    }
+                    catch
+                    {
+                        // Cache clearing failed, but record update was successful
+                        // This is not critical, so we just continue
+                    }
+                }
+                
                 // Step 4: Log the activity for audit purposes using EF
                 try
                 {

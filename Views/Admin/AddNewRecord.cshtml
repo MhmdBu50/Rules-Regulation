@@ -1,3 +1,5 @@
+@model AddNewRecordViewModel
+
 @section Styles {
   <link rel="stylesheet" href="~/css/AddNewRecord.css">
 }
@@ -100,11 +102,14 @@
           </div>
           <div class="col-md-6">
             <!--page number-->
-            <label for="pageNumber" id="label-pageNumber"></label>
-            <input type="text" class="form-control" name="pageNumber"
-              pattern="@Html.Raw("[0-9]+")"
-              title="Please enter only numbers" 
-              id="placeholder-pageNumber" maxlength="3" required>
+            <label for="pageNumber" id="label-pageNumber">Thumbnail Page Number</label>
+            <input type="number" class="form-control" name="PageNumber"
+              min="1" max="999" value="2" step="1"
+              pattern="[0-9]+" inputmode="numeric"
+              title="Please enter the page number to use for PDF thumbnail (1-999)" 
+              id="pageNumber" placeholder="2" required
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57">
             <div id="pageNumberError" class="text-danger mt-1" style="display: none;"></div>
           </div>
         </div>
