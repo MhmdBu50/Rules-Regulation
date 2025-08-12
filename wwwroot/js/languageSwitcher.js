@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-delete-button-alt": "Delete btn",
         "admin-table-header-id": "ID",
         "admin-table-header-regulation-name": "Regulation/ Manual name",
-        "admin-table-header-DocumentType": "Document Type",
+        "admin-table-header-documentType": "Document Type",
         "admin-table-header-version-number": "Version Number",
         "admin-table-header-approving-date": "Approving Date",
         "admin-table-header-responsible-entity": "Responsible Entity",

@@ -1,7 +1,18 @@
 @model List<dynamic>
+@using Microsoft.AspNetCore.Localization
+
 
 @{
     ViewData["Title"] = "Manage Contact Information";
+
+}
+
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
+    var isArabic = currentCulture == "ar-SA";
+
+
 }
 
 @section Styles {
@@ -100,7 +111,7 @@
                                 <div class="multi-select-dropdown" style="width: 100%;">
                                     <div class="multi-select-button" id="contactDepartmentMultiSelectButton"
                                         style="color: #ABB7C2; border: none; cursor: pointer; width: 100%; font-size: 14px; height: 44px; display: flex; align-items: center; justify-content: space-between; background: transparent; padding: 0 8px; font-size: 20px; color: #ABB7C2; font-weight: normal; padding: 25px">
-                                        <span>All Departments</span>
+                                        <span id="contact-all-departments">All Departments</span>
                                         <span class="caret">▼</span>
                                     </div>
                                     <div class="multi-select-dropdown-content" id="contactDepartmentDropdownContent"
@@ -170,7 +181,55 @@
                             @foreach (var contact in Model)
                             {
                                 <tr>
-                                    <td data-label="Department"><strong>@contact.Department</strong></td>
+                                    <td data-label="Department"><strong>
+                                            @if (isArabic)
+                                            {
+                                                switch (contact.Department)
+                                                {
+                                                    case "Reg and Admission":
+                                                        <span>التسجيل والقبول</span>
+                                                        ;
+                                                        break;
+                                                    case "CCSIT":
+                                                        <span>كلية علوم الحاسب وتقنية المعلومات</span>
+                                                        ;
+                                                        break;
+                                                    case "Communication and tech":
+                                                        <span>الاتصالات والتقنية</span>
+                                                        ;
+                                                        break;
+                                                    case "Hospital":
+                                                        <span>المستشفى</span>
+                                                        ;
+                                                        break;
+                                                    case "Library":
+                                                        <span>المكتبة</span>
+                                                        ;
+                                                        break;
+                                                    case "Students Affairs":
+                                                        <span>شؤون الطلاب</span>
+                                                        ;
+                                                        break;
+                                                    case "Preparetory":
+                                                        <span>السنة التحضيرية</span>
+                                                        ;
+                                                        break;
+                                                    case "Academic Affairs":
+                                                        <span>الشؤون الأكاديمية</span>
+                                                        ;
+                                                        break;
+                                                    default:
+                                                        <span>@contact.Department</span>
+                                                        ;
+                                                        break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span>@contact.Department</span>
+                                                ;
+                                            }
+                                        </strong></td>
                                     <td data-label="Name">@contact.Name</td>
                                     <td data-label="Email">
                                         @if (!string.IsNullOrEmpty(contact.Email))
