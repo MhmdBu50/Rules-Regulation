@@ -1,309 +1,556 @@
 /**
- * Activity Log JavaScript Functions
+ * Activity Log JavaScript - Complete Rewrite
  * Handles modal interactions and data visualization for the Activity Log page
  */
 
-// View activity details in modal
+console.log('Activity Log JavaScript loaded successfully');
+
+// Main function to view activity details
 function viewDetails(logId) {
-    // Validate logId before proceeding
-    if (!logId || logId === 'undefined' || logId === 'null' || isNaN(logId)) {
-        alert('Invalid Log ID provided: ' + logId);
+    console.log('=== ViewDetails Function Called ===');
+    console.log('Raw LogId received:', logId);
+    console.log('LogId type:', typeof logId);
+    
+    // Convert to number and validate
+    const numericLogId = parseInt(logId);
+    console.log('Numeric LogId:', numericLogId);
+    
+    // Strict validation
+    if (!logId || isNaN(numericLogId) || numericLogId <= 0) {
+        console.error('Invalid LogId:', logId);
+        showError(`Invalid Log ID: "${logId}". Please refresh the page and try again.`);
         return;
     }
     
-    // Debug: Show the LogId being passed
-    console.log('DEBUG: viewDetails called with LogId:', logId, 'Type:', typeof logId);
+    console.log('*** LogId validation passed ***');
+    console.log('*** If this fails, the issue is DATA SYNC between list and detail queries ***');
+    console.log('*** REAL TEST: Try LogId 48, 49, 50, 51, or 52 - these should work! ***');
+    console.log('LogId validation passed, proceeding with:', numericLogId);
     
-    const modal = new bootstrap.Modal(document.getElementById('activityDetailsModal'));
-    const content = document.getElementById('activityDetailsContent');
+    // Get modal elements
+    const modalElement = document.getElementById('activityDetailsModal');
+    const contentElement = document.getElementById('activityDetailsContent');
+    
+    if (!modalElement || !contentElement) {
+        console.error('Modal elements not found!');
+        showError('Modal elements not found. Please refresh the page.');
+        return;
+    }
+    
+    console.log('Modal elements found successfully');
+    
+    // Initialize Bootstrap modal
+    let modal;
+    try {
+        modal = new bootstrap.Modal(modalElement);
+        console.log('Bootstrap modal initialized');
+    } catch (error) {
+        console.error('Failed to initialize Bootstrap modal:', error);
+        showError('Failed to initialize modal. Please refresh the page.');
+        return;
+    }
     
     // Show loading state
-    content.innerHTML = `
-        <div class="text-center py-4">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="mt-2">Loading activity details...</div>
-        </div>
-    `;
+    showLoadingState(contentElement);
     
-    modal.show();
+    // Show modal
+    try {
+        modal.show();
+        console.log('Modal displayed successfully');
+    } catch (error) {
+        console.error('Failed to show modal:', error);
+        showError('Failed to show modal. Please refresh the page.');
+        return;
+    }
     
-    // Fetch details from server
-    const url = `/Admin/GetActivityLogDetails/${logId}`;
-    
-    fetch(url, {
-        method: 'GET',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/json',
-            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            if (response.status === 404) {
-                throw new Error(`Activity log entry with ID ${logId} not found in database.`);
-            }
-            throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data && typeof data === 'object') {
-            // Build the modal content according to specifications
-            let html = `
-                <div class="container-fluid">
-                    <!-- Activity Information (Left) & User Information (Right) Row -->
-                    <div class="row mb-4">
-                        <!-- Activity Information - Left Column -->
-                        <div class="col-md-6">
-                            <h6 class="text-primary mb-3 fw-bold">
-                                <span class="bi bi-activity me-2"></span>Activity Information
-                            </h6>
-                            <div class="card border-0 shadow-sm">
-                                <div class="card-body bg-light">
-                                    <div class="mb-3">
-                                        <label class="form-label fw-bold text-secondary">Log ID:</label>
-                                        <div class="form-control-plaintext fw-semibold">${data.logId}</div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label fw-bold text-secondary">Timestamp:</label>
-                                        <div class="form-control-plaintext">${new Date(data.actionTimestamp).toLocaleString('en-US', { 
-                                            year: 'numeric', month: '2-digit', day: '2-digit',
-                                            hour: '2-digit', minute: '2-digit', second: '2-digit',
-                                            timeZoneName: 'short'
-                                        })}</div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label fw-bold text-secondary">Action Type:</label>
-                                        <div class="form-control-plaintext">
-                                            <span class="badge fs-6 ${getActionBadgeStyle(data.actionType)}">${data.actionType.toUpperCase()}</span>
-                                        </div>
-                                    </div>
-                                    <div class="mb-0">
-                                        <label class="form-label fw-bold text-secondary">Entity Type:</label>
-                                        <div class="form-control-plaintext">
-                                            <span class="badge fs-6 ${getEntityBadgeStyle(data.entityType)}">${data.entityType}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- User Information - Right Column -->
-                        <div class="col-md-6">
-                            <h6 class="text-primary mb-3 fw-bold">
-                                <span class="bi bi-person-circle me-2"></span>User Information
-                            </h6>
-                            <div class="card border-0 shadow-sm">
-                                <div class="card-body bg-light">
-                                    <div class="mb-3">
-                                        <label class="form-label fw-bold text-secondary">User ID:</label>
-                                        <div class="form-control-plaintext fw-semibold">${data.userId}</div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label fw-bold text-secondary">User Name:</label>
-                                        <div class="form-control-plaintext">${data.userName || 'N/A'}</div>
-                                    </div>
-                                    <div class="mb-0">
-                                        <label class="form-label fw-bold text-secondary">User Role:</label>
-                                        <div class="form-control-plaintext">
-                                            <span class="badge fs-6 ${getRoleBadgeStyle(data.userRole)}">${data.userRole.toUpperCase()}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Entity Information - Full Width Row -->
-                    <div class="row mb-4">
-                        <div class="col-12">
-                            <h6 class="text-primary mb-3 fw-bold">
-                                <span class="bi bi-database me-2"></span>Entity Information
-                            </h6>
-                            <div class="card border-0 shadow-sm">
-                                <div class="card-body bg-light">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="mb-3">
-                                                <label class="form-label fw-bold text-secondary">Entity ID:</label>
-                                                <div class="form-control-plaintext fw-semibold">${data.entityId || 'N/A'}</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="mb-3">
-                                                <label class="form-label fw-bold text-secondary">Entity Name:</label>
-                                                <div class="form-control-plaintext">${data.entityName || 'N/A'}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    ${data.details ? `
-                                        <div class="mb-0">
-                                            <label class="form-label fw-bold text-secondary">Details:</label>
-                                            <div class="form-control-plaintext">${data.details}</div>
-                                        </div>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Data Changes - Full Width Row -->
-                    <div class="row mb-0">
-                        <div class="col-12">
-                            <h6 class="text-primary mb-3 fw-bold">
-                                <span class="bi bi-code-square me-2"></span>Data Changes
-                            </h6>
-                            ${getDataChangesContent(data.actionType, data.beforeData, data.afterData)}
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            content.innerHTML = html;
-        } else {
-            content.innerHTML = `
-                <div class="alert alert-warning">
-                    <span class="bi bi-exclamation-triangle me-2"></span>
-                    Activity details not found or could not be loaded.
-                </div>
-            `;
-        }
-    })
-    .catch(error => {
-        content.innerHTML = `
-            <div class="alert alert-danger">
-                <span class="bi bi-exclamation-triangle me-2"></span>
-                Error loading activity details: ${error.message}
-                <br><small class="text-muted">LogId: ${logId}</small>
-            </div>
-        `;
-    });
+    // Fetch data from server
+    fetchActivityDetails(numericLogId, contentElement);
 }
 
-// Helper function to generate data changes content based on action type
+// Show loading state in modal
+function showLoadingState(contentElement) {
+    console.log('Showing loading state...');
+    contentElement.innerHTML = `
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <h5 class="text-muted">Loading activity details...</h5>
+            <p class="text-muted small">Please wait while we fetch the information</p>
+        </div>
+    `;
+}
+
+// Fetch activity details from server
+async function fetchActivityDetails(logId, contentElement) {
+    console.log('=== Fetching Activity Details ===');
+    console.log('Fetching details for LogId:', logId);
+    
+    // Use query-string form to avoid any route-parameter binding issues
+    const url = `/Admin/GetActivityLogDetails?logId=${encodeURIComponent(logId)}`;
+    console.log('Request URL:', url);
+    console.log('*** STANDARDIZED: Using GetActivityLogDetails endpoint ***');
+    
+    // Get CSRF token
+    const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+    const token = tokenElement ? tokenElement.value : '';
+    console.log('CSRF token found:', token ? 'Yes' : 'No');
+    
+    // Prepare request options
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    };
+    
+    // Add token if available
+    if (token) {
+        requestOptions.headers['RequestVerificationToken'] = token;
+    }
+    
+    console.log('Request options:', requestOptions);
+    
+    try {
+        console.log('Sending request...');
+        const response = await fetch(url, requestOptions);
+        console.log('Response received:', response);
+        console.log('Response status:', response.status);
+        console.log('Response ok:', response.ok);
+        
+        // Handle different response statuses
+        if (!response.ok) {
+            let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+            
+            try {
+                const errorData = await response.json();
+                console.log('Error response data:', errorData);
+                
+                if (errorData.error) {
+                    errorMessage = errorData.error;
+                }
+                
+                if (errorData.availableLogIds) {
+                    errorMessage += `\n\nAvailable Log IDs: ${errorData.availableLogIds.join(', ')}`;
+                }
+                
+                if (errorData.message) {
+                    errorMessage += `\n${errorData.message}`;
+                }
+            } catch (parseError) {
+                console.warn('Could not parse error response:', parseError);
+            }
+            
+            throw new Error(errorMessage);
+        }
+        
+        console.log('Parsing JSON response...');
+        const data = await response.json();
+        console.log('Response data:', data);
+        
+        if (data && typeof data === 'object') {
+            console.log('Valid data received, rendering modal content...');
+            renderModalContent(data, contentElement);
+        } else {
+            console.error('Invalid data format received:', data);
+            throw new Error('Invalid response format received from server');
+        }
+        
+    } catch (error) {
+        console.error('=== Fetch Error ===');
+        console.error('Error details:', error);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+        
+        showErrorInModal(error.message, logId, contentElement);
+    }
+}
+
+// Render modal content with activity details
+function renderModalContent(data, contentElement) {
+    console.log('=== Rendering Modal Content ===');
+    console.log('Data to render:', data);
+    
+    try {
+        const html = buildModalHTML(data);
+        contentElement.innerHTML = html;
+        console.log('Modal content rendered successfully');
+    } catch (error) {
+        console.error('Error rendering modal content:', error);
+        showErrorInModal('Failed to render activity details', data.logId || 'Unknown', contentElement);
+    }
+}
+
+// Build the modal HTML content
+function buildModalHTML(data) {
+    console.log('Building modal HTML...');
+    
+    // Format timestamp safely
+    let formattedTimestamp = 'Unknown';
+    try {
+        if (data.actionTimestamp) {
+            const date = new Date(data.actionTimestamp);
+            formattedTimestamp = date.toLocaleString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZoneName: 'short'
+            });
+        }
+    } catch (dateError) {
+        console.warn('Error formatting timestamp:', dateError);
+        formattedTimestamp = data.actionTimestamp || 'Unknown';
+    }
+    
+    // Build HTML sections
+    const activitySection = buildActivitySection(data, formattedTimestamp);
+    const userSection = buildUserSection(data);
+    const entitySection = buildEntitySection(data);
+    const changesSection = buildChangesSection(data);
+    
+    return `
+        <div class="container-fluid">
+            <div class="row mb-4">
+                ${activitySection}
+                ${userSection}
+            </div>
+            ${entitySection}
+            ${changesSection}
+        </div>
+    `;
+}
+
+// Build activity information section
+function buildActivitySection(data, formattedTimestamp) {
+    return `
+        <div class="col-md-6">
+            <h6 class="text-primary mb-3 fw-bold">
+                <i class="bi bi-activity me-2"></i>Activity Information
+            </h6>
+            <div class="card border-0 shadow-sm">
+                <div class="card-body bg-light">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Log ID:</label>
+                        <div class="form-control-plaintext fw-semibold">${safeString(data.logId)}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Timestamp:</label>
+                        <div class="form-control-plaintext">${formattedTimestamp}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Action Type:</label>
+                        <div class="form-control-plaintext">
+                            <span class="badge fs-6 ${getActionBadgeClass(data.actionType)}">${safeString(data.actionType).toUpperCase()}</span>
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label fw-bold text-secondary">Entity Type:</label>
+                        <div class="form-control-plaintext">
+                            <span class="badge fs-6 ${getEntityBadgeClass(data.entityType)}">${safeString(data.entityType)}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Build user information section
+function buildUserSection(data) {
+    return `
+        <div class="col-md-6">
+            <h6 class="text-primary mb-3 fw-bold">
+                <i class="bi bi-person-circle me-2"></i>User Information
+            </h6>
+            <div class="card border-0 shadow-sm">
+                <div class="card-body bg-light">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">User ID:</label>
+                        <div class="form-control-plaintext fw-semibold">${safeString(data.userId)}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">User Name:</label>
+                        <div class="form-control-plaintext">${safeString(data.userName) || 'N/A'}</div>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label fw-bold text-secondary">User Role:</label>
+                        <div class="form-control-plaintext">
+                            <span class="badge fs-6 ${getRoleBadgeClass(data.userRole)}">${safeString(data.userRole).toUpperCase()}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Build entity information section
+function buildEntitySection(data) {
+    const detailsSection = data.details ? `
+        <div class="mb-0">
+            <label class="form-label fw-bold text-secondary">Details:</label>
+            <div class="form-control-plaintext">${safeString(data.details)}</div>
+        </div>
+    ` : '';
+    
+    return `
+        <div class="row mb-4">
+            <div class="col-12">
+                <h6 class="text-primary mb-3 fw-bold">
+                    <i class="bi bi-database me-2"></i>Entity Information
+                </h6>
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body bg-light">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold text-secondary">Entity ID:</label>
+                                    <div class="form-control-plaintext fw-semibold">${safeString(data.entityId) || 'N/A'}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold text-secondary">Entity Name:</label>
+                                    <div class="form-control-plaintext">${safeString(data.entityName) || 'N/A'}</div>
+                                </div>
+                            </div>
+                        </div>
+                        ${detailsSection}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Build data changes section
+function buildChangesSection(data) {
+    return `
+        <div class="row mb-0">
+            <div class="col-12">
+                <h6 class="text-primary mb-3 fw-bold">
+                    <i class="bi bi-code-square me-2"></i>Data Changes
+                </h6>
+                ${getDataChangesContent(data.actionType, data.beforeData, data.afterData)}
+            </div>
+        </div>
+    `;
+}
+
+// Generate data changes content
 function getDataChangesContent(actionType, beforeData, afterData) {
-    const actionUpper = actionType.toUpperCase();
+    console.log('Generating changes content for action:', actionType);
+    console.log('Before data available:', !!beforeData);
+    console.log('After data available:', !!afterData);
     
     if (actionType === 'Add' && afterData) {
         return `
             <div class="card border-success">
                 <div class="card-header bg-success bg-opacity-10 border-success">
                     <h6 class="card-title mb-0 text-success">
-                        <span class="bi bi-plus-circle me-2"></span>Added Data
+                        <i class="bi bi-plus-circle me-2"></i>Added Data
                     </h6>
                 </div>
                 <div class="card-body">
-                    <pre class="json-content bg-light p-3 rounded">${formatJson(afterData)}</pre>
-                </div>
-            </div>
-        `;
-    } else if (actionType === 'Delete' && beforeData) {
-        return `
-            <div class="card border-danger">
-                <div class="card-header bg-danger bg-opacity-10 border-danger">
-                    <h6 class="card-title mb-0 text-danger">
-                        <span class="bi bi-trash me-2"></span>Deleted Data
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <pre class="json-content bg-light p-3 rounded">${formatJson(beforeData)}</pre>
-                </div>
-            </div>
-        `;
-    } else if (actionType === 'Edit' && (beforeData || afterData)) {
-        return `
-            <div class="row">
-                ${beforeData ? `
-                    <div class="col-md-6 mb-3">
-                        <div class="card border-warning">
-                            <div class="card-header bg-warning bg-opacity-10 border-warning">
-                                <h6 class="card-title mb-0 text-warning">
-                                    <span class="bi bi-arrow-left-circle me-2"></span>Before Changes
-                                </h6>
-                            </div>
-                            <div class="card-body">
-                                <pre class="json-content bg-light p-3 rounded">${formatJson(beforeData)}</pre>
-                            </div>
-                        </div>
-                    </div>
-                ` : ''}
-                ${afterData ? `
-                    <div class="col-md-6 mb-3">
-                        <div class="card border-info">
-                            <div class="card-header bg-info bg-opacity-10 border-info">
-                                <h6 class="card-title mb-0 text-info">
-                                    <span class="bi bi-arrow-right-circle me-2"></span>After Changes
-                                </h6>
-                            </div>
-                            <div class="card-body">
-                                <pre class="json-content bg-light p-3 rounded">${formatJson(afterData)}</pre>
-                            </div>
-                        </div>
-                    </div>
-                ` : ''}
-            </div>
-        `;
-    } else {
-        return `
-            <div class="card border-secondary">
-                <div class="card-body text-center text-muted py-4">
-                    <span class="bi bi-info-circle fs-4 mb-2"></span>
-                    <p class="mb-0">No detailed change information available for this activity.</p>
+                    <pre class="json-content bg-light p-3 rounded">${formatJsonData(afterData)}</pre>
                 </div>
             </div>
         `;
     }
+    
+    if (actionType === 'Delete' && beforeData) {
+        return `
+            <div class="card border-danger">
+                <div class="card-header bg-danger bg-opacity-10 border-danger">
+                    <h6 class="card-title mb-0 text-danger">
+                        <i class="bi bi-trash me-2"></i>Deleted Data
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <pre class="json-content bg-light p-3 rounded">${formatJsonData(beforeData)}</pre>
+                </div>
+            </div>
+        `;
+    }
+    
+    if (actionType === 'Edit' && (beforeData || afterData)) {
+        const beforeColumn = beforeData ? `
+            <div class="col-md-6 mb-3">
+                <div class="card border-warning">
+                    <div class="card-header bg-warning bg-opacity-10 border-warning">
+                        <h6 class="card-title mb-0 text-warning">
+                            <i class="bi bi-arrow-left-circle me-2"></i>Before Changes
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <pre class="json-content bg-light p-3 rounded">${formatJsonData(beforeData)}</pre>
+                    </div>
+                </div>
+            </div>
+        ` : '';
+        
+        const afterColumn = afterData ? `
+            <div class="col-md-6 mb-3">
+                <div class="card border-info">
+                    <div class="card-header bg-info bg-opacity-10 border-info">
+                        <h6 class="card-title mb-0 text-info">
+                            <i class="bi bi-arrow-right-circle me-2"></i>After Changes
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <pre class="json-content bg-light p-3 rounded">${formatJsonData(afterData)}</pre>
+                    </div>
+                </div>
+            </div>
+        ` : '';
+        
+        return `<div class="row">${beforeColumn}${afterColumn}</div>`;
+    }
+    
+    return `
+        <div class="card border-secondary">
+            <div class="card-body text-center text-muted py-4">
+                <i class="bi bi-info-circle fs-4 mb-2"></i>
+                <p class="mb-0">No detailed change information available for this activity.</p>
+            </div>
+        </div>
+    `;
 }
 
-// Helper function to format JSON with proper indentation and syntax highlighting
-function formatJson(jsonString) {
+// Format JSON data safely
+function formatJsonData(jsonString) {
     if (!jsonString) return 'No data available';
     
     try {
         const parsed = JSON.parse(jsonString);
         return JSON.stringify(parsed, null, 2);
-    } catch (e) {
-        // If it's not valid JSON, return as-is with proper escaping
-        return jsonString.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    } catch (error) {
+        console.warn('Error parsing JSON:', error);
+        return escapeHtml(String(jsonString));
     }
 }
 
-// Helper functions for badge styling
-function getActionBadgeStyle(actionType) {
-    switch(actionType) {
-        case 'Add': return 'bg-success text-white px-3 py-2';
-        case 'Edit': return 'bg-warning text-white px-3 py-2';  
-        case 'Delete': return 'bg-danger text-white px-3 py-2';
+// Safely escape HTML
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Safely convert value to string
+function safeString(value) {
+    if (value === null || value === undefined) return '';
+    return String(value);
+}
+
+// Get badge class for action type
+function getActionBadgeClass(actionType) {
+    switch (safeString(actionType).toLowerCase()) {
+        case 'add': return 'bg-success text-white px-3 py-2';
+        case 'edit': return 'bg-warning text-white px-3 py-2';
+        case 'delete': return 'bg-danger text-white px-3 py-2';
         default: return 'bg-secondary text-white px-3 py-2';
     }
 }
 
-function getEntityBadgeStyle(entityType) {
-    switch(entityType) {
-        case 'Record': return 'bg-primary text-white px-3 py-2';
-        case 'Contact': return 'bg-info text-white px-3 py-2';
+// Get badge class for entity type
+function getEntityBadgeClass(entityType) {
+    switch (safeString(entityType).toLowerCase()) {
+        case 'record': return 'bg-primary text-white px-3 py-2';
+        case 'contact': return 'bg-info text-white px-3 py-2';
         default: return 'bg-secondary text-white px-3 py-2';
     }
 }
 
-function getRoleBadgeStyle(userRole) {
-    switch(userRole) {
-        case 'Admin': return 'bg-danger text-white px-3 py-2';
-        case 'Editor': return 'bg-success text-white px-3 py-2';
+// Get badge class for user role
+function getRoleBadgeClass(userRole) {
+    switch (safeString(userRole).toLowerCase()) {
+        case 'admin': return 'bg-danger text-white px-3 py-2';
+        case 'editor': return 'bg-success text-white px-3 py-2';
         default: return 'bg-secondary text-white px-3 py-2';
     }
 }
 
-// Initialize page when DOM is loaded
+// Show error in modal
+function showErrorInModal(errorMessage, logId, contentElement) {
+    console.log('Showing error in modal:', errorMessage);
+    contentElement.innerHTML = `
+        <div class="alert alert-danger">
+            <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-exclamation-triangle-fill fs-4 me-3 text-danger"></i>
+                <div>
+                    <h5 class="alert-heading mb-1">Error Loading Activity Details</h5>
+                    <small class="text-muted">Log ID: ${safeString(logId)}</small>
+                </div>
+            </div>
+            <hr>
+            <div class="mb-3">
+                <strong>Error Details:</strong>
+                <pre class="mt-2 p-3 bg-light border rounded small">${escapeHtml(errorMessage)}</pre>
+            </div>
+            <div class="mb-0">
+                <strong>Troubleshooting:</strong>
+                <ul class="mb-0 mt-2">
+                    <li>Check if the Log ID exists in the database</li>
+                    <li>Verify your network connection</li>
+                    <li>Try refreshing the page</li>
+                    <li>Contact system administrator if the problem persists</li>
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
+// Show general error alert
+function showError(message) {
+    console.error('Showing error alert:', message);
+    alert(`❌ Error: ${message}`);
+}
+
+// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize tooltips if Bootstrap 5 is loaded
-    if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
+    console.log('=== Activity Log Page Initialized ===');
+    
+    // Check for required dependencies
+    if (typeof bootstrap === 'undefined') {
+        console.error('Bootstrap is not loaded!');
+        showError('Bootstrap library is not loaded. Please refresh the page.');
+        return;
     }
+    
+    // Initialize tooltips
+    try {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+        console.log('Tooltips initialized:', tooltipList.length);
+    } catch (error) {
+        console.warn('Failed to initialize tooltips:', error);
+    }
+    
+    // Test modal elements
+    const modal = document.getElementById('activityDetailsModal');
+    const content = document.getElementById('activityDetailsContent');
+    
+    if (!modal) {
+        console.error('Modal element not found!');
+    } else {
+        console.log('Modal element found');
+    }
+    
+    if (!content) {
+        console.error('Modal content element not found!');
+    } else {
+        console.log('Modal content element found');
+    }
+    
+    console.log('Activity Log JavaScript initialization complete');
 });
+
+// Make viewDetails function globally available
+window.viewDetails = viewDetails;
+console.log('viewDetails function attached to window object');
