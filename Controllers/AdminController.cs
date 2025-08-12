@@ -2675,26 +2675,51 @@ public async Task<IActionResult> ViewPdf(int id)
     {
         try
         {
-            _logger.LogInformation("GetActivityLogDetails called with logId: {LogId}", logId);
+            _logger.LogInformation("GetActivityLogDetails called with logId: {LogId} (Type: {LogIdType})", logId, logId.GetType().Name);
+            Console.WriteLine($"DEBUG: GetActivityLogDetails called with logId: {logId}");
             
-            // Return hardcoded test data first to verify the modal works
-            var testResult = new
+            using var connection = new OracleConnection(_connectionString);
+            await connection.OpenAsync();
+
+            // Try new schema first (ACTION_TIMESTAMP, OLD_VALUES, NEW_VALUES)
+            object? result = await TryGetActivityLogDetailsWithSchema(connection, logId, true);
+            
+            // If not found with new schema, try old schema (TIMESTAMP, BEFORE_DATA, AFTER_DATA)
+            if (result == null)
             {
-                LogId = logId,
-                UserName = "Test User",
-                UserRole = "Admin",
-                ActionType = "EDIT",
-                EntityType = "Record",
-                EntityId = 123,
-                EntityName = "Test Record",
-                ActionTimestamp = "2025-08-11 12:00:00",
-                BeforeData = "{ \"name\": \"old value\", \"status\": \"draft\" }",
-                AfterData = "{ \"name\": \"new value\", \"status\": \"approved\" }",
-                Details = "Test activity log details"
-            };
-            
-            _logger.LogInformation("Returning test data for LogId: {LogId}", logId);
-            return Json(testResult);
+                result = await TryGetActivityLogDetailsWithSchema(connection, logId, false);
+            }
+
+            if (result != null)
+            {
+                return Json(result);
+            }
+            else
+            {
+                _logger.LogWarning("Activity log entry with ID {LogId} not found in database", logId);
+                
+                // Additional debugging - check what LogIds are actually available
+                var availableIds = new List<int>();
+                try 
+                {
+                    var checkSql = "SELECT LOG_ID FROM ACTIVITY_LOGS ORDER BY LOG_ID";
+                    using var checkCmd = new OracleCommand(checkSql, connection);
+                    using var checkReader = await checkCmd.ExecuteReaderAsync();
+                    while (await checkReader.ReadAsync()) {
+                        availableIds.Add(checkReader.GetInt32("LOG_ID"));
+                    }
+                } catch (Exception checkEx) {
+                    _logger.LogError(checkEx, "Error checking available LogIds");
+                }
+                
+                return NotFound(new { 
+                    error = $"Activity log entry with ID {logId} not found in database.",
+                    requestedLogId = logId,
+                    availableLogIds = availableIds.Take(10).ToArray(), // Show first 10 available IDs
+                    totalAvailable = availableIds.Count,
+                    message = $"Available LogIds: [{string.Join(", ", availableIds.Take(5))}]{(availableIds.Count > 5 ? "..." : "")}"
+                });
+            }
         }
         catch (Exception ex)
         {
@@ -2702,9 +2727,95 @@ public async Task<IActionResult> ViewPdf(int id)
             return StatusCode(500, new { 
                 error = "Database query failed", 
                 message = ex.Message,
-                logId = logId,
-                suggestion = "Please check database column names"
+                logId = logId
             });
+        }
+    }
+
+    private async Task<object?> TryGetActivityLogDetailsWithSchema(OracleConnection connection, int logId, bool useNewSchema)
+    {
+        try
+        {
+            var tsCol = useNewSchema ? "ACTION_TIMESTAMP" : "TIMESTAMP";
+            var oldCol = useNewSchema ? "OLD_VALUES" : "BEFORE_DATA";
+            var newCol = useNewSchema ? "NEW_VALUES" : "AFTER_DATA";
+
+            _logger.LogInformation("Attempting to query with {Schema} schema - LogId: {LogId}", 
+                useNewSchema ? "NEW" : "OLD", logId);
+            
+            var sql = $@"SELECT 
+                            LOG_ID,
+                            USER_NAME,
+                            USER_ROLE,
+                            ACTION_TYPE,
+                            ENTITY_TYPE,
+                            ENTITY_ID,
+                            ENTITY_NAME,
+                            {tsCol} AS ACTION_TIMESTAMP,
+                            {oldCol} AS BEFORE_DATA,
+                            {newCol} AS AFTER_DATA,
+                            DETAILS,
+                            USER_ID
+                        FROM ACTIVITY_LOGS 
+                        WHERE LOG_ID = :logId";
+
+            _logger.LogInformation("Executing SQL: {SQL}", sql);
+
+            using var command = new OracleCommand(sql, connection);
+            command.Parameters.Add("logId", OracleDbType.Int32).Value = logId;
+
+            using var reader = await command.ExecuteReaderAsync();
+            
+            if (await reader.ReadAsync())
+            {
+                _logger.LogInformation("Successfully found record with {Schema} schema", 
+                    useNewSchema ? "NEW" : "OLD");
+                
+                // Handle CLOB data properly for BEFORE_DATA and AFTER_DATA
+                string? beforeData = null;
+                string? afterData = null;
+
+                if (!reader.IsDBNull("BEFORE_DATA"))
+                {
+                    var clobReader = reader.GetTextReader("BEFORE_DATA");
+                    beforeData = await clobReader.ReadToEndAsync();
+                }
+
+                if (!reader.IsDBNull("AFTER_DATA"))
+                {
+                    var clobReader = reader.GetTextReader("AFTER_DATA");
+                    afterData = await clobReader.ReadToEndAsync();
+                }
+
+                return new
+                {
+                    LogId = reader.IsDBNull("LOG_ID") ? 0 : reader.GetInt32("LOG_ID"),
+                    UserId = reader.IsDBNull("USER_ID") ? 0 : reader.GetInt32("USER_ID"),
+                    UserName = reader.IsDBNull("USER_NAME") ? null : reader.GetString("USER_NAME"),
+                    UserRole = reader.IsDBNull("USER_ROLE") ? null : reader.GetString("USER_ROLE"),
+                    ActionType = reader.IsDBNull("ACTION_TYPE") ? null : reader.GetString("ACTION_TYPE"),
+                    EntityType = reader.IsDBNull("ENTITY_TYPE") ? null : reader.GetString("ENTITY_TYPE"),
+                    EntityId = reader.IsDBNull("ENTITY_ID") ? (int?)null : reader.GetInt32("ENTITY_ID"),
+                    EntityName = reader.IsDBNull("ENTITY_NAME") ? null : reader.GetString("ENTITY_NAME"),
+                    ActionTimestamp = reader.GetDateTime("ACTION_TIMESTAMP"),
+                    BeforeData = beforeData,
+                    AfterData = afterData,
+                    Details = reader.IsDBNull("DETAILS") ? null : reader.GetString("DETAILS")
+                };
+            }
+            else
+            {
+                _logger.LogWarning("No record found with {Schema} schema for LogId: {LogId}", 
+                    useNewSchema ? "NEW" : "OLD", logId);
+            }
+            return null;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to query with {Schema} schema for LogId {LogId}. Error: {ErrorMessage}. SQL attempted: {SQL}", 
+                useNewSchema ? "new" : "old", logId, ex.Message, 
+                $"Columns attempted: {(useNewSchema ? "ACTION_TIMESTAMP, OLD_VALUES, NEW_VALUES" : "TIMESTAMP, BEFORE_DATA, AFTER_DATA")}");
+            return null;
         }
     }
 
@@ -3003,5 +3114,139 @@ public async Task<IActionResult> ViewPdf(int id)
         }
         
         return (userId, userName ?? "Unknown", userRole ?? "Unknown");
+    }
+
+    /**
+     * Debug endpoint to test direct database query for specific LogId
+     */
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> TestLogIdQuery(int id)
+    {
+        try
+        {
+            _logger.LogInformation("TestLogIdQuery called with id: {Id}", id);
+            
+            using var connection = new OracleConnection(_connectionString);
+            await connection.OpenAsync();
+            
+            // Test the exact same query as GetActivityLogDetails
+            var sql = @"SELECT 
+                            LOG_ID,
+                            USER_NAME,
+                            USER_ROLE,
+                            ACTION_TYPE,
+                            ENTITY_TYPE,
+                            ENTITY_ID,
+                            ENTITY_NAME,
+                            TIMESTAMP,
+                            BEFORE_DATA,
+                            AFTER_DATA,
+                            DETAILS,
+                            USER_ID
+                        FROM ACTIVITY_LOGS 
+                        WHERE LOG_ID = :logId";
+
+            using var command = new OracleCommand(sql, connection);
+            command.Parameters.Add("logId", OracleDbType.Int32).Value = id;
+
+            _logger.LogInformation("Executing SQL: {Sql} with LogId: {LogId}", sql, id);
+            
+            using var reader = await command.ExecuteReaderAsync();
+            
+            if (await reader.ReadAsync())
+            {
+                var result = new
+                {
+                    Found = true,
+                    LogId = reader.GetInt32("LOG_ID"),
+                    UserName = reader.IsDBNull("USER_NAME") ? null : reader.GetString("USER_NAME"),
+                    UserRole = reader.IsDBNull("USER_ROLE") ? null : reader.GetString("USER_ROLE"),
+                    ActionType = reader.IsDBNull("ACTION_TYPE") ? null : reader.GetString("ACTION_TYPE"),
+                    Query = sql,
+                    ParameterValue = id
+                };
+                
+                return Json(result);
+            }
+            else
+            {
+                // No record found - let's also check what records DO exist
+                var checkSql = "SELECT LOG_ID FROM ACTIVITY_LOGS ORDER BY LOG_ID";
+                var existingIds = new List<int>();
+                
+                using var checkCmd = new OracleCommand(checkSql, connection);
+                using var checkReader = await checkCmd.ExecuteReaderAsync();
+                
+                while (await checkReader.ReadAsync())
+                {
+                    existingIds.Add(checkReader.GetInt32("LOG_ID"));
+                }
+                
+                return Json(new { 
+                    Found = false, 
+                    SearchedId = id, 
+                    ExistingLogIds = existingIds,
+                    ConnectionString = _connectionString.Substring(0, Math.Min(50, _connectionString.Length)) + "...",
+                    Query = sql
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in TestLogIdQuery for id {Id}: {Error}", id, ex.Message);
+            return Json(new { 
+                Error = ex.Message, 
+                SearchedId = id,
+                StackTrace = ex.StackTrace 
+            });
+        }
+    }
+
+    /**
+     * Debug endpoint to check the actual table structure
+     */
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> CheckTableStructure()
+    {
+        try
+        {
+            using var connection = new OracleConnection(_connectionString);
+            await connection.OpenAsync();
+            
+            // Query to get column information
+            var sql = @"SELECT COLUMN_NAME, DATA_TYPE, DATA_LENGTH, NULLABLE 
+                        FROM USER_TAB_COLUMNS 
+                        WHERE TABLE_NAME = 'ACTIVITY_LOGS' 
+                        ORDER BY COLUMN_ID";
+
+            using var command = new OracleCommand(sql, connection);
+            using var reader = await command.ExecuteReaderAsync();
+            
+            var columns = new List<object>();
+            while (await reader.ReadAsync())
+            {
+                columns.Add(new
+                {
+                    ColumnName = reader.GetString("COLUMN_NAME"),
+                    DataType = reader.GetString("DATA_TYPE"),
+                    DataLength = reader.IsDBNull("DATA_LENGTH") ? (int?)null : reader.GetInt32("DATA_LENGTH"),
+                    Nullable = reader.GetString("NULLABLE")
+                });
+            }
+            
+            return Json(new { 
+                TableName = "ACTIVITY_LOGS",
+                Columns = columns
+            });
+        }
+        catch (Exception ex)
+        {
+            return Json(new { 
+                Error = true,
+                Message = ex.Message
+            });
+        }
     }
 } // End of AdminController class
