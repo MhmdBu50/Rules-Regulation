@@ -6,6 +6,7 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/addContactInfo.css">
+    <link rel="stylesheet" href="~/css/adminPagesHeader.css">
     <style>
         /* Simply hide the modal backdrop completely */
         .modal-backdrop {
@@ -13,26 +14,26 @@
         }
     </style>
 }
+@section Scripts {
+    <script src="~/js/adminPagesHeader.js"></script>
+    <script src="~/js/languageSwitcher.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function confirmDelete(contactId, contactName, department) {
+            document.getElementById('contactName').textContent = contactName;
+            document.getElementById('contactDepartment').textContent = department;
+            document.getElementById('deleteContactId').value = contactId;
+            document.getElementById('deleteForm').action = '@Url.Action("DeleteContactInfo", "Admin")';
+            
+            var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            modal.show();
+        }
+    </script>
+}
 
 <div class="AddContactInfo mb-footer-space">
-    <!-- Top Bar -->
-    <div class="top-bar">
-
-        <!-- Back Button -->
-        <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"> 
-            <img src="@Url.Content("~/svgs/admin/backButton.svg")"> 
-            <span id="btn-back" class="me-2"></span> 
-        </a>
-
-        <!-- Logout Button -->
-        <form method="post" action="@Url.Action("Logout", "Account")" style="display: inline;">
-          @Html.AntiForgeryToken()
-          <button type="submit" class="btn" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
-              <span id="btn-logout" class="ms-2"></span> 
-              <img src="@Url.Content("~/svgs/admin/logOut.svg")">
-          </button>
-        </form>
-    </div>
+    <!-- Admin Header -->
+  @await Html.PartialAsync("adminPagesHeader")
 
     <!-- Logo -->
     <div class="container logo-container">
@@ -184,19 +185,5 @@
     </div>
 </div>
 </div>
-@section Scripts {
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function confirmDelete(contactId, contactName, department) {
-            document.getElementById('contactName').textContent = contactName;
-            document.getElementById('contactDepartment').textContent = department;
-            document.getElementById('deleteContactId').value = contactId;
-            document.getElementById('deleteForm').action = '@Url.Action("DeleteContactInfo", "Admin")';
-            
-            var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
-            modal.show();
-        }
-    </script>
-}
 
 @await Html.PartialAsync("_Footer")

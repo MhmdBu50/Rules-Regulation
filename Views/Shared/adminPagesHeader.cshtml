@@ -1,0 +1,68 @@
+<header class="menu">
+
+    <div class="container-fluid h-100 bootstrap-wrapper">
+        <div class="row align-items-center h-100 g-0">
+            <div class="col-auto">
+                <div class="d-flex align-items-center justify-content-around ms-3 gap-3 me-3 ">
+
+                    <button id="burgerBtn" class="navbar-toggler d-lg-none me-2" style="margin-left: 15px;"
+                        type="button">
+                        <img src="~/svgs/navigation/hamburger-menu.svg" alt="Menu" width="36" height="36" />
+                    </button>
+
+                    <!------------------- Logout Button ------------------->
+                    <div class="d-none d-lg-block d-xl-block">
+                        <form method="post" action="@Url.Action("Logout", "Account")" style="margin: 0">
+                            @Html.AntiForgeryToken()
+                            <button class="desktop-logo d-flex logo header-nav" type="submit" style="">
+                                <img src="~/svgs/navigation/logout.svg" alt="Menu" width="36px" height="36px" />
+                                <span class="poppins-regular" id="Logout345"></span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-------- Vertical Divider -------->
+                    <div class="vr d-none d-lg-block d-xl-block" style="color: aliceblue; opacity: 0.75;"></div>
+                    <!-------- Vertical Divider -------->
+
+                    <!-------------------- Language Switcher ------------------->
+                    <div class="language-switcher-container d-none d-lg-block d-xl-block">
+                        <button id="language-toggle" class="language-toggle-btn desktop-logo logo header-nav">
+                            <img src="~/svgs/navigation/language.svg" alt="Language" width="36px" height="36px" />
+                            <span class="poppins-regular" id="Language345">English</span>
+                        </button>
+                    </div>
+
+                    <!-------- Vertical Divider ------>
+                    <div class="vr d-none d-lg-block d-xl-block" style="color: aliceblue; opacity: 0.75;"></div>
+                    <!-------- Vertical Divider ------>
+
+                    <!--------------------- Exit Edit Mode Button ------------------->
+                    <div class="d-none d-lg-block d-xl-block">
+                        <button class="desktop-logo logo header-nav d-none d-lg-flex"
+                            onclick="location.href='@Url.Action("homePage", "Home")'">
+                            <img src="~/svgs/nav-buttons/Normal-AdminView.svg" alt="Exit" width="36" height="36" />
+                            <span class="poppins-regular" id="admin-exit-view-button">Exit edit mode</span>
+
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col d-flex flex-nowrap align-items-center justify-content-center">
+                <!-- Search section removed as requested -->
+            </div>
+
+            <div class="col-auto flex-nowrap">
+                <div>
+                    <button class="desktop-logo logo header-nav d-flex" onclick="goBack()">
+                        <span class="poppins-regular" id="back-button"></span>
+                        <img id="back-icon" src="~/svgs/Admin/backButton.svg" alt="Back" width="36" height="36" />
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</header>

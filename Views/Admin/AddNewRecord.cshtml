@@ -2,36 +2,22 @@
 
 @section Styles {
   <link rel="stylesheet" href="~/css/AddNewRecord.css">
+  <link rel="stylesheet" href="~/css/adminPagesHeader.css">
 }
 <!-- javascript files, from js file-->
 @section Scripts {
   <script src="~/js/addnewrecord.js"></script>
   <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="~/js/adminPagesHeader.js"></script>
+  <script src="~/js/languageSwitcher.js"></script>
 }
 <!-- This file contains the view for adding a new record in the admin panel. -->
 <!-- It includes a form for entering details about the regulation or manual
      it includes details like name, version number, department, approval date etc. -->
 <div class="AddNewRecord mb-footer-space">
 
-  <!-- Top Bar -->
-  <div class="top-bar">
-
-    <!-- Back Button -->
-    <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'">
-      <img src="@Url.Content("~/svgs/admin/backButton.svg")">
-      <span id="btn-back" class="me-2"></span>
-    </a>
-
-    <!-- Logout Button -->
-    <form method="post" action="@Url.Action("Logout", "Account")" style="display: inline;">
-      @Html.AntiForgeryToken()
-      <button type="submit" class="btn"
-        style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
-        <span id="btn-logout" class="ms-2"></span>
-        <img src="@Url.Content("~/svgs/admin/logOut.svg")">
-      </button>
-    </form>
-  </div>
+  <!-- New Admin Header -->
+  @await Html.PartialAsync("adminPagesHeader")
 
   <!-- Logo -->
   <div class="container logo-container">

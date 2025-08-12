@@ -12,10 +12,12 @@
     <link rel="stylesheet" href="~/css/addContactInfo.css">
     <link rel="stylesheet" href="~/css/_rtl_Styles.css">
     <link rel="stylesheet" href="~/css/NewEditor.css">
+    <link rel="stylesheet" href="~/css/adminPagesHeader.css">
 }
 
 @section Scripts {
     <script src="~/js/bootstrap.js"></script>
+    <script src="~/js/adminPagesHeader.js"></script>
     <script>
             // CSRF token for all AJAX requests
         const token = $('input[name="__RequestVerificationToken"]').val();
@@ -185,25 +187,8 @@
 
 <!-- Main Content -->
 <div class="AddContactInfo mb-footer-space @(isArabic ? "rtl" : "ltr")">
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <!-- Back Button -->
-        <a class="btn" onclick="location.href='@Url.Action("AdminPage", "Admin")'"> 
-            <img src="@Url.Content("~/svgs/admin/backButton.svg")"> 
-            <!-- back button -->
-            <span id="btn-back"></span> 
-        </a>
-
-        <!-- Logout Button -->
-        <form method="post" action="@Url.Action("Logout", "Account")" style="display: inline;">
-            @Html.AntiForgeryToken()
-            <button type="submit" class="btn" style="background: none; border: none; padding: 0; color: inherit; text-decoration: none; cursor: pointer;">
-                <!-- logout button -->
-                <span id="btn-logout"></span> 
-                <img src="@Url.Content("~/svgs/admin/logOut.svg")">
-            </button>
-        </form>
-    </div>
+    <!-- New Admin Header -->
+  @await Html.PartialAsync("adminPagesHeader")
 
     <!-- Logo -->
     <div class="container logo-container">
