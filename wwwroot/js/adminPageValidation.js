@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     if (input.value.trim() && !arabicPattern.test(input.value)) {
       if (errorElement) {
-        errorElement.textContent = "هذا الحقل يجب أن يحتوي على نص عربي فقط.";
+        errorElement.textContent = "This field must contain only Arabic text.";
         errorElement.style.display = "block";
         errorElement.setAttribute('dir', 'rtl');
       }
