@@ -42,7 +42,8 @@ function viewDetails(logId) {
     // Initialize Bootstrap modal
     let modal;
     try {
-        modal = new bootstrap.Modal(modalElement);
+        // Get existing modal instance or create new one
+        modal = bootstrap.Modal.getOrCreateInstance(modalElement);
         console.log('Bootstrap modal initialized');
     } catch (error) {
         console.error('Failed to initialize Bootstrap modal:', error);
@@ -540,6 +541,25 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Modal element not found!');
     } else {
         console.log('Modal element found');
+        
+        // Add modal event listeners for proper cleanup
+        modal.addEventListener('hidden.bs.modal', function () {
+            console.log('Modal hidden, cleaning up content...');
+            if (content) {
+                content.innerHTML = `
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="mt-2">Loading activity details...</div>
+                    </div>
+                `;
+            }
+        });
+        
+        modal.addEventListener('shown.bs.modal', function () {
+            console.log('Modal shown successfully');
+        });
     }
     
     if (!content) {
