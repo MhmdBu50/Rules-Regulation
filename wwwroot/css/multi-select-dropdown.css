@@ -38,6 +38,10 @@
     transform: rotate(180deg) scaleX(1.5);
 }
 
+#contactDropdown{
+    transform: rotate(180deg) scaleX(1.5);
+}
+
 .multi-select-dropdown-content {
     position: absolute;
     top: 104%;

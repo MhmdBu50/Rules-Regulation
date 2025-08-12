@@ -54,10 +54,7 @@
 
         #dateRangeFields {
           display: grid;
-          grid-template-columns: 40px 1fr;
           row-gap: 8px;
-          column-gap: 10px;
-          align-items: center;
         }
 
         .filter-column:first-child {
@@ -207,7 +204,7 @@
           */
 
 
-        @media (min-width: 1700px) {
+        @media (min-width: 1850px) {
           .search-container {
             position: absolute;
             left: 50%;

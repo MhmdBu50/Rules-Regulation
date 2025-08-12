@@ -55,6 +55,8 @@
             const tableRows = document.querySelectorAll('tbody tr');
             const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
             
+
+
             // Get selected departments from multi-select
             const departmentOptions = document.querySelectorAll('.contact-department-option');
             const selectedDepartments = [];
@@ -295,6 +297,20 @@
             const departmentOptions = document.querySelectorAll('.contact-department-option');
             const selectedDepartments = [];
             const button = document.getElementById('contactDepartmentMultiSelectButton');
+
+            const dropdown = button.closest('.multi-select-dropdown');
+            
+             // Add event listener to toggle dropdown
+            button.addEventListener('click', function() {
+                dropdown.classList.toggle('active');
+            });
+            
+            // Handle clicks outside to close dropdown
+            document.addEventListener('click', function(event) {
+                if (!dropdown.contains(event.target)) {
+                    dropdown.classList.remove('active');
+                }
+            });
             
             departmentOptions.forEach(function(option) {
                 if (option.checked && option.value !== '') {
@@ -308,9 +324,9 @@
             
             // Update button text
             if (selectedDepartments.length === 0 || departmentOptions[0].checked) {
-                button.innerHTML = `<span>${allDepartmentsText}</span> <span class="caret">▼</span>`;
+                button.innerHTML = `<span>${allDepartmentsText}</span> <span class="caret" style="scale: 0.6;">▼</span>`;
             } else if (selectedDepartments.length === 1) {
-                button.innerHTML = `<span>${selectedDepartments[0]}</span> <span class="caret">▼</span>`;
+                button.innerHTML = `<span>${selectedDepartments[0]}</span> <span class="caret" style="scale: 0.6;">▼</span>`;
             } else {
                 // For multiple departments, show count with translated "Departments" text
                 const isArabic = document.documentElement.lang === 'ar' || 
@@ -318,7 +334,7 @@
                                 document.body.classList.contains('rtl') ||
                                 document.querySelector('[lang="ar"]') !== null;
                 const departmentsText = isArabic ? 'أقسام' : 'Departments';
-                button.innerHTML = `<span>${selectedDepartments.length} ${departmentsText}</span> <span class="caret">▼</span>`;
+                button.innerHTML = `<span>${selectedDepartments.length} ${departmentsText}</span> <span class="caret" style="scale: 0.6;">▼</span>`;
             }
             
             // Update hidden field

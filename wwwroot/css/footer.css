@@ -157,7 +157,7 @@ main, .container-fluid, .main-content {
 .contact-item {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
     color: #b0bec5;
@@ -178,7 +178,7 @@ main, .container-fluid, .main-content {
 .social-links {
     display: flex;
     gap: 1rem;
-    justify-content: center;
+    justify-content: start;
 }
 
 .social-links a {
@@ -294,11 +294,11 @@ main, .container-fluid, .main-content {
         flex-direction: column;
     }
     
-    body.rtl .contact-item {
+    .contact-item {
         justify-content: center;
     }
     
-    body.rtl .social-links {
+    .social-links {
         justify-content: center;
     }
 }

@@ -13,15 +13,6 @@
             border-color: #667eea;
         }
         
-        .search-and-filter-buttons {
-            padding: 8px !important;
-        }
-        
-        .search-and-filter-buttons:hover {
-            background-color: rgba(255, 255, 255, 0.1) !important;
-            border-radius: 4px;
-        }
-        
         /* Table responsiveness */
         .table-container {
             overflow-x: auto;
