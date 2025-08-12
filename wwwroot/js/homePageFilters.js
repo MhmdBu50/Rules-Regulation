@@ -136,7 +136,8 @@ function applyFilters() {
       card.dataset.section?.split(",").map((s) => s.trim().toLowerCase()) || [];
     const cardType = card.dataset.type?.trim().toLowerCase();
     const cardTitle = card.dataset.title?.toLowerCase();
-    const cardDate = card.dataset.date;
+    const cardDate = getCardDateStr(card);
+
 
     // Check if card matches selected filters
     const matchesDept = !department || department === cardDept;
@@ -259,8 +260,9 @@ function sortCardsByDate(order) {
   );
 
   cards.sort((a, b) => {
-    const dateA = new Date(a.querySelector(".document-card").dataset.date);
-    const dateB = new Date(b.querySelector(".document-card").dataset.date);
+    // Change from dataset.date to dataset.versionDate
+    const dateA = new Date(a.querySelector(".document-card").dataset.versionDate);
+    const dateB = new Date(b.querySelector(".document-card").dataset.versionDate);
     return order === "newest" ? dateB - dateA : dateA - dateB;
   });
 
@@ -272,27 +274,159 @@ function sortCardsByDate(order) {
 function setupDateRangeFieldsToggle() {
   const specifyRangeRadio = document.getElementById("specifyRange");
   const dateRangeFields = document.getElementById("dateRangeFields");
+  const dateOptionRadios = document.querySelectorAll('input[name="dateOption"]');
+  const fromDateInput = document.getElementById("fromDate");
+  const toDateInput = document.getElementById("toDate");
 
-  if (specifyRangeRadio && dateRangeFields) {
-    document.querySelectorAll('input[name="dateOption"]').forEach((radio) => {
-      radio.addEventListener("change", function () {
-        // Show/hide date range input
-        dateRangeFields.style.display =
-          this.value === "range" ? "block" : "none";
-      });
+  if (!specifyRangeRadio || !dateRangeFields || !dateOptionRadios.length) {
+    console.error("Date range filter elements not found.");
+    return;
+  }
+
+  // Toggle fields when date option changes
+  dateOptionRadios.forEach((radio) => {
+    radio.addEventListener("change", function () {
+      const isRange = this.value === "range";
+      dateRangeFields.style.setProperty("display", isRange ? "block" : "none", "important");
+      applyFilters();
     });
+  });
 
-    if (specifyRangeRadio.checked) {
-      dateRangeFields.style.display = "block";
+  // Apply filters when date range inputs change
+  if (fromDateInput) fromDateInput.addEventListener("change", applyFilters);
+  if (toDateInput) toDateInput.addEventListener("change", applyFilters);
+
+  // Initial state on page load
+  if (specifyRangeRadio.checked) {
+    dateRangeFields.style.display = "block";
+  } else {
+    dateRangeFields.style.display = "none";
+  }
+}
+
+// ---------- small helpers ----------
+function debounce(fn, ms = 120) {
+  let t = null;
+  return function (...args) {
+    clearTimeout(t);
+    t = setTimeout(() => fn.apply(this, args), ms);
+  };
+}
+
+// Parse many common formats into a Date at local midnight. Returns null on failure.
+function parseToDate(input) {
+  if (!input) return null;
+  input = String(input).trim();
+
+  // YYYY-MM-DD -> interpret as local midnight
+  if (/^\d{4}-\d{2}-\d{2}$/.test(input)) {
+    return new Date(input + 'T00:00:00');
+  }
+
+  // DD/MM/YYYY -> convert -> YYYY-MM-DD
+  const dmy = input.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (dmy) {
+    const [, dd, mm, yyyy] = dmy;
+    return new Date(`${yyyy}-${mm}-${dd}T00:00:00`);
+  }
+
+  // fallback to Date parser (ISO, datetimes)
+  const d = new Date(input);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+// Prefer versionDate then date attributes (handles data-version-date, data-date, etc.)
+function getCardDateStr(card) {
+  if (!card) return null;
+  return (
+    card.dataset.versionDate ||
+    card.dataset.versiondate ||
+    card.dataset.date ||
+    card.getAttribute('data-version-date') ||
+    card.getAttribute('data-date') ||
+    null
+  );
+}
+
+// Check if dateStr falls between from/to (both optional). If neither from/to -> true.
+function isDateInRange(dateStr, fromStr, toStr) {
+  if (!fromStr && !toStr) return true;
+
+  const cardDate = parseToDate(dateStr);
+  if (!cardDate) return false; // exclude cards with no valid date when range active
+
+  cardDate.setHours(0, 0, 0, 0);
+  const t = cardDate.getTime();
+
+  if (fromStr) {
+    const f = parseToDate(fromStr);
+    if (!f) return false;
+    f.setHours(0, 0, 0, 0);
+    if (t < f.getTime()) return false;
+  }
+  if (toStr) {
+    const tt = parseToDate(toStr);
+    if (!tt) return false;
+    tt.setHours(0, 0, 0, 0);
+    if (t > tt.getTime()) return false;
+  }
+  return true;
+}
+
+// ---------- robust UI wiring for date-range controls ----------
+function setupDateRangeFieldsToggle() {
+  const dateRangeFields = document.getElementById('dateRangeFields');
+  const radios = document.querySelectorAll('input[name="dateOption"]');
+  const fromInput = document.getElementById('fromDate');
+  const toInput = document.getElementById('toDate');
+
+  // toggles the UI and re-applies filters
+  function updateUiAndFilter() {
+    const checked = document.querySelector('input[name="dateOption"]:checked');
+    const isRange = checked && checked.value === 'range';
+
+    if (dateRangeFields) {
+      // keep grid layout from CSS; CSS shows #dateRangeFields as grid
+      if (isRange) dateRangeFields.style.setProperty('display', 'grid', 'important');
+      else dateRangeFields.style.setProperty('display', 'none', 'important');
+    }
+
+    // re-run filter immediately
+    applyFilters();
+  }
+
+  // attach listeners to radios (defensive if HTML changes)
+  radios.forEach((r) => r.addEventListener('change', updateUiAndFilter));
+
+  // apply filters as user types dates (debounced) and also on change
+  const debouncedApply = debounce(applyFilters, 120);
+  if (fromInput) {
+    fromInput.addEventListener('input', debouncedApply);
+    fromInput.addEventListener('change', applyFilters);
+  }
+  if (toInput) {
+    toInput.addEventListener('input', debouncedApply);
+    toInput.addEventListener('change', applyFilters);
+  }
+
+  // initialize visibility based on the currently checked radio
+  const initial = document.querySelector('input[name="dateOption"]:checked');
+  if (dateRangeFields) {
+    if (initial && initial.value === 'range') {
+      dateRangeFields.style.setProperty('display', 'grid', 'important');
+    } else {
+      dateRangeFields.style.setProperty('display', 'none', 'important');
     }
   }
 }
 
+
 // ==================== Initialization on Page Load ====================
 
 function initializeHomePageFunctionality() {
+  console.log("initializeHomePageFunctionality() started!");
   setupDateRangeFieldsToggle(); // Show/hide date range fields
-
+console.log("After setupDateRangeFieldsToggle()");
   // Remove auto-apply event listeners for manual filters
   // Only keep search input for instant search
   document
@@ -300,6 +434,8 @@ function initializeHomePageFunctionality() {
     ?.addEventListener("input", applyFilters);
 
   applyFilters(); // Run filters initially (if needed)
+  console.log("initializeHomePageFunctionality() finished!");
 }
 
 document.addEventListener("DOMContentLoaded", initializeHomePageFunctionality);
+console.log("DOMContentLoaded fired!");
