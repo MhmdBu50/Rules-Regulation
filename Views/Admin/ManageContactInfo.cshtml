@@ -7,28 +7,14 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/addContactInfo.css">
     <link rel="stylesheet" href="~/css/adminPagesHeader.css">
-    <style>
-        /* Simply hide the modal backdrop completely */
-        .modal-backdrop {
-            display: none !important;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/manageContactInfo.css">
+    <link rel="stylesheet" href="~/css/multi-select-dropdown.css" />
 }
 @section Scripts {
     <script src="~/js/adminPagesHeader.js"></script>
     <script src="~/js/languageSwitcher.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function confirmDelete(contactId, contactName, department) {
-            document.getElementById('contactName').textContent = contactName;
-            document.getElementById('contactDepartment').textContent = department;
-            document.getElementById('deleteContactId').value = contactId;
-            document.getElementById('deleteForm').action = '@Url.Action("DeleteContactInfo", "Admin")';
-            
-            var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
-            modal.show();
-        }
-    </script>
+    <script src="~/js/manageContactInfo.js"></script>
 }
 
 <div class="AddContactInfo mb-footer-space">
@@ -68,6 +54,72 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
+
+    <!-- Search Section -->
+    <div class="container my-4">
+    <!-- Search and Filter Section -->
+    <div class="container my-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <!-- Search Bar -->
+                    <div class="flex-grow-1" style="min-width: 300px;">
+                        <div class="search-container d-flex align-items-center position-relative" style="background-color: #2f3e5f; border-radius: 25px; padding: 12px 20px; height: 50px;">
+                            <button class="search-and-filter-buttons" style="background: none; border: none; padding: 8px;">
+                                <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon"
+                                    width="24" height="24" />
+                            </button>
+                            <input id="contactSearchInput"
+                                class="search poppins-regular flex-grow-1" type="text"
+                                style="color: #ABB7C2; background: transparent; border: none; padding: 8px 30px 8px 8px; outline: none; font-size: 16px;">
+                            <button id="contactClearBtn" class="position-absolute"
+                                style="inset-inline-end: 20px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ABB7C2; font-size: 18px; cursor: pointer; display: none;"
+                                onclick="clearContactSearch()" title="Clear search">
+                                ×
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Department Filter -->
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="multi-select-dropdown-container">
+                            <div class="multi-select-dropdown">
+                                <div class="multi-select-button" id="contactDepartmentMultiSelectButton" style="background-color: #2f3e5f; color: #ABB7C2; border: 1px solid #dee2e6; border-radius: 25px; padding: 12px 20px; cursor: pointer; min-width: 300px; font-size: 16px; height: 50px; display: flex; align-items: center; justify-content: space-between;">
+                                    <span id="contact-all-departments">All Departments</span> <span class="caret"></span>
+                                </div>
+                                <div class="multi-select-dropdown-content" id="contactDepartmentDropdownContent" style="display: none; position: absolute; background-color: white; min-width: 300px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000; margin-top: 4px;">
+                                    <label style="display: block; padding: 8px 12px; cursor: pointer; margin: 0;">
+                                        <input type="checkbox" class="form-check-input contact-department-option me-2" value="" checked> <span id="contact-all-departments-option">All Departments</span>
+                                    </label>
+                                    @{
+                                        var allDepartments = new List<(string key, string value)>
+                                        {
+                                            ("dept-reg-admission", "Reg and Admission"),
+                                            ("dept-ccsit", "CCSIT"),
+                                            ("dept-communication-tech", "Communication and tech"),
+                                            ("dept-hospital", "Hospital"),
+                                            ("dept-library", "Library"),
+                                            ("dept-students-affairs", "Students Affairs"),
+                                            ("dept-preparetory", "Preparetory"),
+                                            ("dept-academic-affairs", "Academic Affairs")
+                                        };
+                                    }
+                                    @foreach (var department in allDepartments)
+                                    {
+                                        <label style="display: block; padding: 8px 12px; cursor: pointer; margin: 0; border-top: 1px solid #eee;">
+                                            <input type="checkbox" class="form-check-input contact-department-option me-2" value="@department.value"> <span id="@department.key">@department.value</span>
+                                        </label>
+                                    }
+                                </div>
+                            </div>
+                            <input type="hidden" id="contactDepartmentFilter" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
 
     <!-- Contact Information Table -->
 <div class="container">

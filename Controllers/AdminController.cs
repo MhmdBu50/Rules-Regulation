@@ -2669,12 +2669,19 @@ public async Task<IActionResult> ViewPdf(int id)
      * @param logId - Activity log ID to retrieve details for
      * @return JSON response with log details
      */
-    [HttpGet]
+    // Explicit absolute routes to match both /Admin/GetActivityLogDetails and /Admin/GetActivityLogDetails/{logId}
+    [HttpGet("/Admin/GetActivityLogDetails/{logId:int}")]
+    [HttpGet("/Admin/GetActivityLogDetails")] // fallback: /Admin/GetActivityLogDetails?logId=58
     [AllowAnonymous] // Temporarily remove auth for debugging
     public async Task<IActionResult> GetActivityLogDetails(int logId)
     {
         try
         {
+            if (logId <= 0)
+            {
+                _logger.LogWarning("GetActivityLogDetails called with invalid logId: {LogId}. Check routing and binding.", logId);
+                return BadRequest(new { error = "Invalid logId. Use /Admin/GetActivityLogDetails/{logId}", received = logId });
+            }
             _logger.LogInformation("GetActivityLogDetails called with logId: {LogId} (Type: {LogIdType})", logId, logId.GetType().Name);
             Console.WriteLine($"DEBUG: GetActivityLogDetails called with logId: {logId}");
             

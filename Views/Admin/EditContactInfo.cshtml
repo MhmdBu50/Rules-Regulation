@@ -17,7 +17,7 @@
 
 <div class="AddContactInfo">
     <!-- New Admin Header -->
-  @await Html.PartialAsync("adminPagesHeader")
+    @await Html.PartialAsync("adminPagesHeader")
 
     <!-- Logo -->
     <div class="container logo-container">
@@ -27,7 +27,7 @@
     <!-- Main Header -->
     <div class="main-header">
         <h1 id="main-header-90201">Edit Contact Information</h1>
-        <p class="subtitle" id= "subtitle-90201">Update contact information details</p>
+        <p class="subtitle" id="subtitle-90201">Update contact information details</p>
     </div>
 
     @if (TempData["SuccessMessage"] != null)
@@ -57,17 +57,25 @@
                     <label for="Department" id="label-department-90201">Relevant Department</label>
                     <select class="form-select" id="Department" name="Department" required>
                         <option value="" id="option-select-dept-90201">Select department</option>
-                        <option value="Reg and Admission" selected="@(Model.Department == "Reg and Admission")" id="option-reg-90201">Reg and
+                        <option value="Reg and Admission" selected="@(Model.Department == "Reg and Admission")"
+                            id="option-reg-90201">Reg and
                             Admission</option>
-                        <option value="CCSIT" selected="@(Model.Department == "CCSIT")" id="option-ccsit-90201">CCSIT</option>
+                        <option value="CCSIT" selected="@(Model.Department == "CCSIT")" id="option-ccsit-90201">CCSIT
+                        </option>
                         <option value="Communication and tech"
-                            selected="@(Model.Department == "Communication and tech")" id="option-commtech-90201">Communication and tech</option>
-                        <option value="Hospital" selected="@(Model.Department == "Hospital")" id="option-hospital-90201">Hospital</option>
-                        <option value="Library" selected="@(Model.Department == "Library")" id="option-library-90201">Library</option>
-                        <option value="Students Affairs" selected="@(Model.Department == "Students Affairs")" id="option-affairs-90201">Students
+                            selected="@(Model.Department == "Communication and tech")" id="option-commtech-90201">
+                            Communication and tech</option>
+                        <option value="Hospital" selected="@(Model.Department == "Hospital")"
+                            id="option-hospital-90201">Hospital</option>
+                        <option value="Library" selected="@(Model.Department == "Library")" id="option-library-90201">
+                            Library</option>
+                        <option value="Students Affairs" selected="@(Model.Department == "Students Affairs")"
+                            id="option-affairs-90201">Students
                             Affairs</option>
-                        <option value="Preparetory" selected="@(Model.Department == "Preparetory")" id="option-prep-90201">Preparetory</option>
-                        <option value="Academic Affairs" selected="@(Model.Department == "Academic Affairs")" id="option-academic-90201">Academic
+                        <option value="Preparetory" selected="@(Model.Department == "Preparetory")"
+                            id="option-prep-90201">Preparetory</option>
+                        <option value="Academic Affairs" selected="@(Model.Department == "Academic Affairs")"
+                            id="option-academic-90201">Academic
                             Affairs</option>
                     </select>
                 </div>
@@ -77,13 +85,20 @@
                         <div class="col-6">
                             <label for="Name" id="label-name-en-90201">Name of Responsible Person (English)</label>
                             <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" lang="en"
-                                required>
+                                required pattern="[a-zA-Z0-9\s\-.,'()&]*" title="Please enter English text only"
+                                placeholder="Enter name in English only"
+                                oninput="this.value = this.value.replace(/[^\u0000-\u007F\s\-.,'()&]/g, '')"
+                                onkeypress="return /[\u0000-\u007F\s\-.,'()&]/.test(String.fromCharCode(event.charCode)) || event.charCode === 8 || event.charCode === 0">
                             <div id="nameError" class="text-danger mt-1"></div>
                         </div>
                         <div class="col-6">
                             <label for="NameAr" id="label-name-ar-90201">Name of Responsible Person (Arabic)</label>
                             <input type="text" class="form-control" id="NameAr" name="NameAr"
-                                value="@(Model.NameAr ?? "")" lang="ar" dir="rtl" required>
+                                value="@(Model.NameAr ?? "")" lang="ar" dir="rtl" required
+                                pattern="[\u0600-\u06FF\s\u060C\u061B\u061F\u0640\-.,'،]*"
+                                title="Please enter Arabic text only" placeholder="أدخل الاسم باللغة العربية فقط"
+                                oninput="this.value = this.value.replace(/[^\u0600-\u06FF\s\u060C\u061B\u061F\u0640\-.,'،]/g, '')"
+                                onkeypress="return /[\u0600-\u06FF\s\u060C\u061B\u061F\u0640\-.,'،]/.test(String.fromCharCode(event.charCode)) || event.charCode === 8 || event.charCode === 0">
                             <div id="nameArError" class="text-danger mt-1"></div>
                         </div>
                     </div>
@@ -91,25 +106,37 @@
 
                 <div class="mb-5">
                     <label for="Email" id="label-email-90201">E-mail</label>
-                    <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email">
+                    <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email"
+                        placeholder="Enter email address(example@example.com)" required>
                 </div>
 
                 <div class="mb-5">
                     <label for="Telephone" id="label-telephone-90201">Telephone number</label>
-                    <input type="tel" class="form-control" id="Telephone" name="Telephone" value="@Model.Telephone">
+                    <input type="tel" class="form-control" id="Telephone" name="Telephone" value="@Model.Telephone"
+                        placeholder="01XXXXXXXX" maxlength="10" pattern="[0-9]{10}" required
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)"
+                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                        title="Enter exactly 10 digits">
                 </div>
 
-                    <div class="mb-5">
-                        <label for="Mobile" id="label-mobile-90201">Mobile number</label>
-                        <div class="input-group">
-                            <span class="input-group-text shadowed">+966</span>
-                            <input type="tel" class="form-control" id="Mobile" name="Mobile" value="@Model.Mobile">
-                        </div>
+                <div class="mb-5">
+                    <label for="Mobile" id="label-mobile-90201">Mobile number</label>
+                    <div class="input-group">
+                        <span class="input-group-text shadowed">+966</span>
+                        <input type="tel" class="form-control" id="Mobile" name="Mobile" value="@Model.Mobile"
+                            placeholder="05XXXXXXXX" maxlength="10" pattern="[0-9]{10}"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length>10)this.value=this.value.slice(0,10);"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                            title="Enter exactly 10 digits">
+
                     </div>
+                </div>
 
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary me-2" id="btn-update-90201">Update Contact Info</button>
-                    <a href="@Url.Action("ManageContactInfo", "Admin")" class="btn btn-secondary" id="btn-cancel-90201">Cancel</a>
+                    <button type="submit" class="btn btn-primary me-2" id="btn-update-90201">Update Contact
+                        Info</button>
+                    <a href="@Url.Action("ManageContactInfo", "Admin")" class="btn btn-secondary"
+                        id="btn-cancel-90201">Cancel</a>
                 </div>
             </form>
         </div>
