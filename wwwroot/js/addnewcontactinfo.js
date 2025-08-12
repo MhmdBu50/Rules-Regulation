@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Phone number validation (numbers only)
   if (mobileInput) {
     mobileInput.addEventListener('input', function () {
-      this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);
+      this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
     });
   }
 

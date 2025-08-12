@@ -124,10 +124,11 @@
                     <div class="input-group">
                         <span class="input-group-text shadowed">+966</span>
                         <input type="tel" class="form-control" id="Mobile" name="Mobile" value="@Model.Mobile"
-                            placeholder="05XXXXXXXX" maxlength="10" pattern="[0-9]{10}"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)"
+                            placeholder="05XXXXXXXX" maxlength="10" pattern="[0-9]{10}" required
+                            oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length>10)this.value=this.value.slice(0,10);"
                             onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                             title="Enter exactly 10 digits">
+
                     </div>
                 </div>
 
