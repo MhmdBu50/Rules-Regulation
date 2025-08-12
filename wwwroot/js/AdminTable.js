@@ -70,6 +70,14 @@ function setupAccordionLazyLoading() {
             // Replace the content with AJAX loaded content
             accordionBody.innerHTML = html;
             
+            // Initialize validation for the newly loaded record form
+            if (typeof window.addValidationToRecord === 'function') {
+              console.log('Calling addValidationToRecord for:', recordId);
+              window.addValidationToRecord(recordId);
+            } else {
+              console.log('addValidationToRecord function not available');
+            }
+            
             // Apply translations to the newly loaded content
             setTimeout(() => {
               const currentLang = document.body.classList.contains('rtl') ? 'ar' : 'en';
@@ -166,6 +174,11 @@ function showAdminRecordDetails(recordId) {
     })
     .then((html) => {
       detailsContainer.innerHTML = html;
+      
+      // Initialize validation for the newly loaded record form
+      if (typeof window.addValidationToRecord === 'function') {
+        window.addValidationToRecord(recordId);
+      }
     })
     .catch((error) => {
 
@@ -271,6 +284,11 @@ function toggleEditMode(recordId) {
 
     // Clear any pending file selections
     clearPendingFileSelections(recordId);
+    
+    // Clear validation styles when returning to view mode
+    if (typeof window.clearValidationStyles === 'function') {
+      window.clearValidationStyles(recordId);
+    }
 
     // Reset form to original values if canceling
     location.reload(); // Simple solution to reset form
@@ -279,6 +297,11 @@ function toggleEditMode(recordId) {
     editBtn.style.display = "none";
     saveBtn.style.display = "inline-block";
     cancelBtn.style.display = "inline-block";
+    
+    // Initialize validation when entering edit mode
+    if (typeof window.addValidationToRecord === 'function') {
+      window.addValidationToRecord(recordId);
+    }
   }
 
 
@@ -587,12 +610,132 @@ async function clearThumbnailCacheForRecord(recordId) {
   return result;
 }
 
+// Function to validate form fields before submission
+function validateFormFields(recordId) {
+  console.log('validateFormFields called for record:', recordId);
+  const formId = `recordForm_${recordId}`;
+  const form = document.getElementById(formId);
+  
+  if (!form) {
+    console.log('Form not found:', formId);
+    return true; // If form not found, allow submission
+  }
+
+  // Arabic validation pattern
+  const arabicPattern = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF0-9\s\.\,\:\;\!\?\@\#\$\%\^\&\*\(\)\[\]\{\}\/\\\<\>\-\_\+\=\"\'\|،؟؛\n\r]+$/;
+  // English validation pattern - more restrictive
+  const englishPattern = /^[a-zA-Z0-9\s\-.,'()&]+$/;
+
+  let isValid = true;
+
+  // Get English fields
+  const regulationNameEn = form.querySelector('textarea[name="regulationName"]');
+  const descriptionEn = form.querySelector('textarea[name="description"]');
+  const approvingEntityEn = form.querySelector('input[name="approvingEntity"]');
+  const notesEn = form.querySelector('input[name="notes"]');
+
+  // Get Arabic fields
+  const regulationNameAr = form.querySelector('textarea[name="regulationNameAr"]');
+  const descriptionAr = form.querySelector('textarea[name="descriptionAr"]');
+  const approvingEntityAr = form.querySelector('input[name="approvingEntityAr"]');
+  const notesAr = form.querySelector('input[name="notesAr"]');
+
+  console.log('Found fields:', {
+    regulationNameEn: !!regulationNameEn,
+    descriptionEn: !!descriptionEn,
+    approvingEntityEn: !!approvingEntityEn,
+    notesEn: !!notesEn,
+    regulationNameAr: !!regulationNameAr,
+    descriptionAr: !!descriptionAr,
+    approvingEntityAr: !!approvingEntityAr,
+    notesAr: !!notesAr
+  });
+
+  // Validate English fields
+  if (regulationNameEn && !regulationNameEn.disabled && regulationNameEn.value.trim()) {
+    console.log('Validating English regulation name:', regulationNameEn.value);
+    if (!englishPattern.test(regulationNameEn.value)) {
+      console.log('English regulation name failed validation');
+      regulationNameEn.classList.add('is-invalid');
+      isValid = false;
+    }
+  }
+
+  if (descriptionEn && !descriptionEn.disabled && descriptionEn.value.trim()) {
+    console.log('Validating English description:', descriptionEn.value);
+    if (!englishPattern.test(descriptionEn.value)) {
+      console.log('English description failed validation');
+      descriptionEn.classList.add('is-invalid');
+      isValid = false;
+    }
+  }
+
+  if (approvingEntityEn && !approvingEntityEn.disabled && approvingEntityEn.value.trim()) {
+    console.log('Validating English approving entity:', approvingEntityEn.value);
+    if (!englishPattern.test(approvingEntityEn.value)) {
+      console.log('English approving entity failed validation');
+      approvingEntityEn.classList.add('is-invalid');
+      isValid = false;
+    }
+  }
+
+  if (notesEn && !notesEn.disabled && notesEn.value.trim()) {
+    console.log('Validating English notes:', notesEn.value);
+    if (!englishPattern.test(notesEn.value)) {
+      console.log('English notes failed validation');
+      notesEn.classList.add('is-invalid');
+      isValid = false;
+    }
+  }
+
+  // Validate Arabic fields
+  if (regulationNameAr && !regulationNameAr.disabled && regulationNameAr.value.trim()) {
+    if (!arabicPattern.test(regulationNameAr.value)) {
+      regulationNameAr.classList.add('is-invalid');
+      isValid = false;
+    }
+  }
+
+  if (descriptionAr && !descriptionAr.disabled && descriptionAr.value.trim()) {
+    if (!arabicPattern.test(descriptionAr.value)) {
+      descriptionAr.classList.add('is-invalid');
+      isValid = false;
+    }
+  }
+
+  if (approvingEntityAr && !approvingEntityAr.disabled && approvingEntityAr.value.trim()) {
+    if (!arabicPattern.test(approvingEntityAr.value)) {
+      approvingEntityAr.classList.add('is-invalid');
+      isValid = false;
+    }
+  }
+
+  if (notesAr && !notesAr.disabled && notesAr.value.trim()) {
+    if (!arabicPattern.test(notesAr.value)) {
+      notesAr.classList.add('is-invalid');
+      isValid = false;
+    }
+  }
+
+  console.log('Validation result for record', recordId, ':', isValid);
+  return isValid;
+}
+
 // Function to handle form submission with file uploads
 async function handleFormSubmit(event, recordId) {
   event.preventDefault(); // Prevent default form submission
 
   const form = event.target;
   const saveBtn = form.querySelector(".save-btn");
+
+  // First, run validation check
+  console.log('Running validation check for record:', recordId);
+  if (!validateFormFields(recordId)) {
+    console.log('Validation failed for record:', recordId);
+    alert('Please ensure all fields contain only the appropriate script before submitting.');
+    return false;
+  }
+  console.log('Validation passed for record:', recordId);
 
   // Show loading state
   const originalSaveText = saveBtn.textContent;

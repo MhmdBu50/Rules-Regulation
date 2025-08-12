@@ -3,7 +3,7 @@
 
 document.addEventListener('DOMContentLoaded', function () {
   // Arabic validation pattern - includes Arabic letters, punctuation, and common symbols
-  const arabicPattern = /^[\u0600-\u06FF\s\u060C\u061B\u061F\u0640]*$/;
+  const arabicPattern = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF0-9\s\.\,\:\;\!\?\@\#\$\%\^\&\*\(\)\[\]\{\}\/\\\<\>\-\_\+\=\"\'\|،؟؛\n\r]+$/;
 
   // English validation function
   function validateEnglishField(input, errorElementId) {
@@ -67,10 +67,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Function to add validation to a specific record form
   function addValidationToRecord(recordId) {
+    console.log('Initializing validation for record:', recordId);
     const formId = `recordForm_${recordId}`;
     const form = document.getElementById(formId);
     
-    if (!form) return;
+    if (!form) {
+      console.log('Form not found:', formId);
+      return;
+    }
+
+    // Remove any existing validation markers to prevent duplicate listeners
+    if (form.hasAttribute('data-validation-initialized')) {
+      console.log('Validation already initialized for record:', recordId);
+      return; // Already initialized
+    }
+    
+    console.log('Adding validation to record:', recordId);
+    // Mark form as having validation initialized
+    form.setAttribute('data-validation-initialized', 'true');
 
     // Get English fields
     const regulationNameEn = form.querySelector('textarea[name="regulationName"]');
@@ -119,50 +133,66 @@ document.addEventListener('DOMContentLoaded', function () {
     // Add real-time validation for English fields
     if (regulationNameEn) {
       regulationNameEn.addEventListener('input', function() {
-        validateEnglishField(this, `regulationNameEnError_${recordId}`);
+        if (!this.disabled && !this.readOnly) {
+          validateEnglishField(this, `regulationNameEnError_${recordId}`);
+        }
       });
     }
 
     if (descriptionEn) {
       descriptionEn.addEventListener('input', function() {
-        validateEnglishField(this, `descriptionEnError_${recordId}`);
+        if (!this.disabled && !this.readOnly) {
+          validateEnglishField(this, `descriptionEnError_${recordId}`);
+        }
       });
     }
 
     if (approvingEntityEn) {
       approvingEntityEn.addEventListener('input', function() {
-        validateEnglishField(this, `approvingEntityEnError_${recordId}`);
+        if (!this.disabled && !this.readOnly) {
+          validateEnglishField(this, `approvingEntityEnError_${recordId}`);
+        }
       });
     }
 
     if (notesEn) {
       notesEn.addEventListener('input', function() {
-        validateEnglishField(this, `notesEnError_${recordId}`);
+        if (!this.disabled && !this.readOnly) {
+          validateEnglishField(this, `notesEnError_${recordId}`);
+        }
       });
     }
 
     // Add real-time validation for Arabic fields
     if (regulationNameAr) {
       regulationNameAr.addEventListener('input', function() {
-        validateArabicField(this, `regulationNameArError_${recordId}`);
+        if (!this.disabled && !this.readOnly) {
+          validateArabicField(this, `regulationNameArError_${recordId}`);
+        }
       });
     }
 
     if (descriptionAr) {
       descriptionAr.addEventListener('input', function() {
-        validateArabicField(this, `descriptionArError_${recordId}`);
+        if (!this.disabled && !this.readOnly) {
+          validateArabicField(this, `descriptionArError_${recordId}`);
+        }
       });
     }
 
     if (approvingEntityAr) {
       approvingEntityAr.addEventListener('input', function() {
-        validateArabicField(this, `approvingEntityArError_${recordId}`);
+        if (!this.disabled && !this.readOnly) {
+          validateArabicField(this, `approvingEntityArError_${recordId}`);
+        }
       });
     }
 
     if (notesAr) {
       notesAr.addEventListener('input', function() {
-        validateArabicField(this, `notesArError_${recordId}`);
+        if (!this.disabled && !this.readOnly) {
+          validateArabicField(this, `notesArError_${recordId}`);
+        }
       });
     }
 
@@ -233,6 +263,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById(formId);
     
     if (!form) return;
+
+    // Remove validation marker so it can be re-initialized
+    form.removeAttribute('data-validation-initialized');
 
     // Remove validation classes from all form controls
     const formControls = form.querySelectorAll('.form-control');
