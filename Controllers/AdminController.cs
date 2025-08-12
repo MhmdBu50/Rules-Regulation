@@ -1,5 +1,6 @@
 // Required using statements for MVC, Oracle database, file handling, and dependency injection
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RulesRegulation.Models;
 using RulesRegulation.Services;
@@ -189,7 +190,7 @@ public class AdminController : Controller
                 {
                     new { label = "Academic rules", value = 5, percentage = 45.5 },
                     new { label = "Student rules & regulations", value = 3, percentage = 27.3 },
-                    new { label = "Employees' rules & regulations", value = 2, percentage = 18.2 },
+                    new { label = "Employees’ rules & regulations", value = 2, percentage = 18.2 },
                     new { label = "Student guides & templates", value = 1, percentage = 9.1 }
                 };
             }
@@ -220,7 +221,7 @@ public class AdminController : Controller
                 donutData = new[] {
                     new { label = "Academic rules", value = 5, percentage = 45.5 },
                     new { label = "Student rules & regulations", value = 3, percentage = 27.3 },
-                    new { label = "Employees' rules & regulations", value = 2, percentage = 18.2 },
+                    new { label = "Employees’ rules & regulations", value = 2, percentage = 18.2 },
                     new { label = "Student guides & templates", value = 1, percentage = 9.1 }
                 },
                 barData = new[] {
@@ -353,6 +354,22 @@ public class AdminController : Controller
             // Return empty list if there's an error to prevent application crash
             return View(new List<dynamic>());
         }
+    }
+
+    /**
+     * AdminPortal (GET) - Elegant landing page for Admins after login
+     * 
+     * Admin-only access with 4 large cards linking to key administrative sections.
+     * Uses established university branding and admin page layout patterns.
+     * 
+     * @return View with admin portal interface
+     */
+    [HttpGet]
+    [Authorize(Roles = "Admin")] // Restored: Admin access only
+    public IActionResult AdminPortal()
+    {
+        ViewData["Title"] = "Admin Portal";
+        return View("~/Views/Admin/AdminPortal.cshtml");
     }
 
     /**
