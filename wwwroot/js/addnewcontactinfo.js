@@ -6,7 +6,7 @@ function confirmCancel() {
 
 document.addEventListener('DOMContentLoaded', function () {
   // Arabic validation pattern - includes Arabic letters, punctuation, and common symbols
-  const arabicPattern = /^[\u0600-\u06FF\s\u060C\u061B\u061F\u0640]*$/;
+  const arabicPattern = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF0-9\s\.\,\:\;\!\?\@\#\$\%\^\&\*\(\)\[\]\{\}\/\\\<\>\-\_\+\=\"\'\|،؟؛\n\r]+$/;
 
   // English validation pattern
   
