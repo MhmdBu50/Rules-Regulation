@@ -189,7 +189,7 @@ public class AdminController : Controller
                 {
                     new { label = "Academic rules", value = 5, percentage = 45.5 },
                     new { label = "Student rules & regulations", value = 3, percentage = 27.3 },
-                    new { label = "Employees' rules & regulations", value = 2, percentage = 18.2 },
+                    new { label = "Employees’ rules & regulations", value = 2, percentage = 18.2 },
                     new { label = "Student guides & templates", value = 1, percentage = 9.1 }
                 };
             }
@@ -220,7 +220,7 @@ public class AdminController : Controller
                 donutData = new[] {
                     new { label = "Academic rules", value = 5, percentage = 45.5 },
                     new { label = "Student rules & regulations", value = 3, percentage = 27.3 },
-                    new { label = "Employees' rules & regulations", value = 2, percentage = 18.2 },
+                    new { label = "Employees’ rules & regulations", value = 2, percentage = 18.2 },
                     new { label = "Student guides & templates", value = 1, percentage = 9.1 }
                 },
                 barData = new[] {

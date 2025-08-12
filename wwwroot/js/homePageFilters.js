@@ -59,7 +59,7 @@ function navigateToEmployeeRules(btn) {
   document.getElementById("policiesFilter").checked = false;
   document.getElementById("academicFilter").checked = false;
 
-  // Set Employees' rules & regulations
+  // Set Employees’ rules & regulations
   document.getElementById("policiesFilter").checked = true;
   applyFilters();
 }
