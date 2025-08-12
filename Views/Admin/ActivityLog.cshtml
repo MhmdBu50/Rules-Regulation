@@ -19,7 +19,7 @@
 }
 
 @section Scripts {
-    <script src="~/js/bootstrap.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/adminPagesHeader.js"></script>
     <script src="~/js/activityLog.js"></script>
 }
@@ -49,9 +49,11 @@
     <div class="main-header">
         <div class="container text-center d-flex flex-column align-items-center justify-content-center">
             <h1 class="display-5 fw-semibold mb-2">
-                <span class="bi bi-activity me-3"></span>Activity Log
+                <!-- Activity Log -->
+                <span class="bi bi-activity me-3" id="activityLog-page-title"></span>
             </h1>
-            <p class="subtitle text-white-50 mb-4">Monitor and track all privileged user actions and changes</p>
+            <!-- Monitor and track all privileged user actions and changes -->
+            <p class="subtitle text-white-50 mb-4" id= "activityLog-subtitle"></p>
         </div>
     </div>
 
@@ -81,27 +83,32 @@
             <div class="stat-card total">
                 <span class="bi bi-bar-chart stat-icon"></span>
                 <div class="stat-number">@Model.TotalActions</div>
-                <div class="stat-label">Total Actions</div>
+                <!-- Total Actions -->
+                <div class="stat-label" id="activityLog-total-actions"></div>
             </div>
             <div class="stat-card admin">
                 <span class="bi bi-shield-check stat-icon"></span>
                 <div class="stat-number">@Model.AdminActionsCount</div>
-                <div class="stat-label">Admin Actions</div>
+                <!--Admin Actions -->
+                <div class="stat-label" id="activityLog-admin-actions"></div>
             </div>
             <div class="stat-card editor">
                 <span class="bi bi-pencil-square stat-icon"></span>
                 <div class="stat-number">@Model.EditorActionsCount</div>
-                <div class="stat-label">Editor Actions</div>
+                <!-- Editor Actions -->
+                <div class="stat-label" id="activityLog-editor-actions"></div>
             </div>
             <div class="stat-card records">
                 <span class="bi bi-file-earmark-text stat-icon"></span>
                 <div class="stat-number">@Model.RecordActionsCount</div>
-                <div class="stat-label">Record Changes</div>
+                <!-- Record Changes -->
+                <div class="stat-label" id="activityLog-record-changes"></div>
             </div>
             <div class="stat-card contacts">
                 <span class="bi bi-person-vcard stat-icon"></span>
                 <div class="stat-number">@Model.ContactActionsCount</div>
-                <div class="stat-label">Contact Changes</div>
+                <!-- Contact Changes -->
+                <div class="stat-label" id="activityLog-contact-changes"></div>
             </div>
         </div>
 
@@ -111,45 +118,58 @@
                 <form method="get" asp-action="ActivityLog" id="filterForm">
                     <div class="row g-3 align-items-end">
                         <div class="col-md-2">
-                            <label class="form-label fw-semibold">Action Type</label>
+                            <!-- Action Type Filter -->
+                            <label class="form-label fw-semibold" id="activityLog-action-type"></label>
                             <select name="actionTypeFilter" class="form-select" style="border: 1px solid #ced4da;">
-                                <option value="">All Actions</option>
-                                <option value="Add" selected="@(Model.ActionTypeFilter == "Add" ? "selected" : null)">Add</option>
-                                <option value="Edit" selected="@(Model.ActionTypeFilter == "Edit" ? "selected" : null)">Edit</option>
-                                <option value="Delete" selected="@(Model.ActionTypeFilter == "Delete" ? "selected" : null)">Delete</option>
+                                <!-- All Actions -->
+                                <option value="" id= "activityLog-all-actions"></option>
+                                <!-- add, edit, delete options -->
+                                <option value="Add" selected="@(Model.ActionTypeFilter == "Add" ? "selected" : null)" id="Add"></option>
+                                <option value="Edit" selected="@(Model.ActionTypeFilter == "Edit" ? "selected" : null)" id="Edit"></option>
+                                <option value="Delete" selected="@(Model.ActionTypeFilter == "Delete" ? "selected" : null)" id="Delete"></option>
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label fw-semibold">Entity Type</label>
+                            <!-- Entity Type Filter -->
+                            <label class="form-label fw-semibold" id="activityLog-entity-type"></label>
                             <select name="entityTypeFilter" class="form-select" style="border: 1px solid #ced4da;">
-                                <option value="">All Entities</option>
-                                <option value="Record" selected="@(Model.EntityTypeFilter == "Record" ? "selected" : null)">Record</option>
-                                <option value="Contact" selected="@(Model.EntityTypeFilter == "Contact" ? "selected" : null)">Contact</option>
+                                <!-- All Entities -->
+                                <option value="" id= "activityLog-all-entities"></option>
+                                <!-- Record and Contact options -->
+                                <option value="Record" selected="@(Model.EntityTypeFilter == "Record" ? "selected" : null)" id="Record"></option>
+                                <option value="Contact" selected="@(Model.EntityTypeFilter == "Contact" ? "selected" : null)" id="Contact"></option>
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label fw-semibold">User Role</label>
+                            <!-- User Role Filter -->
+                            <label class="form-label fw-semibold" id="activityLog-user-role"></label>
                             <select name="userRoleFilter" class="form-select" style="border: 1px solid #ced4da;">
-                                <option value="">All Roles</option>
-                                <option value="Admin" selected="@(Model.UserRoleFilter == "Admin" ? "selected" : null)">Admin</option>
-                                <option value="Editor" selected="@(Model.UserRoleFilter == "Editor" ? "selected" : null)">Editor</option>
+                                <!-- All Roles -->
+                                <option value="" id="activityLog-all-roles"></option>
+                                <!-- Admin and Editor options -->
+                                <option value="Admin" selected="@(Model.UserRoleFilter == "Admin" ? "selected" : null)" id="Admin"></option>
+                                <option value="Editor" selected="@(Model.UserRoleFilter == "Editor" ? "selected" : null)" id="Editor"></option>
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label fw-semibold">Start Date</label>
+                            <!-- Start Date -->
+                            <label class="form-label fw-semibold" id="activityLog-start-date"></label>
                             <input type="date" name="startDate" class="form-control" value="@Model.StartDate?.ToString("yyyy-MM-dd")" style="border: 1px solid #ced4da;" />
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label fw-semibold">End Date</label>
+                            <!-- End Date -->
+                            <label class="form-label fw-semibold" id="activityLog-end-date"></label>
                             <input type="date" name="endDate" class="form-control" value="@Model.EndDate?.ToString("yyyy-MM-dd")" style="border: 1px solid #ced4da;" />
                         </div>
                         <div class="col-md-2">
                             <div class="d-grid">
                                 <button type="submit" class="btn" style="background-color: #8B4513; color: white; border: none; font-weight: 600; padding: 0.5rem 1rem;">
-                                    <span class="bi bi-funnel-fill me-1"></span>APPLY
+                                    <!-- Apply Filters -->
+                                    <span class="bi bi-funnel-fill me-1" id="apply"></span>
                                 </button>
                                 <a href="@Url.Action("ActivityLog")" class="btn btn-secondary mt-2" style="font-weight: 600; padding: 0.5rem 1rem;">
-                                    <span class="bi bi-x-circle me-1"></span>Clear
+                                    <!-- Clear Filters -->
+                                    <span class="bi bi-x-circle me-1" id="Clear"></span>
                                 </a>
                             </div>
                         </div>
@@ -165,7 +185,8 @@
                         <div class="col-md-2">
                             <div class="d-grid">
                                 <button type="submit" class="btn" style="background-color: #8B4513; color: white; border: none; font-weight: 600; padding: 0.5rem 1rem;">
-                                    <span class="bi bi-search me-1"></span>SEARCH
+                                    <!-- Search -->
+                                    <span class="bi bi-search me-1" id= "search-button-459"></span>
                                 </button>
                             </div>
                         </div>
@@ -183,32 +204,23 @@
                         <table class="table table-hover mb-0" style="border-collapse: separate; border-spacing: 0;">
                             <thead style="background-color: #4a5568; color: white;">
                                 <tr>
-                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;">
-                                        Log ID
+                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;" id="activityLog-table-header-log-id"">
                                     </th>
-                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;">
-                                        User
+                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;" id="activityLog-table-header-user">
                                     </th>
-                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;">
-                                        Role
+                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;" id="activityLog-table-header-role">
                                     </th>
-                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;">
-                                        Action
+                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;" id="activityLog-table-header-action">
                                     </th>
-                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;">
-                                        Entity
+                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;" id="activityLog-table-header-entity">
                                     </th>
-                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;">
-                                        Entity Details
+                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;" id="activityLog-table-header-entity-details">
                                     </th>
-                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;">
-                                        Timestamp
+                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;" id="activityLog-table-header-timestamp"> 
                                     </th>
-                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;">
-                                        Summary
+                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;" id="activityLog-table-header-summary">
                                     </th>
-                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;">
-                                        Options
+                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;" id="activityLog-table-header-options">
                                     </th>
                                 </tr>
                             </thead>
@@ -221,8 +233,7 @@
                                     <div style="font-weight: 600; color: #2563eb; font-size: 0.875rem;">
                                         #@log.LogId
                                     </div>
-                                    <div style="font-size: 0.75rem; color: #718096;">
-                                        LOG_ID
+                                    <div style="font-size: 0.75rem; color: #718096;" id="activityLog-log-id-label">
                                     </div>
                                 </td>
                                 <!-- User -->
@@ -230,8 +241,8 @@
                                     <div style="font-weight: 500; color: #2d3748; font-size: 0.875rem;">
                                         @log.UserName
                                     </div>
-                                    <div style="font-size: 0.75rem; color: #718096;">
-                                        ID: @log.UserId
+                                    <div style="font-size: 0.75rem; color: #718096;" id="activityLog-user-id-label">
+                                         @log.UserId
                                     </div>
                                 </td>
                                 <!-- Role -->
@@ -239,13 +250,13 @@
                                     @if (log.IsAdminAction)
                                     {
                                         <span class="badge" style="background-color: #e53e3e; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <span class="bi bi-shield-fill-check me-1"></span>ADMIN
+                                            <span class="bi bi-shield-fill-check me-1" id="activityLog-role-admin"></span>
                                         </span>
                                     }
                                     else
                                     {
                                         <span class="badge" style="background-color: #38a169; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <span class="bi bi-pencil-square me-1"></span>EDITOR
+                                            <span class="bi bi-pencil-square me-1" id= "activityLog-role-editor"></span>
                                         </span>
                                     }
                                 </td>
@@ -254,19 +265,22 @@
                                     @if (log.ActionType == "Add")
                                     {
                                         <span class="badge" style="background-color: #38a169; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <span class="bi bi-plus-circle me-1"></span>ADD
+                                            <!-- add -->
+                                            <span class="bi bi-plus-circle me-1" id= "activityLog-action-add"></span>
                                         </span>
                                     }
                                     else if (log.ActionType == "Edit")
                                     {
                                         <span class="badge" style="background-color: #f6ad55; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <span class="bi bi-pencil me-1"></span>EDIT
+                                            <!-- edit -->
+                                            <span class="bi bi-pencil me-1" id="activityLog-action-edit"></span>
                                         </span>
                                     }
                                     else if (log.ActionType == "Delete")
                                     {
                                         <span class="badge" style="background-color: #e53e3e; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <span class="bi bi-trash me-1"></span>DELETE
+                                            <!-- delete -->
+                                            <span class="bi bi-trash me-1" id="activityLog-action-delete"></span>
                                         </span>
                                     }
                                 </td>
@@ -275,13 +289,15 @@
                                     @if (log.EntityType == "Record")
                                     {
                                         <span class="badge" style="background-color: #3182ce; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <span class="bi bi-file-text me-1"></span>RECORD
+                                            <!-- record -->
+                                            <span class="bi bi-file-text me-1" id="activityLog-entity-record"></span>
                                         </span>
                                     }
                                     else if (log.EntityType == "Contact")
                                     {
                                         <span class="badge" style="background-color: #805ad5; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <span class="bi bi-person-vcard me-1"></span>CONTACT
+                                            <!-- contact -->
+                                            <span class="bi bi-person-vcard me-1" id="activityLog-entity-contact"></span>
                                         </span>
                                     }
                                 </td>
@@ -292,8 +308,10 @@
                                     </div>
                                     @if (log.EntityId.HasValue)
                                     {
-                                        <div style="font-size: 0.75rem; color: #718096;">
-                                            ID: @log.EntityId
+                                        <!-- Entity ID -->
+                                        <div style="font-size: 0.75rem; color: #718096;" id="activityLog-user-id-label2">
+                                            
+                                            @log.EntityId
                                         </div>
                                     }
                                 </td>
@@ -317,7 +335,8 @@
                                     else if (log.ActionType == "Add")
                                     {
                                         <div style="font-size: 0.875rem; color: #38a169;">
-                                            <span class="bi bi-plus-circle me-1"></span>New @log.EntityDisplayName created
+                                            <!-- New records-->
+                                            <span class="bi bi-plus-circle me-1" id= "activityLog-summary-add"></span> @log.EntityDisplayName <span id="created"></span>
                                         </div>
                                     }
                                     else if (log.ActionType == "Delete")
@@ -328,7 +347,7 @@
                                     }
                                     else
                                     {
-                                        <div style="font-size: 0.875rem; color: #718096;">No details available</div>
+                                        <div style="font-size: 0.875rem; color: #718096;" id="activityLog-summary-no-details"></div>
                                     }
                                 </td>
                                 <!-- Options -->
@@ -337,7 +356,8 @@
                                     {
                                         <button class="btn btn-sm" style="background-color: transparent; border: 1px solid #cbd5e0; color: #4a5568; font-size: 0.75rem; padding: 4px 8px;" 
                                                 onclick="viewDetails(@log.LogId)" data-bs-toggle="modal" data-bs-target="#activityDetailsModal">
-                                            <span class="bi bi-eye me-1"></span>VIEW DETAILS
+                                                <!-- View Details -->
+                                            <span class="bi bi-eye me-1" id="activityLog-options-view-details"></span>
                                         </button>
                                     }
                                     else
@@ -368,7 +388,8 @@
                                     {
                                         <li class="page-item">
                                             <a class="page-link" href="@GetPageUrl(Model.CurrentPage - 1)" style="color: #4a5568; border: 1px solid #cbd5e0;">
-                                                <span class="bi bi-chevron-left"></span> Previous
+                                                <!-- Previous -->
+                                                <span class="bi bi-chevron-left" id="Previous"></span> 
                                             </a>
                                         </li>
                                     }
@@ -397,8 +418,10 @@
                 {
                     <div class="p-5 text-center" style="color: #718096;">
                         <span class="bi bi-inbox" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></span>
-                        <h5 style="color: #4a5568; margin-bottom: 0.5rem;">No Activity Found</h5>
-                        <p style="margin-bottom: 0;">Try adjusting your filters or search terms.</p>
+                        <!-- No Activity Found -->
+                        <h5 style="color: #4a5568; margin-bottom: 0.5rem;" id="no-activity-found"></h5>
+                        <!-- Try adjusting your filters or search terms -->
+                        <p style="margin-bottom: 0;" id= "try-adjusting-filters"></p>
                     </div>
                 }
             </div>
@@ -413,7 +436,8 @@
             <!-- Header -->
             <div class="modal-header" style="background: linear-gradient(135deg, #4a5568, #2d3748); color: white;">
                 <h5 class="modal-title">
-                    <span class="bi bi-info-circle me-2"></span>Activity Details
+                    <!-- Activity Details -->
+                    <span class="bi bi-info-circle me-2" id="activityLog-details-modal-title"></span>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -423,16 +447,18 @@
                 <!-- Loading State (will be replaced by JavaScript) -->
                 <div class="text-center">
                     <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                        <!-- Loading Spinner -->
+                        <span class="visually-hidden" id="modal-loading-status"></span>
                     </div>
-                    <div class="mt-2">Loading activity details...</div>
+                    <!-- Loading activity details... -->
+                    <div class="mt-2" id="modal-loading-details"></div>
                 </div>
             </div>
             
             <!-- Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <span class="bi bi-x-circle me-1"></span>Close
+                    <span class="bi bi-x-circle me-1" id="close"></span>
                 </button>
             </div>
         </div>
