@@ -69,7 +69,7 @@
           <div class="col-md-6">
             <label for="Name" id="label-name-en-90101">Name of Responsible Person (English)</label>
             <input type="text" class="form-control" id="Name" name="Name" required pattern="[a-zA-Z0-9\s\-.,'()&]*"
-              title="Please enter English text only"
+              title="Please enter English text only" placeholder="Enter name in English only"
               oninput="this.value = this.value.replace(/[^\u0000-\u007F\s\-.,'()&]/g, '')"
               onkeypress="return /[\u0000-\u007F\s\-.,'()&]/.test(String.fromCharCode(event.charCode)) || event.charCode === 8 || event.charCode === 0">
             <div id="nameError" class="text-danger mt-1"></div>
@@ -78,6 +78,7 @@
             <label for="NameAr" id="label-name-ar-90101">Name of Responsible Person (Arabic)</label>
             <input type="text" class="form-control" id="NameAr" name="NameAr" lang="ar" dir="rtl" required
               pattern="[\u0600-\u06FF\s\u060C\u061B\u061F\u0640\-.,'،]*" title="Please enter Arabic text only"
+              placeholder="Please enter Arabic text only" required
               oninput="this.value = this.value.replace(/[^\u0600-\u06FF\s\u060C\u061B\u061F\u0640\-.,'،]/g, '')"
               onkeypress="return /[\u0600-\u06FF\s\u060C\u061B\u061F\u0640\-.,'،]/.test(String.fromCharCode(event.charCode)) || event.charCode === 8 || event.charCode === 0">
             <div id="nameArError" class="text-danger mt-1"></div>
@@ -86,19 +87,24 @@
 
         <div class="mb-5">
           <label for="Email" id="label-email-90101">E-mail</label>
-          <input type="email" class="form-control" id="Email" name="Email">
+          <input type="email" class="form-control" id="Email" name="Email"
+            placeholder="Enter email address(example@example.com)" required>
         </div>
 
         <div class="mb-5">
           <label for="Telephone" id="label-telephone-90101">Telephone number</label>
-          <input type="tel" class="form-control" id="Telephone" name="Telephone">
+          <input type="tel" class="form-control" id="Telephone" name="Telephone" placeholder="01XXXXXXXX" maxlength="10"
+            pattern="[0-9]{10}" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)"
+            onkeypress="return event.charCode >= 48 && event.charCode <= 57" title="Enter exactly 10 digits">
         </div>
 
         <div class="mb-5">
           <label for="Mobile" id="label-mobile-90101">Mobile number</label>
           <div class="input-group" dir="ltr">
             <span class="input-group-text shadowed">+966</span>
-            <input type="tel" class="form-control" id="Mobile" name="Mobile">
+            <input type="tel" class="form-control" id="Mobile" name="Mobile" placeholder="05XXXXXXXX" maxlength="10"
+              pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57" title="Enter exactly 10 digits">
           </div>
         </div>
 
