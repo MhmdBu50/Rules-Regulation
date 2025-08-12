@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="~/css/adminPagesHeader.css">
     <link rel="stylesheet" href="~/css/manageContactInfo.css">
     <link rel="stylesheet" href="~/css/multi-select-dropdown.css" />
+    <link rel="stylesheet" href="~/css/AdminPage.css">
+
 }
 @section Scripts {
     <script src="~/js/adminPagesHeader.js"></script>
@@ -19,24 +21,34 @@
 
 <div class="AddContactInfo mb-footer-space">
     <!-- Admin Header -->
-  @await Html.PartialAsync("adminPagesHeader")
+    @await Html.PartialAsync("adminPagesHeader")
 
     <!-- Logo -->
     <div class="container logo-container">
-      <img class="header-logo mx-auto d-block" src="~/imgs/IAU Logo (Horizontal).png" alt="IAU Logo">
+        <img class="header-logo mx-auto d-block" src="~/imgs/IAU Logo (Horizontal).png" alt="IAU Logo">
     </div>
 
-<div class="main-header ">
-  <div class="container text-center d-flex flex-column align-items-center justify-content-center">
-    <h1 class="display-5 fw-semibold mb-2" id= "manageContact-title33">Manage Contact Information</h1>
-    <p class="subtitle text-white-50 mb-4" id="manageContact-subtitle33">View and manage all contact information</p>
-    <button onclick="location.href='@Url.Action("AddNewContactInfo", "Admin")'" class="btn btn-outline-light btn-lg d-flex align-items-center justify-content-center">
-        <!-- Inline SVG is needed here for easier color changing on hover effect-->
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="22" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class="btn-outline-light"><g><path d="M23 11h-2V9a1 1 0 0 0-2 0v2h-2a1 1 0 0 0 0 2h2v2a1 1 0 0 0 2 0v-2h2a1 1 0 0 0 0-2ZM9 12a6 6 0 1 0-6-6 6.006 6.006 0 0 0 6 6ZM9 2a4 4 0 1 1-4 4 4 4 0 0 1 4-4ZM9 14a9.01 9.01 0 0 0-9 9 1 1 0 0 0 2 0 7 7 0 0 1 14 0 1 1 0 0 0 2 0 9.01 9.01 0 0 0-9-9Z" fill="currentColor" opacity="1" data-original="#000000" class=""></path></g></svg>
-        <span class="ms-2 me-2" id="addContact-btn33"></span>
-    </button>
-  </div>
-</div>
+    <div class="main-header ">
+        <div class="container text-center d-flex flex-column align-items-center justify-content-center">
+            <h1 class="display-5 fw-semibold mb-2" id="manageContact-title33">Manage Contact Information</h1>
+            <p class="subtitle text-white-50 mb-4" id="manageContact-subtitle33">View and manage all contact information
+            </p>
+            <button onclick="location.href='@Url.Action("AddNewContactInfo", "Admin")'"
+                class="btn btn-outline-light btn-lg d-flex align-items-center justify-content-center">
+                <!-- Inline SVG is needed here for easier color changing on hover effect-->
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+                    width="22" height="22" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512"
+                    xml:space="preserve" class="btn-outline-light">
+                    <g>
+                        <path
+                            d="M23 11h-2V9a1 1 0 0 0-2 0v2h-2a1 1 0 0 0 0 2h2v2a1 1 0 0 0 2 0v-2h2a1 1 0 0 0 0-2ZM9 12a6 6 0 1 0-6-6 6.006 6.006 0 0 0 6 6ZM9 2a4 4 0 1 1-4 4 4 4 0 0 1 4-4ZM9 14a9.01 9.01 0 0 0-9 9 1 1 0 0 0 2 0 7 7 0 0 1 14 0 1 1 0 0 0 2 0 9.01 9.01 0 0 0-9-9Z"
+                            fill="currentColor" opacity="1" data-original="#000000" class=""></path>
+                    </g>
+                </svg>
+                <span class="ms-2 me-2" id="addContact-btn33"></span>
+            </button>
+        </div>
+    </div>
 
 
     @if (TempData["SuccessMessage"] != null)
@@ -55,187 +67,215 @@
         </div>
     }
 
-    <!-- Search Section -->
+
     <div class="container my-4">
-    <!-- Search and Filter Section -->
-    <div class="container my-4">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-10">
-                <div class="d-flex align-items-center gap-3 flex-wrap">
-                    <!-- Search Bar -->
-                    <div class="flex-grow-1" style="min-width: 300px;">
-                        <div class="search-container d-flex align-items-center position-relative" style="background-color: #2f3e5f; border-radius: 25px; padding: 12px 20px; height: 50px;">
-                            <button class="search-and-filter-buttons" style="background: none; border: none; padding: 8px;">
-                                <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon"
-                                    width="24" height="24" />
-                            </button>
-                            <input id="contactSearchInput"
-                                class="search poppins-regular flex-grow-1" type="text"
-                                style="color: #ABB7C2; background: transparent; border: none; padding: 8px 30px 8px 8px; outline: none; font-size: 16px;">
-                            <button id="contactClearBtn" class="position-absolute"
-                                style="inset-inline-end: 20px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ABB7C2; font-size: 18px; cursor: pointer; display: none;"
-                                onclick="clearContactSearch()" title="Clear search">
-                                ×
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Department Filter -->
-                    <div class="d-flex align-items-center gap-2">
-                        <div class="multi-select-dropdown-container">
-                            <div class="multi-select-dropdown">
-                                <div class="multi-select-button" id="contactDepartmentMultiSelectButton" style="background-color: #2f3e5f; color: #ABB7C2; border: 1px solid #dee2e6; border-radius: 25px; padding: 12px 20px; cursor: pointer; min-width: 300px; font-size: 16px; height: 50px; display: flex; align-items: center; justify-content: space-between;">
-                                    <span id="contact-all-departments">All Departments</span> <span class="caret"></span>
+        <section>
+            <div class="container" style="margin-bottom: -30px;">
+                <table class="w-100">
+                    <thead class="text-center">
+                        <tr>
+                            <th class="col-8 d-none d-md-table-cell padding-between-search-filter">
+                                <div class="col flex-nowrap align-items-center">
+                                    <div class="search-container d-flex align-items-center position-relative">
+                                        <button class="search-and-filter-buttons">
+                                            <img src="~/svgs/navigation/search-icon.svg" alt="Search"
+                                                class="search-icon" width="44" height="44" />
+                                        </button>
+                                        <input id="contactSearchInput"
+                                            class="search poppins-regular flex-grow-1 small-font-size" type="text"
+                                            placeholder="Search by Name/ID..."
+                                            style="color: #ABB7C2; background: transparent; border: none; padding-inline-end: 30px;">
+                                        <button id="contactClearBtn" class="position-absolute"
+                                            style="inset-inline-end: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ABB7C2; font-size: 18px; cursor: pointer; display: none;"
+                                            onclick="clearContactSearch()" title="Clear search">
+                                            ×
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="multi-select-dropdown-content" id="contactDepartmentDropdownContent" style="display: none; position: absolute; background-color: white; min-width: 300px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000; margin-top: 4px;">
-                                    <label style="display: block; padding: 8px 12px; cursor: pointer; margin: 0;">
-                                        <input type="checkbox" class="form-check-input contact-department-option me-2" value="" checked> <span id="contact-all-departments-option">All Departments</span>
-                                    </label>
-                                    @{
-                                        var allDepartments = new List<(string key, string value)>
-                                        {
-                                            ("dept-reg-admission", "Reg and Admission"),
-                                            ("dept-ccsit", "CCSIT"),
-                                            ("dept-communication-tech", "Communication and tech"),
-                                            ("dept-hospital", "Hospital"),
-                                            ("dept-library", "Library"),
-                                            ("dept-students-affairs", "Students Affairs"),
-                                            ("dept-preparetory", "Preparetory"),
-                                            ("dept-academic-affairs", "Academic Affairs")
-                                        };
-                                    }
-                                    @foreach (var department in allDepartments)
-                                    {
-                                        <label style="display: block; padding: 8px 12px; cursor: pointer; margin: 0; border-top: 1px solid #eee;">
-                                            <input type="checkbox" class="form-check-input contact-department-option me-2" value="@department.value"> <span id="@department.key">@department.value</span>
-                                        </label>
-                                    }
+                            </th>
+                            <th class="col-4 d-none d-md-table-cell padding-between-search-filter">
+                                    <div class="col flex-nowrap align-items-center">
+                                        <div class="search-container d-flex align-items-center px-2" id="document-search">
+                                            <div class="multi-select-dropdown-container" style="width: 100%;">
+                                                <div class="multi-select-dropdown" style="width: 100%;">
+                                                    <div class="multi-select-button" id="contactDepartmentMultiSelectButton"
+                                                        style="color: #ABB7C2; border: none; cursor: pointer; width: 100%; font-size: 14px; height: 44px; display: flex; align-items: center; justify-content: space-between; background: transparent; padding: 0 8px;">
+                                                        <span style="font-size: 24px; color: #ABB7C2;">All Departments</span>
+                                                        <span class="caret">▼</span>
+                                                        </div>
+                                                            <div class="multi-select-dropdown-content"
+                                                                id="contactDepartmentDropdownContent"
+                                                                style="position: absolute; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000; width: 100%;">
+                                                                <label style="display: flex; align-items: center; padding: 8px 12px; cursor: pointer; margin: 0;">
+                                                                    <input type="checkbox"
+                                                                        class="form-check-input contact-department-option me-2"
+                                                                        value="" checked
+                                                                        style="margin: 0; margin-right: 8px;">
+                                                                    <span id="contact-all-departments-option"
+                                                                        style="font-size: 24px; color: #ABB7C2;">All Departments</span>
+                                                                </label>
+                                                                @{
+                                                                    var allDepartments = new List<(string key, string value)>
+                                                                        {
+                                                                        ("dept-reg-admission", "Reg and Admission"),
+                                                                        ("dept-ccsit", "CCSIT"),
+                                                                        ("dept-communication-tech", "Communication and tech"),
+                                                                        ("dept-hospital", "Hospital"),
+                                                                        ("dept-library", "Library"),
+                                                                        ("dept-students-affairs", "Students Affairs"),
+                                                                        ("dept-preparetory", "Preparetory"),
+                                                                        ("dept-academic-affairs", "Academic Affairs")
+                                                                        };
+                                                                }
+                                                                @foreach (var department in allDepartments)
+                                                                {
+                                                                    <label
+                                                                        style="display: flex; align-items: center; padding: 8px 12px; cursor: pointer; margin: 0;">
+                                                                        <input type="checkbox"
+                                                                            class="form-check-input contact-department-option me-2"
+                                                                            value="@department.value"
+                                                                            style="margin: 0; margin-right: 8px;">
+                                                                        <span id="@department.key"
+                                                                            style="font-size: 22px; color: #ABB7C2;">@department.value</span>
+                                                                    </label>
+                                                                }
+                                                            </div>
+                                                        </div>    
+                                                    </div>    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <input type="hidden" id="contactDepartmentFilter" value="">
-                        </div>
-                    </div>
-                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
-        </div>
-    </div>
+        </section>
     </div>
 
     <!-- Contact Information Table -->
-<div class="container">
-    <div class="form-wrapper">
-        @if (Model != null && Model.Any())
-        {
-            <div class="table-container"> <!-- 🔁 Updated wrapper class -->
-                <table class="table table-hover mb-0"> <!-- 🔁 Added mb-0 -->
-                    <thead>
-                        <tr>
-                            <th id="table-header-department33">Department</th>
-                            <th id="table-header-name33">Name</th>
-                            <th id="table-header-email33">Email</th>
-                            <th id="table-header-mobile33">Mobile</th>
-                            <th id="table-header-telephone33">Telephone</th>
-                            <th class="text-center" id="table-header-actions33">Actions</th> <!-- 🔁 Align Actions to center -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var contact in Model)
-                        {
+    <div class="container">
+        <div class="form-wrapper">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-container"> <!-- 🔁 Updated wrapper class -->
+                    <table class="table table-hover mb-0"> <!-- 🔁 Added mb-0 -->
+                        <thead>
                             <tr>
-                                <td data-label="Department"><strong>@contact.Department</strong></td>
-                                <td data-label="Name">@contact.Name</td>
-                                <td data-label="Email">
-                                    @if (!string.IsNullOrEmpty(contact.Email))
-                                    {
-                                        <a href="mailto:@contact.Email">@contact.Email</a>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">-</span>
-                                    }
-                                </td>
-                                <td data-label="Mobile">
-                                    @if (!string.IsNullOrEmpty(contact.Mobile))
-                                    {
-                                        <a href="tel:@contact.Mobile">@contact.Mobile</a>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">-</span>
-                                    }
-                                </td>
-                                <td data-label="Telephone">
-                                    @if (!string.IsNullOrEmpty(contact.Telephone))
-                                    {
-                                        <a href="tel:@contact.Telephone">@contact.Telephone</a>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">-</span>
-                                    }
-                                </td>
-                                <td data-label="Actions" class="action-buttons d-flex align-items-center justify-content-center"> <!-- 🔁 Apply action buttons style -->
-                                    <button type="button"
-                                            class="btn btn-sm btn-primary me-2"
-                                            title="Edit"
+                                <th id="table-header-department33">Department</th>
+                                <th id="table-header-name33">Name</th>
+                                <th id="table-header-email33">Email</th>
+                                <th id="table-header-mobile33">Mobile</th>
+                                <th id="table-header-telephone33">Telephone</th>
+                                <th class="text-center" id="table-header-actions33">Actions</th>
+                                <!-- 🔁 Align Actions to center -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var contact in Model)
+                            {
+                                <tr>
+                                    <td data-label="Department"><strong>@contact.Department</strong></td>
+                                    <td data-label="Name">@contact.Name</td>
+                                    <td data-label="Email">
+                                        @if (!string.IsNullOrEmpty(contact.Email))
+                                        {
+                                            <a href="mailto:@contact.Email">@contact.Email</a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td data-label="Mobile">
+                                        @if (!string.IsNullOrEmpty(contact.Mobile))
+                                        {
+                                            <a href="tel:@contact.Mobile">@contact.Mobile</a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td data-label="Telephone">
+                                        @if (!string.IsNullOrEmpty(contact.Telephone))
+                                        {
+                                            <a href="tel:@contact.Telephone">@contact.Telephone</a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td data-label="Actions"
+                                        class="action-buttons d-flex align-items-center justify-content-center">
+                                        <!-- 🔁 Apply action buttons style -->
+                                        <button type="button" class="btn btn-sm btn-primary me-2" title="Edit"
                                             style="padding:0; border:none; background:none; z-index: 1;"
                                             onclick="location.href='@Url.Action("EditContactInfo", new { id = contact.ContactId })'">
-                                        <img src="@Url.Content("~/svgs/admin/Edit-Contact-info.svg")" width="29" height="29" alt="Edit" style="display:inline;">
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-danger" 
-                                            onclick="confirmDelete(@contact.ContactId, '@contact.Name', '@contact.Department')" 
+                                            <img src="@Url.Content("~/svgs/admin/Edit-Contact-info.svg")" width="29" height="29"
+                                                alt="Edit" style="display:inline;">
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-danger"
+                                            onclick="confirmDelete(@contact.ContactId, '@contact.Name', '@contact.Department')"
                                             title="Delete" style="padding:0; border:none; background:none;">
-                                        <img src="@Url.Content("~/svgs/admin/Delete-Contact-info.svg")" width="28" height="29" alt="Delete" style="display:inline;">
-                                    </button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
-        else
-        {
-            <div class="text-center py-5">
-                <h5 id= "empty-state-title33">No contact information found</h5>
-                <p class="text-muted" id="empty-state-desc33">Click the button below to add new contact information.</p>
-                <a href="@Url.Action("AddNewContactInfo", "Admin")" class="btn btn-primary" id="empty-state-button33">Add New Contact Info</a>
-            </div>
-        }
-    </div>
-</div>
-
-
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="deleteModalLabel" id="modal-title-delete33">Confirm Delete</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p id="modal-body-confirmation33">Are you sure you want to delete the contact information for:</p>
-                <div class="alert alert-warning">
-                    <strong id="contactName"></strong><br>
-                    <small id="contactDepartment"></small>
+                                            <img src="@Url.Content("~/svgs/admin/Delete-Contact-info.svg")" width="28"
+                                                height="29" alt="Delete" style="display:inline;">
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-                <p class="text-danger" id= "modal-warning33"><strong>This action cannot be undone!</strong></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary me-3" data-bs-dismiss="modal" id="modal-button-cancel33">Cancel</button>
-                <form id="deleteForm" method="post" style="display: inline;">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="id" id="deleteContactId" />
-                    <button type="submit" class="btn btn-danger">
-                        <img src="@Url.Content("~/svgs/admin/Delete-Button.svg")" width="16" height="16" alt="Delete" class="me-2" id="modal-button-delete33">
-                        Delete Contact
-                    </button>
-                </form>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <h5 id="empty-state-title33">No contact information found</h5>
+                    <p class="text-muted" id="empty-state-desc33">Click the button below to add new contact information.</p>
+                    <a href="@Url.Action("AddNewContactInfo", "Admin")" class="btn btn-primary"
+                        id="empty-state-button33">Add New Contact Info</a>
+                </div>
+            }
+        </div>
+    </div>
+
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteModalLabel" id="modal-title-delete33">Confirm Delete</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="modal-body-confirmation33">Are you sure you want to delete the contact information for:</p>
+                    <div class="alert alert-warning">
+                        <strong id="contactName"></strong><br>
+                        <small id="contactDepartment"></small>
+                    </div>
+                    <p class="text-danger" id="modal-warning33"><strong>This action cannot be undone!</strong></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary me-3" data-bs-dismiss="modal"
+                        id="modal-button-cancel33">Cancel</button>
+                    <form id="deleteForm" method="post" style="display: inline;">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" id="deleteContactId" />
+                        <button type="submit" class="btn btn-danger">
+                            <img src="@Url.Content("~/svgs/admin/Delete-Button.svg")" width="16" height="16"
+                                alt="Delete" class="me-2" id="modal-button-delete33">
+                            Delete Contact
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 @await Html.PartialAsync("_Footer")
