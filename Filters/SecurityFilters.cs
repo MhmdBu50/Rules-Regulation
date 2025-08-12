@@ -33,6 +33,17 @@ namespace RulesRegulation.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
+            // If the action/controller explicitly allows anonymous, skip this filter
+            // This lets us temporarily debug views without being redirected
+            var allowsAnonymous = context.ActionDescriptor?.EndpointMetadata
+                ?.OfType<Microsoft.AspNetCore.Authorization.IAllowAnonymous>()
+                .Any() == true;
+            if (allowsAnonymous)
+            {
+                base.OnActionExecuting(context);
+                return;
+            }
+
             // Check if user is authenticated
             var userId = context.HttpContext.Session.GetInt32("UserId");
             

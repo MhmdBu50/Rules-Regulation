@@ -1,5 +1,6 @@
 // Required using statements for MVC, Oracle database, file handling, and dependency injection
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RulesRegulation.Models;
 using RulesRegulation.Services;
@@ -353,6 +354,22 @@ public class AdminController : Controller
             // Return empty list if there's an error to prevent application crash
             return View(new List<dynamic>());
         }
+    }
+
+    /**
+     * AdminPortal (GET) - Elegant landing page for Admins after login
+     * 
+     * Admin-only access with 4 large cards linking to key administrative sections.
+     * Uses established university branding and admin page layout patterns.
+     * 
+     * @return View with admin portal interface
+     */
+    [HttpGet]
+    [Authorize(Roles = "Admin")] // Restored: Admin access only
+    public IActionResult AdminPortal()
+    {
+        ViewData["Title"] = "Admin Portal";
+        return View("~/Views/Admin/AdminPortal.cshtml");
     }
 
     /**
