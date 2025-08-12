@@ -1,5 +1,5 @@
 /* Scoped Styles for Add New Record Page */
-.AddNewRecord {
+body, .AddNewRecord {
   background-color: #EAE0CA;
   font-family: 'Inter', sans-serif;
   min-height: 100vh;

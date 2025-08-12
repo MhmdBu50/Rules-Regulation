@@ -1,133 +1,101 @@
-@section styles {
-    <link rel="stylesheet" href="~/css/homePage.css">
-}
+    // Open and close the side nav menu (mobile only)
+    document.addEventListener("DOMContentLoaded", function () {
+        const sidebar = document.getElementById('sideNavBar');
+        const burgerBtn = document.getElementById('burgerBtn');
+        const backdrop = document.getElementById('sidebarBackdrop');
 
-@section scripts {
-    <script src="@Url.Content("~/js/homePage.js")"></script>
-    <script src="@Url.Content("~/js/mobileMenu.js")"></script>
-    <script src="@Url.Content("~/js/savedFunctions.js")"></script>
-}
-<div id="sideNavBar" class="custom-sidebar sideNav text-white">
-    <div>
-        <!--home button mobile-->
-        <a class="text-white d-block py-2 mobile-menu-section"
-            onclick="alter(this); location.href='@Url.Action("homePage", "Home")'" style="background-color: #2B334F; ">
-            <div style="display: flex; align-items: center; gap: 5px;">
-                <svg width="16" height="16" viewBox="0 0 53 53" fill="currentColor" style="margin-right: 5px;"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M51.5668 23.0414L45.6353 17.1099V1.55279C45.6353 0.695237 44.9401 0 44.0825 0H37.4296C36.5721 0 35.8768 0.695237 35.8768 1.55279V7.35164L29.9582 1.43302C29.0342 0.508902 27.8056 0 26.4988 0C25.1919 0 23.9632 0.508902 23.0392 1.43302L1.43074 23.0416C-0.476914 24.9491 -0.476914 28.0531 1.43074 29.9606C2.35486 30.8847 3.58343 31.3936 4.89026 31.3936C5.16407 31.3936 5.43405 31.3699 5.69895 31.3262V47.2913C5.69895 50.4403 8.26085 53.0021 11.4098 53.0021H21.5093C22.3668 53.0021 23.0621 52.3068 23.0621 51.4493V39.6963H29.9358V51.4492C29.9358 52.3067 30.631 53.002 31.4886 53.002H41.5879C44.7369 53.002 47.2987 50.4402 47.2987 47.2912V31.3261C47.5635 31.3699 47.8333 31.3935 48.1072 31.3935H48.1075C49.4141 31.3935 50.6427 30.8846 51.567 29.9604C52.491 29.0364 52.9999 27.8078 53 26.501C52.9998 25.1942 52.4909 23.9655 51.5668 23.0414ZM38.9825 3.10558H42.5298V14.0044L38.9825 10.457V3.10558ZM41.5878 49.8964H33.0412V38.1435C33.0412 37.2859 32.3461 36.5907 31.4886 36.5907H21.5092C20.6516 36.5907 19.9564 37.2859 19.9564 38.1435V49.8964H11.4097C9.97317 49.8964 8.80443 48.7278 8.80443 47.2912V29.5056L26.4988 11.8117L44.193 29.5058V47.2913C44.193 48.7277 43.0243 49.8964 41.5878 49.8964ZM49.371 27.7644C49.2054 27.9309 49.0085 28.0629 48.7916 28.1528C48.5747 28.2427 48.3421 28.2886 48.1073 28.288C47.8725 28.2886 47.64 28.2427 47.4232 28.1529C47.2063 28.063 47.0095 27.9311 46.8439 27.7647L46.8435 27.7643L27.5968 8.51768C26.9906 7.91116 26.0074 7.91137 25.4009 8.51768L6.15402 27.7642L6.15351 27.7647C5.81603 28.1022 5.36748 28.288 4.89026 28.288C4.41303 28.288 3.96428 28.1022 3.6267 27.7646C2.93001 27.068 2.93001 25.9342 3.6267 25.2375L25.2351 3.62898C25.4007 3.46252 25.5977 3.33056 25.8146 3.24072C26.0315 3.15088 26.264 3.10495 26.4988 3.10558C26.976 3.10558 27.4248 3.2915 27.7623 3.62898L36.3317 12.1983L49.3708 25.2373C50.0676 25.934 50.0676 27.0679 49.371 27.7644Z"
-                        fill="white" />
-                </svg> <span id="mobile-home">Home</span>
-            </div>
-        </a>
-
-        @if (User.IsInRole("admin") || User.IsInRole("Admin"))
-        {
-            <a class="text-white d-block py-2 mobile-menu-section"
-                onclick="alter(this); location.href='@Url.Action("AdminPage", "Admin")'" data-id="AdminViewM"
-                style="background-color: #A6832C; ">
-                <div style="display: flex; align-items: center; gap: 5px;">
-                    <div class="svg-container">
-
-                    </div>
-                    <span id="mobile-admin-view"> view as Admin </span>
-                </div>
-            </a>
+        if (!sidebar || !burgerBtn || !backdrop) {
+            return;
         }
 
-        <a class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); navigateToStudentGuides(this)"
-            data-id="studentGuidesM" style="background-color: #01514F; ">
-            <div style="display: flex; align-items: center; gap: 5px;">
-                <div class="svg-container">
+        burgerBtn.addEventListener('click', () => {
+            sidebar.classList.remove('d-lg-none'); // force show sidebar
+            sidebar.style.display = 'block';
+            backdrop.style.display = 'block';
 
-                </div>
-                <span id="mobile-student-guides"> Student Guides & Templates </span>
-            </div>
-        </a>
-        <a href="#" class="text-white d-block py-2 mobile-menu-section"
-            onclick="alter(this); navigateToStudentRules(this)" data-id="studentRulesRegulationsM"
-            style="background-color: #4D7160; ">
-            <div style="display: flex; align-items: center; gap: 5px;">
-                <div class="svg-container">
+            setTimeout(() => {
+                sidebar.style.width = '250px';
+            }, 10);
+        });
 
-                </div>
-                <span id="mobile-student-rules">Student Rules & Regulations</span>
-            </div>
-        </a>
-        <a class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); navigateToEmployeeRules(this)"
-            data-id="employeeRuleM" style="background-color: #4F1C34; ">
-            <div style="display: flex; align-items: center; gap: 5px;">
-                <div>
-                    <div class="svg-container">
+        //this section handles the backdrop click to close the sidebar
+        backdrop.addEventListener('click', () => {
+            sidebar.style.width = '0';               // Start slide-out animation
+            backdrop.style.display = 'none';         // Instantly hide the backdrop
 
-                    </div>
-                </div>
-                <span id="mobile-employee-rules">Employees’ Rules & Regulations</span>
-            </div>
-        </a>
-        <a class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); navigateToAcademicRules(this)"
-            data-id="academicRulesRegulationsM" style="background-color: #94331C; ">
-            <div style="display: flex; align-items: center; gap: 5px;">
-                <div class="svg-container">
+            setTimeout(() => {
+                sidebar.style.display = 'none';        // Fully hide sidebar after animation
+                sidebar.classList.add('d-lg-none');    // Reapply Bootstrap’s mobile-only hiding
+            }, 300);
+        });
 
-                </div>
-                <span id="mobile-academic-rules">Academic Rules & Regulations</span>
-            </div>
-        </a>
-        <a class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); navigateToSaved(this)"
-            data-id="SavedRulesRegulationsM" style="background-color: #2F3E5F; ">
-            <div style="display: flex; align-items: center; gap: 5px;">
-                <div class="svg-container">
+        // Helper function to auto-close
+        function closeSidebar() {
+            sidebar.style.width = '0';
+            backdrop.style.display = 'none';
+            setTimeout(() => {
+                sidebar.style.display = 'none';
+                sidebar.classList.add('d-lg-none');
+            }, 300);
+        }
 
-                </div>
-                <span id="mobile-saved-rules">Saved Rules & Regulations</span>
-            </div>
-        </a>
-        <a class="text-white d-block py-2 mobile-menu-section" onclick="alter(this); navigateToHistory(this)"
-            data-id="historyM" style="background-color: #0F1734; ">
-            <div style="display: flex; align-items: center; gap: 5px;">
+        // Auto-close when window resized large
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 992) {
+                closeSidebar();
+            }
+        });
+    });
 
-                <svg width="20" height="20" viewBox="0 0 53 49" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M28.9291 0.208496C23.5887 0.234488 18.4079 2.0313 14.1982 5.31742C9.98857 8.60355 6.98795 13.1933 5.66648 18.3676L4.04998 15.923C3.89694 15.6671 3.69366 15.4448 3.45238 15.2695C3.21111 15.0943 2.93684 14.9697 2.64612 14.9034C2.3554 14.837 2.05425 14.8302 1.76083 14.8834C1.46741 14.9365 1.1878 15.0486 0.938857 15.2128C0.689916 15.3769 0.476803 15.5898 0.31237 15.8386C0.147936 16.0873 0.0355886 16.3668 -0.0178978 16.6602C-0.0713842 16.9536 -0.0649015 17.2547 0.00115929 17.5455C0.0672201 17.8363 0.19149 18.1107 0.366477 18.3522L5.22481 25.7147C5.56229 26.187 6.05985 26.5205 6.62489 26.6533C7.20186 26.7677 7.80072 26.6529 8.29439 26.3331L15.5819 21.424C15.8332 21.267 16.0503 21.0612 16.2203 20.8186C16.3904 20.5761 16.5099 20.3018 16.5718 20.0121C16.6337 19.7224 16.6366 19.4232 16.5805 19.1323C16.5244 18.8415 16.4103 18.5649 16.245 18.319C16.0798 18.0732 15.8668 17.863 15.6186 17.7012C15.3705 17.5394 15.0924 17.4291 14.8008 17.377C14.5092 17.3249 14.21 17.3319 13.9212 17.3978C13.6324 17.4636 13.3598 17.5869 13.1196 17.7603L9.80489 19.9952C10.6871 16.4141 12.5581 13.1531 15.2045 10.5843C17.8508 8.01543 21.166 6.24216 24.7717 5.46679C28.3773 4.69142 32.1284 4.94517 35.5968 6.19909C39.0652 7.45302 42.1113 9.65662 44.3876 12.5585C46.6639 15.4603 48.0787 18.9436 48.4705 22.6108C48.8624 26.2781 48.2155 29.9816 46.6037 33.2989C44.992 36.6162 42.4802 39.4137 39.3551 41.3721C36.2299 43.3306 32.6172 44.3712 28.9291 44.3752C25.7675 44.3666 22.6547 43.5948 19.8553 42.1254C17.056 40.6559 14.6528 38.5322 12.8502 35.9349C12.6887 35.687 12.4791 35.4741 12.2338 35.3087C11.9885 35.1434 11.7124 35.029 11.422 34.9725C11.1316 34.9159 10.8328 34.9182 10.5434 34.9794C10.2539 35.0405 9.97969 35.1592 9.73698 35.3283C9.49427 35.4975 9.28802 35.7137 9.13048 35.9641C8.97294 36.2145 8.86732 36.494 8.8199 36.786C8.77247 37.078 8.7842 37.3766 8.85439 37.664C8.92459 37.9514 9.05182 38.2218 9.22852 38.459C12.1591 42.6839 16.3677 45.8574 21.2357 47.5129C26.1037 49.1685 31.3744 49.2188 36.2731 47.6566C41.1719 46.0944 45.4403 43.0019 48.4511 38.8338C51.4619 34.6657 53.0563 29.6417 52.9999 24.5002C53.0216 18.0892 50.4996 11.9313 45.9871 7.37738C41.4746 2.82344 35.34 0.245301 28.9291 0.208496Z"
-                        fill="white" />
-                    <path
-                        d="M28.7083 11.1396C28.1226 11.1396 27.5609 11.3723 27.1468 11.7865C26.7327 12.2006 26.5 12.7623 26.5 13.348V24.5001C26.5094 25.0838 26.7408 25.6421 27.147 26.0614L33.772 32.746C34.1878 33.1552 34.7469 33.3858 35.3302 33.3887C35.9135 33.3916 36.4749 33.1665 36.8946 32.7614C37.3104 32.3491 37.5453 31.7885 37.5478 31.2029C37.5503 30.6173 37.3201 30.0547 36.9079 29.6389L30.9167 23.5924V13.348C30.9167 12.7623 30.684 12.2006 30.2699 11.7865C29.8557 11.3723 29.294 11.1396 28.7083 11.1396Z"
-                        fill="white" />
-                </svg>
 
-                <span id="mobile-history">History</span>
-            </div>
-        </a>
+    //  Safe SVG loader using innerHTML
+    function getSVGFromTemplate(id) {
+        const tpl = document.getElementById(id);
+        if (!tpl) return null;
 
-        <a class="text-white d-block py-2 mobile-menu-section"
-            onclick="alter(this); document.getElementById('language-toggle')?.click();" data-id="languageM">
-            <div style="display: flex; align-items: center; gap: 5px;">
-                <svg width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20.0002 39.1668C17.3807 39.1668 14.905 38.6637 12.5731 37.6575C10.2411 36.6512 8.20468 35.2776 6.4637 33.5366C4.72273 31.7957 3.34912 29.7592 2.34287 27.4272C1.33662 25.0953 0.833496 22.6196 0.833496 20.0002C0.833496 17.3488 1.33662 14.8651 2.34287                                     12.5491C3.34912 10.2331 4.72273 8.20468 6.4637 6.4637C8.20468 4.72273 10.2411 3.34912 12.5731 2.34287C14.905 1.33662 17.3807 0.833496 20.0002 0.833496C22.6516 0.833496 25.1352 1.33662 27.4512 2.34287C29.7672 3.34912 31.7957 4.72273 33.5366 6.4637C35.2776 8.20468 36.6512 10.2331 37.6575 12.5491C38.6637 14.8651 39.1668 17.3488 39.1668 20.0002C39.1668 22.6196 38.6637 25.0953 37.6575 27.4272C36.6512 29.7592 35.2776 31.7957 33.5366 33.5366C31.7957 35.2776 29.7672 36.6512 27.4512 37.6575C25.1352 38.6637 22.6516 39.1668 20.0002 39.1668ZM20.0002 35.2377C20.8307 34.0877 21.5495 32.8897 22.1564 31.6439C22.7634 30.3981 23.2585 29.0724 23.6418 27.6668H16.3585C16.7418 29.0724 17.237 30.3981 17.8439 31.6439C18.4509 32.8897 19.1696 34.0877 20.0002 35.2377ZM15.0168 34.471C14.4418 33.4168 13.9387 32.3227 13.5075 31.1887C13.0762 30.0547 12.7168 28.8807 12.4293 27.6668H6.77516C7.70155 29.2641 8.85954 30.6536 10.2491 31.8356C11.6387 33.0175 13.2279 33.896 15.0168 34.471ZM24.9835 34.471C26.7724 33.896 
-                        28.3616 33.0175 29.7512 31.8356C31.1408 30.6536 32.2988 29.2641 33.2252 27.6668H27.571C27.2835 28.8807 26.9241 30.0547 26.4929 31.1887C26.0616 32.3227 25.5585 33.4168 24.9835 34.471ZM5.146 23.8335H11.6627C11.5668 23.1946 11.495 22.5637 11.447 21.9408C11.3991 21.3179 11.3752 20.671 11.3752 20.0002C11.3752 19.3293 11.3991 18.6825 11.447 18.0595C11.495 17.4366 11.5668 16.8057 11.6627 16.1668H5.146C4.98627 16.8057 4.86648 17.4366 4.78662 18.0595C4.70676 18.6825 4.66683 19.3293 4.66683 20.0002C4.66683 20.671 4.70676 21.3179 4.78662 21.9408C4.86648 22.5637 4.98627 23.1946 5.146 23.8335ZM15.496 23.8335H24.5043C24.6002 23.1946 24.672 22.5637 24.72 21.9408C24.7679 21.3179 24.7918 20.671 24.7918 20.0002C24.7918 19.3293 24.7679 18.6825 24.72 18.0595C24.672 17.4366 24.6002 16.8057 24.5043 16.1668H15.496C15.4002 16.8057 15.3283 17.4366 15.2804 18.0595C15.2325 18.6825 15.2085 19.3293 15.2085 20.0002C15.2085 20.671 15.2325 21.3179 15.2804 21.9408C15.3283 22.5637 15.4002 23.1946 15.496 
-                        23.8335ZM28.3377 23.8335H34.8543C35.0141 23.1946 35.1338 22.5637 35.2137 21.9408C35.2936 21.3179 35.3335 20.671 35.3335 20.0002C35.3335 19.3293 35.2936 18.6825 35.2137 18.0595C35.1338 17.4366 35.0141 16.8057 34.8543 16.1668H28.3377C28.4335 16.8057 28.5054 17.4366 28.5533 18.0595C28.6012 18.6825 28.6252 19.3293 28.6252 20.0002C28.6252 20.671 28.6012 21.3179 28.5533 21.9408C28.5054 22.5637 28.4335 23.1946 28.3377 23.8335ZM27.571 12.3335H33.2252C32.2988 10.7363 31.1408 9.34669 29.7512 8.16475C28.3616 6.9828 26.7724 6.10433 24.9835 5.52933C25.5585 6.5835 26.0616 7.67759 26.4929 8.81162C26.9241 9.94565 27.2835 11.1196 27.571 12.3335ZM16.3585 12.3335H23.6418C23.2585 10.9279 22.7634 9.60225 22.1564 8.35641C21.5495 7.11058 20.8307 5.91266 20.0002 4.76266C19.1696 5.91266 18.4509 7.11058 17.8439 8.35641C17.237 9.60225 16.7418 10.9279 16.3585 12.3335ZM6.77516 12.3335H12.4293C12.7168 11.1196 13.0762 9.94565 13.5075 8.81162C13.9387 7.67759 14.4418 6.5835 15.0168 5.52933C13.2279 6.10433 11.6387 6.9828 10.2491 8.16475C8.85954 
-                        9.34669 7.70155 10.7363 6.77516 12.3335Z" fill="#CFEFFF"></path>
-                </svg>
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = tpl.innerHTML.trim();
+        return wrapper.firstElementChild;
+    }
 
-                <span id="mobile-language-text">change language</span>
-            </div>
-        </a>
+    //  Replace .svg-container with normal version from template
+    function initIcons(selector) {
+        document.querySelectorAll(selector).forEach(container => {
+            const parent = container.closest('[data-id]');
+            if (!parent) return;
 
-        <form method="post" action="@Url.Action("Logout", "Account")" style="margin: 0;">
-            @Html.AntiForgeryToken()
-            <button type="submit"
-                class="text-white d-block py-2 mobile-menu-section border-0 bg-transparent w-100 text-start"
-                style="cursor: pointer;">
-                <div style="display: flex; align-items: center; gap: 5px;">
-                    <img src="@Url.Content("~/svgs/admin/logOut.svg")">
-                    <span id="mobile-logout"> logout</span>
-                </div>
-            </button>
-        </form>
-    </div>
-</div>
+            const dataId = parent.getAttribute('data-id');
+            const svg = getSVGFromTemplate(`normal-${dataId}`);
+            if (svg) {
+                container.innerHTML = '';  // clean existing
+                container.appendChild(svg);
+            }
+        });
+    }
 
-<div id="sidebarBackdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-     background: rgba(0,0,0,0.5); z-index: 1061; cursor: pointer;"></div>
+    //  Toggle between normal and altered SVGs when clicked
+    function alter(clickedEl) {
+        document.querySelectorAll('[data-id]').forEach(el => {
+            const id = el.dataset.id;
+            const container = el.querySelector('.svg-container');
+            const normal = getSVGFromTemplate(`normal-${id}`);
+            if (container && normal) {
+                container.innerHTML = '';
+                container.appendChild(normal);
+            }
+        });
+
+        const id = clickedEl.dataset.id;
+        const container = clickedEl.querySelector('.svg-container');
+        const altered = getSVGFromTemplate(`altered-${id}`);
+        if (container && altered) {
+            container.innerHTML = '';
+            container.appendChild(altered);
+        }
+    }
+
+    //  Wait until DOM is fully loaded, then run once
+    document.addEventListener('DOMContentLoaded', () => {
+        initIcons('.navigation-bar .svg-container');
+        initIcons('#sideNavBar .svg-container');
+    });

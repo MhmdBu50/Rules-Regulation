@@ -669,16 +669,14 @@ there's also many filtering options to find the policy and other adminstrative s
             <div class="modal-header"
                 style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px 15px 0 0;">
                 <h5 class="modal-title fw-bold" id="exportModalLabel">
-                    <!-- select tables to export -->
-                    <span class="fas fa-file-excel me-2" id= "export-modal-title"></span>
+                    <i class="fas fa-file-excel me-2"></i>Select Tables to Export
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <p class="text-muted mb-4">
-                    <!-- choose which database tables to include in your Excel export -->
-                    <span class="fas fa-info-circle me-2" id="export-modal-description"></span>
+                    <i class="fas fa-info-circle me-2"></i>Choose which database tables to include in your Excel export:
                 </p>
 
                 <form id="exportForm" method="POST" action="/Admin/ExportAllDataToExcel">
@@ -690,11 +688,9 @@ there's also many filtering options to find the policy and other adminstrative s
                         <input class="form-check-input" type="checkbox" id="selectAll" name="tables" value="all"
                             checked>
                         <label class="form-check-label fw-bold" for="selectAll">
-                            <!-- all tables -->
-                            <span class="fas fa-database me-2 text-secondary" id="export-option-all-tables"></span>
+                            <i class="fas fa-database me-2 text-secondary"></i>All Tables
                         </label>
-                        <!-- Export all available database tables -->
-                        <small class="d-block text-muted mt-1" id="export-option-all-tables-desc"></small>
+                        <small class="d-block text-muted mt-1">Export all available database tables</small>
                     </div>
 
                     <hr class="my-3">
@@ -707,11 +703,9 @@ there's also many filtering options to find the policy and other adminstrative s
                                 <input class="form-check-input table-checkbox" type="checkbox" id="recordsTable"
                                     name="tables" value="records" checked>
                                 <label class="form-check-label" for="recordsTable">
-                                    <!-- Records -->
-                                    <span class="fas fa-file-alt me-2 text-info" id="export-option-records"><strong></strong></span>
+                                    <i class="fas fa-file-alt me-2 text-info"></i><strong>Records</strong>
                                 </label>
-                                <!-- All regulation and policy records -->
-                                <small class="d-block text-muted mt-1" id="export-option-records-desc"></small>
+                                <small class="d-block text-muted mt-1">All regulation and policy records</small>
                             </div>
                         </div>
 
@@ -721,11 +715,9 @@ there's also many filtering options to find the policy and other adminstrative s
                                 <input class="form-check-input table-checkbox" type="checkbox" id="usersTable"
                                     name="tables" value="users" checked>
                                 <label class="form-check-label" for="usersTable">
-                                    <!-- Users -->
-                                    <span class="fas fa-users me-2 text-success" id="export-option-users"><strong></strong></span>
+                                    <i class="fas fa-users me-2 text-success"></i><strong>Users</strong>
                                 </label>
-                                <!-- All registered users information -->
-                                <small class="d-block text-muted mt-1" id="export-option-users-desc"></small>
+                                <small class="d-block text-muted mt-1">All registered users information</small>
                             </div>
                         </div>
 
@@ -735,12 +727,10 @@ there's also many filtering options to find the policy and other adminstrative s
                                 <input class="form-check-input table-checkbox" type="checkbox" id="contactTable"
                                     name="tables" value="contact" checked>
                                 <label class="form-check-label" for="contactTable">
-                                    <!-- Contact Information -->
-                                    <span class="fas fa-address-book me-2 text-warning" id="export-option-contact"><strong>
-                                        </strong></span
+                                    <i class="fas fa-address-book me-2 text-warning"></i><strong>Contact
+                                        Information</strong>
                                 </label>
-                                <!-- Department contact details -->
-                                <small class="d-block text-muted mt-1" id="export-option-contact-desc"></small>
+                                <small class="d-block text-muted mt-1">Department contact details</small>
                             </div>
                         </div>
 
@@ -750,11 +740,9 @@ there's also many filtering options to find the policy and other adminstrative s
                                 <input class="form-check-input table-checkbox" type="checkbox" id="attachmentsTable"
                                     name="tables" value="attachments" checked>
                                 <label class="form-check-label" for="attachmentsTable">
-                                    <!-- Attachments -->
-                                    <span class="fas fa-paperclip me-2 text-danger"id="export-option-attachments"><strong></strong></span>
+                                    <i class="fas fa-paperclip me-2 text-danger"></i><strong>Attachments</strong>
                                 </label>
-                                <!-- File attachments and documents -->
-                                <small class="d-block text-muted mt-1" id="export-option-attachments-desc"></small>
+                                <small class="d-block text-muted mt-1">File attachments and documents</small>
                             </div>
                         </div>
 
@@ -764,11 +752,9 @@ there's also many filtering options to find the policy and other adminstrative s
                                 <input class="form-check-input table-checkbox" type="checkbox" id="historyTable"
                                     name="tables" value="history" checked>
                                 <label class="form-check-label" for="historyTable">
-                                    <!-- User History -->
-                                    <span class="fas fa-history me-2 text-primary" id="export-option-history"><strong></strong></span>
+                                    <i class="fas fa-history me-2 text-primary"></i><strong>User History</strong>
                                 </label>
-                                <!-- User activity and action logs -->
-                                <small class="d-block text-muted mt-1" id="export-option-history-desc"></small>
+                                <small class="d-block text-muted mt-1">User activity and action logs</small>
                             </div>
                         </div>
                     </div>
@@ -776,12 +762,10 @@ there's also many filtering options to find the policy and other adminstrative s
             </div>
             <div class="modal-footer bg-light" style="border-radius: 0 0 15px 15px;">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <!-- Cancel button -->
-                    <span class="fas fa-times me-2" id="export-button-cancel"></span>
+                    <i class="fas fa-times me-2"></i>Cancel
                 </button>
                 <button type="button" class="btn btn-primary" onclick="confirmExport()" id="confirmExportBtn">
-                    <!-- confirm Export button -->
-                    <span class="fas fa-download me-2" id="export-button-confirm"></span>
+                    <i class="fas fa-download me-2"></i>Export Selected Tables
                 </button>
             </div>
         </div>
