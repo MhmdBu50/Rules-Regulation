@@ -1,3 +1,5 @@
+/*-------------- this is the multi-select dropdown styling for the Department in filter panel --------------*/
+
 /* Multi-select dropdown styling */
 .multi-select-dropdown-container {
     position: relative;
@@ -16,7 +18,7 @@
     padding: 8px 12px;
     background-color: #fff;
     border: 1px solid #ced4da;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 12px;
     color: #333; /* Darker text color for better contrast */
@@ -27,29 +29,29 @@
 }
 
 .multi-select-button .caret {
-    margin-left: 10px;
+    margin-inline-start: 10px;
     transition: transform 0.2s;
+    transform: scaleX(1.5);
 }
 
 .multi-select-dropdown.active .caret {
-    transform: rotate(180deg);
+    transform: rotate(180deg) scaleX(1.5);
 }
 
 .multi-select-dropdown-content {
     position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background-color: #fff;
+    top: 104%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #2f3e5f;
     border: 1px solid #ced4da;
-    border-top: none;
-    border-radius: 0 0 4px 4px;
+    border-radius: 10px;
     max-height: 240px;
     overflow-y: auto;
-    z-index: 1000; /* Higher z-index to ensure it appears above other elements */
+    z-index: 1000;
     display: none;
     padding: 5px 0;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.38);
 }
 
 .multi-select-dropdown.active .multi-select-dropdown-content {
@@ -63,8 +65,7 @@
     font-weight: normal;
     transition: background-color 0.2s;
     margin: 0;
-    font-size: 12px;
-    color: #333; /* Darker text color */
+    font-size: clamp(12px, calc(0.6rem + .6vw), 25px);
 }
 
 .multi-select-dropdown-content label:hover {
@@ -73,8 +74,6 @@
 
 .multi-select-dropdown-content input[type="checkbox"] {
     margin-right: 6px;
-    vertical-align: middle;
-    transform: scale(0.85); /* Make checkboxes a bit smaller */
 }
 
 .multi-select-badge {
@@ -104,12 +103,6 @@
     outline: none;
 }
 
-/* Style for the checkboxes */
-.multi-select-dropdown-content .form-check-input {
-    width: 14px;
-    height: 14px;
-}
-
 /* Improve contrast on hover */
 .multi-select-dropdown-content label:hover {
     background-color: #e9ecef;
@@ -118,18 +111,23 @@
 
 /* Style specifically for the filter panel */
 .filter-column .multi-select-dropdown-container {
-    width: 100%;
-    max-width: 180px;
+    max-width: calc(300px - .6vw);
 }
 
+@media (max-width: 576px) {
+    .multi-select-dropdown-container {
+        max-width: 100%;
+    }
+}
 .filter-column .multi-select-button {
-    font-size: 11px;
+    font-size: clamp(12px,calc(0.6rem + .6vw), 22px);
     padding: 6px 10px;
-    color: #212529;
-    background-color: #f8f9fa;
+    background-color: #2f3e5f;
+    color: white;
 }
 
 .filter-column .multi-select-dropdown-content {
     max-height: 200px;
-    width: 200px; /* Make dropdown wider than the button for better readability */
+    width: max-content;
+    max-width: 128%;
 }
