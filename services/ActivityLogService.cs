@@ -120,25 +120,7 @@ namespace RulesRegulation.Services
                 var whereConditions = new List<string>();
                 var parameters = new List<OracleParameter>();
 
-                // Local safe int conversion to avoid runtime exceptions when columns are string-typed
-                static int SafeToInt(object? value)
-                {
-                    if (value == null || value == DBNull.Value) return 0;
-                    try
-                    {
-                        return value switch
-                        {
-                            int i => i,
-                            long l => (int)l,
-                            decimal d => (int)d,
-                            double db => (int)db,
-                            float f => (int)f,
-                            string s when int.TryParse(s, out var n) => n,
-                            _ => Convert.ToInt32(value)
-                        };
-                    }
-                    catch { return 0; }
-                }
+                // Note: use typed getters for numeric columns to avoid OracleDecimal cast issues
 
                 // Build WHERE clause based on filters
                 if (!string.IsNullOrEmpty(actionTypeFilter))
@@ -226,17 +208,18 @@ namespace RulesRegulation.Services
                         using var reader = await dataCommand.ExecuteReaderAsync();
                         while (await reader.ReadAsync())
                         {
+                            // Read numeric columns using typed getters to avoid OracleDecimal -> 0 fallbacks
                             int? entityId = null;
                             if (!reader.IsDBNull("ENTITY_ID"))
                             {
-                                var tmp = SafeToInt(reader["ENTITY_ID"]);
-                                entityId = tmp == 0 ? (int?)null : tmp;
+                                try { entityId = reader.GetInt32("ENTITY_ID"); }
+                                catch { entityId = Convert.ToInt32(reader["ENTITY_ID"].ToString()); }
                             }
 
                             logsLocal.Add(new ActivityLogEntry
                             {
-                                LogId = SafeToInt(reader["LOG_ID"]),
-                                UserId = SafeToInt(reader["USER_ID"]),
+                                LogId = reader.IsDBNull("LOG_ID") ? 0 : reader.GetInt32("LOG_ID"),
+                                UserId = reader.IsDBNull("USER_ID") ? 0 : reader.GetInt32("USER_ID"),
                                 UserName = reader.IsDBNull("USER_NAME") ? string.Empty : reader.GetString("USER_NAME"),
                                 UserRole = reader.IsDBNull("USER_ROLE") ? string.Empty : reader.GetString("USER_ROLE"),
                                 ActionType = reader.IsDBNull("ACTION_TYPE") ? string.Empty : reader.GetString("ACTION_TYPE"),

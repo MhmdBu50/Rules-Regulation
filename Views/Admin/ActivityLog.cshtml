@@ -14,494 +14,14 @@
     <link rel="stylesheet" href="~/css/_rtl_Styles.css">
     <link rel="stylesheet" href="~/css/NewEditor.css">
     <link rel="stylesheet" href="~/css/adminPagesHeader.css">
+    <link rel="stylesheet" href="~/css/activityLog.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --success-color: #16a34a;
-            --warning-color: #d97706;
-            --danger-color: #dc2626;
-            --info-color: #0891b2;
-            --secondary-color: #64748b;
-            --light-bg: #f8fafc;
-            --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            --border-radius: 0.75rem;
-        }
-
-        /* Main Container Styles */
-        .activity-container {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 2rem 0;
-        }
-
-        /* Statistics Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            text-align: center;
-            box-shadow: var(--card-shadow);
-            border: none;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--info-color));
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1e293b;
-            line-height: 1;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 0.875rem;
-            color: #64748b;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .stat-icon {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 2rem;
-            opacity: 0.2;
-        }
-
-        /* Action Cards Colors */
-        .stat-card.total { --accent-color: var(--primary-color); }
-        .stat-card.admin { --accent-color: var(--danger-color); }
-        .stat-card.editor { --accent-color: var(--info-color); }
-        .stat-card.records { --accent-color: var(--success-color); }
-        .stat-card.contacts { --accent-color: var(--warning-color); }
-
-        .stat-card.total::before { background: var(--primary-color); }
-        .stat-card.admin::before { background: var(--danger-color); }
-        .stat-card.editor::before { background: var(--info-color); }
-        .stat-card.records::before { background: var(--success-color); }
-        .stat-card.contacts::before { background: var(--warning-color); }
-
-        /* Filter Card */
-        .filter-card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: var(--card-shadow);
-            border: none;
-        }
-
-        .filter-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            align-items: end;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-        }
-
-        .form-control, .form-select {
-            border: 2px solid #e5e7eb;
-            border-radius: 0.5rem;
-            padding: 0.75rem;
-            font-size: 0.875rem;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        /* Activity Table */
-        .activity-table-container {
-            background: white;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            border: none;
-        }
-
-        .activity-table {
-            margin: 0;
-        }
-
-        .activity-table thead th {
-            background: linear-gradient(135deg, #1e293b, #334155);
-            color: white;
-            font-weight: 600;
-            font-size: 0.875rem;
-            padding: 1rem 0.75rem;
-            border: none;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .activity-table tbody td {
-            padding: 1rem 0.75rem;
-            border: none;
-            border-bottom: 1px solid #f1f5f9;
-            vertical-align: middle;
-        }
-
-        .activity-table tbody tr:hover {
-            background: var(--light-bg);
-        }
-
-        .activity-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        /* Badges */
-        .badge {
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .badge.action-add { background-color: var(--success-color); color: white; }
-        .badge.action-edit { background-color: var(--warning-color); color: white; }
-        .badge.action-delete { background-color: var(--danger-color); color: white; }
-        .badge.entity-record { background-color: var(--info-color); color: white; }
-        .badge.entity-contact { background-color: #8b5cf6; color: white; }
-        .badge.role-admin { background-color: var(--danger-color); color: white; }
-        .badge.role-editor { background-color: var(--success-color); color: white; }
-
-        /* User Info */
-        .user-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .user-name {
-            font-weight: 600;
-            color: #1e293b;
-            font-size: 0.875rem;
-        }
-
-        .user-id {
-            font-size: 0.75rem;
-            color: #64748b;
-        }
-
-        /* Entity Info */
-        .entity-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .entity-name {
-            font-weight: 600;
-            color: #1e293b;
-            font-size: 0.875rem;
-        }
-
-        .entity-id {
-            font-size: 0.75rem;
-            color: #64748b;
-        }
-
-        /* Timestamp */
-        .timestamp {
-            font-size: 0.8rem;
-            color: #64748b;
-            font-family: 'Courier New', monospace;
-        }
-
-        /* Action Buttons */
-        .btn-view-details {
-            background: linear-gradient(135deg, var(--primary-color), var(--info-color));
-            color: white;
-            border: none;
-            border-radius: 0.5rem;
-            padding: 0.5rem 1rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .btn-view-details:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-            color: white;
-        }
-
-        /* No Data State */
-        .no-data {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: #64748b;
-        }
-
-        .no-data-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.3;
-        }
-
-        /* Pagination */
-        .pagination {
-            gap: 0.5rem;
-        }
-
-        .page-link {
-            border: 2px solid #e5e7eb;
-            border-radius: 0.5rem;
-            color: #374151;
-            font-weight: 500;
-            padding: 0.5rem 0.75rem;
-            transition: all 0.2s ease;
-        }
-
-        .page-link:hover {
-            background: var(--primary-color);
-            border-color: var(--primary-color);
-            color: white;
-        }
-
-        .page-item.active .page-link {
-            background: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        /* Modal */
-        .modal-content {
-            border: none;
-            border-radius: var(--border-radius);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        .modal-header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
-            padding: 1.5rem 2rem;
-        }
-
-        .modal-title {
-            font-weight: 600;
-            font-size: 1.25rem;
-        }
-
-        .modal-body {
-            padding: 2rem;
-        }
-
-        /* JSON Content Styling */
-        .json-content {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 0.875rem;
-            line-height: 1.5;
-            color: #374151;
-            background: #f8fafc !important;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.375rem;
-            max-height: 300px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        .json-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .json-content::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 4px;
-        }
-
-        .json-content::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        .json-content::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        .detail-section {
-            background: var(--light-bg);
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .detail-section h6 {
-            color: #374151;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 0.5rem;
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .detail-label {
-            font-weight: 600;
-            color: #64748b;
-            font-size: 0.875rem;
-        }
-
-        .detail-value {
-            font-weight: 500;
-            color: #1e293b;
-        }
-
-        .data-changes {
-            background: #1e293b;
-            color: #e2e8f0;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.8rem;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        /* Action Buttons */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--info-color));
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: transform 0.2s ease;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            background: linear-gradient(135deg, #1d4ed8, #0e7490);
-        }
-
-        .btn-success {
-            background: var(--success-color);
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: 600;
-        }
-
-        .btn-outline-secondary {
-            border: 2px solid #e5e7eb;
-            color: #64748b;
-            border-radius: 0.5rem;
-            font-weight: 500;
-        }
-
-        /* Loading State */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-
-        .loading-spinner {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            text-align: center;
-            box-shadow: var(--card-shadow);
-        }
-
-        /* Responsive Design */
-        @@media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-            }
-
-            .filter-row {
-                grid-template-columns: 1fr;
-            }
-
-            .activity-table-container {
-                overflow-x: auto;
-            }
-
-            .activity-table {
-                min-width: 800px;
-            }
-        }
-
-        @@media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stat-card {
-                padding: 1.5rem;
-            }
-
-            .stat-number {
-                font-size: 2rem;
-            }
-        }
-    </style>
 }
 
 @section Scripts {
     <script src="~/js/bootstrap.js"></script>
     <script src="~/js/adminPagesHeader.js"></script>
+    <script src="~/js/activityLog.js"></script>
 }
 
 <!-- Loading Overlay -->
@@ -529,7 +49,7 @@
     <div class="main-header">
         <div class="container text-center d-flex flex-column align-items-center justify-content-center">
             <h1 class="display-5 fw-semibold mb-2">
-                <i class="bi bi-activity me-3"></i>Activity Log
+                <span class="bi bi-activity me-3"></span>Activity Log
             </h1>
             <p class="subtitle text-white-50 mb-4">Monitor and track all privileged user actions and changes</p>
         </div>
@@ -541,7 +61,7 @@
         @if (TempData["SuccessMessage"] != null)
         {
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle me-2"></i>
+                <span class="bi bi-check-circle me-2"></span>
                 @TempData["SuccessMessage"]
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -550,7 +70,7 @@
         @if (TempData["ErrorMessage"] != null)
         {
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span class="bi bi-exclamation-triangle me-2"></span>
                 @TempData["ErrorMessage"]
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -559,27 +79,27 @@
         <!-- Statistics Dashboard -->
         <div class="stats-grid">
             <div class="stat-card total">
-                <i class="bi bi-bar-chart stat-icon"></i>
+                <span class="bi bi-bar-chart stat-icon"></span>
                 <div class="stat-number">@Model.TotalActions</div>
                 <div class="stat-label">Total Actions</div>
             </div>
             <div class="stat-card admin">
-                <i class="bi bi-shield-check stat-icon"></i>
+                <span class="bi bi-shield-check stat-icon"></span>
                 <div class="stat-number">@Model.AdminActionsCount</div>
                 <div class="stat-label">Admin Actions</div>
             </div>
             <div class="stat-card editor">
-                <i class="bi bi-pencil-square stat-icon"></i>
+                <span class="bi bi-pencil-square stat-icon"></span>
                 <div class="stat-number">@Model.EditorActionsCount</div>
                 <div class="stat-label">Editor Actions</div>
             </div>
             <div class="stat-card records">
-                <i class="bi bi-file-earmark-text stat-icon"></i>
+                <span class="bi bi-file-earmark-text stat-icon"></span>
                 <div class="stat-number">@Model.RecordActionsCount</div>
                 <div class="stat-label">Record Changes</div>
             </div>
             <div class="stat-card contacts">
-                <i class="bi bi-person-vcard stat-icon"></i>
+                <span class="bi bi-person-vcard stat-icon"></span>
                 <div class="stat-number">@Model.ContactActionsCount</div>
                 <div class="stat-label">Contact Changes</div>
             </div>
@@ -626,10 +146,10 @@
                         <div class="col-md-2">
                             <div class="d-grid">
                                 <button type="submit" class="btn" style="background-color: #8B4513; color: white; border: none; font-weight: 600; padding: 0.5rem 1rem;">
-                                    <i class="bi bi-funnel-fill me-1"></i>APPLY
+                                    <span class="bi bi-funnel-fill me-1"></span>APPLY
                                 </button>
                                 <a href="@Url.Action("ActivityLog")" class="btn btn-secondary mt-2" style="font-weight: 600; padding: 0.5rem 1rem;">
-                                    <i class="bi bi-x-circle me-1"></i>Clear
+                                    <span class="bi bi-x-circle me-1"></span>Clear
                                 </a>
                             </div>
                         </div>
@@ -645,7 +165,7 @@
                         <div class="col-md-2">
                             <div class="d-grid">
                                 <button type="submit" class="btn" style="background-color: #8B4513; color: white; border: none; font-weight: 600; padding: 0.5rem 1rem;">
-                                    <i class="bi bi-search me-1"></i>SEARCH
+                                    <span class="bi bi-search me-1"></span>SEARCH
                                 </button>
                             </div>
                         </div>
@@ -663,6 +183,9 @@
                         <table class="table table-hover mb-0" style="border-collapse: separate; border-spacing: 0;">
                             <thead style="background-color: #4a5568; color: white;">
                                 <tr>
+                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;">
+                                        Log ID
+                                    </th>
                                     <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;">
                                         User
                                     </th>
@@ -693,6 +216,15 @@
                         @foreach (var log in Model.ActivityLogs)
                         {
                             <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <!-- Log ID -->
+                                <td style="padding: 12px 16px; vertical-align: middle;">
+                                    <div style="font-weight: 600; color: #2563eb; font-size: 0.875rem;">
+                                        #@log.LogId
+                                    </div>
+                                    <div style="font-size: 0.75rem; color: #718096;">
+                                        LOG_ID
+                                    </div>
+                                </td>
                                 <!-- User -->
                                 <td style="padding: 12px 16px; vertical-align: middle;">
                                     <div style="font-weight: 500; color: #2d3748; font-size: 0.875rem;">
@@ -707,13 +239,13 @@
                                     @if (log.IsAdminAction)
                                     {
                                         <span class="badge" style="background-color: #e53e3e; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <i class="bi bi-shield-fill-check me-1"></i>ADMIN
+                                            <span class="bi bi-shield-fill-check me-1"></span>ADMIN
                                         </span>
                                     }
                                     else
                                     {
                                         <span class="badge" style="background-color: #38a169; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <i class="bi bi-pencil-square me-1"></i>EDITOR
+                                            <span class="bi bi-pencil-square me-1"></span>EDITOR
                                         </span>
                                     }
                                 </td>
@@ -722,19 +254,19 @@
                                     @if (log.ActionType == "Add")
                                     {
                                         <span class="badge" style="background-color: #38a169; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <i class="bi bi-plus-circle me-1"></i>ADD
+                                            <span class="bi bi-plus-circle me-1"></span>ADD
                                         </span>
                                     }
                                     else if (log.ActionType == "Edit")
                                     {
                                         <span class="badge" style="background-color: #f6ad55; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <i class="bi bi-pencil me-1"></i>EDIT
+                                            <span class="bi bi-pencil me-1"></span>EDIT
                                         </span>
                                     }
                                     else if (log.ActionType == "Delete")
                                     {
                                         <span class="badge" style="background-color: #e53e3e; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <i class="bi bi-trash me-1"></i>DELETE
+                                            <span class="bi bi-trash me-1"></span>DELETE
                                         </span>
                                     }
                                 </td>
@@ -743,13 +275,13 @@
                                     @if (log.EntityType == "Record")
                                     {
                                         <span class="badge" style="background-color: #3182ce; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <i class="bi bi-file-text me-1"></i>RECORD
+                                            <span class="bi bi-file-text me-1"></span>RECORD
                                         </span>
                                     }
                                     else if (log.EntityType == "Contact")
                                     {
                                         <span class="badge" style="background-color: #805ad5; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <i class="bi bi-person-vcard me-1"></i>CONTACT
+                                            <span class="bi bi-person-vcard me-1"></span>CONTACT
                                         </span>
                                     }
                                 </td>
@@ -785,13 +317,13 @@
                                     else if (log.ActionType == "Add")
                                     {
                                         <div style="font-size: 0.875rem; color: #38a169;">
-                                            <i class="bi bi-plus-circle me-1"></i>New @log.EntityDisplayName created
+                                            <span class="bi bi-plus-circle me-1"></span>New @log.EntityDisplayName created
                                         </div>
                                     }
                                     else if (log.ActionType == "Delete")
                                     {
                                         <div style="font-size: 0.875rem; color: #e53e3e;">
-                                            <i class="bi bi-trash me-1"></i>@log.EntityDisplayName removed
+                                            <span class="bi bi-trash me-1"></span>@log.EntityDisplayName removed
                                         </div>
                                     }
                                     else
@@ -805,7 +337,7 @@
                                     {
                                         <button class="btn btn-sm" style="background-color: transparent; border: 1px solid #cbd5e0; color: #4a5568; font-size: 0.75rem; padding: 4px 8px;" 
                                                 onclick="viewDetails(@log.LogId)" data-bs-toggle="modal" data-bs-target="#activityDetailsModal">
-                                            <i class="bi bi-eye me-1"></i>VIEW DETAILS
+                                            <span class="bi bi-eye me-1"></span>VIEW DETAILS
                                         </button>
                                     }
                                     else
@@ -836,7 +368,7 @@
                                     {
                                         <li class="page-item">
                                             <a class="page-link" href="@GetPageUrl(Model.CurrentPage - 1)" style="color: #4a5568; border: 1px solid #cbd5e0;">
-                                                <i class="bi bi-chevron-left"></i> Previous
+                                                <span class="bi bi-chevron-left"></span> Previous
                                             </a>
                                         </li>
                                     }
@@ -852,7 +384,7 @@
                                 {
                                     <li class="page-item">
                                         <a class="page-link" href="@GetPageUrl(Model.CurrentPage + 1)" style="color: #4a5568; border: 1px solid #cbd5e0;">
-                                            Next <i class="bi bi-chevron-right"></i>
+                                            Next <span class="bi bi-chevron-right"></span>
                                         </a>
                                     </li>
                                 }
@@ -864,7 +396,7 @@
                 else
                 {
                     <div class="p-5 text-center" style="color: #718096;">
-                        <i class="bi bi-inbox" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                        <span class="bi bi-inbox" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></span>
                         <h5 style="color: #4a5568; margin-bottom: 0.5rem;">No Activity Found</h5>
                         <p style="margin-bottom: 0;">Try adjusting your filters or search terms.</p>
                     </div>
@@ -881,7 +413,7 @@
             <!-- Header -->
             <div class="modal-header" style="background: linear-gradient(135deg, #4a5568, #2d3748); color: white;">
                 <h5 class="modal-title">
-                    <i class="bi bi-info-circle me-2"></i>Activity Details
+                    <span class="bi bi-info-circle me-2"></span>Activity Details
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -900,7 +432,7 @@
             <!-- Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-circle me-1"></i>Close
+                    <span class="bi bi-x-circle me-1"></span>Close
                 </button>
             </div>
         </div>
@@ -970,298 +502,3 @@
         return $"?{queryString}";
     }
 }
-
-<script>
-    // View activity details in modal
-    function viewDetails(logId) {
-        const modal = new bootstrap.Modal(document.getElementById('activityDetailsModal'));
-        const content = document.getElementById('activityDetailsContent');
-        
-        // Show loading state
-        content.innerHTML = `
-            <div class="text-center py-4">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <div class="mt-2">Loading activity details...</div>
-            </div>
-        `;
-        
-        modal.show();
-        
-        // Fetch details from server
-        fetch(`/Admin/GetActivityLogDetails/${logId}`, {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                if (response.status === 404) {
-                    throw new Error(`Activity log entry with ID ${logId} not found.`);
-                }
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data) {
-                // Build the modal content according to specifications
-                let html = `
-                    <div class="container-fluid">
-                        <!-- Activity Information (Left) & User Information (Right) Row -->
-                        <div class="row mb-4">
-                            <!-- Activity Information - Left Column -->
-                            <div class="col-md-6">
-                                <h6 class="text-primary mb-3 fw-bold">
-                                    <i class="bi bi-activity me-2"></i>Activity Information
-                                </h6>
-                                <div class="card border-0 shadow-sm">
-                                    <div class="card-body bg-light">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold text-secondary">Log ID:</label>
-                                            <div class="form-control-plaintext fw-semibold">${data.logId}</div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold text-secondary">Timestamp:</label>
-                                            <div class="form-control-plaintext">${new Date(data.actionTimestamp).toLocaleString('en-US', { 
-                                                year: 'numeric', month: '2-digit', day: '2-digit',
-                                                hour: '2-digit', minute: '2-digit', second: '2-digit',
-                                                timeZoneName: 'short'
-                                            })}</div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold text-secondary">Action Type:</label>
-                                            <div class="form-control-plaintext">
-                                                <span class="badge fs-6 ${getActionBadgeStyle(data.actionType)}">${data.actionType.toUpperCase()}</span>
-                                            </div>
-                                        </div>
-                                        <div class="mb-0">
-                                            <label class="form-label fw-bold text-secondary">Entity Type:</label>
-                                            <div class="form-control-plaintext">
-                                                <span class="badge fs-6 ${getEntityBadgeStyle(data.entityType)}">${data.entityType}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- User Information - Right Column -->
-                            <div class="col-md-6">
-                                <h6 class="text-primary mb-3 fw-bold">
-                                    <i class="bi bi-person-circle me-2"></i>User Information
-                                </h6>
-                                <div class="card border-0 shadow-sm">
-                                    <div class="card-body bg-light">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold text-secondary">User ID:</label>
-                                            <div class="form-control-plaintext fw-semibold">${data.userId}</div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold text-secondary">User Name:</label>
-                                            <div class="form-control-plaintext">${data.userName || 'N/A'}</div>
-                                        </div>
-                                        <div class="mb-0">
-                                            <label class="form-label fw-bold text-secondary">User Role:</label>
-                                            <div class="form-control-plaintext">
-                                                <span class="badge fs-6 ${getRoleBadgeStyle(data.userRole)}">${data.userRole.toUpperCase()}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Entity Information - Full Width Row -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <h6 class="text-primary mb-3 fw-bold">
-                                    <i class="bi bi-database me-2"></i>Entity Information
-                                </h6>
-                                <div class="card border-0 shadow-sm">
-                                    <div class="card-body bg-light">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold text-secondary">Entity ID:</label>
-                                                    <div class="form-control-plaintext fw-semibold">${data.entityId || 'N/A'}</div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold text-secondary">Entity Name:</label>
-                                                    <div class="form-control-plaintext">${data.entityName || 'N/A'}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        ${data.details ? `
-                                            <div class="mb-0">
-                                                <label class="form-label fw-bold text-secondary">Details:</label>
-                                                <div class="form-control-plaintext">${data.details}</div>
-                                            </div>
-                                        ` : ''}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Data Changes - Full Width Row -->
-                        <div class="row mb-0">
-                            <div class="col-12">
-                                <h6 class="text-primary mb-3 fw-bold">
-                                    <i class="bi bi-code-square me-2"></i>Data Changes
-                                </h6>
-                                ${getDataChangesContent(data.actionType, data.beforeData, data.afterData)}
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                content.innerHTML = html;
-            } else {
-                content.innerHTML = `
-                    <div class="alert alert-warning">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
-                        Activity details not found or could not be loaded.
-                    </div>
-                `;
-            }
-        })
-        .catch(error => {
-            content.innerHTML = `
-                <div class="alert alert-danger">
-                    <i class="bi bi-exclamation-triangle me-2"></i>
-                    Error loading activity details: ${error.message}
-                    <br><small class="text-muted">LogId: ${logId}</small>
-                </div>
-            `;
-        });
-    }
-
-    // Helper function to generate data changes content based on action type
-    function getDataChangesContent(actionType, beforeData, afterData) {
-        const actionUpper = actionType.toUpperCase();
-        
-        if (actionType === 'Add' && afterData) {
-            return `
-                <div class="card border-success">
-                    <div class="card-header bg-success bg-opacity-10 border-success">
-                        <h6 class="card-title mb-0 text-success">
-                            <i class="bi bi-plus-circle me-2"></i>Added Data
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <pre class="json-content bg-light p-3 rounded">${formatJson(afterData)}</pre>
-                    </div>
-                </div>
-            `;
-        } else if (actionType === 'Delete' && beforeData) {
-            return `
-                <div class="card border-danger">
-                    <div class="card-header bg-danger bg-opacity-10 border-danger">
-                        <h6 class="card-title mb-0 text-danger">
-                            <i class="bi bi-trash me-2"></i>Deleted Data
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <pre class="json-content bg-light p-3 rounded">${formatJson(beforeData)}</pre>
-                    </div>
-                </div>
-            `;
-        } else if (actionType === 'Edit' && (beforeData || afterData)) {
-            return `
-                <div class="row">
-                    ${beforeData ? `
-                        <div class="col-md-6 mb-3">
-                            <div class="card border-warning">
-                                <div class="card-header bg-warning bg-opacity-10 border-warning">
-                                    <h6 class="card-title mb-0 text-warning">
-                                        <i class="bi bi-arrow-left-circle me-2"></i>Before Changes
-                                    </h6>
-                                </div>
-                                <div class="card-body">
-                                    <pre class="json-content bg-light p-3 rounded">${formatJson(beforeData)}</pre>
-                                </div>
-                            </div>
-                        </div>
-                    ` : ''}
-                    ${afterData ? `
-                        <div class="col-md-6 mb-3">
-                            <div class="card border-info">
-                                <div class="card-header bg-info bg-opacity-10 border-info">
-                                    <h6 class="card-title mb-0 text-info">
-                                        <i class="bi bi-arrow-right-circle me-2"></i>After Changes
-                                    </h6>
-                                </div>
-                                <div class="card-body">
-                                    <pre class="json-content bg-light p-3 rounded">${formatJson(afterData)}</pre>
-                                </div>
-                            </div>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        } else {
-            return `
-                <div class="card border-secondary">
-                    <div class="card-body text-center text-muted py-4">
-                        <i class="bi bi-info-circle fs-4 mb-2"></i>
-                        <p class="mb-0">No detailed change information available for this activity.</p>
-                    </div>
-                </div>
-            `;
-        }
-    }
-
-    // Helper function to format JSON with proper indentation and syntax highlighting
-    function formatJson(jsonString) {
-        if (!jsonString) return 'No data available';
-        
-        try {
-            const parsed = JSON.parse(jsonString);
-            return JSON.stringify(parsed, null, 2);
-        } catch (e) {
-            // If it's not valid JSON, return as-is with proper escaping
-            return jsonString.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
-    }
-
-    // Helper functions for badge styling
-    function getActionBadgeStyle(actionType) {
-        switch(actionType) {
-            case 'Add': return 'bg-success text-white px-3 py-2';
-            case 'Edit': return 'bg-warning text-white px-3 py-2';  
-            case 'Delete': return 'bg-danger text-white px-3 py-2';
-            default: return 'bg-secondary text-white px-3 py-2';
-        }
-    }
-
-    function getEntityBadgeStyle(entityType) {
-        switch(entityType) {
-            case 'Record': return 'bg-primary text-white px-3 py-2';
-            case 'Contact': return 'bg-info text-white px-3 py-2';
-            default: return 'bg-secondary text-white px-3 py-2';
-        }
-    }
-
-    function getRoleBadgeStyle(userRole) {
-        switch(userRole) {
-            case 'Admin': return 'bg-danger text-white px-3 py-2';
-            case 'Editor': return 'bg-success text-white px-3 py-2';
-            default: return 'bg-secondary text-white px-3 py-2';
-        }
-    }
-
-    // Initialize page
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize tooltips if Bootstrap 5 is loaded
-        if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
-        }
-    });
-</script>
