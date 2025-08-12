@@ -71,90 +71,83 @@
     <div class="container my-4">
         <section>
             <div class="container" style="margin-bottom: -30px;">
-                <table class="w-100">
-                    <thead class="text-center">
-                        <tr>
-                            <th class="col-8 d-none d-md-table-cell padding-between-search-filter">
-                                <div class="col flex-nowrap align-items-center">
-                                    <div class="search-container d-flex align-items-center position-relative">
-                                        <button class="search-and-filter-buttons">
-                                            <img src="~/svgs/navigation/search-icon.svg" alt="Search"
-                                                class="search-icon" width="44" height="44" />
-                                        </button>
-                                        <input id="contactSearchInput"
-                                            class="search poppins-regular flex-grow-1 small-font-size" type="text"
-                                            placeholder="Search by Name/ID..."
-                                            style="color: #ABB7C2; background: transparent; border: none; padding-inline-end: 30px;">
-                                        <button id="contactClearBtn" class="position-absolute"
-                                            style="inset-inline-end: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ABB7C2; font-size: 18px; cursor: pointer; display: none;"
-                                            onclick="clearContactSearch()" title="Clear search">
-                                            ×
-                                        </button>
+                <div class="row justify-content-center"> <!-- تمت إضافة justify-content-center لمركزة العناصر -->
+                    <!-- Search Column -->
+                    <div class="col-12 col-md-8 order-1 order-md-1 mb-3 mb-md-0">
+                        <!-- تمت إضافة mb-3 للمسافة السفلية -->
+                        <div class="search-container d-flex align-items-center position-relative mx-auto">
+
+                            <button class="search-and-filter-buttons" style="margin-bottom: 15px;">
+                                <img src="~/svgs/navigation/search-icon.svg" alt="Search" class="search-icon" width="44"
+                                    height="44" />
+                            </button>
+                            <input id="contactSearchInput" class="search poppins-regular flex-grow-1 small-font-size"
+                                type="text" placeholder="Search by Name/ID..."
+                                style="color: #ABB7C2; background: transparent; border: none; padding-inline-end: 30px;">
+                            <button id="contactClearBtn" class="position-absolute"
+                                style="inset-inline-end: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ABB7C2; font-size: 18px; cursor: pointer; display: none;"
+                                onclick="clearContactSearch()" title="Clear search">
+                                ×
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filter Column -->
+                    <div class="col-12 col-md-4 order-2 order-md-2">
+                        <div class="search-container d-flex align-items-center px-2 mx-auto" id="document-search"
+                            style="max-width: 600px;"> <!-- تمت إضافة mx-auto و max-width -->
+                            <div class="multi-select-dropdown-container" style="width: 100%;">
+                                <div class="multi-select-dropdown" style="width: 100%;">
+                                    <div class="multi-select-button" id="contactDepartmentMultiSelectButton"
+                                        style="color: #ABB7C2; border: none; cursor: pointer; width: 100%; font-size: 14px; height: 44px; display: flex; align-items: center; justify-content: space-between; background: transparent; padding: 0 8px; font-size: 20px; color: #ABB7C2; font-weight: normal; padding: 25px">
+                                        <span>All Departments</span>
+                                        <span class="caret">▼</span>
+                                    </div>
+                                    <div class="multi-select-dropdown-content" id="contactDepartmentDropdownContent"
+                                        style="position: absolute; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000; width: 100%;">
+                                        <label
+                                            style="display: flex; align-items: center; padding: 8px 12px; cursor: pointer; margin: 0;">
+                                            <input type="checkbox"
+                                                class="form-check-input contact-department-option me-2" value="" checked
+                                                style="margin: 0; margin-right: 8px;">
+                                            <span id="contact-all-departments-option"
+                                                style="font-size: 24px; color: #ABB7C2;">All Departments</span>
+                                        </label>
+                                        @{
+                                            var allDepartments = new List<(string key, string value)>
+                                                                                {
+                                                                                ("dept-reg-admission", "Reg and Admission"),
+                                                                                ("dept-ccsit", "CCSIT"),
+                                                                                ("dept-communication-tech", "Communication and tech"),
+                                                                                ("dept-hospital", "Hospital"),
+                                                                                ("dept-library", "Library"),
+                                                                                ("dept-students-affairs", "Students Affairs"),
+                                                                                ("dept-preparetory", "Preparetory"),
+                                                                                ("dept-academic-affairs", "Academic Affairs")
+                                                                                };
+                                        }
+                                        @foreach (var department in allDepartments)
+                                        {
+                                            <label
+                                                style="display: flex; align-items: center; padding: 8px 12px; cursor: pointer; margin: 0;">
+                                                <input type="checkbox"
+                                                    class="form-check-input contact-department-option me-2"
+                                                    value="@department.value" style="margin: 0; margin-right: 8px;">
+                                                <span id="@department.key"
+                                                    style="font-size: 22px; color: #ABB7C2;">@department.value</span>
+                                            </label>
+                                        }
                                     </div>
                                 </div>
-                            </th>
-                            <th class="col-4 d-none d-md-table-cell padding-between-search-filter">
-                                    <div class="col flex-nowrap align-items-center">
-                                        <div class="search-container d-flex align-items-center px-2" id="document-search">
-                                            <div class="multi-select-dropdown-container" style="width: 100%;">
-                                                <div class="multi-select-dropdown" style="width: 100%;">
-                                                    <div class="multi-select-button" id="contactDepartmentMultiSelectButton"
-                                                        style="color: #ABB7C2; border: none; cursor: pointer; width: 100%; font-size: 14px; height: 44px; display: flex; align-items: center; justify-content: space-between; background: transparent; padding: 0 8px;">
-                                                        <span style="font-size: 24px; color: #ABB7C2;">All Departments</span>
-                                                        <span class="caret">▼</span>
-                                                        </div>
-                                                            <div class="multi-select-dropdown-content"
-                                                                id="contactDepartmentDropdownContent"
-                                                                style="position: absolute; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000; width: 100%;">
-                                                                <label style="display: flex; align-items: center; padding: 8px 12px; cursor: pointer; margin: 0;">
-                                                                    <input type="checkbox"
-                                                                        class="form-check-input contact-department-option me-2"
-                                                                        value="" checked
-                                                                        style="margin: 0; margin-right: 8px;">
-                                                                    <span id="contact-all-departments-option"
-                                                                        style="font-size: 24px; color: #ABB7C2;">All Departments</span>
-                                                                </label>
-                                                                @{
-                                                                    var allDepartments = new List<(string key, string value)>
-                                                                        {
-                                                                        ("dept-reg-admission", "Reg and Admission"),
-                                                                        ("dept-ccsit", "CCSIT"),
-                                                                        ("dept-communication-tech", "Communication and tech"),
-                                                                        ("dept-hospital", "Hospital"),
-                                                                        ("dept-library", "Library"),
-                                                                        ("dept-students-affairs", "Students Affairs"),
-                                                                        ("dept-preparetory", "Preparetory"),
-                                                                        ("dept-academic-affairs", "Academic Affairs")
-                                                                        };
-                                                                }
-                                                                @foreach (var department in allDepartments)
-                                                                {
-                                                                    <label
-                                                                        style="display: flex; align-items: center; padding: 8px 12px; cursor: pointer; margin: 0;">
-                                                                        <input type="checkbox"
-                                                                            class="form-check-input contact-department-option me-2"
-                                                                            value="@department.value"
-                                                                            style="margin: 0; margin-right: 8px;">
-                                                                        <span id="@department.key"
-                                                                            style="font-size: 22px; color: #ABB7C2;">@department.value</span>
-                                                                    </label>
-                                                                }
-                                                            </div>
-                                                        </div>    
-                                                    </div>    
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
-    </div>
 
+
+    </div>
     <!-- Contact Information Table -->
     <div class="container">
         <div class="form-wrapper">
@@ -242,6 +235,7 @@
             }
         </div>
     </div>
+
 
 
     <!-- Delete Confirmation Modal -->
