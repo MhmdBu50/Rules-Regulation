@@ -416,6 +416,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     "admin-button-assign-editor": "Manage Editor",
     
+    // AdminPortal translations
+    "admin-portal-title": "Admin Portal",
+    "admin-portal-subtitle": "Quick access to main administrative tools",
+    "admin-portal-home-title": "Home Page",
+    "admin-portal-home-desc": "Overview and quick links",
+    "admin-portal-home-cta": "Open →",
+    "admin-portal-editor-title": "Editor Page",
+    "admin-portal-editor-desc": "Manage records and content",
+    "admin-portal-editor-cta": "Open →",
+    "admin-portal-activity-title": "Activity Log",
+    "admin-portal-activity-desc": "Review all admin/editor changes",
+    "admin-portal-activity-cta": "Open →",
+    "admin-portal-assign-title": "Assign New Editor",
+    "admin-portal-assign-desc": "Grant editor access",
+    "admin-portal-assign-cta": "Open →",
+    
 
     // Mobile Menu Translations
     "mobile-home": "Home",
@@ -922,6 +938,22 @@ document.addEventListener("DOMContentLoaded", () => {
     "export-button-cancel": "إلغاء",
     "export-button-confirm": "تصدير الجداول المحددة",
     "admin-button-assign-editor": "إدارة المحررين",
+    
+    // AdminPortal Arabic translations
+    "admin-portal-title": "بوابة الإدارة",
+    "admin-portal-subtitle": "الوصول السريع للأدوات الإدارية الرئيسية",
+    "admin-portal-home-title": "الصفحة الرئيسية",
+    "admin-portal-home-desc": "نظرة عامة وروابط سريعة",
+    "admin-portal-home-cta": "فتح ←",
+    "admin-portal-editor-title": "صفحة المحرر",
+    "admin-portal-editor-desc": "إدارة السجلات والمحتوى",
+    "admin-portal-editor-cta": "فتح ←",
+    "admin-portal-activity-title": "سجل الأنشطة",
+    "admin-portal-activity-desc": "مراجعة جميع تغييرات الإدارة/المحرر",
+    "admin-portal-activity-cta": "فتح ←",
+    "admin-portal-assign-title": "تعيين محرر جديد",
+    "admin-portal-assign-desc": "منح صلاحية المحرر",
+    "admin-portal-assign-cta": "فتح ←",
 
     // Mobile Menu Translations
     "mobile-home": "الرئيسية",
