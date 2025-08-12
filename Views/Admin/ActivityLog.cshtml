@@ -529,7 +529,7 @@
     <div class="main-header">
         <div class="container text-center d-flex flex-column align-items-center justify-content-center">
             <h1 class="display-5 fw-semibold mb-2">
-                <i class="bi bi-activity me-3"></i>Activity Log
+                <span class="bi bi-activity me-3"></span>Activity Log
             </h1>
             <p class="subtitle text-white-50 mb-4">Monitor and track all privileged user actions and changes</p>
         </div>
@@ -541,7 +541,7 @@
         @if (TempData["SuccessMessage"] != null)
         {
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle me-2"></i>
+                <span class="bi bi-check-circle me-2"></span>
                 @TempData["SuccessMessage"]
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -550,7 +550,7 @@
         @if (TempData["ErrorMessage"] != null)
         {
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span class="bi bi-exclamation-triangle me-2"></span>
                 @TempData["ErrorMessage"]
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -559,27 +559,27 @@
         <!-- Statistics Dashboard -->
         <div class="stats-grid">
             <div class="stat-card total">
-                <i class="bi bi-bar-chart stat-icon"></i>
+                <span class="bi bi-bar-chart stat-icon"></span>
                 <div class="stat-number">@Model.TotalActions</div>
                 <div class="stat-label">Total Actions</div>
             </div>
             <div class="stat-card admin">
-                <i class="bi bi-shield-check stat-icon"></i>
+                <span class="bi bi-shield-check stat-icon"></span>
                 <div class="stat-number">@Model.AdminActionsCount</div>
                 <div class="stat-label">Admin Actions</div>
             </div>
             <div class="stat-card editor">
-                <i class="bi bi-pencil-square stat-icon"></i>
+                <span class="bi bi-pencil-square stat-icon"></span>
                 <div class="stat-number">@Model.EditorActionsCount</div>
                 <div class="stat-label">Editor Actions</div>
             </div>
             <div class="stat-card records">
-                <i class="bi bi-file-earmark-text stat-icon"></i>
+                <span class="bi bi-file-earmark-text stat-icon"></span>
                 <div class="stat-number">@Model.RecordActionsCount</div>
                 <div class="stat-label">Record Changes</div>
             </div>
             <div class="stat-card contacts">
-                <i class="bi bi-person-vcard stat-icon"></i>
+                <span class="bi bi-person-vcard stat-icon"></span>
                 <div class="stat-number">@Model.ContactActionsCount</div>
                 <div class="stat-label">Contact Changes</div>
             </div>
@@ -626,10 +626,10 @@
                         <div class="col-md-2">
                             <div class="d-grid">
                                 <button type="submit" class="btn" style="background-color: #8B4513; color: white; border: none; font-weight: 600; padding: 0.5rem 1rem;">
-                                    <i class="bi bi-funnel-fill me-1"></i>APPLY
+                                    <span class="bi bi-funnel-fill me-1"></span>APPLY
                                 </button>
                                 <a href="@Url.Action("ActivityLog")" class="btn btn-secondary mt-2" style="font-weight: 600; padding: 0.5rem 1rem;">
-                                    <i class="bi bi-x-circle me-1"></i>Clear
+                                    <span class="bi bi-x-circle me-1"></span>Clear
                                 </a>
                             </div>
                         </div>
@@ -645,7 +645,7 @@
                         <div class="col-md-2">
                             <div class="d-grid">
                                 <button type="submit" class="btn" style="background-color: #8B4513; color: white; border: none; font-weight: 600; padding: 0.5rem 1rem;">
-                                    <i class="bi bi-search me-1"></i>SEARCH
+                                    <span class="bi bi-search me-1"></span>SEARCH
                                 </button>
                             </div>
                         </div>
@@ -707,13 +707,13 @@
                                     @if (log.IsAdminAction)
                                     {
                                         <span class="badge" style="background-color: #e53e3e; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <i class="bi bi-shield-fill-check me-1"></i>ADMIN
+                                            <span class="bi bi-shield-fill-check me-1"></span>ADMIN
                                         </span>
                                     }
                                     else
                                     {
                                         <span class="badge" style="background-color: #38a169; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <i class="bi bi-pencil-square me-1"></i>EDITOR
+                                            <span class="bi bi-pencil-square me-1"></span>EDITOR
                                         </span>
                                     }
                                 </td>
@@ -722,19 +722,19 @@
                                     @if (log.ActionType == "Add")
                                     {
                                         <span class="badge" style="background-color: #38a169; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <i class="bi bi-plus-circle me-1"></i>ADD
+                                            <span class="bi bi-plus-circle me-1"></span>ADD
                                         </span>
                                     }
                                     else if (log.ActionType == "Edit")
                                     {
                                         <span class="badge" style="background-color: #f6ad55; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <i class="bi bi-pencil me-1"></i>EDIT
+                                            <span class="bi bi-pencil me-1"></span>EDIT
                                         </span>
                                     }
                                     else if (log.ActionType == "Delete")
                                     {
                                         <span class="badge" style="background-color: #e53e3e; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <i class="bi bi-trash me-1"></i>DELETE
+                                            <span class="bi bi-trash me-1"></span>DELETE
                                         </span>
                                     }
                                 </td>
@@ -743,13 +743,13 @@
                                     @if (log.EntityType == "Record")
                                     {
                                         <span class="badge" style="background-color: #3182ce; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <i class="bi bi-file-text me-1"></i>RECORD
+                                            <span class="bi bi-file-text me-1"></span>RECORD
                                         </span>
                                     }
                                     else if (log.EntityType == "Contact")
                                     {
                                         <span class="badge" style="background-color: #805ad5; color: white; font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
-                                            <i class="bi bi-person-vcard me-1"></i>CONTACT
+                                            <span class="bi bi-person-vcard me-1"></span>CONTACT
                                         </span>
                                     }
                                 </td>
@@ -785,13 +785,13 @@
                                     else if (log.ActionType == "Add")
                                     {
                                         <div style="font-size: 0.875rem; color: #38a169;">
-                                            <i class="bi bi-plus-circle me-1"></i>New @log.EntityDisplayName created
+                                            <span class="bi bi-plus-circle me-1"></span>New @log.EntityDisplayName created
                                         </div>
                                     }
                                     else if (log.ActionType == "Delete")
                                     {
                                         <div style="font-size: 0.875rem; color: #e53e3e;">
-                                            <i class="bi bi-trash me-1"></i>@log.EntityDisplayName removed
+                                            <span class="bi bi-trash me-1"></span>@log.EntityDisplayName removed
                                         </div>
                                     }
                                     else
@@ -805,7 +805,7 @@
                                     {
                                         <button class="btn btn-sm" style="background-color: transparent; border: 1px solid #cbd5e0; color: #4a5568; font-size: 0.75rem; padding: 4px 8px;" 
                                                 onclick="viewDetails(@log.LogId)" data-bs-toggle="modal" data-bs-target="#activityDetailsModal">
-                                            <i class="bi bi-eye me-1"></i>VIEW DETAILS
+                                            <span class="bi bi-eye me-1"></span>VIEW DETAILS
                                         </button>
                                     }
                                     else
@@ -836,7 +836,7 @@
                                     {
                                         <li class="page-item">
                                             <a class="page-link" href="@GetPageUrl(Model.CurrentPage - 1)" style="color: #4a5568; border: 1px solid #cbd5e0;">
-                                                <i class="bi bi-chevron-left"></i> Previous
+                                                <span class="bi bi-chevron-left"></span> Previous
                                             </a>
                                         </li>
                                     }
@@ -852,7 +852,7 @@
                                 {
                                     <li class="page-item">
                                         <a class="page-link" href="@GetPageUrl(Model.CurrentPage + 1)" style="color: #4a5568; border: 1px solid #cbd5e0;">
-                                            Next <i class="bi bi-chevron-right"></i>
+                                            Next <span class="bi bi-chevron-right"></span>
                                         </a>
                                     </li>
                                 }
@@ -864,7 +864,7 @@
                 else
                 {
                     <div class="p-5 text-center" style="color: #718096;">
-                        <i class="bi bi-inbox" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                        <span class="bi bi-inbox" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></span>
                         <h5 style="color: #4a5568; margin-bottom: 0.5rem;">No Activity Found</h5>
                         <p style="margin-bottom: 0;">Try adjusting your filters or search terms.</p>
                     </div>
@@ -881,7 +881,7 @@
             <!-- Header -->
             <div class="modal-header" style="background: linear-gradient(135deg, #4a5568, #2d3748); color: white;">
                 <h5 class="modal-title">
-                    <i class="bi bi-info-circle me-2"></i>Activity Details
+                    <span class="bi bi-info-circle me-2"></span>Activity Details
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -900,7 +900,7 @@
             <!-- Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-circle me-1"></i>Close
+                    <span class="bi bi-x-circle me-1"></span>Close
                 </button>
             </div>
         </div>
@@ -1016,7 +1016,7 @@
                             <!-- Activity Information - Left Column -->
                             <div class="col-md-6">
                                 <h6 class="text-primary mb-3 fw-bold">
-                                    <i class="bi bi-activity me-2"></i>Activity Information
+                                    <span class="bi bi-activity me-2"></span>Activity Information
                                 </h6>
                                 <div class="card border-0 shadow-sm">
                                     <div class="card-body bg-light">
@@ -1051,7 +1051,7 @@
                             <!-- User Information - Right Column -->
                             <div class="col-md-6">
                                 <h6 class="text-primary mb-3 fw-bold">
-                                    <i class="bi bi-person-circle me-2"></i>User Information
+                                    <span class="bi bi-person-circle me-2"></span>User Information
                                 </h6>
                                 <div class="card border-0 shadow-sm">
                                     <div class="card-body bg-light">
@@ -1078,7 +1078,7 @@
                         <div class="row mb-4">
                             <div class="col-12">
                                 <h6 class="text-primary mb-3 fw-bold">
-                                    <i class="bi bi-database me-2"></i>Entity Information
+                                    <span class="bi bi-database me-2"></span>Entity Information
                                 </h6>
                                 <div class="card border-0 shadow-sm">
                                     <div class="card-body bg-light">
@@ -1111,7 +1111,7 @@
                         <div class="row mb-0">
                             <div class="col-12">
                                 <h6 class="text-primary mb-3 fw-bold">
-                                    <i class="bi bi-code-square me-2"></i>Data Changes
+                                    <span class="bi bi-code-square me-2"></span>Data Changes
                                 </h6>
                                 ${getDataChangesContent(data.actionType, data.beforeData, data.afterData)}
                             </div>
@@ -1123,7 +1123,7 @@
             } else {
                 content.innerHTML = `
                     <div class="alert alert-warning">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <span class="bi bi-exclamation-triangle me-2"></span>
                         Activity details not found or could not be loaded.
                     </div>
                 `;
@@ -1132,7 +1132,7 @@
         .catch(error => {
             content.innerHTML = `
                 <div class="alert alert-danger">
-                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <span class="bi bi-exclamation-triangle me-2"></span>
                     Error loading activity details: ${error.message}
                     <br><small class="text-muted">LogId: ${logId}</small>
                 </div>
@@ -1149,7 +1149,7 @@
                 <div class="card border-success">
                     <div class="card-header bg-success bg-opacity-10 border-success">
                         <h6 class="card-title mb-0 text-success">
-                            <i class="bi bi-plus-circle me-2"></i>Added Data
+                            <span class="bi bi-plus-circle me-2"></span>Added Data
                         </h6>
                     </div>
                     <div class="card-body">
@@ -1162,7 +1162,7 @@
                 <div class="card border-danger">
                     <div class="card-header bg-danger bg-opacity-10 border-danger">
                         <h6 class="card-title mb-0 text-danger">
-                            <i class="bi bi-trash me-2"></i>Deleted Data
+                            <span class="bi bi-trash me-2"></span>Deleted Data
                         </h6>
                     </div>
                     <div class="card-body">
@@ -1178,7 +1178,7 @@
                             <div class="card border-warning">
                                 <div class="card-header bg-warning bg-opacity-10 border-warning">
                                     <h6 class="card-title mb-0 text-warning">
-                                        <i class="bi bi-arrow-left-circle me-2"></i>Before Changes
+                                        <span class="bi bi-arrow-left-circle me-2"></span>Before Changes
                                     </h6>
                                 </div>
                                 <div class="card-body">
@@ -1192,7 +1192,7 @@
                             <div class="card border-info">
                                 <div class="card-header bg-info bg-opacity-10 border-info">
                                     <h6 class="card-title mb-0 text-info">
-                                        <i class="bi bi-arrow-right-circle me-2"></i>After Changes
+                                        <span class="bi bi-arrow-right-circle me-2"></span>After Changes
                                     </h6>
                                 </div>
                                 <div class="card-body">
@@ -1207,7 +1207,7 @@
             return `
                 <div class="card border-secondary">
                     <div class="card-body text-center text-muted py-4">
-                        <i class="bi bi-info-circle fs-4 mb-2"></i>
+                        <span class="bi bi-info-circle fs-4 mb-2"></span>
                         <p class="mb-0">No detailed change information available for this activity.</p>
                     </div>
                 </div>
