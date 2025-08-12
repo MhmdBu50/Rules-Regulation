@@ -157,6 +157,7 @@ main, .container-fluid, .main-content {
 .contact-item {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
     color: #b0bec5;
@@ -177,6 +178,7 @@ main, .container-fluid, .main-content {
 .social-links {
     display: flex;
     gap: 1rem;
+    justify-content: center;
 }
 
 .social-links a {
@@ -250,175 +252,12 @@ main, .container-fluid, .main-content {
 }
 
 /* RTL Support - Enhanced for Arabic */
-body.rtl .footer-content,
-body[dir="rtl"] .footer-content,
-html[lang="ar"] .footer-content {
-    direction: rtl;
-    text-align: right;
-}
 
-/* Reorder footer columns for RTL */
-body.rtl .footer-content,
-body[dir="rtl"] .footer-content,
-html[lang="ar"] .footer-content {
-    grid-template-columns: 1fr 1fr 1fr 2fr;
-}
 
-body.rtl .footer-brand,
-body[dir="rtl"] .footer-brand,
-html[lang="ar"] .footer-brand {
-    flex-direction: row-reverse;
-    order: 4;
-}
 
-body.rtl .footer-links,
-body[dir="rtl"] .footer-links,
-html[lang="ar"] .footer-links {
-    order: 3;
-}
 
-body.rtl .footer-contact,
-body[dir="rtl"] .footer-contact,
-html[lang="ar"] .footer-contact {
-    order: 2;
-}
 
-body.rtl .footer-social,
-body[dir="rtl"] .footer-social,
-html[lang="ar"] .footer-social {
-    order: 1;
-}
 
-body.rtl .contact-item,
-body[dir="rtl"] .contact-item,
-html[lang="ar"] .contact-item {
-    flex-direction: row;
-    text-align: right;
-    justify-content: flex-end;
-    margin-bottom: 0.4rem;
-    line-height: 1.2;
-    min-height: auto;
-    direction: rtl;
-}
-
-body.rtl .contact-item i,
-body[dir="rtl"] .contact-item i,
-html[lang="ar"] .contact-item i {
-    margin-left: 0;
-    margin-right: 0.5rem;
-    flex-shrink: 0;
-}
-
-body.rtl .contact-item span,
-body[dir="rtl"] .contact-item span,
-html[lang="ar"] .contact-item span {
-    text-align: right;
-    line-height: 1.2;
-    direction: rtl;
-    width: 100%;
-    unicode-bidi: plaintext;
-    display: block;
-}
-
-body.rtl .social-links,
-body[dir="rtl"] .social-links,
-html[lang="ar"] .social-links {
-    justify-content: flex-start;
-    direction: rtl;
-}
-
-body.rtl .footer-bottom-content,
-body[dir="rtl"] .footer-bottom-content,
-html[lang="ar"] .footer-bottom-content {
-    flex-direction: row-reverse;
-}
-
-/* Better RTL alignment for headings and content */
-body.rtl .footer-links h6,
-body.rtl .footer-contact h6,
-body.rtl .footer-social h6,
-body[dir="rtl"] .footer-links h6,
-body[dir="rtl"] .footer-contact h6,
-body[dir="rtl"] .footer-social h6,
-html[lang="ar"] .footer-links h6,
-html[lang="ar"] .footer-contact h6,
-html[lang="ar"] .footer-social h6 {
-    text-align: right;
-    direction: rtl;
-    display: inline-block;
-    width: auto;
-    margin-right: 0;
-    margin-left: auto;
-}
-
-body.rtl .footer-links,
-body[dir="rtl"] .footer-links,
-html[lang="ar"] .footer-links {
-    text-align: right;
-    direction: rtl;
-}
-
-body.rtl .footer-contact,
-body[dir="rtl"] .footer-contact,
-html[lang="ar"] .footer-contact {
-    text-align: right;
-    direction: rtl;
-    max-height: 110px;
-    overflow: hidden;
-}
-
-body.rtl .footer-social,
-body[dir="rtl"] .footer-social,
-html[lang="ar"] .footer-social {
-    text-align: right;
-    direction: rtl;
-}
-
-body.rtl .footer-links ul,
-body[dir="rtl"] .footer-links ul,
-html[lang="ar"] .footer-links ul {
-    text-align: right;
-    direction: rtl;
-    margin-right: 0;
-    margin-left: auto;
-}
-
-body.rtl .footer-links li,
-body[dir="rtl"] .footer-links li,
-html[lang="ar"] .footer-links li {
-    text-align: right;
-    direction: rtl;
-}
-
-body.rtl .footer-links a,
-body[dir="rtl"] .footer-links a,
-html[lang="ar"] .footer-links a {
-    text-align: right;
-    direction: rtl;
-}
-
-/* Specific alignment for Arabic text sections */
-body.rtl .footer-content > div,
-body[dir="rtl"] .footer-content > div,
-html[lang="ar"] .footer-content > div {
-    text-align: right;
-}
-
-/* Ensure border-bottom for headings aligns properly in RTL */
-body.rtl .footer-links h6,
-body.rtl .footer-contact h6,
-body.rtl .footer-social h6,
-body[dir="rtl"] .footer-links h6,
-body[dir="rtl"] .footer-contact h6,
-body[dir="rtl"] .footer-social h6,
-html[lang="ar"] .footer-links h6,
-html[lang="ar"] .footer-contact h6,
-html[lang="ar"] .footer-social h6 {
-    border-bottom: 2px solid #3f51b5;
-    padding-bottom: 0.25rem;
-    display: inline-block;
-    text-align: right;
-}
 
 /* Responsive Design */
 @media (max-width: 992px) {

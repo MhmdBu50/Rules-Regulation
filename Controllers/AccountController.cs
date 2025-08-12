@@ -86,6 +86,13 @@ public async Task<IActionResult> LoginPage(string Name, string password)
         // Add script to clear logout state on successful login
         TempData["ClearLogoutState"] = true;
 
+        // Redirect based on user role: Admins go to AdminPortal, others to HomePage
+        var userRole = user.Role?.Trim();
+        if (!string.IsNullOrEmpty(userRole) && userRole.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+        {
+            return RedirectToAction("AdminPortal", "Admin");
+        }
+
         return RedirectToAction("HomePage", "Home");
     }
     catch (Oracle.ManagedDataAccess.Client.OracleException)

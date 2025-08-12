@@ -47,11 +47,11 @@ document.addEventListener("DOMContentLoaded", () => {
             "nav-home-label": "Home",
             "nav-student-guides-label": "Student guides & templates",
             "nav-student-rules-label": "Student rules & regulations",
-            "nav-employee-rules-label": "Employees' rules & regulations",
+            "nav-employee-rules-label": "Employees’ rules & regulations",
             "nav-academic-rules-label": "Academic rules & regulations",
             "nav-student-guides-label1": "Student guides & templates",
             "nav-student-rules-label1": "Student rules & regulations",
-            "nav-employee-rules-label1": "Employees' rules & regulations",
+            "nav-employee-rules-label1": "Employees’ rules & regulations",
             "nav-academic-rules-label1": "Academic rules & regulations",
             "nav-saved-rules-label": "Saved rules & regulations",
             "nav-history-label": "History",
@@ -416,13 +416,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     "admin-button-assign-editor": "Manage Editor",
     
+    // AdminPortal translations
+    "admin-portal-title": "Admin Portal",
+    "admin-portal-subtitle": "Quick access to main administrative tools",
+    "admin-portal-home-title": "Home Page",
+    "admin-portal-home-desc": "Overview and quick links",
+    "admin-portal-home-cta": "Open →",
+    "admin-portal-editor-title": "Editor Page",
+    "admin-portal-editor-desc": "Manage records and content",
+    "admin-portal-editor-cta": "Open →",
+    "admin-portal-activity-title": "Activity Log",
+    "admin-portal-activity-desc": "Review all admin/editor changes",
+    "admin-portal-activity-cta": "Open →",
+    "admin-portal-assign-title": "Assign New Editor",
+    "admin-portal-assign-desc": "Grant editor access",
+    "admin-portal-assign-cta": "Open →",
+    
 
     // Mobile Menu Translations
     "mobile-home": "Home",
     "mobile-admin-view": "view as Admin",
     "mobile-student-guides": "Student Guides & Templates",
     "mobile-student-rules": "Student Rules & Regulations",
-    "mobile-employee-rules": "Employees' Rules & Regulations",
+    "mobile-employee-rules": "Employees’ rules & regulations",
     "mobile-academic-rules": "Academic Rules & Regulations",
     "mobile-saved-rules": "Saved Rules & Regulations",
     "mobile-history": "History",
@@ -526,7 +542,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Home page elements
             "admin-view-button": "عرض المحرر",
-            "searchInput": "... ابحث",
+            "searchInput": " ابحث...",
 
             // Filter Section
             "filter-sections-heading": "الأقسام",
@@ -637,9 +653,9 @@ document.addEventListener("DOMContentLoaded", () => {
         "dept-preparetory": "السنة التحضيرية",
         "dept-academic-affairs": "الشؤون الأكاديمية",
         "visitToggler": "الزيارات الشهرية",
-        "desktopSearchInput": "...البحث بالاسم/رقم السجل",
-        "mobileSearchInput": "...البحث بالاسم/رقم السجل",
-        "admin-clear-search-title": "مسح البحث",    
+        "desktopSearchInput": "البحث بالاسم/رقم السجل...",
+        "mobileSearchInput": "البحث بالاسم/رقم السجل...",
+        "admin-clear-search-title": "مسح البحث",
         "admin-section-filter-all": "جميع الأقسام",
         "admin-section-filter-students": "الطلاب",
         "admin-section-filter-members": "الأعضاء",
@@ -681,7 +697,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "admin-table-form-contact-email-label": "البريد الإلكتروني",
         "admin-table-form-contact-telephone-label": "رقم الهاتف",
         "admin-table-form-contact-mobile-label": "رقم الجوال",
-        "admin-table-form-no-contact-info": ".لا توجد معلومات اتصال متاحة لهذا القسم",
+        "admin-table-form-no-contact-info": "لا توجد معلومات اتصال متاحة لهذا القسم.",
         "admin-table-delete-button": "حذف",
         "admin-table-edit-button": "تحرير",
         "admin-table-save-button": "حفظ",
@@ -922,6 +938,22 @@ document.addEventListener("DOMContentLoaded", () => {
     "export-button-cancel": "إلغاء",
     "export-button-confirm": "تصدير الجداول المحددة",
     "admin-button-assign-editor": "إدارة المحررين",
+    
+    // AdminPortal Arabic translations
+    "admin-portal-title": "بوابة الإدارة",
+    "admin-portal-subtitle": "الوصول السريع للأدوات الإدارية الرئيسية",
+    "admin-portal-home-title": "الصفحة الرئيسية",
+    "admin-portal-home-desc": "نظرة عامة وروابط سريعة",
+    "admin-portal-home-cta": "فتح ←",
+    "admin-portal-editor-title": "صفحة المحرر",
+    "admin-portal-editor-desc": "إدارة السجلات والمحتوى",
+    "admin-portal-editor-cta": "فتح ←",
+    "admin-portal-activity-title": "سجل الأنشطة",
+    "admin-portal-activity-desc": "مراجعة جميع تغييرات الإدارة/المحرر",
+    "admin-portal-activity-cta": "فتح ←",
+    "admin-portal-assign-title": "تعيين محرر جديد",
+    "admin-portal-assign-desc": "منح صلاحية المحرر",
+    "admin-portal-assign-cta": "فتح ←",
 
     // Mobile Menu Translations
     "mobile-home": "الرئيسية",

@@ -36,7 +36,7 @@
             case "Student rules & regulations":
                 displayDocumentType = "قواعد وأنظمة الطلاب";
                 break;
-            case "Employees' rules & regulations":
+            case "Employees’ rules & regulations":
                 displayDocumentType = "قواعد وأنظمة الموظفين";
                 break;
             case "Academic rules & regulations":
@@ -211,7 +211,7 @@
                                         <option value="@Model.DocumentType" selected>@displayDocumentType</option>
                                         <option value="Student guides & templates" id= "admin-chart-legend-student-guides3">@(isArabic ? "أدلة وقوالب الطلاب" : "Student guides & templates")</option>
                                         <option value="Student rules & regulations" id="admin-chart-legend-student-rules3">@(isArabic ? "قواعد وأنظمة الطلاب" : "Student rules & regulations")</option>
-                                        <option value="Employees' rules & regulations" id="admin-chart-legend-employment-rules3">@(isArabic ? "قواعد وأنظمة الموظفين" : "Employees' rules & regulations")</option>
+                                        <option value="Employees’ rules & regulations" id="admin-chart-legend-employment-rules3">@(isArabic ? "قواعد وأنظمة الموظفين" : "Employees’ rules & regulations")</option>
                                         <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules3">@(isArabic ? "قواعد وأنظمة أكاديمية" : "Academic rules & regulations")</option>
                                     </select>
                                 </td>
@@ -352,7 +352,8 @@
                     else
                     {
                         <div class="mb-3">
-                            <p class="text-muted" id="admin-table-form-no-contact-info">No contact information available for this department.</p>
+                            <!--message: No contact information available for this department.-->
+                            <p class="text-muted translatable-label" data-translate-key="admin-table-form-no-contact-info"></p>
                         </div>
                     }
                 </div>
