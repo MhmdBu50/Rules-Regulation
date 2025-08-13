@@ -2761,9 +2761,6 @@ public async Task<IActionResult> ViewPdf(int id)
     string? entityNameAr = null;
     string? detailsAr = null;
 
-    // DEBUG: Log input result
-    System.Diagnostics.Debug.WriteLine($"[DEBUG] Input result: LogId={result?.LogId}, EntityType={result?.EntityType}, EntityId={result?.EntityId}");
-
         try
         {
             // Get Arabic entity name and details if entityId and entityType exist
@@ -2786,13 +2783,9 @@ public async Task<IActionResult> ViewPdf(int id)
                             var descriptionAr = entityReader.IsDBNull("DESCRIPTION_AR") ? null : entityReader.GetString("DESCRIPTION_AR");
                             var notesAr = entityReader.IsDBNull("NOTES_AR") ? null : entityReader.GetString("NOTES_AR");
                             detailsAr = !string.IsNullOrEmpty(descriptionAr) ? descriptionAr : notesAr;
-                            // DEBUG: Log Arabic fields from RECORDS
-                            System.Diagnostics.Debug.WriteLine($"[DEBUG] RECORDS: REGULATION_NAME_AR={entityNameAr}, DESCRIPTION_AR={descriptionAr}, NOTES_AR={notesAr}, detailsAr={detailsAr}");
+                            // ...existing code...
                         }
-                        else
-                        {
-                            System.Diagnostics.Debug.WriteLine($"[DEBUG] RECORDS: No record found for RECORD_ID={result.EntityId.Value}");
-                        }
+                        // ...existing code...
                     }
                 }
                 else if (result.EntityType.Equals("Contact", StringComparison.OrdinalIgnoreCase))
@@ -2809,13 +2802,9 @@ public async Task<IActionResult> ViewPdf(int id)
                         {
                             entityNameAr = contactReader.IsDBNull("NAME_AR") ? null : contactReader.GetString("NAME_AR");
                             detailsAr = contactReader.IsDBNull("DEPARTMENT_AR") ? null : contactReader.GetString("DEPARTMENT_AR");
-                            // DEBUG: Log Arabic fields from CONTACT_INFORMATION
-                            System.Diagnostics.Debug.WriteLine($"[DEBUG] CONTACT_INFORMATION: NAME_AR={entityNameAr}, DEPARTMENT_AR={detailsAr}");
+                            // ...existing code...
                         }
-                        else
-                        {
-                            System.Diagnostics.Debug.WriteLine($"[DEBUG] CONTACT_INFORMATION: No contact found for ID={result.EntityId.Value}");
-                        }
+                        // ...existing code...
                     }
                 }
             }
@@ -2844,8 +2833,7 @@ public async Task<IActionResult> ViewPdf(int id)
             result.Details,
             DetailsAr = detailsAr
         };
-        // DEBUG: Log the final object being returned
-        System.Diagnostics.Debug.WriteLine($"[DEBUG] Final ActivityLogDetail: {System.Text.Json.JsonSerializer.Serialize(debugObj)}");
+    // ...existing code...
         return debugObj;
     }
 
