@@ -240,7 +240,7 @@
 
         <div class="row mb-5">
           <div class="col-md-6">
-            <! -- Notes (English) -->
+            <!-- Notes (English) -->
             <label for="notes" id="label-notes"></label>
             <input type="text" class="form-control" id="notes" name="notes"
               pattern="@Html.Raw("[a-zA-Z0-9\\s\\.\\,\\:\\;\\!\\?\\@\\#\\$\\%\\^\\&\\*\\(\\)\\[\\]\\{\\}\\/\\\\\\&lt;\\&gt;\\-\\_\\+\\=\\&quot;\\'\\|،؟؛\\n\\r]*")"
@@ -249,7 +249,7 @@
             <div id="notesError" class="text-danger mt-1" style="display: none;"></div>
           </div>
           <div class="col-md-6">
-            <! -- Notes (Arabic) -->
+            <!-- Notes (Arabic) -->
             <label for="notesAr" id="label-notesAr"></label>
             <input type="text" class="form-control" id="notesAr" name="notesAr"
               pattern="@Html.Raw("[\\u0600-\\u06FF\\u0750-\\u077F\\u08A0-\\u08FF\\uFB50-\\uFDFF\\uFE70-\\uFEFF0-9\\s\\.\\,\\:\\;\\!\\?\\@\\#\\$\\%\\^\\&\\*\\(\\)\\[\\]\\{\\}\\/\\\\\\&lt;\\&gt;\\-\\_\\+\\=\\&quot;\\'\\|،؟؛\\n\\r]*")"
@@ -260,9 +260,9 @@
         </div>
 
         <div class="text-center mt-4">
-          <! -- Save and upload -->
+          <!-- Save and upload -->
           <button type="submit" class="btn btn-primary me-2" id="btn-save"></button>
-          <! -- Cancel -->
+          <!-- Cancel -->
           <button type="button" class="btn btn-secondary" onclick="confirmCancel()" id="btn-cancel"></button>
         </div>
       </form>
