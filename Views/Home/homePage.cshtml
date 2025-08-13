@@ -223,25 +223,30 @@
             </div>
 
             <div class="filter-column">
-                <h3 id="filter-issue-date-heading">Issue Date</h3>
+                <!-- Issue Date Filter -->
+                <h3 id="filter-issue-date-heading"></h3>
 
                 <label><input type="radio" name="dateOption" value="newest" class="form-check-input">
-                    <span id="filter-newest-oldest">Newest-Oldest</span></label><br>
+                <!-- Newest-Oldest -->
+                    <span id="filter-newest-oldest"></span></label><br>
                 <label><input type="radio" name="dateOption" value="oldest" class="form-check-input">
-                    <span id="filter-oldest-newest">Oldest-Newest</span></label><br>
+                <!-- Oldest-Newest -->
+                    <span id="filter-oldest-newest"></span></label><br>
 
 
                 <label><input type="radio" name="dateOption" id="specifyRange" value="range" class="form-check-input">
-                    <span id="filter-specify-range">Specify Range:</span></label><br>
+                <!-- Specify Range -->
+                    <span id="filter-specify-range"></span></label><br>
 
                 <div id="dateRangeFields" style="display: none; margin-top: 10px;">
                     <div>
-                        <label for="fromDate" id="filter-from-label">From:</label>
+                        <!-- From:  -->
+                        <label for="fromDate" id="filter-from-label"></label>
                         <input class="form-control" type="date" id="fromDate">
                     </div>
                     <div>
-
-                        <label for="toDate" id="filter-to-label">To:</label>
+                        <!-- To:  -->
+                        <label for="toDate" id="filter-to-label"></label>
                         <input class="form-control" type="date" id="toDate">
                     </div>
                 </div>
@@ -285,21 +290,19 @@
 
 
             <div class="filter-column">
-                <h3 id="filter-type-heading">Type</h3>
+                <!-- Type Filter -->
+                <h3 id="filter-type-heading"></h3>
 
-
+                <!-- Student guides & templates -->
                 <label><input type="checkbox" class="form-check-input" id="regulationsFilter"
-                        value="Student guides & templates"> <span id="nav-student-guides-label">Student guides &
-                        templates</span></label>
-
+                        value="Student guides & templates"> <span id="nav-student-guides-label"></span></label>
+                        <!--Student rules & regulations-->
                 <label><input type="checkbox" class="form-check-input" id="guidelinesFilter"
-                        value="Student rules & regulations"> <span id="nav-student-rules-label">Student rules &
-                        regulations</span></label>
-
+                        value="Student rules & regulations"> <span id="nav-student-rules-label"></span></label>
+                        <!-- Employees’ rules & regulations -->
                 <label><input type="checkbox" class="form-check-input" id="policiesFilter"
-                        value="Employees’ rules & regulations"> <span id="nav-employee-rules-label">Employees’ rules &
-                        regulations</span></label>
-
+                        value="Employees’ rules & regulations"> <span id="nav-employee-rules-label"></span></label>
+                        <!-- Academic rules & regulations -->
                 <label><input type="checkbox" class="form-check-input" id="academicFilter"
                         value="Academic rules & regulations">
                     <span id="nav-academic-rules-label"></span></label>
@@ -307,8 +310,9 @@
 
                 <div style="margin-top: auto; margin-inline-start: auto;
         display: flex;">
-                    <button type="button" class="apply-btn" onclick="applyFilters()" id="filter-apply-btn">Apply</button>
-                    <button type="button" class="apply-btn" onclick="clearFilters()" style="background-color: #6c757d; margin-inline-start: 10px;">Clear</button>
+        <!-- Apply and Clear Buttons -->
+                    <button type="button" class="apply-btn" onclick="applyFilters()" id="filter-apply-btn"></button>
+                    <button type="button" class="apply-btn" onclick="clearFilters()" id="Clear"  style="background-color: #6c757d; margin-inline-start: 10px;"></button>
                 </div>
             </div>
         </div>
@@ -345,7 +349,8 @@ border: none;" onclick="navigateToHome(this)">
 
             </div>
             <div class="nav-label">
-                <label class="poppins-regular" id="nav-student-guides-label1">Student guides & templates</label>
+                <!-- Student guides & templates -->
+                <label class="poppins-regular" id="nav-student-guides-label1"></label>
             </div>
         </button>
 
@@ -361,7 +366,8 @@ border: none;" onclick="navigateToHome(this)">
             </div>
 
             <div class="nav-label">
-                <label class="poppins-regular" id="nav-student-rules-label1">Student rules & regulations</label>
+                <!-- Student rules & regulations -->
+                <label class="poppins-regular" id="nav-student-rules-label1"></label>
             </div>
         </button>
 
@@ -373,7 +379,8 @@ border: none;" onclick="navigateToHome(this)">
             <div class="nav-icons svg-container">
             </div>
             <div class="nav-label">
-                <label class="poppins-regular" id="nav-employee-rules-label1">Employees’ rules & regulations</label>
+                <!-- Employees’ rules & regulations -->
+                <label class="poppins-regular" id="nav-employee-rules-label1"></label>
             </div>
         </button>
     </div>
@@ -387,8 +394,8 @@ border: none;" onclick="navigateToHome(this)">
             </div>
 
             <div class="nav-label">
-
-                <label class="poppins-regular" id="nav-academic-rules-label1">Academic rules & regulations</label>
+                <!-- Academic rules & regulations -->
+                <label class="poppins-regular" id="nav-academic-rules-label1"></label>
             </div>
         </button>
 
@@ -403,7 +410,8 @@ border: none;" onclick="navigateToHome(this)">
             </div>
 
             <div class="nav-label">
-                <label class="poppins-regular" id="nav-saved-rules-label">Saved rules & regulations</label>
+                <!-- Saved rules & regulations    -->
+                <label class="poppins-regular" id="nav-saved-rules-label"></label>
 
             </div>
         </button>
@@ -420,7 +428,8 @@ border: none;" onclick="navigateToHome(this)">
             </div>
 
             <div class="nav-label">
-                <label class="poppins-regular" style="word-break: keep-all;" id="nav-history-label">History</label>
+                <!-- History -->
+                <label class="poppins-regular" style="word-break: keep-all;" id="nav-history-label"></label>
 
             </div>
         </button>
@@ -509,8 +518,10 @@ border: none;" onclick="navigateToHome(this)">
                 <div class="card">
 
                     <div class="card-body">
-                        <h3 id="no-records-heading">No records found</h3>
-                        <p id="no-records-message">There are currently no rules and regulations available.</p>
+                        <!-- No records found  -->
+                        <h3 id="no-records-heading"></h3>
+                        <!-- There are currently no rules and regulations available. -->
+                        <p id="no-records-message"></p>
                     </div>
 
                 </div>
@@ -560,8 +571,9 @@ border: none;" onclick="navigateToHome(this)">
         <div class="modal-content">
 
             <div class="modal-header">
+                <!-- Regulation Details -->
                 <h5 class="modal-title" id="modal-title-regulation-details">
-                    Regulation Details
+                    
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
@@ -573,10 +585,11 @@ border: none;" onclick="navigateToHome(this)">
 
                     <div class="spinner-container">
                         <div class="spinner-border" role="status">
-
-                            <span class="visually-hidden" id="modal-loading-spinner-text">Loading...</span>
+                            <!-- Loading... -->
+                            <span class="visually-hidden" id="modal-loading-spinner-text"></span>
                         </div>
-                        <p class="mt-3" id="modal-loading-message">Loading record details...</p>
+                        <!-- Loading record details... -->
+                        <p class="mt-3" id="modal-loading-message"></p>
                     </div>
 
 

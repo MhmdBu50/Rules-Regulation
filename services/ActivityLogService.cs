@@ -4,6 +4,7 @@ using RulesRegulation.Models.ViewModels;
 using System.Data;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace RulesRegulation.Services
 {
@@ -216,7 +217,7 @@ namespace RulesRegulation.Services
                                 catch { entityId = Convert.ToInt32(reader["ENTITY_ID"].ToString()); }
                             }
 
-                            logsLocal.Add(new ActivityLogEntry
+                            var logEntry = new ActivityLogEntry
                             {
                                 LogId = reader.IsDBNull("LOG_ID") ? 0 : reader.GetInt32("LOG_ID"),
                                 UserId = reader.IsDBNull("USER_ID") ? 0 : reader.GetInt32("USER_ID"),
@@ -230,9 +231,17 @@ namespace RulesRegulation.Services
                                 OldValues = reader.IsDBNull("OLD_VALUES") ? null : reader.GetString("OLD_VALUES"),
                                 NewValues = reader.IsDBNull("NEW_VALUES") ? null : reader.GetString("NEW_VALUES"),
                                 Details = reader.IsDBNull("DETAILS") ? null : reader.GetString("DETAILS")
-                            });
+                            };
+
+                            // Note: ChangesSummary will be generated dynamically in the view model
+                            // based on the current language context
+
+                            logsLocal.Add(logEntry);
                         }
                     }
+
+                    // Enrich with Arabic data after fetching the logs
+                    await EnrichWithArabicDataAsync(connection, logsLocal);
 
                     return (logsLocal, totalCountLocal);
                 }
@@ -392,6 +401,106 @@ namespace RulesRegulation.Services
             }
 
             return changes.Count > 0 ? string.Join("; ", changes) : "No changes detected";
+        }
+
+        /// <summary>
+        /// Enrich activity log entries with Arabic data by looking up related tables
+        /// </summary>
+        private async Task EnrichWithArabicDataAsync(OracleConnection connection, List<ActivityLogEntry> logs)
+        {
+            try
+            {
+                // Create dictionaries to cache lookups
+                var userNameDict = new Dictionary<int, string>();
+                var recordNameDict = new Dictionary<int, string>();
+                
+                // Get unique user IDs and entity IDs for batch lookup
+                var userIds = logs.Select(l => l.UserId).Distinct().ToList();
+                var recordIds = logs.Where(l => l.EntityType == "Record" && l.EntityId.HasValue)
+                                   .Select(l => l.EntityId!.Value).Distinct().ToList();
+                
+                // Batch lookup Arabic user names (check if USER_NAME_AR column exists)
+                if (userIds.Any())
+                {
+                    var userSql = "SELECT USER_ID, USER_NAME, USER_NAME_AR FROM USERS WHERE USER_ID IN (" + 
+                                 string.Join(",", userIds) + ")";
+                    
+                    try
+                    {
+                        using var userCmd = new OracleCommand(userSql, connection);
+                        using var userReader = await userCmd.ExecuteReaderAsync();
+                        while (await userReader.ReadAsync())
+                        {
+                            var userId = userReader.GetInt32("USER_ID");
+                            var userNameAr = !userReader.IsDBNull("USER_NAME_AR") ? 
+                                           userReader.GetString("USER_NAME_AR") : null;
+                            if (!string.IsNullOrEmpty(userNameAr))
+                            {
+                                userNameDict[userId] = userNameAr;
+                            }
+                        }
+                    }
+                    catch (OracleException ex) when (ex.Number == 904)
+                    {
+                        // USER_NAME_AR column doesn't exist, skip user name translation
+                        _logger.LogDebug("USER_NAME_AR column not found, skipping user name translation");
+                    }
+                }
+                
+                // Batch lookup Arabic record names
+                if (recordIds.Any())
+                {
+                    var recordSql = "SELECT RECORD_ID, REGULATION_NAME, REGULATION_NAME_AR FROM RECORDS WHERE RECORD_ID IN (" + 
+                                   string.Join(",", recordIds) + ")";
+                    
+                    try
+                    {
+                        using var recordCmd = new OracleCommand(recordSql, connection);
+                        using var recordReader = await recordCmd.ExecuteReaderAsync();
+                        while (await recordReader.ReadAsync())
+                        {
+                            var recordId = recordReader.GetInt32("RECORD_ID");
+                            var regulationNameAr = !recordReader.IsDBNull("REGULATION_NAME_AR") ? 
+                                                 recordReader.GetString("REGULATION_NAME_AR") : null;
+                            if (!string.IsNullOrEmpty(regulationNameAr))
+                            {
+                                recordNameDict[recordId] = regulationNameAr;
+                            }
+                        }
+                    }
+                    catch (OracleException ex) when (ex.Number == 904)
+                    {
+                        // REGULATION_NAME_AR column doesn't exist, skip record name translation
+                        _logger.LogDebug("REGULATION_NAME_AR column not found, skipping record name translation");
+                    }
+                }
+                
+                // Apply the Arabic data to the logs
+                foreach (var log in logs)
+                {
+                    // Set Arabic user name if available
+                    if (userNameDict.TryGetValue(log.UserId, out var userNameAr))
+                    {
+                        log.UserNameAr = userNameAr;
+                    }
+                    
+                    // Set Arabic entity name if available
+                    if (log.EntityType == "Record" && log.EntityId.HasValue && 
+                        recordNameDict.TryGetValue(log.EntityId.Value, out var entityNameAr))
+                    {
+                        log.EntityNameAr = entityNameAr;
+                    }
+                    
+                    // For now, we don't translate Details/ChangesSummary as they are dynamic content
+                    // In the future, this could be enhanced to translate common phrases or
+                    // regenerate summaries in Arabic based on the action type
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to enrich activity logs with Arabic data");
+                // Continue without Arabic data if enrichment fails
+            }
         }
     }
 }

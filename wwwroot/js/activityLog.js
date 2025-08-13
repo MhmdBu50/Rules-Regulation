@@ -5,6 +5,25 @@
 
 console.log('Activity Log JavaScript loaded successfully');
 
+// Helper function to get current language
+function getCurrentLanguage() {
+    // Check body lang attribute first
+    const bodyLang = document.body.getAttribute('lang');
+    if (bodyLang === 'ar') return 'ar';
+    if (bodyLang === 'en') return 'en';
+    
+    // Check body dir attribute
+    const bodyDir = document.body.getAttribute('dir');
+    if (bodyDir === 'rtl') return 'ar';
+    if (bodyDir === 'ltr') return 'en';
+    
+    // Check body class
+    if (document.body.classList.contains('rtl')) return 'ar';
+    
+    // Fallback to localStorage or default
+    return localStorage.getItem("websiteLanguage") || "en";
+}
+
 // Main function to view activity details
 function viewDetails(logId) {
     console.log('=== ViewDetails Function Called ===');
@@ -263,6 +282,9 @@ function buildActivitySection(data, formattedTimestamp) {
 
 // Build user information section
 function buildUserSection(data) {
+    const isArabic = getCurrentLanguage() === 'ar';
+    const displayUserName = isArabic && data.userNameAr ? data.userNameAr : (data.userName || 'N/A');
+    
     return `
         <div class="col-md-6">
             <h6 class="text-primary mb-3 fw-bold">
@@ -276,7 +298,7 @@ function buildUserSection(data) {
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-bold text-secondary">User Name:</label>
-                        <div class="form-control-plaintext">${safeString(data.userName) || 'N/A'}</div>
+                        <div class="form-control-plaintext">${displayUserName}</div>
                     </div>
                     <div class="mb-0">
                         <label class="form-label fw-bold text-secondary">User Role:</label>
@@ -292,6 +314,9 @@ function buildUserSection(data) {
 
 // Build entity information section
 function buildEntitySection(data) {
+    const isArabic = getCurrentLanguage() === 'ar';
+    const displayEntityName = isArabic && data.entityNameAr ? data.entityNameAr : (data.entityName || 'N/A');
+    
     const detailsSection = data.details ? `
         <div class="mb-0">
             <label class="form-label fw-bold text-secondary">Details:</label>
@@ -317,7 +342,7 @@ function buildEntitySection(data) {
                             <div class="col-md-8">
                                 <div class="mb-3">
                                     <label class="form-label fw-bold text-secondary">Entity Name:</label>
-                                    <div class="form-control-plaintext">${safeString(data.entityName) || 'N/A'}</div>
+                                    <div class="form-control-plaintext">${displayEntityName}</div>
                                 </div>
                             </div>
                         </div>
@@ -337,6 +362,24 @@ function buildChangesSection(data) {
                 <h6 class="text-primary mb-3 fw-bold">
                     <i class="bi bi-code-square me-2"></i>Data Changes
                 </h6>
+                ${data.actionType === 'Edit' ? `
+                <div class="mb-3">
+                    <div class="d-flex align-items-center gap-3 text-sm">
+                        <span class="d-flex align-items-center">
+                            <span class="highlight-legend-modified me-1"></span>
+                            Modified fields
+                        </span>
+                        <span class="d-flex align-items-center">
+                            <span class="highlight-legend-added me-1"></span>
+                            New/Added fields
+                        </span>
+                        <span class="d-flex align-items-center">
+                            <span class="highlight-legend-removed me-1"></span>
+                            Removed fields
+                        </span>
+                    </div>
+                </div>
+                ` : ''}
                 ${getDataChangesContent(data.actionType, data.beforeData, data.afterData)}
             </div>
         </div>
@@ -386,10 +429,11 @@ function getDataChangesContent(actionType, beforeData, afterData) {
                     <div class="card-header bg-warning bg-opacity-10 border-warning">
                         <h6 class="card-title mb-0 text-warning">
                             <i class="bi bi-arrow-left-circle me-2"></i>Before Changes
+                            <small class="text-muted ms-2">(Original values highlighted)</small>
                         </h6>
                     </div>
                     <div class="card-body">
-                        <pre class="json-content bg-light p-3 rounded">${formatJsonData(beforeData)}</pre>
+                        <pre class="json-content bg-light p-3 rounded">${highlightBeforeChanges(beforeData, afterData)}</pre>
                     </div>
                 </div>
             </div>
@@ -401,10 +445,11 @@ function getDataChangesContent(actionType, beforeData, afterData) {
                     <div class="card-header bg-info bg-opacity-10 border-info">
                         <h6 class="card-title mb-0 text-info">
                             <i class="bi bi-arrow-right-circle me-2"></i>After Changes
+                            <small class="text-muted ms-2">(New values highlighted)</small>
                         </h6>
                     </div>
                     <div class="card-body">
-                        <pre class="json-content bg-light p-3 rounded">${formatJsonData(afterData)}</pre>
+                        <pre class="json-content bg-light p-3 rounded">${highlightAfterChanges(beforeData, afterData)}</pre>
                     </div>
                 </div>
             </div>
@@ -434,6 +479,130 @@ function formatJsonData(jsonString) {
         console.warn('Error parsing JSON:', error);
         return escapeHtml(String(jsonString));
     }
+}
+
+// Highlight changes in JSON data for "After" column
+// Highlight changes in the "Before" column (show what was changed/removed)
+function highlightBeforeChanges(beforeJson, afterJson) {
+    if (!beforeJson || !afterJson) {
+        return formatJsonData(beforeJson);
+    }
+    
+    try {
+        const beforeObj = JSON.parse(beforeJson);
+        const afterObj = JSON.parse(afterJson);
+        
+        return formatJsonWithBeforeHighlights(beforeObj, afterObj);
+    } catch (error) {
+        console.warn('Error comparing JSON objects:', error);
+        return formatJsonData(beforeJson);
+    }
+}
+
+// Highlight changes in the "After" column (show what was modified/added)
+function highlightAfterChanges(beforeJson, afterJson) {
+    if (!beforeJson || !afterJson) {
+        return formatJsonData(afterJson || beforeJson);
+    }
+    
+    try {
+        const beforeObj = JSON.parse(beforeJson);
+        const afterObj = JSON.parse(afterJson);
+        
+        return formatJsonWithAfterHighlights(afterObj, beforeObj);
+    } catch (error) {
+        console.warn('Error comparing JSON objects:', error);
+        return formatJsonData(afterJson || beforeJson);
+    }
+}
+
+// Format JSON with highlighted differences for "Before" column
+function formatJsonWithBeforeHighlights(beforeObj, afterObj) {
+    const changes = findJsonDifferences(beforeObj, afterObj);
+    let jsonString = JSON.stringify(beforeObj, null, 2);
+    
+    // Sort changes by position (longest keys first to avoid overlap issues)
+    const sortedChanges = Object.keys(changes).sort((a, b) => b.length - a.length);
+    
+    // Apply highlights to fields that were modified or removed
+    sortedChanges.forEach(key => {
+        const changeType = changes[key];
+        let highlightClass = '';
+        
+        if (changeType === 'modified') {
+            highlightClass = 'highlight-modified';
+        } else if (changeType === 'removed') {
+            highlightClass = 'highlight-removed';
+        }
+        
+        if (highlightClass) {
+            // Highlight the original value that will be changed or removed
+            const keyRegex = new RegExp(`("${escapeRegex(key)}"\\s*:\\s*[^,\\n}\\]]+)`, 'g');
+            jsonString = jsonString.replace(keyRegex, `<span class="${highlightClass}">$1</span>`);
+        }
+        // Note: We don't highlight "added" fields in before column since they don't exist here
+    });
+    
+    return jsonString;
+}
+
+// Format JSON with highlighted differences for "After" column
+function formatJsonWithAfterHighlights(afterObj, beforeObj) {
+    const changes = findJsonDifferences(beforeObj, afterObj);
+    let jsonString = JSON.stringify(afterObj, null, 2);
+    
+    // Sort changes by position (longest keys first to avoid overlap issues)
+    const sortedChanges = Object.keys(changes).sort((a, b) => b.length - a.length);
+    
+    // Apply highlights
+    sortedChanges.forEach(key => {
+        const changeType = changes[key];
+        let highlightClass = '';
+        
+        if (changeType === 'modified') {
+            highlightClass = 'highlight-modified';
+        } else if (changeType === 'added') {
+            highlightClass = 'highlight-added';
+        }
+        
+        if (highlightClass) {
+            // Find and highlight the key-value pair
+            const keyRegex = new RegExp(`("${escapeRegex(key)}"\\s*:\\s*[^,\\n}\\]]+)`, 'g');
+            jsonString = jsonString.replace(keyRegex, `<span class="${highlightClass}">$1</span>`);
+        }
+    });
+    
+    return jsonString;
+}
+
+// Find differences between two objects
+function findJsonDifferences(beforeObj, afterObj) {
+    const differences = {};
+    
+    // Check for modified and added fields
+    for (const key in afterObj) {
+        if (afterObj.hasOwnProperty(key)) {
+            if (!beforeObj.hasOwnProperty(key)) {
+                differences[key] = 'added';
+            } else if (JSON.stringify(afterObj[key]) !== JSON.stringify(beforeObj[key])) {
+                differences[key] = 'modified';
+            }
+        }
+    }
+    
+    // Check for removed fields (exist in before but not in after)
+    for (const key in beforeObj) {
+        if (beforeObj.hasOwnProperty(key) && !afterObj.hasOwnProperty(key)) {
+            differences[key] = 'removed';
+        }
+    }
+    
+    return differences;
+}
+
+// Escape string for regex
+function escapeRegex(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 // Safely escape HTML
