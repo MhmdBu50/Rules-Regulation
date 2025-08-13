@@ -414,7 +414,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "export-button-cancel": "Cancel",
     "export-button-confirm": "Export Selected Tables",
 
-    "admin-button-assign-editor": "Manage Editor",
+    "admin-button-assign-editor": "Activity Log",
     
     // AdminPortal translations
     "admin-portal-title": "Admin Portal",
