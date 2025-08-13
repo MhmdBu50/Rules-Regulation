@@ -44,8 +44,10 @@
 
     <div class="main-header ">
         <div class="container text-center d-flex flex-column align-items-center justify-content-center">
-            <h1 class="display-5 fw-semibold mb-2" id="manageContact-title33">Manage Contact Information</h1>
-            <p class="subtitle text-white-50 mb-4" id="manageContact-subtitle33">View and manage all contact information
+            <!-- >Manage Contact Information -->
+            <h1 class="display-5 fw-semibold mb-2" id="manageContact-title33"</h1>
+            <!-- View and manage all contact information-->
+            <p class="subtitle text-white-50 mb-4" id="manageContact-subtitle33">
             </p>
             <button onclick="location.href='@Url.Action("AddNewContactInfo", "Admin")'"
                 class="btn btn-outline-light btn-lg d-flex align-items-center justify-content-center">
@@ -114,7 +116,8 @@
                                     <div class="multi-select-button d-flex align-items-center justify-content-between"
                                         id="contactDepartmentMultiSelectButton"
                                         style="color: #ABB7C2; border: none; cursor: pointer; width: 100%; height: 44px; background: transparent; padding: 0 13px; font-size: 20px; color: #ABB7C2; font-weight: normal;">
-                                        <span id="contact-all-departments">All Departments</span>
+                                        <!-- All Departments -->
+                                        <span id="contact-all-departments"></span>
                                         <span class="caret" style="scale: 0.6;">▼</span>
                                     </div>
                                     <div class="multi-select-dropdown-content" id="contactDepartmentDropdownContent"
@@ -124,8 +127,9 @@
                                             <input type="checkbox"
                                                 class="form-check-input contact-department-option me-2" value="" checked
                                                 style="margin: 0; margin-inline-end: 8px; scale: 0.7;">
+                                                <!-- All Departments -->
                                             <span id="contact-all-departments-option"
-                                                style="font-size: 20px; color: #ABB7C2;">All Departments</span>
+                                                style="font-size: 20px; color: #ABB7C2;"></span>
                                         </label>
                                         @{
                                             var departmentsList = DepartmentsHelper.GetDepartmentsList();
@@ -163,12 +167,18 @@
                     <table class="table table-hover mb-0"> <!-- 🔁 Added mb-0 -->
                         <thead>
                             <tr>
-                                <th id="table-header-department33">Department</th>
-                                <th id="table-header-name33">Name</th>
-                                <th id="table-header-email33">Email</th>
-                                <th id="table-header-mobile33">Mobile</th>
-                                <th id="table-header-telephone33">Telephone</th>
-                                <th class="text-center" id="table-header-actions33">Actions</th>
+                                <!-- Department -->
+                                <th id="table-header-department33"></th>
+                                <!-- Name -->
+                                <th id="table-header-name33"></th>
+                                <!-- Email -->
+                                <th id="table-header-email33"></th>
+                                <!-- Mobile -->
+                                <th id="table-header-mobile33"></th>
+                                <!-- Telephone -->
+                                <th id="table-header-telephone33"></th>
+                                <!-- Actions -->
+                                <th class="text-center" id="table-header-actions33"></th>
                                 <!-- 🔁 Align Actions to center -->
                             </tr>
                         </thead>
@@ -297,10 +307,13 @@
             else
             {
                 <div class="text-center py-5">
-                    <h5 id="empty-state-title33">No contact information found</h5>
-                    <p class="text-muted" id="empty-state-desc33">Click the button below to add new contact information.</p>
+                    <!-- No contact information found -->
+                    <h5 id="empty-state-title33"></h5>
+                    <!-- Click the button below to add new contact information. -->
+                    <p class="text-muted" id="empty-state-desc33"></p>
+                    <!-- Add New Contact Info -->
                     <a href="@Url.Action("AddNewContactInfo", "Admin")" class="btn btn-primary"
-                        id="empty-state-button33">Add New Contact Info</a>
+                        id="empty-state-button33"></a>
                 </div>
             }
         </div>
@@ -313,27 +326,32 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="deleteModalLabel" id="modal-title-delete33">Confirm Delete</h5>
+                    <!-- Confirm Delete -->
+                    <h5 class="modal-title" id="deleteModalLabel" id="modal-title-delete33"></h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p id="modal-body-confirmation33">Are you sure you want to delete the contact information for:</p>
+                    <!-- Are you sure you want to delete the contact information for: -->
+                    <p id="modal-body-confirmation33"></p>
                     <div class="alert alert-warning">
                         <strong id="contactName"></strong><br>
                         <small id="contactDepartment"></small>
                     </div>
-                    <p class="text-danger" id="modal-warning33"><strong>This action cannot be undone!</strong></p>
+                    <!-- This action cannot be undone! -->
+                    <p class="text-danger" id="modal-warning33"><strong></strong></p>
                 </div>
                 <div class="modal-footer">
+                    <!-- Cancel -->
                     <button type="button" class="btn btn-secondary me-3" data-bs-dismiss="modal"
-                        id="modal-button-cancel33">Cancel</button>
+                        id="modal-button-cancel33"></button>
                     <form id="deleteForm" method="post" style="display: inline;">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="id" id="deleteContactId" />
                         <button type="submit" class="btn btn-danger">
+                            <!--  Delete Contact -->
                             <img src="@Url.Content("~/svgs/admin/Delete-Button.svg")" width="16" height="16"
                                 alt="Delete" class="me-2" id="modal-button-delete33">
-                            Delete Contact
+                           
                         </button>
                     </form>
                 </div>
