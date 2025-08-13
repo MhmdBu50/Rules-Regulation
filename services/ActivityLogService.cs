@@ -53,7 +53,7 @@ namespace RulesRegulation.Services
                     cmd.Parameters.Add(":entityType", entityType);
                     cmd.Parameters.Add(":entityId", entityId ?? 0);
                     cmd.Parameters.Add(":entityName", string.IsNullOrWhiteSpace(entityName) ? (object)DBNull.Value : entityName);
-                    cmd.Parameters.Add(":ts", DateTime.UtcNow);
+                    cmd.Parameters.Add(":ts", DateTime.Now);
                     cmd.Parameters.Add(":oldVals", oldValues != null ? JsonSerializer.Serialize(oldValues) : (object)DBNull.Value);
                     cmd.Parameters.Add(":newVals", newValues != null ? JsonSerializer.Serialize(newValues) : (object)DBNull.Value);
                     cmd.Parameters.Add(":details", changesSummary ?? details ?? (object)DBNull.Value);
@@ -79,7 +79,7 @@ namespace RulesRegulation.Services
                     cmd.Parameters.Add(":entityType", entityType);
                     cmd.Parameters.Add(":entityId", entityId ?? 0);
                     cmd.Parameters.Add(":entityName", string.IsNullOrWhiteSpace(entityName) ? (object)DBNull.Value : entityName);
-                    cmd.Parameters.Add(":ts", DateTime.UtcNow);
+                    cmd.Parameters.Add(":ts", DateTime.Now);
                     cmd.Parameters.Add(":oldVals", oldValues != null ? JsonSerializer.Serialize(oldValues) : (object)DBNull.Value);
                     cmd.Parameters.Add(":newVals", newValues != null ? JsonSerializer.Serialize(newValues) : (object)DBNull.Value);
                     cmd.Parameters.Add(":details", changesSummary ?? details ?? (object)DBNull.Value);

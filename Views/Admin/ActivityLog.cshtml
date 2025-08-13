@@ -69,7 +69,7 @@
             <button onclick="location.href='/Admin/AssignNewEditor'"
                 class="btn btn-outline-light btn-lg d-flex align-items-center justify-content-center">
                 <span class="bi bi-person-plus-fill me-2"></span>
-                Assign New Editor
+                <span class="translatable-label" data-translate-key="assign-new-editor-btn-label">Assign New Editor</span>
             </button>
         </div>
     </div>
@@ -193,12 +193,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="d-grid">
-                                <button type="submit" class="btn"
-                                    style="background-color: #8B4513; color: white; border: none; font-weight: 600; padding: 0.5rem 1rem;">
-                                    <!-- Apply Filters -->
-                                    <span class="bi bi-funnel-fill me-1" id="apply"></span>
-                                </button>
-                                <a href="@Url.Action("ActivityLog")" class="btn btn-secondary mt-2"
+                                <a href="@Url.Action("ActivityLog")" class="btn btn-secondary"
                                     style="font-weight: 600; padding: 0.5rem 1rem;">
                                     <!-- Clear Filters -->
                                     <span class="bi bi-x-circle me-1" id="Clear"></span>
@@ -211,7 +206,7 @@
                     <div class="row mt-3">
                         <div class="col-md-10">
                             <input type="text" name="searchTerm" class="form-control"
-                                placeholder="Search by user name, entity name, or details..." value="@Model.SearchTerm"
+                                placeholder="@(isArabic ? "ابحث باسم المستخدم أو اسم الكيان أو التفاصيل..." : "Search by user name, entity name, or details...")" value="@Model.SearchTerm"
                                 style="border: 1px solid #ced4da;" />
                         </div>
                         <div class="col-md-2">
@@ -257,9 +252,6 @@
                                     </th>
                                     <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;"
                                         id="activityLog-table-header-timestamp">
-                                    </th>
-                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;"
-                                        id="activityLog-table-header-summary">
                                     </th>
                                     <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;"
                                         id="activityLog-table-header-options">
@@ -373,35 +365,6 @@
                                             <div style="font-size: 0.75rem; color: #718096;">
                                                 @(log?.ActionTimestamp.ToString("HH:mm:ss") ?? "N/A")
                                             </div>
-                                        </td>
-                                        <!-- Summary -->
-                                        <td style="padding: 12px 16px; vertical-align: middle;">
-                                            @if (!string.IsNullOrEmpty(log?.GetDisplayChangesSummary(isArabic)))
-                                            {
-                                                <div style="font-size: 0.875rem; color: #4a5568; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-                                                    title="@log.GetDisplayChangesSummary(isArabic)">
-                                                    @log.GetDisplayChangesSummary(isArabic)
-                                                </div>
-                                            }
-                                            else if (log?.ActionType == "Add")
-                                            {
-                                                <div style="font-size: 0.875rem; color: #38a169;">
-                                                    <!-- New records-->
-                                                    <span class="bi bi-plus-circle me-1" id="activityLog-summary-add"></span>
-                                                    @log.GetDisplayEntityName(isArabic) <span id="created"></span>
-                                                </div>
-                                            }
-                                            else if (log?.ActionType == "Delete")
-                                            {
-                                                <div style="font-size: 0.875rem; color: #e53e3e;">
-                                                    <span class="bi bi-trash me-1"></span>@log.GetDisplayEntityName(isArabic) @(isArabic ? "تم حذف" : "removed")
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div style="font-size: 0.875rem; color: #718096;"
-                                                    id="activityLog-summary-no-details"></div>
-                                            }
                                         </td>
                                         <!-- Options -->
                                         <td style="padding: 12px 16px; vertical-align: middle;">
