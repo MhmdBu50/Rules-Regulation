@@ -203,8 +203,8 @@
         }
           */
 
-
-        @media (min-width: 1850px) {
+/*--- for the people with the fancy screen that has too many pixels, the search bar was made absolutely centered for them---*/
+        @media (min-width: 2250px) {
           .search-container {
             position: absolute;
             left: 50%;
