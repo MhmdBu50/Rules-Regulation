@@ -5,6 +5,25 @@
 
 console.log('Activity Log JavaScript loaded successfully');
 
+// Helper function to get current language
+function getCurrentLanguage() {
+    // Check body lang attribute first
+    const bodyLang = document.body.getAttribute('lang');
+    if (bodyLang === 'ar') return 'ar';
+    if (bodyLang === 'en') return 'en';
+    
+    // Check body dir attribute
+    const bodyDir = document.body.getAttribute('dir');
+    if (bodyDir === 'rtl') return 'ar';
+    if (bodyDir === 'ltr') return 'en';
+    
+    // Check body class
+    if (document.body.classList.contains('rtl')) return 'ar';
+    
+    // Fallback to localStorage or default
+    return localStorage.getItem("websiteLanguage") || "en";
+}
+
 // Main function to view activity details
 function viewDetails(logId) {
     console.log('=== ViewDetails Function Called ===');
@@ -263,6 +282,9 @@ function buildActivitySection(data, formattedTimestamp) {
 
 // Build user information section
 function buildUserSection(data) {
+    const isArabic = getCurrentLanguage() === 'ar';
+    const displayUserName = isArabic && data.userNameAr ? data.userNameAr : (data.userName || 'N/A');
+    
     return `
         <div class="col-md-6">
             <h6 class="text-primary mb-3 fw-bold">
@@ -276,7 +298,7 @@ function buildUserSection(data) {
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-bold text-secondary">User Name:</label>
-                        <div class="form-control-plaintext">${safeString(data.userName) || 'N/A'}</div>
+                        <div class="form-control-plaintext">${displayUserName}</div>
                     </div>
                     <div class="mb-0">
                         <label class="form-label fw-bold text-secondary">User Role:</label>
@@ -292,6 +314,9 @@ function buildUserSection(data) {
 
 // Build entity information section
 function buildEntitySection(data) {
+    const isArabic = getCurrentLanguage() === 'ar';
+    const displayEntityName = isArabic && data.entityNameAr ? data.entityNameAr : (data.entityName || 'N/A');
+    
     const detailsSection = data.details ? `
         <div class="mb-0">
             <label class="form-label fw-bold text-secondary">Details:</label>
@@ -317,7 +342,7 @@ function buildEntitySection(data) {
                             <div class="col-md-8">
                                 <div class="mb-3">
                                     <label class="form-label fw-bold text-secondary">Entity Name:</label>
-                                    <div class="form-control-plaintext">${safeString(data.entityName) || 'N/A'}</div>
+                                    <div class="form-control-plaintext">${displayEntityName}</div>
                                 </div>
                             </div>
                         </div>

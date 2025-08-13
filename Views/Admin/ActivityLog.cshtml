@@ -28,6 +28,7 @@
     <script src="~/js/adminPagesHeader.js"></script>
     <script src="~/js/adminMobileMenu.js"></script>
     <script src="~/js/activityLog.js"></script>
+    <script src="~/js/languageSwitcher.js"></script>
 }
 
 <!-- Loading Overlay -->
@@ -237,10 +238,10 @@
                             <thead style="background-color: #4a5568; color: white;">
                                 <tr>
                                     <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;"
-                                        id="activityLog-table-header-log-id"">
-                                        </th>
-                                        <th style=" padding: 12px 16px; border: none; font-weight: 600; font-size:
-                                        0.875rem;" id="activityLog-table-header-user">
+                                        id="activityLog-table-header-log-id">
+                                    </th>
+                                    <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;"
+                                        id="activityLog-table-header-user">
                                     </th>
                                     <th style="padding: 12px 16px; border: none; font-weight: 600; font-size: 0.875rem;"
                                         id="activityLog-table-header-role">
@@ -274,16 +275,11 @@
                                             <div style="font-weight: 600; color: #2563eb; font-size: 0.875rem;">
                                                 #@log.LogId
                                             </div>
-                                            <div style="font-size: 0.75rem; color: #718096;" id="activityLog-log-id-label">
-                                            </div>
                                         </td>
                                         <!-- User -->
                                         <td style="padding: 12px 16px; vertical-align: middle;">
                                             <div style="font-weight: 500; color: #2d3748; font-size: 0.875rem;">
-                                                @log.UserName
-                                            </div>
-                                            <div style="font-size: 0.75rem; color: #718096;" id="activityLog-user-id-label">
-                                                @log.UserId
+                                                @(log?.GetDisplayUserName(isArabic) ?? (isArabic ? "غير معروف" : "Unknown"))
                                             </div>
                                         </td>
                                         <!-- Role -->
@@ -359,47 +355,46 @@
                                         <!-- Entity Details -->
                                         <td style="padding: 12px 16px; vertical-align: middle;">
                                             <div style="font-weight: 500; color: #2d3748; font-size: 0.875rem;">
-                                                @(log.EntityName ?? "Unknown")
+                                                @(log?.GetDisplayEntityName(isArabic) ?? (isArabic ? "غير معروف" : "Unknown"))
                                             </div>
-                                            @if (log.EntityId.HasValue)
+                                            @if (log?.EntityId.HasValue == true)
                                             {
                                                 <!-- Entity ID -->
-                                                <div style="font-size: 0.75rem; color: #718096;" id="activityLog-user-id-label2">
-
-                                                    @log.EntityId
+                                                <div style="font-size: 0.75rem; color: #718096;">
+                                                    @(isArabic ? "رقم السجل:" : "Record ID:") @log.EntityId
                                                 </div>
                                             }
                                         </td>
                                         <!-- Timestamp -->
                                         <td style="padding: 12px 16px; vertical-align: middle;">
                                             <div style="font-weight: 600; color: #2d3748; font-size: 0.875rem;">
-                                                @log.ActionTimestamp.ToString("MMM dd, yyyy")
+                                                @(log?.ActionTimestamp.ToString("MMM dd, yyyy") ?? "N/A")
                                             </div>
                                             <div style="font-size: 0.75rem; color: #718096;">
-                                                @log.ActionTimestamp.ToString("HH:mm:ss")
+                                                @(log?.ActionTimestamp.ToString("HH:mm:ss") ?? "N/A")
                                             </div>
                                         </td>
                                         <!-- Summary -->
                                         <td style="padding: 12px 16px; vertical-align: middle;">
-                                            @if (!string.IsNullOrEmpty(log.Details))
+                                            @if (!string.IsNullOrEmpty(log?.GetDisplayChangesSummary(isArabic)))
                                             {
                                                 <div style="font-size: 0.875rem; color: #4a5568; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-                                                    title="@log.Details">
-                                                    @log.Details
+                                                    title="@log.GetDisplayChangesSummary(isArabic)">
+                                                    @log.GetDisplayChangesSummary(isArabic)
                                                 </div>
                                             }
-                                            else if (log.ActionType == "Add")
+                                            else if (log?.ActionType == "Add")
                                             {
                                                 <div style="font-size: 0.875rem; color: #38a169;">
                                                     <!-- New records-->
                                                     <span class="bi bi-plus-circle me-1" id="activityLog-summary-add"></span>
-                                                    @log.EntityDisplayName <span id="created"></span>
+                                                    @log.GetDisplayEntityName(isArabic) <span id="created"></span>
                                                 </div>
                                             }
-                                            else if (log.ActionType == "Delete")
+                                            else if (log?.ActionType == "Delete")
                                             {
                                                 <div style="font-size: 0.875rem; color: #e53e3e;">
-                                                    <span class="bi bi-trash me-1"></span>@log.EntityDisplayName removed
+                                                    <span class="bi bi-trash me-1"></span>@log.GetDisplayEntityName(isArabic) @(isArabic ? "تم حذف" : "removed")
                                                 </div>
                                             }
                                             else
@@ -410,8 +405,8 @@
                                         </td>
                                         <!-- Options -->
                                         <td style="padding: 12px 16px; vertical-align: middle;">
-                                            @if (log.HasDetails || !string.IsNullOrEmpty(log.OldValues) ||
-                                                                                !string.IsNullOrEmpty(log.NewValues))
+                                            @if (log?.HasDetails == true || !string.IsNullOrEmpty(log?.OldValues) ||
+                                                                                !string.IsNullOrEmpty(log?.NewValues))
                                             {
                                                 <button class="btn btn-sm"
                                                     style="background-color: transparent; border: 1px solid #cbd5e0; color: #4a5568; font-size: 0.75rem; padding: 4px 8px;"
