@@ -36,7 +36,8 @@
 
   <!-- Main Header -->
   <div class="main-header">
-    <h1 id="add-record-page-title">New Record</h1>
+    <!-- New Record -->
+    <h1 id="add-record-page-title"></h1>
   </div>
 
   <!-- Success/Error Messages -->
@@ -64,7 +65,8 @@
         @Html.AntiForgeryToken()
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="regulationName" id="label-regulationName">Regulation/Manual Name (English)</label>
+            <!-- Regulation/Manual Name (English) -->
+            <label for="regulationName" id="label-regulationName"></label>
             <input type="text" class="form-control" id="regulationName" name="regulationName"
               pattern="@Html.Raw("[a-zA-Z0-9\\s\\.\\,\\:\\;\\!\\?\\@\\#\\$\\%\\^\\&\\*\\(\\)\\[\\]\\{\\}\\/\\\\\\&lt;\\&gt;\\-\\_\\+\\=\\&quot;\\'\\|،؟؛\\n\\r]*")"
               title="Please enter only English letters, numbers, spaces, and common punctuation"
@@ -72,7 +74,8 @@
             <div id="regulationNameError" class="text-danger mt-1" style="display: none;"></div>
           </div>
           <div class="col-md-6">
-            <label for="regulationNameAr" id="label-regulationNameAr">Regulation/Manual Name (Arabic)</label>
+            <!-- Regulation/Manual Name (Arabic) -->
+            <label for="regulationNameAr" id="label-regulationNameAr"></label>
             <input type="text" class="form-control" id="regulationNameAr" name="regulationNameAr"
               pattern="@Html.Raw("[\\u0600-\\u06FF\\u0750-\\u077F\\u08A0-\\u08FF\\uFB50-\\uFDFF\\uFE70-\\uFEFF0-9\\s\\.\\,\\:\\;\\!\\?\\@\\#\\$\\%\\^\\&\\*\\(\\)\\[\\]\\{\\}\\/\\\\\\&lt;\\&gt;\\-\\_\\+\\=\\&quot;\\'\\|،؟؛\\n\\r]*")"
               title="Please enter Arabic text, numbers, spaces, and common punctuation"
@@ -80,25 +83,37 @@
             <div id="regulationNameArError" class="text-danger mt-1" style="display: none;"></div>
           </div>
         </div>
+      
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="relevantDepartment" id="label-relevantDepartment">Relevant Department</label>
+            <!-- Relevant Department -->
+            <label for="relevantDepartment" id="label-relevantDepartment"></label>
             <select class="form-select" id="relevantDepartment" name="relevantDepartment" required>
-              <option value="" id="select-department1">Select department</option>
-              <option value="Reg and Admission" id="option-dept-reg">Reg and Admission</option>
-              <option value="CCSIT" id="option-dept-ccsit">CCSIT</option>
-              <option value="Communication and tech" id="option-dept-tech">Communication and tech</option>
-              <option value="Hospital" id="option-dept-hospital">Hospital</option>
-              <option value="Library" id="option-dept-library">Library</option>
-              <option value="Students Affairs" id="option-dept-students">Students Affairs</option>
-              <option value="Preparetory" id="option-dept-prep">Preparetory</option>
-              <option value="Academic Affairs" id="option-dept-academic">Academic Affairs</option>
+              <!-- Select department -->
+              <option value="" id="select-department1"></option>
+              <!-- Reg and Admission -->
+              <option value="Reg and Admission" id="option-dept-reg"></option>
+              <!-- CCSIT -->
+              <option value="CCSIT" id="option-dept-ccsit"></option>
+              <!-- Communication and tech -->
+              <option value="Communication and tech" id="option-dept-tech"></option>
+              <!-- Hospital -->
+              <option value="Hospital" id="option-dept-hospital"></option>
+              <!-- Library -->
+              <option value="Library" id="option-dept-library"></option>
+              <!-- Students Affairs -->
+              <option value="Students Affairs" id="option-dept-students"></option>
+              <!-- preparetory -->
+              <option value="Preparetory" id="option-dept-prep"></option>
+              <!-- academic affairs -->
+              <option value="Academic Affairs" id="option-dept-academic"></option>
             </select>
           </div>
           <div class="col-md-6">
             <!--page number-->
-            <label for="pageNumber" id="label-pageNumber">Thumbnail Page Number</label>
+            <!-- Thumbnail Page Number -->
+            <label for="pageNumber" id="label-pageNumber"></label>
             <input type="number" class="form-control" name="PageNumber"
               min="1" max="999" value="2" step="1"
               pattern="[0-9]+" inputmode="numeric"
@@ -113,25 +128,29 @@
         
         <div class="row mb-3">
           <div class="col-md-4">
-            <label for="versionNumber" id="label-versionNumber">Version Number</label>
+            <!-- Version Number -->
+            <label for="versionNumber" id="label-versionNumber"></label>
             <input type="text" class="form-control" id="versionNumber" name="versionNumber" 
               pattern="@Html.Raw("[0-9\\.\\-\\_]*")"
               title="Please enter only numbers, dots, hyphens, and underscores (e.g., 1.0, 2.1.3, v1-0)"
               placeholder="e.g., 1.0, 2.1.3" maxlength="20" required>
           </div>
           <div class="col-md-4">
-            <label for="versionDate" id="label-versionDate">Version Date</label>
+            <!-- Version Date -->
+            <label for="versionDate" id="label-versionDate"></label>
             <input type="date" class="form-control" id="versionDate" name="versionDate" required>
           </div>
           <div class="col-md-4">
-            <label for="ApprovingDate" id="label-approvingDate">Approving Date</label>
+            <!-- Approving Date -->
+            <label for="ApprovingDate" id="label-approvingDate"></label>
             <input type="date" class="form-control" id="ApprovingDate" name="ApprovingDate" required>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="ApprovingEntity" id="label-approvingEntity">Approving Entity (English)</label>
+            <!-- Approving Entity (English) -->
+            <label for="ApprovingEntity" id="label-approvingEntity"></label>
             <input type="text" class="form-control" id="ApprovingEntity" name="ApprovingEntity"
               pattern="@Html.Raw("[a-zA-Z0-9\\s\\.\\,\\:\\;\\!\\?\\@\\#\\$\\%\\^\\&\\*\\(\\)\\[\\]\\{\\}\\/\\\\\\&lt;\\&gt;\\-\\_\\+\\=\\&quot;\\'\\|،؟؛\\n\\r]*")"
               title="Please enter only English letters, numbers, spaces, and common punctuation"
@@ -139,7 +158,8 @@
             <div id="ApprovingEntityError" class="text-danger mt-1" style="display: none;"></div>
           </div>
           <div class="col-md-6">
-            <label for="ApprovingEntityAr" id="label-approvingEntityAr">Approving Entity (Arabic)</label>
+            <!-- Approving Entity (Arabic) -->
+            <label for="ApprovingEntityAr" id="label-approvingEntityAr"></label>
             <input type="text" class="form-control" id="ApprovingEntityAr" name="ApprovingEntityAr"
               pattern="@Html.Raw("[\\u0600-\\u06FF\\u0750-\\u077F\\u08A0-\\u08FF\\uFB50-\\uFDFF\\uFE70-\\uFEFF0-9\\s\\.\\,\\:\\;\\!\\?\\@\\#\\$\\%\\^\\&\\*\\(\\)\\[\\]\\{\\}\\/\\\\\\&lt;\\&gt;\\-\\_\\+\\=\\&quot;\\'\\|،؟؛\\n\\r]*")"
               title="Please enter Arabic text, numbers, spaces, and common punctuation"
@@ -150,12 +170,14 @@
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="wordAttachment" id="label-wordAttachment">Word Attachment</label>
+            <!-- Word Attachment -->
+            <label for="wordAttachment" id="label-wordAttachment"></label>
             <input type="file" class="form-control" id="wordAttachment" name="wordAttachment" accept=".doc,.docx"
               title="Please select a Word document (.doc or .docx file)">
           </div>
           <div class="col-md-6">
-            <label for="pdfAttachment" id="label-pdfAttachment">PDF Attachment *</label>
+            <!-- PDF Attachment -->
+            <label for="pdfAttachment" id="label-pdfAttachment"></label>
             <input type="file" class="form-control" id="pdfAttachment" name="pdfAttachment" accept=".pdf"
               title="Please select a PDF document (.pdf file)" required>
             <div id="pdfAttachmentError" class="text-danger mt-1" style="display: none;"></div>
@@ -164,14 +186,16 @@
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="Description" id="label-description">Brief Description (English)</label>
+            <!-- Brief Description (English) -->
+            <label for="Description" id="label-description"></label>
             <textarea class="form-control" id="Description" name="Description" rows="3"
               title="Please enter only English letters, numbers, spaces, and common punctuation"
               placeholder="Enter a brief description of the regulation..." maxlength="500"></textarea>
             <div id="DescriptionError" class="text-danger mt-1" style="display: none;"></div>
           </div>
           <div class="col-md-6">
-            <label for="DescriptionAr" id="label-descriptionAr">Brief Description (Arabic)</label>
+            <!-- Brief Description (Arabic) -->
+            <label for="DescriptionAr" id="label-descriptionAr"></label>
             <textarea class="form-control" id="DescriptionAr" name="DescriptionAr" rows="3"
               title="Please enter Arabic text, numbers, spaces, and common punctuation"
               placeholder="أدخل وصفاً مختصراً للائحة مع أرقام إن لزم الأمر..." maxlength="500" dir="rtl"
@@ -182,36 +206,42 @@
 
         <div class="row mb-4">
           <div class="col-md-5">
-            <label id="label-doc-type-section-7851">Document Type</label>
+            <!-- Document Type -->
+            <label id="label-doc-type-section-7851"></label>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="doctype" value="Student guides & templates" id="reg"
                 required>
-              <label class="form-check-label" for="reg" id="label-doc-student-guides-7851">Student guides &
-                templates</label>
+                <!-- Student guides &
+                templates -->
+              <label class="form-check-label" for="reg" id="label-doc-student-guides-7851"></label>
             </div>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="doctype" value="Student rules & regulations"
                 id="Guidelines">
-              <label class="form-check-label" for="Guidelines" id="label-doc-student-rules-7851">Student rules &
-                regulations</label>
+                <!-- Student rules &
+                regulations -->
+              <label class="form-check-label" for="Guidelines" id="label-doc-student-rules-7851"></label>
             </div>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="doctype" value="Employees’ rules & regulations"
                 id="policy">
-              <label class="form-check-label" for="policy" id="label-doc-employee-rules-7851">Employees’ rules &
-                regulations</label>
+                <!-- Employees’ rules &
+                regulations -->
+              <label class="form-check-label" for="policy" id="label-doc-employee-rules-7851"></label>
             </div>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="doctype" value="Academic rules & regulations"
                 id="Academic">
-              <label class="form-check-label" for="Academic" id="label-doc-academic-rules-7851">Academic rules & regulations</label>
+                <!-- Academic rules & regulations -->
+              <label class="form-check-label" for="Academic" id="label-doc-academic-rules-7851"></label>
             </div>
           </div>
         </div>
 
         <div class="row mb-5">
           <div class="col-md-6">
-            <label for="notes" id="label-notes">Notes (English)</label>
+            <! -- Notes (English) -->
+            <label for="notes" id="label-notes"></label>
             <input type="text" class="form-control" id="notes" name="notes"
               pattern="@Html.Raw("[a-zA-Z0-9\\s\\.\\,\\:\\;\\!\\?\\@\\#\\$\\%\\^\\&\\*\\(\\)\\[\\]\\{\\}\\/\\\\\\&lt;\\&gt;\\-\\_\\+\\=\\&quot;\\'\\|،؟؛\\n\\r]*")"
               title="Please enter only English letters, numbers, spaces, and common punctuation"
@@ -219,7 +249,8 @@
             <div id="notesError" class="text-danger mt-1" style="display: none;"></div>
           </div>
           <div class="col-md-6">
-            <label for="notesAr" id="label-notesAr">Notes (Arabic)</label>
+            <! -- Notes (Arabic) -->
+            <label for="notesAr" id="label-notesAr"></label>
             <input type="text" class="form-control" id="notesAr" name="notesAr"
               pattern="@Html.Raw("[\\u0600-\\u06FF\\u0750-\\u077F\\u08A0-\\u08FF\\uFB50-\\uFDFF\\uFE70-\\uFEFF0-9\\s\\.\\,\\:\\;\\!\\?\\@\\#\\$\\%\\^\\&\\*\\(\\)\\[\\]\\{\\}\\/\\\\\\&lt;\\&gt;\\-\\_\\+\\=\\&quot;\\'\\|،؟؛\\n\\r]*")"
               title="Please enter Arabic text, numbers, spaces, and common punctuation"
@@ -229,8 +260,10 @@
         </div>
 
         <div class="text-center mt-4">
-          <button type="submit" class="btn btn-primary me-2" id="btn-save">Save and upload</button>
-          <button type="button" class="btn btn-secondary" onclick="confirmCancel()" id="btn-cancel">Cancel</button>
+          <! -- Save and upload -->
+          <button type="submit" class="btn btn-primary me-2" id="btn-save"></button>
+          <! -- Cancel -->
+          <button type="button" class="btn btn-secondary" onclick="confirmCancel()" id="btn-cancel"></button>
         </div>
       </form>
     </div>
