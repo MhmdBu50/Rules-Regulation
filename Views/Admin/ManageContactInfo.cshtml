@@ -108,7 +108,8 @@
                             style="max-width: 600px;"> <!-- تمت إضافة mx-auto و max-width -->
                             <div class="multi-select-dropdown-container" style="width: 100%;">
                                 <div class="multi-select-dropdown" style="width: 100%;">
-                                    <div class="multi-select-button d-flex align-items-center justify-content-between" id="contactDepartmentMultiSelectButton"
+                                    <div class="multi-select-button d-flex align-items-center justify-content-between"
+                                        id="contactDepartmentMultiSelectButton"
                                         style="color: #ABB7C2; border: none; cursor: pointer; width: 100%; height: 44px; background: transparent; padding: 0 13px; font-size: 20px; color: #ABB7C2; font-weight: normal;">
                                         <span id="contact-all-departments">All Departments</span>
                                         <span class="caret" style="scale: 0.6;">▼</span>
@@ -142,7 +143,8 @@
                                                 style="display: flex; align-items: center; padding: 8px 12px; cursor: pointer; margin: 0;">
                                                 <input type="checkbox"
                                                     class="form-check-input contact-department-option me-2"
-                                                    value="@department.value" style="margin: 0; margin-inline-end: 8px; scale: 0.7;">
+                                                    value="@department.value"
+                                                    style="margin: 0; margin-inline-end: 8px; scale: 0.7;">
                                                 <span id="@department.key"
                                                     style="font-size: 20px; color: #ABB7C2;">@department.value</span>
                                             </label>
@@ -229,7 +231,23 @@
                                                 ;
                                             }
                                         </strong></td>
-                                    <td data-label="Name">@contact.Name</td>
+                                    <td data-label="Name">
+                                        @if (isArabic)
+                                        {
+                                            if (!string.IsNullOrEmpty(contact.NameAr))
+                                            {
+                                                @contact.NameAr
+                                            }
+                                            else
+                                            {
+                                                @contact.Name
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @contact.Name
+                                        }
+                                    </td>
                                     <td data-label="Email">
                                         @if (!string.IsNullOrEmpty(contact.Email))
                                         {

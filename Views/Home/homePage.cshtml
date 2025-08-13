@@ -5,7 +5,7 @@
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
     @await Html.PartialAsync("_svgsTemplate")
-    
+
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
     var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
     var isArabic = currentCulture == "ar-SA";
@@ -33,17 +33,17 @@
     <script src="@Url.Content("~/js/homePageFilters.js")"></script>
     <script src="@Url.Content("~/js/savedFunctions.js")"></script>
     <script src="@Url.Content("~/js/searchFunctionality.js")"></script>
-    
+
     <script>
         // Handle URL parameters for footer navigation
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const urlParams = new URLSearchParams(window.location.search);
             const filter = urlParams.get('filter');
-            
+
             if (filter) {
                 // Wait a bit for all scripts to load
-                setTimeout(function() {
-                    switch(filter) {
+                setTimeout(function () {
+                    switch (filter) {
                         case 'student-guides':
                             if (typeof navigateToStudentGuides === 'function') {
                                 // Create a dummy button element for the function
@@ -80,9 +80,9 @@
                                 navigateToHistory();
                             }
                             break;
-                            
+
                     }
-                    
+
                     // Clean up the URL by removing the filter parameter
                     window.history.replaceState({}, document.title, window.location.pathname);
                 }, 500);
@@ -97,15 +97,14 @@
         <div class="row align-items-center h-100 g-0">
             <div class="col-auto">
 
-    <!-------------------- Burger Menu Button for Mobile ------------------->
-                <button id="burgerBtn" class="navbar-toggler d-lg-none" style="margin-inline: 10px;"
-                    type="button">
+                <!-------------------- Burger Menu Button for Mobile ------------------->
+                <button id="burgerBtn" class="navbar-toggler d-lg-none" style="margin-inline: 10px;" type="button">
                     <img src="~/svgs/navigation/hamburger-menu.svg" alt="Menu" width="36" height="36" />
                 </button>
 
                 <div class="d-flex align-items-center justify-content-around ms-3 gap-3 me-3 ">
 
-    <!------------------- Logout Button ------------------->
+                    <!------------------- Logout Button ------------------->
                     <div class="d-none d-lg-block d-xl-block">
                         <form method="post" action="@Url.Action("Logout", "Account")" style="margin: 0">
                             @Html.AntiForgeryToken()
@@ -115,12 +114,12 @@
                             </button>
                         </form>
                     </div>
-                    
-                <!-------- Vertical Divider -------->
-                    <div class="vr d-none d-lg-block d-xl-block" style="color: aliceblue; opacity: 0.75;"></div>
-                <!-------- Vertical Divider -------->
 
-    <!-------------------- Language Switcher ------------------->
+                    <!-------- Vertical Divider -------->
+                    <div class="vr d-none d-lg-block d-xl-block" style="color: aliceblue; opacity: 0.75;"></div>
+                    <!-------- Vertical Divider -------->
+
+                    <!-------------------- Language Switcher ------------------->
                     <div class="language-switcher-container d-none d-lg-block d-xl-block">
                         <button id="language-toggle" class="language-toggle-btn desktop-logo logo header-nav">
                             <img src="~/svgs/navigation/language.svg" alt="Language" width="36px" height="36px" />
@@ -128,19 +127,19 @@
                         </button>
                     </div>
 
-                @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
                     {
-                <!-------- Vertical Divider ------>
-                    <div class="vr d-none d-lg-block d-xl-block" style="color: aliceblue; opacity: 0.75;"></div>
-                <!-------- Vertical Divider ------>
+                        <!-------- Vertical Divider ------>
+                        <div class="vr d-none d-lg-block d-xl-block" style="color: aliceblue; opacity: 0.75;"></div>
+                        <!-------- Vertical Divider ------>
 
-    <!--------------------- Admin Button ------------------->
-                    <div class="d-none d-lg-block d-xl-block">
-                    
-                        <button class="desktop-logo logo header-nav d-none d-lg-flex"
-                            onclick="location.href='@Url.Action("AdminPage", "Admin")'" >
-                            <img src="~/svgs/nav-buttons/Normal-AdminView.svg" alt="Admin" width="36" height="36" />
-                            <span class="poppins-regular" id="admin-view-button">view as Editor</span>
+                        <!--------------------- Admin Button ------------------->
+                        <div class="d-none d-lg-block d-xl-block">
+
+                            <button class="desktop-logo logo header-nav d-none d-lg-flex"
+                                onclick="location.href='@Url.Action("AdminPage", "Admin")'">
+                                <img src="~/svgs/nav-buttons/Normal-AdminView.svg" alt="Admin" width="36" height="36" />
+                                <span class="poppins-regular" id="admin-view-button">view as Editor</span>
 
                         </button>
                     
@@ -258,7 +257,8 @@
                         <div class="multi-select-dropdown-content" id="departmentDropdownContent">
                             <label><input type="checkbox" class="form-check-input department-option" value=""> All
                                 Departments</label>
-                            <label><input type="checkbox" class="form-check-input department-option" value="Reg and Admission">
+                            <label><input type="checkbox" class="form-check-input department-option"
+                                    value="Reg and Admission">
                                 Reg and Admission</label>
                             <label><input type="checkbox" class="form-check-input department-option" value="CCSIT">
                                 CCSIT</label>
@@ -268,11 +268,14 @@
                                 Hospital</label>
                             <label><input type="checkbox" class="form-check-input department-option" value="Library">
                                 Library</label>
-                            <label><input type="checkbox" class="form-check-input department-option" value="Students Affairs">
+                            <label><input type="checkbox" class="form-check-input department-option"
+                                    value="Students Affairs">
                                 Students Affairs</label>
-                            <label><input type="checkbox" class="form-check-input department-option" value="Preparetory">
+                            <label><input type="checkbox" class="form-check-input department-option"
+                                    value="Preparetory">
                                 Preparetory</label>
-                            <label><input type="checkbox" class="form-check-input department-option" value="Academic Affairs">
+                            <label><input type="checkbox" class="form-check-input department-option"
+                                    value="Academic Affairs">
                                 Academic Affairs</label>
                         </div>
                     </div>
@@ -297,14 +300,15 @@
                         value="Employees’ rules & regulations"> <span id="nav-employee-rules-label">Employees’ rules &
                         regulations</span></label>
 
-                <label><input type="checkbox" class="form-check-input" id="academicFilter" value="Academic rules & regulations">
+                <label><input type="checkbox" class="form-check-input" id="academicFilter"
+                        value="Academic rules & regulations">
                     <span id="nav-academic-rules-label"></span></label>
 
 
-                <div style="margin-top: 15px;
+                <div style="margin-top: auto; margin-inline-start: auto;
         display: flex;">
                     <button type="button" class="apply-btn" onclick="applyFilters()" id="filter-apply-btn">Apply</button>
-                    <button type="button" class="apply-btn" onclick="clearFilters()" style="background-color: #6c757d; margin: 0 10px;">Clear</button>
+                    <button type="button" class="apply-btn" onclick="clearFilters()" style="background-color: #6c757d; margin-inline-start: 10px;">Clear</button>
                 </div>
             </div>
         </div>
@@ -408,11 +412,12 @@ border: none;" onclick="navigateToHome(this)">
 
     </div>
 
-        <div>
-            <button class="bar-button" id="historyButton" data-id="historyButton" onclick="alter(this); navigateToHistory()" style="background-color: #0F1734; font-size: 1.5em;" >
-                <div class="nav-icons svg-container">
-                    
-                </div>
+    <div>
+        <button class="bar-button" id="historyButton" data-id="historyButton" onclick="alter(this); navigateToHistory()"
+            style="background-color: #0F1734; font-size: 1.5em;">
+            <div class="nav-icons svg-container">
+
+            </div>
 
             <div class="nav-label">
                 <label class="poppins-regular" style="word-break: keep-all;" id="nav-history-label">History</label>
@@ -428,18 +433,18 @@ border: none;" onclick="navigateToHome(this)">
 
 
 <div class="container-fluid mb-footer-space">
-    <div class="row justify-content-center g-lg-4 g-sm-2 g-1 cards-container" 
-    style="margin:1rem max(10px, calc(40px - 2vw)) 3rem max(10px, calc(40px - 2vw)) !important">
+    <div class="row justify-content-center g-lg-4 g-sm-2 g-1 cards-container"
+        style="margin:1rem max(10px, calc(40px - 2vw)) 3rem max(10px, calc(40px - 2vw)) !important">
 
         @if (Model != null && Model.Any())
 
         {
             @foreach (var record in Model)
             {
-                var displayName = isArabic && !string.IsNullOrEmpty(record.RegulationNameAr) 
-                    ? record.RegulationNameAr 
-                    : record.RegulationName;
-                
+                var displayName = isArabic && !string.IsNullOrEmpty(record.RegulationNameAr)
+                ? record.RegulationNameAr
+                : record.RegulationName;
+
                 <!-- Dynamic card -->
                 <div class="col-auto medium-card large-card">
                     <div class="card document-card" data-title="@displayName" data-department="@record.Department"
@@ -454,11 +459,8 @@ border: none;" onclick="navigateToHome(this)">
                                     <div class="spinner"></div>
                                     <span>Loading...</span>
                                 </div>
-                                <img class="pdf-thumbnail" 
-                                     id="thumbnail-@record.Id"
-                                     data-record-id="@record.Id"
-                                     style="display:none;" 
-                                     alt="PDF Thumbnail" />
+                                <img class="pdf-thumbnail" id="thumbnail-@record.Id" data-record-id="@record.Id"
+                                    style="display:none;" alt="PDF Thumbnail" />
                             </div>
                         </div>
                         <h2 class="card-title">@displayName</h2>
@@ -487,12 +489,13 @@ border: none;" onclick="navigateToHome(this)">
 
                                     <img src="~/svgs/cards/book-icon.svg" alt="Book" width="32" height="34" />
                                 </button>
+                                <!-- this is a placeholder for future chatbot functionality, the functionality is not yet completed and the CSS code and the incomplete JS code is in the FuturePlans/Chatbot file
                                 <button class="action-btn" onclick="handleAction('chat')" id="card-chat-icon" title="Chat">
                                     <i class="fas fa-comments">
                                         <img src="~/svgs/cards/chat-icon.svg" alt="Chat" width="32" height="34" />
 
                                     </i>
-                                </button>
+                                </button>-->
                             </div>
                         </div>
                     </div>
@@ -516,7 +519,7 @@ border: none;" onclick="navigateToHome(this)">
 
     </div>
 </div>
-
+<!-- chatbot for future use
 <div class="chatbot-container">
     <div class="chat-icon" id="chat-icon">
         <img src="~/svgs/chatbot/chatbot-large.svg" width="80" height="80" />
@@ -549,6 +552,7 @@ border: none;" onclick="navigateToHome(this)">
         </div>
     </div>
 </div>
+-->
 
 <div class="modal fade" id="recordDetailsModal" tabindex="-1" aria-labelledby="recordDetailsModalLabel"
     aria-hidden="true">
