@@ -96,9 +96,11 @@ function applyFilters() {
   // Grab all selected filter values
 
   // Normalize selected values for safe comparison
-  const department = document
-    .getElementById("departmentFilter")
-    .value.toLowerCase();
+  // Get selected departments as array (support multi-select)
+  const departmentValue = document.getElementById("departmentFilter").value;
+  const selectedDepartments = departmentValue
+    ? departmentValue.split(",").map((d) => d.trim().toLowerCase())
+    : [];
   const sections = getChecked([
     "studentsFilter",
     "membersFilter",
@@ -138,9 +140,10 @@ function applyFilters() {
     const cardTitle = card.dataset.title?.toLowerCase();
     const cardDate = getCardDateStr(card);
 
-
     // Check if card matches selected filters
-    const matchesDept = !department || department === cardDept;
+    // Department: if no filter, show all. If filter, check if cardDept is in selectedDepartments
+    const matchesDept =
+      selectedDepartments.length === 0 || selectedDepartments.includes(cardDept);
     const matchesSection =
       sections.length === 0 || sections.some((s) => cardSections.includes(s));
     const matchesType = types.length === 0 || types.includes(cardType);
@@ -154,8 +157,6 @@ function applyFilters() {
       const recordId = parseInt(bookmark?.getAttribute("data-record-id"));
       matchesSaved = window.savedRecordIds.includes(recordId);
     }
-
-    // 🔍 DEBUG LOGGING for matching
 
     const show =
       matchesDept &&
