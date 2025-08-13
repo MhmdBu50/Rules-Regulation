@@ -1,3 +1,21 @@
+/* Fix select arrow direction for RTL dropdowns */
+.rtl select.form-select {
+    direction: rtl;
+    text-align: right;
+    background-position: left 0.75rem center;
+}
+/* For Webkit browsers */
+.rtl select.form-select::-webkit-input-placeholder {
+    text-align: right;
+}
+/* For Firefox */
+.rtl select.form-select:-moz-placeholder {
+    text-align: right;
+}
+/* For IE */
+.rtl select.form-select:-ms-input-placeholder {
+    text-align: right;
+}
 body.rtl .language-switcher-container {
     right: auto;
     left: 15px;
