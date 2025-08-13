@@ -48,9 +48,9 @@ The `HomeController` is the main public-facing controller that manages the homep
 
 **Features**:
 - University branding display
-- Navigation to document sections
 - Public information access
 - Language selection interface
+> NOTE: Navigation by legacy 'sections' removed; filtering now relies on department, type, text search.
 
 #### `Privacy()` - GET
 **Purpose**: Privacy policy page  
@@ -82,12 +82,13 @@ public IActionResult LoginPage()
 
 **Parameters**:
 - `department`: Filter by department
-- `sections`: Filter by document sections
 - `documentTypes`: Filter by document type
 - `alphabetical`: Alphabetical sorting
 - `dateSort`: Date-based sorting
 - `fromDate`: Date range start
 - `toDate`: Date range end
+
+> Removed: `sections` parameter (DB column & UI eliminated).
 
 **Features**:
 - Advanced filtering system

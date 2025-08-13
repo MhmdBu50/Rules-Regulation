@@ -123,7 +123,8 @@ _dbContext.Visits.Add(new Visit
 {
     UserId = user.UserId,
     IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString(),
-    VisitTimestamp = DateTime.UtcNow
+    // Store visit timestamp using server local time (previously UtcNow)
+    VisitTimestamp = DateTime.Now
 });
 ```
 

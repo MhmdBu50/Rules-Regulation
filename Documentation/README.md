@@ -24,6 +24,7 @@ The **Rules & Regulations System** is a comprehensive web application designed f
 - [LanguageController](./Controllers/LanguageController.md) - Localization management
 - [SavedController](./Controllers/SavedController.md) - User's saved documents
 - [HistoryController](./Controllers/HistoryController.md) - User activity tracking
+- [ActivityLog](./Controllers/ActivityLog.md) - Administrative change log & diff viewer
 - [PDFController](./Controllers/PDFController.md) - PDF operations and management
 
 ### 🎨 Views Documentation
@@ -121,6 +122,11 @@ For technical support and maintenance:
 
 ---
 
-**Last Updated**: August 7, 2025  
-**Version**: 1.0  
+**Last Updated**: August 13, 2025  
+**Version**: 1.1  
+**Recent Changes**:
+- Added Activity Log documentation (dual diff, Arabic localization)
+- Removed deprecated `Sections` field references
+- Updated timestamps to use local time instead of UTC in logging/bookmarks
+- Added Arabic entity/field localization details
 **Maintained by**: Bukhamsin Development Team

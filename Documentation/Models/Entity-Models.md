@@ -81,15 +81,20 @@ entity.Property(e => e.Department).HasColumnName("DEPARTMENT").HasMaxLength(100)
 **Purpose**: Main regulation records entity  
 
 **Key Properties**:
-- `RegulationName`: Document title
-- `Description`: Document description
+- `RegulationName`: Document title (English)
+- `RegulationNameAr`: Document title (Arabic) ✅ (added for localization)
+- `Description`: Document description (English)
+- `DescriptionAr`: Document description (Arabic) ✅
 - `Department`: Owning department
 - `DocumentType`: Classification (Policy, Procedure, etc.)
 - `Version`: Document version number
 - `VersionDate`: Version creation date
 - `ApprovingDate`: Official approval date
-- `Sections`: Document section count
+- `ApprovingEntity` / `ApprovingEntityAr`: Entity that approved (EN/AR) ✅
+- `Notes` / `NotesAr`: Additional notes (EN/AR) ✅
 - `CreatedAt`: Record creation timestamp
+
+> NOTE: The legacy `Sections` property was removed from the data model and all logging/UI. Documentation updated accordingly.
 
 **Relationships**:
 - One-to-Many with `Attachments`

@@ -106,7 +106,8 @@ var newRecord = new SavedRecord
     SavedId = Guid.NewGuid().ToString(),
     UserId = userId,
     RecordId = request.RecordId,
-    SavedTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
+    // Use server local time (was UtcNow previously)
+    SavedTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
 };
 
 _context.SavedRecords.Add(newRecord);
