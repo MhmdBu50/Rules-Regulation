@@ -91,6 +91,73 @@ function getTranslatedUserRole(userRole) {
     return translated;
 }
 
+// Helper function to translate field names in JSON data
+function getTranslatedFieldName(fieldName) {
+    if (!fieldName) return '';
+    
+    const fieldTranslations = {
+        'regulationName': 'activity-field-regulationName',
+        'regulationNameAr': 'activity-field-regulationNameAr', 
+        'department': 'activity-field-department',
+        'version': 'activity-field-version',
+        'versionDate': 'activity-field-versionDate',
+        'approvalDate': 'activity-field-approvalDate',
+        'approvingEntity': 'activity-field-approvingEntity',
+        'approvingEntityAr': 'activity-field-approvingEntityAr',
+        'description': 'activity-field-description',
+        'descriptionAr': 'activity-field-descriptionAr',
+        'documentType': 'activity-field-documentType',
+        'notes': 'activity-field-notes',
+        'notesAr': 'activity-field-notesAr'
+    };
+    
+    const translationKey = fieldTranslations[fieldName];
+    if (translationKey) {
+        const translated = getTranslatedText(translationKey);
+        if (translated !== translationKey) {
+            return translated;
+        }
+    }
+    
+    // Fallback: convert camelCase to readable format
+    return fieldName.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+}
+
+// Attempt to extract Arabic entity name from enriched fields or embedded JSON strings
+function extractArabicEntityName(data) {
+    if (!data) return null;
+    if (data.entityNameAr) return data.entityNameAr;
+    if (data.EntityNameAr) return data.EntityNameAr;
+    // Fallback: parse any before/after/new/old JSON blobs for common Arabic keys
+    const blobs = [data.afterData, data.AfterData, data.beforeData, data.BeforeData, data.newValues, data.NewValues, data.oldValues, data.OldValues];
+    for (const blob of blobs) {
+        if (!blob || typeof blob !== 'string') continue;
+        try {
+            const parsed = JSON.parse(blob);
+            if (!parsed || typeof parsed !== 'object') continue;
+            if (parsed.regulationNameAr) return parsed.regulationNameAr;
+            if (parsed.RegulationNameAr) return parsed.RegulationNameAr;
+            if (parsed.REGULATION_NAME_AR) return parsed.REGULATION_NAME_AR;
+            if (parsed.contactNameAr) return parsed.contactNameAr;
+            if (parsed.ContactNameAr) return parsed.ContactNameAr;
+            if (parsed.NAME_AR) return parsed.NAME_AR;
+        } catch { /* ignore parse errors */ }
+    }
+    return null;
+}
+
+// Helper function to translate JSON object field names
+function translateJsonFieldNames(jsonObj) {
+    if (!jsonObj || typeof jsonObj !== 'object') return jsonObj;
+    
+    const translated = {};
+    for (const [key, value] of Object.entries(jsonObj)) {
+        const translatedKey = getTranslatedFieldName(key);
+        translated[translatedKey] = value;
+    }
+    return translated;
+}
+
 // Main function to view activity details
 function viewDetails(logId) {
     console.log('=== ViewDetails Function Called ===');
@@ -401,32 +468,65 @@ function buildUserSection(data) {
     `;
 }
 
+// Generate localized activity summary
+function generateLocalizedSummary(actionType, entityType, entityName, isArabic) {
+    if (!actionType || !entityType || !entityName) {
+        return null;
+    }
+    
+    const action = actionType.toLowerCase();
+    const entity = entityType.toLowerCase();
+    
+    if (isArabic) {
+        const entityTypeArabic = entity === 'record' ? 'السجل' : 
+                               entity === 'contact' ? 'جهة الاتصال' : entityType;
+        
+        switch (action) {
+            case 'add':
+            case 'create':
+                return `تم إنشاء ${entityTypeArabic}: ${entityName}`;
+            case 'edit':
+            case 'update':
+                return `تم تحديث ${entityTypeArabic}: ${entityName}`;
+            case 'delete':
+            case 'remove':
+                return `تم حذف ${entityTypeArabic}: ${entityName}`;
+            default:
+                return `تم تنفيذ ${actionType} على ${entityTypeArabic}: ${entityName}`;
+        }
+    } else {
+        switch (action) {
+            case 'add':
+            case 'create':
+                return `${entityType} created: ${entityName}`;
+            case 'edit':
+            case 'update':
+                return `${entityType} updated: ${entityName}`;
+            case 'delete':
+            case 'remove':
+                return `${entityType} deleted: ${entityName}`;
+            default:
+                return `${actionType} performed on ${entityType}: ${entityName}`;
+        }
+    }
+}
+
 // Build entity information section
 function buildEntitySection(data) {
     const isArabic = getCurrentLanguage() === 'ar';
-    
-    // Pull Arabic names from database if available (check both camelCase and PascalCase)
-    const entityNameAr = data.entityNameAr || data.EntityNameAr;
-    const displayEntityName = isArabic && entityNameAr 
-        ? entityNameAr 
-        : (data.entityName || data.EntityName || 'N/A');
-    
-    // Pull Arabic details from database if available (check both camelCase and PascalCase)
-    const detailsAr = data.detailsAr || data.DetailsAr;
-    const displayDetails = isArabic && detailsAr 
-        ? detailsAr 
-        : (data.details || data.Details || null);
-    
-    console.log('=== Entity Section Debug ===');
-    console.log('isArabic:', isArabic);
-    console.log('entityNameAr (camelCase):', data.entityNameAr);
-    console.log('EntityNameAr (PascalCase):', data.EntityNameAr);
-    console.log('Selected entityNameAr:', entityNameAr);
-    console.log('Final displayEntityName:', displayEntityName);
-    console.log('detailsAr (camelCase):', data.detailsAr);
-    console.log('DetailsAr (PascalCase):', data.DetailsAr);
-    console.log('Selected detailsAr:', detailsAr);
-    console.log('Final displayDetails:', displayDetails);
+    const entityNameAr = extractArabicEntityName(data);
+    const englishName = data.entityName || data.EntityName || '';
+    const displayEntityName = isArabic && entityNameAr ? entityNameAr : (englishName || 'N/A');
+    const entityNameForSummary = isArabic && entityNameAr ? entityNameAr : englishName;
+    const localizedSummary = generateLocalizedSummary(
+        data.actionType || data.ActionType, 
+        data.entityType || data.EntityType, 
+        entityNameForSummary, 
+        isArabic
+    );
+    let displayDetails = localizedSummary || (data.details || data.Details);
+    if (isArabic && !displayDetails && entityNameAr) displayDetails = entityNameAr; // ensure Arabic text shows
+    if (!displayDetails) displayDetails = isArabic ? 'غير متاح' : 'N/A';
     
     const detailsSection = displayDetails ? `
         <div class="mb-0">
@@ -579,13 +679,14 @@ function getDataChangesContent(actionType, beforeData, afterData) {
     `;
 }
 
-// Format JSON data safely
+// Format JSON data safely with translated field names
 function formatJsonData(jsonString) {
     if (!jsonString) return getTranslatedText('no-data-available');
     
     try {
         const parsed = JSON.parse(jsonString);
-        return JSON.stringify(parsed, null, 2);
+        const translated = translateJsonFieldNames(parsed);
+        return JSON.stringify(translated, null, 2);
     } catch (error) {
         console.warn('Error parsing JSON:', error);
         return escapeHtml(String(jsonString));
@@ -630,16 +731,17 @@ function highlightAfterChanges(beforeJson, afterJson) {
 // Format JSON with highlighted differences for "Before" column
 function formatJsonWithBeforeHighlights(beforeObj, afterObj) {
     const changes = findJsonDifferences(beforeObj, afterObj);
-    let jsonString = JSON.stringify(beforeObj, null, 2);
     
-    // Sort changes by position (longest keys first to avoid overlap issues)
-    const sortedChanges = Object.keys(changes).sort((a, b) => b.length - a.length);
+    // Translate field names first
+    const translatedBefore = translateJsonFieldNames(beforeObj);
+    let jsonString = JSON.stringify(translatedBefore, null, 2);
     
     // Apply highlights to fields that were modified or removed
-    sortedChanges.forEach(key => {
-        const changeType = changes[key];
-        let highlightClass = '';
+    Object.keys(changes).forEach(originalKey => {
+        const changeType = changes[originalKey];
+        const translatedKey = getTranslatedFieldName(originalKey);
         
+        let highlightClass = '';
         if (changeType === 'modified') {
             highlightClass = 'highlight-modified';
         } else if (changeType === 'removed') {
@@ -647,8 +749,8 @@ function formatJsonWithBeforeHighlights(beforeObj, afterObj) {
         }
         
         if (highlightClass) {
-            // Highlight the original value that will be changed or removed
-            const keyRegex = new RegExp(`("${escapeRegex(key)}"\\s*:\\s*[^,\\n}\\]]+)`, 'g');
+            // Highlight using the translated key
+            const keyRegex = new RegExp(`("${escapeRegex(translatedKey)}"\\s*:\\s*[^,\\n}\\]]+)`, 'g');
             jsonString = jsonString.replace(keyRegex, `<span class="${highlightClass}">$1</span>`);
         }
         // Note: We don't highlight "added" fields in before column since they don't exist here
@@ -660,16 +762,17 @@ function formatJsonWithBeforeHighlights(beforeObj, afterObj) {
 // Format JSON with highlighted differences for "After" column
 function formatJsonWithAfterHighlights(afterObj, beforeObj) {
     const changes = findJsonDifferences(beforeObj, afterObj);
-    let jsonString = JSON.stringify(afterObj, null, 2);
     
-    // Sort changes by position (longest keys first to avoid overlap issues)
-    const sortedChanges = Object.keys(changes).sort((a, b) => b.length - a.length);
+    // Translate field names first
+    const translatedAfter = translateJsonFieldNames(afterObj);
+    let jsonString = JSON.stringify(translatedAfter, null, 2);
     
     // Apply highlights
-    sortedChanges.forEach(key => {
-        const changeType = changes[key];
-        let highlightClass = '';
+    Object.keys(changes).forEach(originalKey => {
+        const changeType = changes[originalKey];
+        const translatedKey = getTranslatedFieldName(originalKey);
         
+        let highlightClass = '';
         if (changeType === 'modified') {
             highlightClass = 'highlight-modified';
         } else if (changeType === 'added') {
@@ -677,8 +780,8 @@ function formatJsonWithAfterHighlights(afterObj, beforeObj) {
         }
         
         if (highlightClass) {
-            // Find and highlight the key-value pair
-            const keyRegex = new RegExp(`("${escapeRegex(key)}"\\s*:\\s*[^,\\n}\\]]+)`, 'g');
+            // Highlight using the translated key
+            const keyRegex = new RegExp(`("${escapeRegex(translatedKey)}"\\s*:\\s*[^,\\n}\\]]+)`, 'g');
             jsonString = jsonString.replace(keyRegex, `<span class="${highlightClass}">$1</span>`);
         }
     });
