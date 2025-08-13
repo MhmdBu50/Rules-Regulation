@@ -2757,32 +2757,65 @@ public async Task<IActionResult> ViewPdf(int id)
 
     private async Task<object> EnrichActivityLogDetailWithArabicAsync(OracleConnection connection, dynamic result)
     {
-        string? userNameAr = null;
-        string? entityNameAr = null;
+    string? userNameAr = null;
+    string? entityNameAr = null;
+    string? detailsAr = null;
+
+    // DEBUG: Log input result
+    System.Diagnostics.Debug.WriteLine($"[DEBUG] Input result: LogId={result?.LogId}, EntityType={result?.EntityType}, EntityId={result?.EntityId}");
 
         try
         {
-            // Get Arabic user name if userId exists
-            if (result.UserId > 0)
-            {
-                using (var userCmd = new OracleCommand("SELECT USER_NAME_AR FROM USERS WHERE USER_ID = :userId", connection))
-                {
-                    userCmd.Parameters.Add(new OracleParameter("userId", result.UserId));
-                    var userNameArResult = await userCmd.ExecuteScalarAsync();
-                    userNameAr = userNameArResult?.ToString();
-                }
-            }
-
-            // Get Arabic entity name if entityId and entityType exist
+            // Get Arabic entity name and details if entityId and entityType exist
             if (result.EntityId?.HasValue == true && !string.IsNullOrEmpty(result.EntityType))
             {
                 if (result.EntityType.Equals("Record", StringComparison.OrdinalIgnoreCase))
                 {
-                    using (var entityCmd = new OracleCommand("SELECT REGULATION_NAME_AR FROM RECORDS WHERE RECORD_ID = :entityId", connection))
+                    using (var entityCmd = new OracleCommand(@"SELECT 
+                                                                REGULATION_NAME_AR, 
+                                                                DESCRIPTION_AR, 
+                                                                NOTES_AR 
+                                                              FROM RECORDS 
+                                                              WHERE RECORD_ID = :entityId", connection))
                     {
                         entityCmd.Parameters.Add(new OracleParameter("entityId", result.EntityId.Value));
-                        var entityNameArResult = await entityCmd.ExecuteScalarAsync();
-                        entityNameAr = entityNameArResult?.ToString();
+                        using var entityReader = await entityCmd.ExecuteReaderAsync();
+                        if (await entityReader.ReadAsync())
+                        {
+                            entityNameAr = entityReader.IsDBNull("REGULATION_NAME_AR") ? null : entityReader.GetString("REGULATION_NAME_AR");
+                            var descriptionAr = entityReader.IsDBNull("DESCRIPTION_AR") ? null : entityReader.GetString("DESCRIPTION_AR");
+                            var notesAr = entityReader.IsDBNull("NOTES_AR") ? null : entityReader.GetString("NOTES_AR");
+                            detailsAr = !string.IsNullOrEmpty(descriptionAr) ? descriptionAr : notesAr;
+                            // DEBUG: Log Arabic fields from RECORDS
+                            System.Diagnostics.Debug.WriteLine($"[DEBUG] RECORDS: REGULATION_NAME_AR={entityNameAr}, DESCRIPTION_AR={descriptionAr}, NOTES_AR={notesAr}, detailsAr={detailsAr}");
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[DEBUG] RECORDS: No record found for RECORD_ID={result.EntityId.Value}");
+                        }
+                    }
+                }
+                else if (result.EntityType.Equals("Contact", StringComparison.OrdinalIgnoreCase))
+                {
+                    using (var contactCmd = new OracleCommand(@"SELECT 
+                                                                NAME_AR, 
+                                                                DEPARTMENT_AR 
+                                                              FROM CONTACT_INFORMATION 
+                                                              WHERE ID = :entityId", connection))
+                    {
+                        contactCmd.Parameters.Add(new OracleParameter("entityId", result.EntityId.Value));
+                        using var contactReader = await contactCmd.ExecuteReaderAsync();
+                        if (await contactReader.ReadAsync())
+                        {
+                            entityNameAr = contactReader.IsDBNull("NAME_AR") ? null : contactReader.GetString("NAME_AR");
+                            detailsAr = contactReader.IsDBNull("DEPARTMENT_AR") ? null : contactReader.GetString("DEPARTMENT_AR");
+                            // DEBUG: Log Arabic fields from CONTACT_INFORMATION
+                            System.Diagnostics.Debug.WriteLine($"[DEBUG] CONTACT_INFORMATION: NAME_AR={entityNameAr}, DEPARTMENT_AR={detailsAr}");
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[DEBUG] CONTACT_INFORMATION: No contact found for ID={result.EntityId.Value}");
+                        }
                     }
                 }
             }
@@ -2793,7 +2826,7 @@ public async Task<IActionResult> ViewPdf(int id)
                 (int)result.LogId, ex.Message);
         }
 
-        return new
+        var debugObj = new
         {
             result.LogId,
             result.UserId,
@@ -2808,8 +2841,12 @@ public async Task<IActionResult> ViewPdf(int id)
             result.ActionTimestamp,
             result.BeforeData,
             result.AfterData,
-            result.Details
+            result.Details,
+            DetailsAr = detailsAr
         };
+        // DEBUG: Log the final object being returned
+        System.Diagnostics.Debug.WriteLine($"[DEBUG] Final ActivityLogDetail: {System.Text.Json.JsonSerializer.Serialize(debugObj)}");
+        return debugObj;
     }
 
     private async Task<object?> TryGetActivityLogDetailsWithSchema(OracleConnection connection, int logId, bool useNewSchema)
