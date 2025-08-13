@@ -7,13 +7,16 @@
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
     var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
     var isArabic = currentCulture == "ar-SA";
+    ViewBag.IsArabic = isArabic;
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/addContactInfo.css">
     <link rel="stylesheet" href="~/css/_rtl_Styles.css">
     <link rel="stylesheet" href="~/css/NewEditor.css">
+    <link rel="stylesheet" href="~/css/AdminPage.css">
     <link rel="stylesheet" href="~/css/adminPagesHeader.css">
+    <link rel="stylesheet" href="~/css/adminMobileMenu.css">
     <link rel="stylesheet" href="~/css/activityLog.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 }
@@ -21,6 +24,7 @@
 @section Scripts {
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/adminPagesHeader.js"></script>
+    <script src="~/js/adminMobileMenu.js"></script>
     <script src="~/js/activityLog.js"></script>
 }
 
@@ -40,6 +44,10 @@
 <div class="AddContactInfo mb-footer-space @(isArabic ? "rtl" : "ltr")">
     <!-- New Admin Header -->
     @await Html.PartialAsync("adminPagesHeader")
+    
+    <!-- Admin Mobile Menu -->
+    @await Html.PartialAsync("adminMobileMenu", new { isArabic = isArabic })
+    
     <!-- Logo -->
     <div class="container logo-container">
         <img class="header-logo mx-auto d-block" src="~/imgs/IAU Logo (Horizontal).png" alt="IAU Logo">

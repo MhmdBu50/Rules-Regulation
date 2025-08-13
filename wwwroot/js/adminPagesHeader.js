@@ -30,4 +30,52 @@ document.addEventListener('DOMContentLoaded', function () {
             backIcon.src = "/svgs/Admin/backButton-right.svg";
         }
     }
+
+    // Mobile menu functionality with RTL support
+    const burgerBtn = document.getElementById('burgerBtn');
+    const sideNavBar = document.getElementById('sideNavBar');
+    const backdrop = document.getElementById('sidebarBackdrop');
+
+    if (burgerBtn && sideNavBar && backdrop) {
+        burgerBtn.addEventListener('click', function () {
+            const isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+
+            if (isRTL) {
+                sideNavBar.style.right = '0';
+                sideNavBar.style.left = 'auto';
+            } else {
+                sideNavBar.style.left = '0';
+                sideNavBar.style.right = 'auto';
+            }
+            backdrop.style.display = 'block';
+        });
+
+        backdrop.addEventListener('click', function () {
+            const isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+
+            if (isRTL) {
+                sideNavBar.style.right = '-100%';
+            } else {
+                sideNavBar.style.left = '-100%';
+            }
+            backdrop.style.display = 'none';
+        });
+
+        // Close menu if burger button disappears (e.g., on resize to desktop)
+        function closeMenuIfBurgerHidden() {
+            const burgerVisible = burgerBtn.offsetParent !== null;
+            const menuOpen = backdrop.style.display === 'block';
+            if (!burgerVisible && menuOpen) {
+                // Close the menu
+                const isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+                if (isRTL) {
+                    sideNavBar.style.right = '-100%';
+                } else {
+                    sideNavBar.style.left = '-100%';
+                }
+                backdrop.style.display = 'none';
+            }
+        }
+        window.addEventListener('resize', closeMenuIfBurgerHidden);
+    }
 });

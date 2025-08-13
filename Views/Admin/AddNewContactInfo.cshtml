@@ -1,16 +1,24 @@
+@using Microsoft.AspNetCore.Localization
+
 @{
   ViewData["Title"] = "Add New Contact Info";
+  var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+  var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
+  var isArabic = currentCulture == "ar-SA";
+  ViewBag.IsArabic = isArabic;
 }
 
 @section Styles {
   <link rel="stylesheet" href="~/css/AddContactInfo.css">
   <link rel="stylesheet" href="~/css/adminPagesHeader.css">
+  <link rel="stylesheet" href="~/css/adminMobileMenu.css">
 }
 <!--test branch-->
 @section Scripts {
   <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="~/js/addnewcontactinfo.js"></script>
   <script src="~/js/adminPagesHeader.js"></script>
+  <script src="~/js/adminMobileMenu.js"></script>
 }
 
 <div class="AddContactInfo mb-footer-space">
