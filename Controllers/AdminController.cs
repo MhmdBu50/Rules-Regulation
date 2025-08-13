@@ -1755,14 +1755,14 @@ public async Task<IActionResult> ViewPdf(int id)
                 regulationNameAr = oldRecord.RegulationNameAr,
                 department = oldRecord.Department,
                 version = oldRecord.Version,
-                versionDate = oldRecord.VersionDate,
+                versionDate = oldRecord.VersionDate, // Keep as string for consistency
                 approvingEntity = oldRecord.ApprovingEntity,
                 approvingEntityAr = oldRecord.ApprovingEntityAr,
-                approvalDate = oldRecord.ApprovalDate,
+                approvalDate = oldRecord.ApprovalDate, // Keep as string for consistency
                 description = oldRecord.Description,
                 descriptionAr = oldRecord.DescriptionAr,
                 documentType = oldRecord.DocumentType,
-                sections = oldRecord.Sections,
+                // sections field removed from logging
                 notes = oldRecord.Notes,
                 notesAr = oldRecord.NotesAr
             } : null;
@@ -1805,14 +1805,14 @@ public async Task<IActionResult> ViewPdf(int id)
                         regulationNameAr,
                         department,
                         version,
-                        versionDate,
+                        versionDate = versionDate.ToString("yyyy-MM-dd"), // Convert to same string format
                         approvingEntity,
                         approvingEntityAr,
-                        approvalDate,
+                        approvalDate = approvalDate.ToString("yyyy-MM-dd"), // Convert to same string format
                         description,
                         descriptionAr,
                         documentType,
-                        sections,
+                        // sections field removed from logging
                         notes,
                         notesAr
                     };
