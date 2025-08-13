@@ -524,6 +524,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "modal-loading-status": "Loading...",
     "Loading activity details...": "Loading activity details...",
     "close" : "Close",
+    
 
         },
         "ar": {

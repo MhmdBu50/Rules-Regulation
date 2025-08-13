@@ -324,7 +324,7 @@
             
             // Update button text
             if (selectedDepartments.length === 0 || departmentOptions[0].checked) {
-                button.innerHTML = `<span>${allDepartmentsText}</span> <span class="caret" style="scale: 0.6;">▼</span>`;
+                button.innerHTML = `<span id="contact-all-departments">${allDepartmentsText}</span> <span class="caret" style="scale: 0.6;">▼</span>`;
             } else if (selectedDepartments.length === 1) {
                 button.innerHTML = `<span>${selectedDepartments[0]}</span> <span class="caret" style="scale: 0.6;">▼</span>`;
             } else {

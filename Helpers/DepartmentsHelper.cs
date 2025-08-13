@@ -1,0 +1,20 @@
+using System.Collections.Generic;
+
+namespace RulesRegulation.Helpers
+{
+    public static class DepartmentsHelper
+    {
+        public static List<(string key, string value, string ar)> GetDepartmentsList() => new()
+        {
+            ("dept-all", "All Departments", "جميع الأقسام"),
+            ("dept-reg-admission", "Reg and Admission", "التسجيل والقبول"),
+            ("dept-ccsit", "CCSIT", "كلية علوم الحاسب وتقنية المعلومات"),
+            ("dept-communication-tech", "Communication and tech", "الاتصالات والتقنية"),
+            ("dept-hospital", "Hospital", "المستشفى"),
+            ("dept-library", "Library", "المكتبة"),
+            ("dept-students-affairs", "Students Affairs", "شؤون الطلاب"),
+            ("dept-preparetory", "Preparetory", "السنة التحضيرية"),
+            ("dept-academic-affairs", "Academic Affairs", "الشؤون الأكاديمية")
+        };
+    }
+}

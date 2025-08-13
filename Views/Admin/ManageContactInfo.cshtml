@@ -1,5 +1,7 @@
 @model List<dynamic>
 @using Microsoft.AspNetCore.Localization
+@using System.Collections.Generic
+@using RulesRegulation.Helpers
 
 
 @{
@@ -126,28 +128,19 @@
                                                 style="font-size: 20px; color: #ABB7C2;">All Departments</span>
                                         </label>
                                         @{
-                                            var allDepartments = new List<(string key, string value)>
-                                                                                {
-                                                                                ("dept-reg-admission", "Reg and Admission"),
-                                                                                ("dept-ccsit", "CCSIT"),
-                                                                                ("dept-communication-tech", "Communication and tech"),
-                                                                                ("dept-hospital", "Hospital"),
-                                                                                ("dept-library", "Library"),
-                                                                                ("dept-students-affairs", "Students Affairs"),
-                                                                                ("dept-preparetory", "Preparetory"),
-                                                                                ("dept-academic-affairs", "Academic Affairs")
-                                                                                };
+                                            var departmentsList = DepartmentsHelper.GetDepartmentsList();
                                         }
-                                        @foreach (var department in allDepartments)
+                                        @foreach (var department in departmentsList)
                                         {
+                                            var displayName = isArabic ? department.ar : department.value;
                                             <label
                                                 style="display: flex; align-items: center; padding: 8px 12px; cursor: pointer; margin: 0;">
                                                 <input type="checkbox"
                                                     class="form-check-input contact-department-option me-2"
-                                                    value="@department.value"
+                                                    value="@displayName"
                                                     style="margin: 0; margin-inline-end: 8px; scale: 0.7;">
                                                 <span id="@department.key"
-                                                    style="font-size: 20px; color: #ABB7C2;">@department.value</span>
+                                                    style="font-size: 20px; color: #ABB7C2;">@displayName</span>
                                             </label>
                                         }
                                     </div>

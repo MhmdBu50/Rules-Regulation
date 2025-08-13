@@ -10,7 +10,6 @@ using Oracle.ManagedDataAccess.Client;
 using System.Data;
 using Oracle.ManagedDataAccess.Types;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Authorization;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.Drawing;
@@ -2654,7 +2653,7 @@ public async Task<IActionResult> ViewPdf(int id)
             {
                 csv.AppendLine($"\"{log.FormattedTimestamp}\",\"{log.ActionDisplayName}\",\"{log.EntityDisplayName}\"," +
                               $"\"{log.EntityId}\",\"{log.EntityName?.Replace("\"", "\"\"")}\",\"{log.UserName.Replace("\"", "\"\"")}\",\"{log.UserRole}\"," +
-                              $"\"{log.GetChangesSummary()?.Replace("\"", "\"\"")}\",\"{log.IpAddress}\"");
+                              $"\"{log.GetDisplayChangesSummary()?.Replace("\"", "\"\"")}\",\"{log.IpAddress}\"");
             }
 
             var fileName = $"activity_log_{DateTime.UtcNow:yyyyMMdd_HHmmss}.csv";
@@ -2756,6 +2755,63 @@ public async Task<IActionResult> ViewPdf(int id)
         }
     }
 
+    private async Task<object> EnrichActivityLogDetailWithArabicAsync(OracleConnection connection, dynamic result)
+    {
+        string? userNameAr = null;
+        string? entityNameAr = null;
+
+        try
+        {
+            // Get Arabic user name if userId exists
+            if (result.UserId > 0)
+            {
+                using (var userCmd = new OracleCommand("SELECT USER_NAME_AR FROM USERS WHERE USER_ID = :userId", connection))
+                {
+                    userCmd.Parameters.Add(new OracleParameter("userId", result.UserId));
+                    var userNameArResult = await userCmd.ExecuteScalarAsync();
+                    userNameAr = userNameArResult?.ToString();
+                }
+            }
+
+            // Get Arabic entity name if entityId and entityType exist
+            if (result.EntityId?.HasValue == true && !string.IsNullOrEmpty(result.EntityType))
+            {
+                if (result.EntityType.Equals("Record", StringComparison.OrdinalIgnoreCase))
+                {
+                    using (var entityCmd = new OracleCommand("SELECT REGULATION_NAME_AR FROM RECORDS WHERE RECORD_ID = :entityId", connection))
+                    {
+                        entityCmd.Parameters.Add(new OracleParameter("entityId", result.EntityId.Value));
+                        var entityNameArResult = await entityCmd.ExecuteScalarAsync();
+                        entityNameAr = entityNameArResult?.ToString();
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning("Error enriching activity log detail with Arabic data for LogId {LogId}: {Error}", 
+                (int)result.LogId, ex.Message);
+        }
+
+        return new
+        {
+            result.LogId,
+            result.UserId,
+            result.UserName,
+            UserNameAr = userNameAr,
+            result.UserRole,
+            result.ActionType,
+            result.EntityType,
+            result.EntityId,
+            result.EntityName,
+            EntityNameAr = entityNameAr,
+            result.ActionTimestamp,
+            result.BeforeData,
+            result.AfterData,
+            result.Details
+        };
+    }
+
     private async Task<object?> TryGetActivityLogDetailsWithSchema(OracleConnection connection, int logId, bool useNewSchema)
     {
         try
@@ -2811,7 +2867,7 @@ public async Task<IActionResult> ViewPdf(int id)
                     afterData = await clobReader.ReadToEndAsync();
                 }
 
-                return new
+                var result = new
                 {
                     LogId = reader.IsDBNull("LOG_ID") ? 0 : reader.GetInt32("LOG_ID"),
                     UserId = reader.IsDBNull("USER_ID") ? 0 : reader.GetInt32("USER_ID"),
@@ -2826,6 +2882,10 @@ public async Task<IActionResult> ViewPdf(int id)
                     AfterData = afterData,
                     Details = reader.IsDBNull("DETAILS") ? null : reader.GetString("DETAILS")
                 };
+
+                // Enrich with Arabic data
+                var enrichedResult = await EnrichActivityLogDetailWithArabicAsync(connection, result);
+                return enrichedResult;
             }
             else
             {
