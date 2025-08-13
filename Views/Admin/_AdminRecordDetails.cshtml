@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="~/css/_rtl_Styles.css">
     <link rel="stylesheet" href="~/css/AdminPageCustom.css">
 }
-<!-- Scripts for the admin page -->
+
 @section Scripts {
     <script src="@Url.Content("~/js/card-animations.js")"></script>
     <script src="@Url.Content("https://cdn.jsdelivr.net/npm/fitty@2.3.6/dist/fitty.min.js")"></script>
@@ -23,7 +23,7 @@
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
     var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
     var isArabic = currentCulture == "ar-SA";
-    
+
     // Document Type translation logic
     var displayDocumentType = Model?.DocumentType?.ToString() ?? "";
     if (isArabic && !string.IsNullOrEmpty(displayDocumentType))
@@ -87,69 +87,62 @@
             <input type="hidden" name="recordId" value="@Model.Id" />
             
             <div class="row mb-2">
-                <!-- left side of the accordion menu inside -->
                 <div class="col-lg-6 col-12 mb-3 mb-lg-0">
                     <div class="table-responsive">
                         <table class="table table-borderless mb-0">
                             <tr>
                                 <td colspan="3">
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-regulation-name-label">Regulation/ Manual
-                                        name (English)</label>
-                                    <textarea name="regulationName" class="form-control" rows="2"
-                                readonly disabled>@Model.RegulationName</textarea>
+                                    <!-- Regulation/ Manual name (English) -->
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-regulation-name-label"></label>
+                                    <textarea name="regulationName" class="form-control" rows="2" readonly disabled>@Model.RegulationName</textarea>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="3">
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-brief-description-label">Brief
-                                        Description (English)</label>
-                                    <textarea name="description" class="form-control" rows="4"
-                                readonly disabled>@Model.Description</textarea>
+                                    <! -- Brief Description (English) -->
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-brief-description-label"></label>
+                                    <textarea name="description" class="form-control" rows="4" readonly disabled>@Model.Description</textarea>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-approving-entity-label">Approving Entity (English)</label>
-                                    <input type="text" name="approvingEntity" class="form-control"
-                                        value="@Model.ApprovingEntity" readonly disabled>
+                                    <!-- Approving Entity (English) -->
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-approving-entity-label"></label>
+                                    <input type="text" name="approvingEntity" class="form-control" value="@Model.ApprovingEntity" readonly disabled>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-note-label">Note (English)</label>
-                                    <input type="text" name="notes" class="form-control mb-2"
-                                        value="@Model.Notes" readonly disabled>
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-note-label"></label>
+                                    <input type="text" name="notes" class="form-control mb-2" value="@Model.Notes" readonly disabled>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-12 col-sm-4">
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-approving-date-label">Approving
-                                        Date</label>
-                                    <input type="date" name="approvalDate" class="form-control mb-2" value="@Model.ApprovalDate"
-                                        readonly disabled>
+                                    <!-- Approving Date -->
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-approving-date-label"></label>
+                                    <input type="date" name="approvalDate" class="form-control mb-2" value="@Model.ApprovalDate" readonly disabled>
                                 </td>
                                 <td class="col-12 col-sm-4">
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-version-date-label">Version Date</label>
-                                    <input type="date" name="versionDate" class="form-control mb-2" value="@Model.VersionDate"
-                                        readonly disabled>
+                                    <!-- Version Date -->
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-version-date-label"></label>
+                                    <input type="date" name="versionDate" class="form-control mb-2" value="@Model.VersionDate" readonly disabled>
                                 </td>
-
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-version-number-label">Version Number</label>
-                                    <input type="text" name="version" class="form-control mb-2" value="@Model.Version"
-                                        readonly disabled
-                                        title="Version number (numbers, dots, and commas only)"
-                                        pattern="[0-9.,]*" inputmode="numeric"
-                                        oninput="this.value = this.value.replace(/[^0-9.,]/g, '')"
-                                        onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode === 46 || event.charCode === 44">
+                                    <!-- Version Number -- >
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-version-number-label"></label>
+                                    <input type="text" name="version" class="form-control mb-2" value="@Model.Version" readonly disabled
+                                    title="Version number (numbers, dots, and commas only)" pattern="[0-9.,]*" inputmode="numeric"
+                                    oninput="this.value = this.value.replace(/[^0-9.,]/g, '')"
+                                    onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode === 46 || event.charCode === 44">
                                 </td>
-                                
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <label class="fw-bold translatable-label" data-translate-key="admin-table-form-responsible-department-label">Responsible Department</label>
+                                    <!-- Responsible Department -->
+                                    <label class="fw-bold translatable-label" data-translate-key="admin-table-form-responsible-department-label"></label>
                                     <select name="department" class="form-select" disabled>
                                         <option value="@Model.Department" selected>@displayDepartment</option>
                                         <option value="Reg and Admission">@(isArabic ? "التسجيل والقبول" : "Reg and Admission")</option>
@@ -167,73 +160,64 @@
                     </div>
                 </div>
 
-                <!------------------------------------------------ right side of the accordion menu inside------------------------------------------------------>
                 <div class="col-lg-6 col-12">
                     <div class="table-responsive">
                         <table class="table table-borderless mb-0">
-                            
                             <tr>
                                 <td colspan="3">
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-regulation-name-ar-label">Regulation/ Manual
-                                        name (Arabic)</label>
-                                    <textarea name="regulationNameAr" class="form-control" rows="2" dir="rtl"
-                                readonly disabled>@(Model.RegulationNameAr ?? "")</textarea>
+                                    <!-- Regulation/ Manual name (Arabic) -->
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-regulation-name-ar-label"></label>
+                                    <textarea name="regulationNameAr" class="form-control" rows="2" dir="rtl" readonly disabled>@(Model.RegulationNameAr ?? "")</textarea>
                                 </td>
                             </tr>
-                            
                             <tr>
                                 <td colspan="3">
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-brief-description-ar-label">Brief
-                                        Description (Arabic)</label>
-                                    <textarea name="descriptionAr" class="form-control" rows="4" dir="rtl"
-                                readonly disabled>@(Model.DescriptionAr ?? "")</textarea>
+                                    <!-- Brief Description (Arabic) -->
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-brief-description-ar-label"></label>
+                                    <textarea name="descriptionAr" class="form-control" rows="4" dir="rtl" readonly disabled>@(Model.DescriptionAr ?? "")</textarea>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-approving-entity-ar-label">Approving Entity (Arabic)</label>
-                                    <input type="text" name="approvingEntityAr" class="form-control" dir="rtl"
-                                        value="@(Model.ApprovingEntityAr ?? "")" readonly disabled>
+                                    <!-- Approving Entity (Arabic) -->
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-approving-entity-ar-label"></label>
+                                    <input type="text" name="approvingEntityAr" class="form-control" dir="rtl" value="@(Model.ApprovingEntityAr ?? "")" readonly disabled>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-note-ar-label">Note (Arabic)</label>
-                                    <input type="text" name="notesAr" class="form-control mb-2" dir="rtl"
-                                        value="@(Model.NotesAr ?? "")" readonly disabled>
+                                    <!-- Note (Arabic) -->
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-note-ar-label"></label>
+                                    <input type="text" name="notesAr" class="form-control mb-2" dir="rtl" value="@(Model.NotesAr ?? "")" readonly disabled>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-document-type-label">Document
-                                        Type</label>
+                                    <!-- Document Type -->
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-document-type-label"></label>
                                     <select name="documentType" class="form-select mb-2" disabled>
                                         <option value="@Model.DocumentType" selected>@displayDocumentType</option>
-                                        <option value="Student guides & templates" id= "admin-chart-legend-student-guides3">@(isArabic ? "أدلة وقوالب الطلاب" : "Student guides & templates")</option>
+                                        <option value="Student guides & templates" id="admin-chart-legend-student-guides3">@(isArabic ? "أدلة وقوالب الطلاب" : "Student guides & templates")</option>
                                         <option value="Student rules & regulations" id="admin-chart-legend-student-rules3">@(isArabic ? "قواعد وأنظمة الطلاب" : "Student rules & regulations")</option>
                                         <option value="Employees’ rules & regulations" id="admin-chart-legend-employment-rules3">@(isArabic ? "قواعد وأنظمة الموظفين" : "Employees’ rules & regulations")</option>
                                         <option value="Academic rules & regulations" id="admin-chart-legend-academic-rules3">@(isArabic ? "قواعد وأنظمة أكاديمية" : "Academic rules & regulations")</option>
                                     </select>
                                 </td>
                             </tr>
-
                             <tr>
                                 <td>
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-attach-word-label" dir="ltr">Attach word file</label>
+                                    <!-- Attach word file -->
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-attach-word-label" dir="ltr"></label>
                                     @{
                                         var wordAttachment = ((IEnumerable<dynamic>)Model.Attachments)?.FirstOrDefault(a => a.FileType?.ToString()?.ToLower() == "word" || a.FileType?.ToString()?.ToLower() == "docx");
                                     }
                                     <div class="input-group mb-2" dir="ltr">
-                                        <input type="text" class="form-control attachment-display" 
-                                               id="wordDisplay_@Model.Id"
-                                               value="@(wordAttachment?.OriginalFileName ?? "")" 
-                                               readonly disabled>
-                                        <input type="file" id="wordFile_@Model.Id" class="d-none" accept=".doc,.docx" 
-                                               onchange="handleFileSelection(@Model.Id, 'word', this)" disabled>
-                                        <span class="input-group-text attachment-upload-btn" 
-                                              id="wordUploadBtn_@Model.Id"
-                                              style="cursor: not-allowed; opacity: 0.6;" 
-                                              title="Click Edit to enable file upload">
+                                        <input type="text" class="form-control attachment-display" id="wordDisplay_@Model.Id"
+                                        value="@(wordAttachment?.OriginalFileName ?? "")" readonly disabled>
+                                        <input type="file" id="wordFile_@Model.Id" class="d-none" accept=".doc,.docx"
+                                        onchange="handleFileSelection(@Model.Id, 'word', this)" disabled>
+                                        <span class="input-group-text attachment-upload-btn" id="wordUploadBtn_@Model.Id"
+                                        style="cursor: not-allowed; opacity: 0.6;" title="Click Edit to enable file upload">
                                             <i class="bi bi-paperclip">
                                                 <img src="~/svgs/admin/upload-file.svg" alt="upload-file" />
                                             </i>
@@ -241,21 +225,18 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-attach-pdf-label" dir="ltr">Attach PDF file</label>
+                                    <!-- Attach PDF file -->
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-attach-pdf-label" dir="ltr"></label>
                                     @{
                                         var pdfAttachment = ((IEnumerable<dynamic>)Model.Attachments)?.FirstOrDefault(a => a.FileType?.ToString()?.ToLower() == "pdf");
                                     }
                                     <div class="input-group mb-2" dir="ltr">
-                                        <input type="text" class="form-control attachment-display" 
-                                               id="pdfDisplay_@Model.Id"
-                                               value="@(pdfAttachment?.OriginalFileName ?? "")" 
-                                               readonly disabled>
-                                        <input type="file" id="pdfFile_@Model.Id" class="d-none" accept=".pdf" 
-                                               onchange="handleFileSelection(@Model.Id, 'pdf', this)" disabled>
-                                        <span class="input-group-text attachment-upload-btn" 
-                                              id="pdfUploadBtn_@Model.Id"
-                                              style="cursor: not-allowed; opacity: 0.6;" 
-                                              title="Click Edit to enable file upload">
+                                        <input type="text" class="form-control attachment-display" id="pdfDisplay_@Model.Id"
+                                        value="@(pdfAttachment?.OriginalFileName ?? "")" readonly disabled>
+                                        <input type="file" id="pdfFile_@Model.Id" class="d-none" accept=".pdf"
+                                        onchange="handleFileSelection(@Model.Id, 'pdf', this)" disabled>
+                                        <span class="input-group-text attachment-upload-btn" id="pdfUploadBtn_@Model.Id"
+                                        style="cursor: not-allowed; opacity: 0.6;" title="Click Edit to enable file upload">
                                             <i class="bi bi-paperclip">
                                                 <img src="~/svgs/admin/upload-file.svg" alt="upload-file" />
                                             </i>
@@ -265,37 +246,36 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-page-number-label">Page Number</label>
+                                    <!-- Page Number -->
+                                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-page-number-label"></label>
                                     @{
                                         string pageNumberValue = "";
-                                        try 
+                                        try
                                         {
                                             pageNumberValue = Model?.PageNumber?.ToString() ?? "2";
                                         }
-                                        catch 
+                                        catch
                                         {
                                             pageNumberValue = "2"; // Default fallback
                                         }
                                     }
                                     <input type="number" name="pageNumber" class="form-control" min="1" max="999"
-                                        value="@pageNumberValue" readonly disabled id="pageNumber_@(Model?.Id ?? "")"
-                                        onchange="handlePageNumberChange(@(Model?.Id ?? ""), this.value)"
-                                        title="Page number for PDF thumbnail generation"
-                                        pattern="[0-9]*" inputmode="numeric"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                    value="@pageNumberValue" readonly disabled id="pageNumber_@(Model?.Id ?? "")"
+                                    onchange="handlePageNumberChange(@(Model?.Id ?? ""), this.value)"
+                                    title="Page number for PDF thumbnail generation"
+                                    pattern="[0-9]*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                                 </td>
                             </tr>
-                            
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- Contact Information Section - Full Width -->
             <div class="row mt-4">
                 <div class="col-12">
-                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-responsible-contact-label">Responsible Department contact information:</label>
+                    <!-- Responsible Department contact information: -->
+                    <label class="form-label fw-bold translatable-label" data-translate-key="admin-table-form-responsible-contact-label"></label>
                     @if (Model.ContactInformation != null && ((IEnumerable<dynamic>)Model.ContactInformation).Any())
                     {
                         <div class="row">
@@ -304,23 +284,23 @@
                                 <div class="col-12 col-md-12 col-lg-6 col-xl-4 mb-3">
                                     <div class="p-3 border rounded h-100">
                                         <div class="mb-2">
-                                            <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-name-en-label">Name (English)</label>
-                                            <input type="text" class="form-control contact-input"
-                                                value="@contact.Name" readonly disabled>
+                                            <!-- Name (English) -->
+                                            <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-name-en-label"></label>
+                                            <input type="text" class="form-control contact-input" value="@contact.Name" readonly disabled>
                                         </div>
                                         <div class="mb-2">
-                                            <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-name-ar-label">Name (Arabic)</label>
-                                            <input type="text" class="form-control contact-input" dir="rtl"
-                                                value="@(contact.NameAr ?? "")" readonly disabled>
+                                            <!-- Name (Arabic) -->
+                                            <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-name-ar-label"></label>
+                                            <input type="text" class="form-control contact-input" dir="rtl" value="@(contact.NameAr ?? "")" readonly disabled>
                                         </div>
                                         @if (!string.IsNullOrEmpty(contact.Email?.ToString()))
                                         {
                                             <div class="mb-2">
-                                                <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-email-label">Email</label>
-                                                <input type="email" class="form-control contact-input"
-                                                    value="@contact.Email" readonly disabled>
+                                                <!-- Email -->
+                                                <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-email-label"></label>
+                                                <input type="email" class="form-control contact-input" value="@contact.Email" readonly disabled>
                                             </div>
-                                        }  
+                                        }
                                         @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()) || !string.IsNullOrEmpty(contact.Mobile?.ToString()))
                                         {
                                             <div class="mb-2">
@@ -328,17 +308,17 @@
                                                     @if (!string.IsNullOrEmpty(contact.Telephone?.ToString()))
                                                     {
                                                         <div class="col-6">
-                                                            <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-telephone-label">Telephone number</label>
-                                                            <input type="text" class="form-control contact-input" value="@contact.Telephone"
-                                                                readonly disabled>
+                                                            <!-- Telephone number -->
+                                                            <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-telephone-label"></label>
+                                                            <input type="text" class="form-control contact-input" value="@contact.Telephone" readonly disabled>
                                                         </div>
                                                     }
                                                     @if (!string.IsNullOrEmpty(contact.Mobile?.ToString()))
                                                     {
                                                         <div class="col-6">
-                                                            <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-mobile-label">Mobile number</label>
-                                                            <input type="text" class="form-control contact-input" value="@contact.Mobile"
-                                                                readonly disabled>
+                                                            <!-- Mobile number -->
+                                                            <label class="form-label mb-0 translatable-label" data-translate-key="admin-table-form-contact-mobile-label"></label>
+                                                            <input type="text" class="form-control contact-input" value="@contact.Mobile" readonly disabled>
                                                         </div>
                                                     }
                                                 </div>
@@ -352,21 +332,20 @@
                     else
                     {
                         <div class="mb-3">
-                            <!--message: No contact information available for this department.-->
                             <p class="text-muted translatable-label" data-translate-key="admin-table-form-no-contact-info"></p>
                         </div>
                     }
                 </div>
             </div>
 
-            <!-- Buttons -->
             <div class="row mt-3">
                 <div class="col-12">
                     <div class="d-flex flex-wrap justify-content-end gap-2">
-                        <button type="button" class="btn btn-danger translatable-label" data-translate-key="admin-table-delete-button" onclick="deleteRecord(@Model.Id)">Delete</button>
-                        <button type="button" class="btn btn-secondary edit-btn translatable-label" data-translate-key="admin-table-edit-button" onclick="toggleEditMode(@Model.Id)">Edit</button>
-                        <button type="submit" class="btn btn-success save-btn translatable-label" data-translate-key="admin-table-save-button" style="display: none;">Save</button>
-                        <button type="button" class="btn btn-outline-secondary cancel-btn translatable-label" data-translate-key="admin-table-cancel-button" style="display: none;" onclick="cancelEdit(@Model.Id)">Cancel</button>
+                        <!-- Delete, Edit, Save, and Cancel buttons -->
+                        <button type="button" class="btn btn-danger translatable-label" data-translate-key="admin-table-delete-button" onclick="deleteRecord(@Model.Id)"></button>
+                        <button type="button" class="btn btn-secondary edit-btn translatable-label" data-translate-key="admin-table-edit-button" onclick="toggleEditMode(@Model.Id)"></button>
+                        <button type="submit" class="btn btn-success save-btn translatable-label" data-translate-key="admin-table-save-button" style="display: none;"></button>
+                        <button type="button" class="btn btn-outline-secondary cancel-btn translatable-label" data-translate-key="admin-table-cancel-button" style="display: none;" onclick="cancelEdit(@Model.Id)"></button>
                     </div>
                 </div>
             </div>
@@ -376,7 +355,8 @@
 else
 {
     <div class="alert alert-danger">
+        <!-- Record details could not be loaded. -->
         <i class="fas fa-exclamation-triangle me-2"></i>
-        Record details could not be loaded.
+        
     </div>
 }
