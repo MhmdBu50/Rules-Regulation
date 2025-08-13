@@ -145,6 +145,22 @@
                         </button>
                     
                     </div>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <!-------- Vertical Divider (Admin Only) ------>
+                        <div class="vr d-none d-lg-block d-xl-block" style="color: aliceblue; opacity: 0.75;"></div>
+                        <!-------- Vertical Divider (Admin Only) ------>
+
+                        <!--------------------- Admin Panel Button ------------------->
+                        <div class="d-none d-lg-block d-xl-block">
+                            <button class="desktop-logo logo header-nav d-none d-lg-flex"
+                                onclick="location.href='@Url.Action("AdminPortal", "Admin")'">
+                                <img src="~/svgs/navigation/admin.svg" alt="Admin Panel" width="36" height="36" />
+                                <span class="poppins-regular" id="admin-panel-button">Admin Panel</span>
+                            </button>
+                        </div>
+                    }
                     }
                 </div>
             </div>

@@ -107,13 +107,19 @@ body {
   margin-inline-start: .5rem !important;
 }
 
-#admin-view-button, #admin-exit-view-button {
+#admin-view-button, #admin-exit-view-button, #admin-panel-button {
   background: linear-gradient(45.26deg, #FFE075 7.77%, #FFFFFF 93.85%);
   background-clip: border-box;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+}
+
+/* Apply golden gradient to admin SVG icons */
+#admin-panel-button img, 
+button[onclick*="AdminPortal"] img[src*="admin.svg"] {
+  filter: hue-rotate(30deg) saturate(1.5) brightness(1.2) contrast(1.1);
 }
 
 

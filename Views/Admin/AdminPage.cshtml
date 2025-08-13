@@ -10,6 +10,7 @@
 <!-- This File is about the admin page that controls what to be added, wheather its a new record or contact. in this page you can edit and delete.
 there's also many filtering options to find the policy and other adminstrative stuff-->
 @section Styles {
+    <link rel="stylesheet" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/AdminPage.css">
     <link rel="stylesheet" href="~/css/_rtl_Styles.css">
     <link rel="stylesheet" href="~/css/AdminPageCustom.css">
@@ -112,6 +113,22 @@ there's also many filtering options to find the policy and other adminstrative s
 
                         </button>
                     </div>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <!-------- Vertical Divider (Admin Only) ------>
+                        <div class="vr d-none d-lg-block d-xl-block" style="color: aliceblue; opacity: 0.75;"></div>
+                        <!-------- Vertical Divider (Admin Only) ------>
+
+                        <!--------------------- Admin Panel Button ------------------->
+                        <div class="d-none d-lg-block d-xl-block">
+                            <button class="desktop-logo logo header-nav d-none d-lg-flex"
+                                onclick="location.href='@Url.Action("AdminPortal", "Admin")'">
+                                <img src="~/svgs/navigation/admin.svg" alt="Admin Panel" width="36" height="36" />
+                                <span class="poppins-regular" id="admin-panel-button">Admin Panel</span>
+                            </button>
+                        </div>
+                    }
                 </div>
             </div>
 
