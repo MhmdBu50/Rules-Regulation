@@ -32,8 +32,10 @@
 
   <!-- Main Header -->
   <div class="main-header">
-    <h1 id="title-90101">Add Contact Information</h1>
-    <p class="subtitle" id="subtitle-90101">Add new contact information for departments</p>
+    <!-- Add Contact Information -->
+    <h1 id="title-90101"></h1>
+    <!-- Add new contact information for departments -->
+    <p class="subtitle" id="subtitle-90101"></p>
   </div>
 
   @if (TempData["SuccessMessage"] != null)
@@ -59,23 +61,34 @@
         @Html.AntiForgeryToken()
 
         <div class="mb-5">
-          <label for="Department" id="label-department-90101">Relevant Department</label>
+          <!-- Relevant Department -->
+          <label for="Department" id="label-department-90101"></label>
           <select class="form-select" id="Department" name="Department" required>
-            <option value="" id="option-select-dept-90101">Select department</option>
-            <option value="Reg and Admission" id="option-reg-90101">Reg and Admission</option>
-            <option value="CCSIT" id="option-ccsit-90101">CCSIT</option>
-            <option value="Communication and tech" id="option-commtech-90101">Communication and tech</option>
-            <option value="Hospital" id="option-hospital-90101">Hospital</option>
-            <option value="Library" id="option-library-90101">Library</option>
-            <option value="Students Affairs" id="option-affairs-90101">Students Affairs</option>
-            <option value="Preparetory" id="option-prep-90101">Preparetory</option>
-            <option value="Academic Affairs" id="option-academic-90101">Academic Affairs</option>
+            <!-- Select department -->
+            <option value="" id="option-select-dept-90101"></option>
+            <!-- Reg and Admission -->
+            <option value="Reg and Admission" id="option-reg-90101"></option>
+            <!-- CCSIT -->
+            <option value="CCSIT" id="option-ccsit-90101"></option>
+            <!-- Communication and tech -->
+            <option value="Communication and tech" id="option-commtech-90101"></option>
+            <!-- Hospital -->
+            <option value="Hospital" id="option-hospital-90101"></option>
+            <!-- Library -->
+            <option value="Library" id="option-library-90101"></option>
+            <!-- Students Affairs -->
+            <option value="Students Affairs" id="option-affairs-90101"></option>
+            <!-- Preparetory -->
+            <option value="Preparetory" id="option-prep-90101"></option>
+            <!-- Academic Affairs -->
+            <option value="Academic Affairs" id="option-academic-90101"></option>
           </select>
         </div>
 
         <div class="row mb-5">
           <div class="col-md-6">
-            <label for="Name" id="label-name-en-90101">Name of Responsible Person (English)</label>
+            <!-- Name of Responsible Person (English) -->
+            <label for="Name" id="label-name-en-90101"></label>
             <input type="text" class="form-control" id="Name" name="Name" required pattern="[a-zA-Z0-9\s\-.,'()&]*"
               title="Please enter English text only" placeholder="Enter name in English only"
               oninput="this.value = this.value.replace(/[^\u0000-\u007F\s\-.,'()&]/g, '')"
@@ -83,7 +96,8 @@
             <div id="nameError" class="text-danger mt-1"></div>
           </div>
           <div class="col-md-6">
-            <label for="NameAr" id="label-name-ar-90101">Name of Responsible Person (Arabic)</label>
+            <!-- Name of Responsible Person (Arabic) -->
+            <label for="NameAr" id="label-name-ar-90101"></label>
             <input type="text" class="form-control" id="NameAr" name="NameAr" lang="ar" dir="rtl" required
               pattern="[\u0600-\u06FF\s\u060C\u061B\u061F\u0640\-.,'،]*" title="Please enter Arabic text only"
               placeholder="Please enter Arabic text only" required
@@ -94,20 +108,23 @@
         </div>
 
         <div class="mb-5">
-          <label for="Email" id="label-email-90101">E-mail</label>
+          <!-- E-mail -->
+          <label for="Email" id="label-email-90101"></label>
           <input type="email" class="form-control" id="Email" name="Email"
             placeholder="Enter email address(example@example.com)" required>
         </div>
 
         <div class="mb-5">
-          <label for="Telephone" id="label-telephone-90101">Telephone number</label>
+          <!-- Telephone number -->
+          <label for="Telephone" id="label-telephone-90101"></label>
           <input type="tel" class="form-control" id="Telephone" name="Telephone" placeholder="01XXXXXXXX" maxlength="10"
             pattern="[0-9]{10}" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)"
             onkeypress="return event.charCode >= 48 && event.charCode <= 57" title="Enter exactly 10 digits">
         </div>
 
         <div class="mb-5">
-          <label for="Mobile" id="label-mobile-90101">Mobile number</label>
+          <!-- Mobile number -->
+          <label for="Mobile" id="label-mobile-90101"></label>
           <div class="input-group" dir="ltr">
             <span class="input-group-text shadowed">+966</span>
             <input type="tel" class="form-control" id="Mobile" name="Mobile" placeholder="05XXXXXXXX" maxlength="10"
@@ -117,9 +134,11 @@
         </div>
 
         <div class="text-center">
-          <button type="submit" class="btn btn-primary me-2" id="btn-submit-90101">Submit</button>
+          <!-- Submit -->
+          <button type="submit" class="btn btn-primary me-2" id="btn-submit-90101"></button>
+          <!- Cancel button -->
           <button type="button" class="btn btn-secondary" onclick="confirmCancel()"
-            id="btn-cancel-90101">Cancel</button>
+            id="btn-cancel-90101"></button>
         </div>
       </form>
     </div>
