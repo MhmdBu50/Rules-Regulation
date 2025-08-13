@@ -24,6 +24,73 @@ function getCurrentLanguage() {
     return localStorage.getItem("websiteLanguage") || "en";
 }
 
+// Helper function to get translated text
+function getTranslatedText(key) {
+    const currentLang = getCurrentLanguage();
+    
+    // Access the global translations object from languageSwitcher.js
+    if (typeof window.translations !== 'undefined' && 
+        window.translations[currentLang] && 
+        window.translations[currentLang][key]) {
+        return window.translations[currentLang][key];
+    }
+    
+    // Fallback: check if translations object is available in another way
+    if (typeof translations !== 'undefined' && 
+        translations[currentLang] && 
+        translations[currentLang][key]) {
+        return translations[currentLang][key];
+    }
+    
+    // Return the key if no translation found (for debugging)
+    return key;
+}
+
+// Helper function to translate action types
+function getTranslatedActionType(actionType) {
+    if (!actionType) return '';
+    
+    const actionKey = `activityLog-action-${actionType.toLowerCase()}`;
+    const translated = getTranslatedText(actionKey);
+    
+    // If no specific translation found, return the original uppercased
+    if (translated === actionKey) {
+        return safeString(actionType).toUpperCase();
+    }
+    
+    return translated;
+}
+
+// Helper function to translate entity types
+function getTranslatedEntityType(entityType) {
+    if (!entityType) return '';
+    
+    const entityKey = `activityLog-entity-${entityType.toLowerCase()}`;
+    const translated = getTranslatedText(entityKey);
+    
+    // If no specific translation found, return the original
+    if (translated === entityKey) {
+        return safeString(entityType);
+    }
+    
+    return translated;
+}
+
+// Helper function to translate user roles
+function getTranslatedUserRole(userRole) {
+    if (!userRole) return '';
+    
+    const roleKey = `activityLog-role-${userRole.toLowerCase()}`;
+    const translated = getTranslatedText(roleKey);
+    
+    // If no specific translation found, return the original uppercased
+    if (translated === roleKey) {
+        return safeString(userRole).toUpperCase();
+    }
+    
+    return translated;
+}
+
 // Main function to view activity details
 function viewDetails(logId) {
     console.log('=== ViewDetails Function Called ===');
@@ -93,10 +160,10 @@ function showLoadingState(contentElement) {
     contentElement.innerHTML = `
         <div class="text-center py-5">
             <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
-                <span class="visually-hidden">Loading...</span>
+                <span class="visually-hidden">${getTranslatedText('loading')}</span>
             </div>
-            <h5 class="text-muted">Loading activity details...</h5>
-            <p class="text-muted small">Please wait while we fetch the information</p>
+            <h5 class="text-muted">${getTranslatedText('loading-activity-details')}</h5>
+            <p class="text-muted small">${getTranslatedText('please-wait-fetching')}</p>
         </div>
     `;
 }
@@ -192,6 +259,16 @@ async function fetchActivityDetails(logId, contentElement) {
 function renderModalContent(data, contentElement) {
     console.log('=== Rendering Modal Content ===');
     console.log('Data to render:', data);
+    console.log('Entity Name (English):', data.entityName);
+    console.log('Entity Name (Arabic - camelCase):', data.entityNameAr);
+    console.log('Entity Name (Arabic - PascalCase):', data.EntityNameAr);
+    console.log('Details (English):', data.details);
+    console.log('Details (Arabic - camelCase):', data.detailsAr);
+    console.log('Details (Arabic - PascalCase):', data.DetailsAr);
+    console.log('User Name (English):', data.userName);
+    console.log('User Name (Arabic - camelCase):', data.userNameAr);
+    console.log('User Name (Arabic - PascalCase):', data.UserNameAr);
+    console.log('Current Language:', getCurrentLanguage());
     
     try {
         const html = buildModalHTML(data);
@@ -250,28 +327,28 @@ function buildActivitySection(data, formattedTimestamp) {
     return `
         <div class="col-md-6">
             <h6 class="text-primary mb-3 fw-bold">
-                <i class="bi bi-activity me-2"></i>Activity Information
+                <i class="bi bi-activity me-2"></i>${getTranslatedText('activity-information')}
             </h6>
             <div class="card border-0 shadow-sm">
                 <div class="card-body bg-light">
                     <div class="mb-3">
-                        <label class="form-label fw-bold text-secondary">Log ID:</label>
-                        <div class="form-control-plaintext fw-semibold">${safeString(data.logId)}</div>
+                        <label class="form-label fw-bold text-secondary">${getTranslatedText('log-id')}</label>
+                        <div class="form-control-plaintext fw-semibold">${safeString(data.logId || data.LogId)}</div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-bold text-secondary">Timestamp:</label>
+                        <label class="form-label fw-bold text-secondary">${getTranslatedText('timestamp')}</label>
                         <div class="form-control-plaintext">${formattedTimestamp}</div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-bold text-secondary">Action Type:</label>
+                        <label class="form-label fw-bold text-secondary">${getTranslatedText('action-type')}</label>
                         <div class="form-control-plaintext">
-                            <span class="badge fs-6 ${getActionBadgeClass(data.actionType)}">${safeString(data.actionType).toUpperCase()}</span>
+                            <span class="badge fs-6 ${getActionBadgeClass(data.actionType || data.ActionType)}">${getTranslatedActionType(data.actionType || data.ActionType)}</span>
                         </div>
                     </div>
                     <div class="mb-0">
-                        <label class="form-label fw-bold text-secondary">Entity Type:</label>
+                        <label class="form-label fw-bold text-secondary">${getTranslatedText('entity-type')}</label>
                         <div class="form-control-plaintext">
-                            <span class="badge fs-6 ${getEntityBadgeClass(data.entityType)}">${safeString(data.entityType)}</span>
+                            <span class="badge fs-6 ${getEntityBadgeClass(data.entityType || data.EntityType)}">${getTranslatedEntityType(data.entityType || data.EntityType)}</span>
                         </div>
                     </div>
                 </div>
@@ -283,27 +360,39 @@ function buildActivitySection(data, formattedTimestamp) {
 // Build user information section
 function buildUserSection(data) {
     const isArabic = getCurrentLanguage() === 'ar';
-    const displayUserName = isArabic && data.userNameAr ? data.userNameAr : (data.userName || 'N/A');
+    
+    // Pull Arabic user name from database if available (check both camelCase and PascalCase)
+    const userNameAr = data.userNameAr || data.UserNameAr;
+    const displayUserName = isArabic && userNameAr 
+        ? userNameAr 
+        : (data.userName || data.UserName || 'N/A');
+    
+    console.log('=== User Section Debug ===');
+    console.log('isArabic:', isArabic);
+    console.log('userNameAr (camelCase):', data.userNameAr);
+    console.log('UserNameAr (PascalCase):', data.UserNameAr);
+    console.log('Selected userNameAr:', userNameAr);
+    console.log('Final displayUserName:', displayUserName);
     
     return `
         <div class="col-md-6">
             <h6 class="text-primary mb-3 fw-bold">
-                <i class="bi bi-person-circle me-2"></i>User Information
+                <i class="bi bi-person-circle me-2"></i>${getTranslatedText('user-information')}
             </h6>
             <div class="card border-0 shadow-sm">
                 <div class="card-body bg-light">
                     <div class="mb-3">
-                        <label class="form-label fw-bold text-secondary">User ID:</label>
-                        <div class="form-control-plaintext fw-semibold">${safeString(data.userId)}</div>
+                        <label class="form-label fw-bold text-secondary">${getTranslatedText('user-id')}</label>
+                        <div class="form-control-plaintext fw-semibold">${safeString(data.userId || data.UserId)}</div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-bold text-secondary">User Name:</label>
+                        <label class="form-label fw-bold text-secondary">${getTranslatedText('user-name')}</label>
                         <div class="form-control-plaintext">${displayUserName}</div>
                     </div>
                     <div class="mb-0">
-                        <label class="form-label fw-bold text-secondary">User Role:</label>
+                        <label class="form-label fw-bold text-secondary">${getTranslatedText('user-role')}</label>
                         <div class="form-control-plaintext">
-                            <span class="badge fs-6 ${getRoleBadgeClass(data.userRole)}">${safeString(data.userRole).toUpperCase()}</span>
+                            <span class="badge fs-6 ${getRoleBadgeClass(data.userRole || data.UserRole)}">${getTranslatedUserRole(data.userRole || data.UserRole)}</span>
                         </div>
                     </div>
                 </div>
@@ -315,12 +404,34 @@ function buildUserSection(data) {
 // Build entity information section
 function buildEntitySection(data) {
     const isArabic = getCurrentLanguage() === 'ar';
-    const displayEntityName = isArabic && data.entityNameAr ? data.entityNameAr : (data.entityName || 'N/A');
     
-    const detailsSection = data.details ? `
+    // Pull Arabic names from database if available (check both camelCase and PascalCase)
+    const entityNameAr = data.entityNameAr || data.EntityNameAr;
+    const displayEntityName = isArabic && entityNameAr 
+        ? entityNameAr 
+        : (data.entityName || data.EntityName || 'N/A');
+    
+    // Pull Arabic details from database if available (check both camelCase and PascalCase)
+    const detailsAr = data.detailsAr || data.DetailsAr;
+    const displayDetails = isArabic && detailsAr 
+        ? detailsAr 
+        : (data.details || data.Details || null);
+    
+    console.log('=== Entity Section Debug ===');
+    console.log('isArabic:', isArabic);
+    console.log('entityNameAr (camelCase):', data.entityNameAr);
+    console.log('EntityNameAr (PascalCase):', data.EntityNameAr);
+    console.log('Selected entityNameAr:', entityNameAr);
+    console.log('Final displayEntityName:', displayEntityName);
+    console.log('detailsAr (camelCase):', data.detailsAr);
+    console.log('DetailsAr (PascalCase):', data.DetailsAr);
+    console.log('Selected detailsAr:', detailsAr);
+    console.log('Final displayDetails:', displayDetails);
+    
+    const detailsSection = displayDetails ? `
         <div class="mb-0">
-            <label class="form-label fw-bold text-secondary">Details:</label>
-            <div class="form-control-plaintext">${safeString(data.details)}</div>
+            <label class="form-label fw-bold text-secondary">${getTranslatedText('details')}</label>
+            <div class="form-control-plaintext">${safeString(displayDetails)}</div>
         </div>
     ` : '';
     
@@ -328,20 +439,20 @@ function buildEntitySection(data) {
         <div class="row mb-4">
             <div class="col-12">
                 <h6 class="text-primary mb-3 fw-bold">
-                    <i class="bi bi-database me-2"></i>Entity Information
+                    <i class="bi bi-database me-2"></i>${getTranslatedText('entity-information')}
                 </h6>
                 <div class="card border-0 shadow-sm">
                     <div class="card-body bg-light">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold text-secondary">Entity ID:</label>
-                                    <div class="form-control-plaintext fw-semibold">${safeString(data.entityId) || 'N/A'}</div>
+                                    <label class="form-label fw-bold text-secondary">${getTranslatedText('entity-id')}</label>
+                                    <div class="form-control-plaintext fw-semibold">${safeString(data.entityId || data.EntityId) || 'N/A'}</div>
                                 </div>
                             </div>
                             <div class="col-md-8">
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold text-secondary">Entity Name:</label>
+                                    <label class="form-label fw-bold text-secondary">${getTranslatedText('entity-name')}</label>
                                     <div class="form-control-plaintext">${displayEntityName}</div>
                                 </div>
                             </div>
@@ -360,22 +471,22 @@ function buildChangesSection(data) {
         <div class="row mb-0">
             <div class="col-12">
                 <h6 class="text-primary mb-3 fw-bold">
-                    <i class="bi bi-code-square me-2"></i>Data Changes
+                    <i class="bi bi-code-square me-2"></i>${getTranslatedText('data-changes')}
                 </h6>
                 ${data.actionType === 'Edit' ? `
                 <div class="mb-3">
                     <div class="d-flex align-items-center gap-3 text-sm">
                         <span class="d-flex align-items-center">
                             <span class="highlight-legend-modified me-1"></span>
-                            Modified fields
+                            ${getTranslatedText('modified-fields')}
                         </span>
                         <span class="d-flex align-items-center">
                             <span class="highlight-legend-added me-1"></span>
-                            New/Added fields
+                            ${getTranslatedText('new-added-fields')}
                         </span>
                         <span class="d-flex align-items-center">
                             <span class="highlight-legend-removed me-1"></span>
-                            Removed fields
+                            ${getTranslatedText('removed-fields')}
                         </span>
                     </div>
                 </div>
@@ -397,7 +508,7 @@ function getDataChangesContent(actionType, beforeData, afterData) {
             <div class="card border-success">
                 <div class="card-header bg-success bg-opacity-10 border-success">
                     <h6 class="card-title mb-0 text-success">
-                        <i class="bi bi-plus-circle me-2"></i>Added Data
+                        <i class="bi bi-plus-circle me-2"></i>${getTranslatedText('added-data')}
                     </h6>
                 </div>
                 <div class="card-body">
@@ -412,7 +523,7 @@ function getDataChangesContent(actionType, beforeData, afterData) {
             <div class="card border-danger">
                 <div class="card-header bg-danger bg-opacity-10 border-danger">
                     <h6 class="card-title mb-0 text-danger">
-                        <i class="bi bi-trash me-2"></i>Deleted Data
+                        <i class="bi bi-trash me-2"></i>${getTranslatedText('deleted-data')}
                     </h6>
                 </div>
                 <div class="card-body">
@@ -428,8 +539,8 @@ function getDataChangesContent(actionType, beforeData, afterData) {
                 <div class="card border-warning">
                     <div class="card-header bg-warning bg-opacity-10 border-warning">
                         <h6 class="card-title mb-0 text-warning">
-                            <i class="bi bi-arrow-left-circle me-2"></i>Before Changes
-                            <small class="text-muted ms-2">(Original values highlighted)</small>
+                            <i class="bi bi-arrow-left-circle me-2"></i>${getTranslatedText('before-changes')}
+                            <small class="text-muted ms-2">${getTranslatedText('original-values-highlighted')}</small>
                         </h6>
                     </div>
                     <div class="card-body">
@@ -444,8 +555,8 @@ function getDataChangesContent(actionType, beforeData, afterData) {
                 <div class="card border-info">
                     <div class="card-header bg-info bg-opacity-10 border-info">
                         <h6 class="card-title mb-0 text-info">
-                            <i class="bi bi-arrow-right-circle me-2"></i>After Changes
-                            <small class="text-muted ms-2">(New values highlighted)</small>
+                            <i class="bi bi-arrow-right-circle me-2"></i>${getTranslatedText('after-changes')}
+                            <small class="text-muted ms-2">${getTranslatedText('new-values-highlighted')}</small>
                         </h6>
                     </div>
                     <div class="card-body">
@@ -462,7 +573,7 @@ function getDataChangesContent(actionType, beforeData, afterData) {
         <div class="card border-secondary">
             <div class="card-body text-center text-muted py-4">
                 <i class="bi bi-info-circle fs-4 mb-2"></i>
-                <p class="mb-0">No detailed change information available for this activity.</p>
+                <p class="mb-0">${getTranslatedText('no-detailed-change-info')}</p>
             </div>
         </div>
     `;
@@ -470,7 +581,7 @@ function getDataChangesContent(actionType, beforeData, afterData) {
 
 // Format JSON data safely
 function formatJsonData(jsonString) {
-    if (!jsonString) return 'No data available';
+    if (!jsonString) return getTranslatedText('no-data-available');
     
     try {
         const parsed = JSON.parse(jsonString);
@@ -654,22 +765,22 @@ function showErrorInModal(errorMessage, logId, contentElement) {
             <div class="d-flex align-items-center mb-3">
                 <i class="bi bi-exclamation-triangle-fill fs-4 me-3 text-danger"></i>
                 <div>
-                    <h5 class="alert-heading mb-1">Error Loading Activity Details</h5>
-                    <small class="text-muted">Log ID: ${safeString(logId)}</small>
+                    <h5 class="alert-heading mb-1">${getTranslatedText('error-loading-activity-details')}</h5>
+                    <small class="text-muted">${getTranslatedText('log-id')} ${safeString(logId)}</small>
                 </div>
             </div>
             <hr>
             <div class="mb-3">
-                <strong>Error Details:</strong>
+                <strong>${getTranslatedText('error-details')}</strong>
                 <pre class="mt-2 p-3 bg-light border rounded small">${escapeHtml(errorMessage)}</pre>
             </div>
             <div class="mb-0">
-                <strong>Troubleshooting:</strong>
+                <strong>${getTranslatedText('troubleshooting')}</strong>
                 <ul class="mb-0 mt-2">
-                    <li>Check if the Log ID exists in the database</li>
-                    <li>Verify your network connection</li>
-                    <li>Try refreshing the page</li>
-                    <li>Contact system administrator if the problem persists</li>
+                    <li>${getTranslatedText('check-log-id-exists')}</li>
+                    <li>${getTranslatedText('verify-network-connection')}</li>
+                    <li>${getTranslatedText('try-refreshing-page')}</li>
+                    <li>${getTranslatedText('contact-admin-if-persists')}</li>
                 </ul>
             </div>
         </div>
@@ -718,9 +829,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 content.innerHTML = `
                     <div class="text-center">
                         <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                            <span class="visually-hidden">${getTranslatedText('loading')}</span>
                         </div>
-                        <div class="mt-2">Loading activity details...</div>
+                        <div class="mt-2">${getTranslatedText('loading-activity-details')}</div>
                     </div>
                 `;
             }

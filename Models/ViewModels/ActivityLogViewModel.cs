@@ -263,6 +263,30 @@ namespace RulesRegulation.Models.ViewModels
         public bool IsAdminAction => UserRole.Equals("Admin", StringComparison.OrdinalIgnoreCase);
         public bool HasChanges => !string.IsNullOrEmpty(ChangesSummary) || (!string.IsNullOrEmpty(Details) && ActionType == "Edit");
         public bool HasDetails => !string.IsNullOrEmpty(Details);
+        /// <summary>
+        /// Returns the display name for the entity, using contact.NameAr if entity is Contact, otherwise EntityNameAr/EntityName
+        /// </summary>
+        /// <param name="contactNameAr">Arabic name for contact (if available)</param>
+        /// <param name="isArabic">Whether to return Arabic name</param>
+        public string GetDisplayEntityNameSmart(string? contactNameAr = null, bool isArabic = false)
+        {
+            if (EntityType.Equals("Contact", StringComparison.OrdinalIgnoreCase))
+            {
+                if (isArabic && !string.IsNullOrEmpty(contactNameAr))
+                    return contactNameAr;
+                // fallback to EntityNameAr if available
+                if (isArabic && !string.IsNullOrEmpty(EntityNameAr))
+                    return EntityNameAr;
+                // fallback to EntityName
+                return EntityName ?? "Unknown";
+            }
+            else
+            {
+                if (isArabic && !string.IsNullOrEmpty(EntityNameAr))
+                    return EntityNameAr;
+                return EntityName ?? "Unknown";
+            }
+        }
     }
 
     /// <summary>

@@ -53,7 +53,7 @@ namespace RulesRegulation.Services
                     cmd.Parameters.Add(":entityType", entityType);
                     cmd.Parameters.Add(":entityId", entityId ?? 0);
                     cmd.Parameters.Add(":entityName", string.IsNullOrWhiteSpace(entityName) ? (object)DBNull.Value : entityName);
-                    cmd.Parameters.Add(":ts", DateTime.UtcNow);
+                    cmd.Parameters.Add(":ts", DateTime.Now);
                     cmd.Parameters.Add(":oldVals", oldValues != null ? JsonSerializer.Serialize(oldValues) : (object)DBNull.Value);
                     cmd.Parameters.Add(":newVals", newValues != null ? JsonSerializer.Serialize(newValues) : (object)DBNull.Value);
                     cmd.Parameters.Add(":details", changesSummary ?? details ?? (object)DBNull.Value);
@@ -79,7 +79,7 @@ namespace RulesRegulation.Services
                     cmd.Parameters.Add(":entityType", entityType);
                     cmd.Parameters.Add(":entityId", entityId ?? 0);
                     cmd.Parameters.Add(":entityName", string.IsNullOrWhiteSpace(entityName) ? (object)DBNull.Value : entityName);
-                    cmd.Parameters.Add(":ts", DateTime.UtcNow);
+                    cmd.Parameters.Add(":ts", DateTime.Now);
                     cmd.Parameters.Add(":oldVals", oldValues != null ? JsonSerializer.Serialize(oldValues) : (object)DBNull.Value);
                     cmd.Parameters.Add(":newVals", newValues != null ? JsonSerializer.Serialize(newValues) : (object)DBNull.Value);
                     cmd.Parameters.Add(":details", changesSummary ?? details ?? (object)DBNull.Value);
@@ -413,11 +413,37 @@ namespace RulesRegulation.Services
                 // Create dictionaries to cache lookups
                 var userNameDict = new Dictionary<int, string>();
                 var recordNameDict = new Dictionary<int, string>();
+                var contactNameDict = new Dictionary<int, string>();
                 
                 // Get unique user IDs and entity IDs for batch lookup
                 var userIds = logs.Select(l => l.UserId).Distinct().ToList();
                 var recordIds = logs.Where(l => l.EntityType == "Record" && l.EntityId.HasValue)
                                    .Select(l => l.EntityId!.Value).Distinct().ToList();
+                var contactIds = logs.Where(l => l.EntityType == "Contact" && l.EntityId.HasValue)
+                                   .Select(l => l.EntityId!.Value).Distinct().ToList();
+                // Batch lookup Arabic contact names
+                if (contactIds.Any())
+                {
+                    var contactSql = "SELECT CONTACT_ID, NAME_AR FROM CONTACT_INFORMATION WHERE CONTACT_ID IN (" + string.Join(",", contactIds) + ")";
+                    try
+                    {
+                        using var contactCmd = new OracleCommand(contactSql, connection);
+                        using var contactReader = await contactCmd.ExecuteReaderAsync();
+                        while (await contactReader.ReadAsync())
+                        {
+                            var contactId = contactReader.GetInt32("CONTACT_ID");
+                            var nameAr = !contactReader.IsDBNull("NAME_AR") ? contactReader.GetString("NAME_AR") : null;
+                            if (!string.IsNullOrEmpty(nameAr))
+                            {
+                                contactNameDict[contactId] = nameAr;
+                            }
+                        }
+                    }
+                    catch (OracleException ex) when (ex.Number == 904)
+                    {
+                        _logger.LogDebug("NAME_AR column not found, skipping contact name translation");
+                    }
+                }
                 
                 // Batch lookup Arabic user names (check if USER_NAME_AR column exists)
                 if (userIds.Any())
@@ -483,17 +509,19 @@ namespace RulesRegulation.Services
                     {
                         log.UserNameAr = userNameAr;
                     }
-                    
-                    // Set Arabic entity name if available
+                    // Set Arabic entity name for Record
                     if (log.EntityType == "Record" && log.EntityId.HasValue && 
                         recordNameDict.TryGetValue(log.EntityId.Value, out var entityNameAr))
                     {
                         log.EntityNameAr = entityNameAr;
                     }
-                    
+                    // Set Arabic entity name for Contact
+                    if (log.EntityType == "Contact" && log.EntityId.HasValue &&
+                        contactNameDict.TryGetValue(log.EntityId.Value, out var contactNameAr))
+                    {
+                        log.EntityNameAr = contactNameAr;
+                    }
                     // For now, we don't translate Details/ChangesSummary as they are dynamic content
-                    // In the future, this could be enhanced to translate common phrases or
-                    // regenerate summaries in Arabic based on the action type
                 }
             }
             catch (Exception ex)
