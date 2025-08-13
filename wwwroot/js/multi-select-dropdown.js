@@ -67,32 +67,72 @@ function updateSelectedDepartments() {
     const options = document.querySelectorAll('.department-option:checked');
     const hiddenInput = document.getElementById('departmentFilter');
     const button = document.getElementById('departmentMultiSelectButton');
-    
+
+    // Detect current language (check for Arabic)
+    const isArabic = document.documentElement.lang === 'ar' ||
+        document.documentElement.dir === 'rtl' ||
+        document.body.classList.contains('rtl') ||
+        document.querySelector('[lang="ar"]') !== null;
+
+    // Department translations
+    const departmentTranslations = {
+        'Reg and Admission': 'التسجيل والقبول',
+        'CCSIT': 'كلية علوم الحاسب وتقنية المعلومات',
+        'Communication and tech': 'الاتصالات والتقنية',
+        'Hospital': 'المستشفى',
+        'Library': 'المكتبة',
+        'Students Affairs': 'شؤون الطلاب',
+        'Preparetory': 'السنة التحضيرية',
+        'Academic Affairs': 'الشؤون الأكاديمية',
+        '': 'جميع الأقسام',
+    };
+
+    // Get translated texts
+    const allDepartmentsText = isArabic ? 'جميع الأقسام' : 'All Departments';
+    const selectDepartmentsText = isArabic ? 'اختر الأقسام' : 'Select Departments';
+    const departmentsText = isArabic ? 'أقسام' : 'Departments';
+    const multipleDepartmentsText = isArabic ? 'عدة أقسام' : 'Multiple Departments';
+
     // Check for "All Departments" option
     const allDepartmentsSelected = Array.from(options).some(option => option.value === '');
-    
-    // Update hidden input value
+
+    // Update hidden input value and button label
     if (allDepartmentsSelected) {
         hiddenInput.value = '';
-        button.innerHTML = 'All Departments <span class="caret">▼</span>';
+        button.innerHTML = `<span id="all-departments-label">${allDepartmentsText}</span> <span class="caret">▼</span>`;
     } else if (options.length === 0) {
         hiddenInput.value = '';
-        button.innerHTML = 'Select Departments <span class="caret">▼</span>';
+        button.innerHTML = `<span id="select-departments-label">${selectDepartmentsText}</span> <span class="caret">▼</span>`;
     } else {
         // Collect selected values
         const selectedValues = Array.from(options).map(option => option.value);
         hiddenInput.value = selectedValues.join(',');
-        
+
         // Update button text
         if (options.length === 1) {
-            // Get just the department name without extra whitespace from the label
-            const departmentText = options[0].value;
-            button.innerHTML = departmentText + ' <span class="caret">▼</span>';
+            // Get the label text for the selected department
+            const label = options[0].closest('label');
+            let departmentText = options[0].value;
+            if (isArabic && departmentTranslations[departmentText]) {
+                departmentText = departmentTranslations[departmentText];
+            } else if (label) {
+                // Try to get the visible text (should be Arabic or English as rendered)
+                const span = label.querySelector('span');
+                if (span) departmentText = span.textContent.trim();
+            }
+            button.innerHTML = `<span>${departmentText}</span> <span class="caret">▼</span>`;
         } else {
-            button.innerHTML = options.length + ' Depts <span class="caret">▼</span>';
+            // Show all selected in Arabic if Arabic, else show count
+            if (isArabic) {
+                // List all selected in Arabic
+                const selectedArabic = selectedValues.map(val => departmentTranslations[val] || val).join('، ');
+                button.innerHTML = `<span>${selectedArabic}</span> <span class="caret">▼</span>`;
+            } else {
+                button.innerHTML = `<span>${options.length} ${departmentsText}</span> <span class="caret">▼</span>`;
+            }
         }
     }
-    
+
     // Trigger change event on hidden input for filters to apply
     const event = new Event('change');
     hiddenInput.dispatchEvent(event);
