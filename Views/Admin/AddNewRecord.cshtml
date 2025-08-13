@@ -1,14 +1,24 @@
 @model AddNewRecordViewModel
+@using Microsoft.AspNetCore.Localization
+
+@{
+  var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+  var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
+  var isArabic = currentCulture == "ar-SA";
+  ViewBag.IsArabic = isArabic;
+}
 
 @section Styles {
   <link rel="stylesheet" href="~/css/AddNewRecord.css">
   <link rel="stylesheet" href="~/css/adminPagesHeader.css">
+  <link rel="stylesheet" href="~/css/adminMobileMenu.css">
 }
 <!-- javascript files, from js file-->
 @section Scripts {
   <script src="~/js/addnewrecord.js"></script>
   <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
   <script src="~/js/adminPagesHeader.js"></script>
+  <script src="~/js/adminMobileMenu.js"></script>
   <script src="~/js/languageSwitcher.js"></script>
 }
 <!-- This file contains the view for adding a new record in the admin panel. -->

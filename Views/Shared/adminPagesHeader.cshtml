@@ -1,3 +1,7 @@
+@{
+    var isArabic = ViewBag.IsArabic ?? false;
+}
+
 <header class="menu">
 
     <div class="container-fluid h-100 bootstrap-wrapper">
@@ -83,3 +87,9 @@
     </div>
 
 </header>
+
+
+@await Html.PartialAsync("adminMobileMenu")
+
+<div id="sidebarBackdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+     background: rgba(0, 0, 0, 0.5); z-index: 1061; cursor: pointer;"></div>

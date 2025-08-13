@@ -7,17 +7,21 @@
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
     var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
     var isArabic = currentCulture == "ar-SA";
+    ViewBag.IsArabic = isArabic;
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/admin-portal.css">
     <link rel="stylesheet" href="~/css/_rtl_Styles.css">
     <link rel="stylesheet" href="~/css/adminPagesHeader.css">
+    <link rel="stylesheet" href="~/css/adminMobileMenu.css">
 }
 
 @section Scripts {
     <script src="~/js/admin-portal.js"></script>
     <script src="~/js/languageSwitcher.js"></script>
+    <script src="~/js/adminPagesHeader.js"></script>
+    <script src="~/js/adminMobileMenu.js"></script>
 }
 
 <!-- Admin Header with Language and Logout buttons -->

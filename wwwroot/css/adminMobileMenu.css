@@ -1,0 +1,85 @@
+/* Admin Mobile Menu Styles */
+
+.custom-sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 280px;
+    height: 100vh;
+    background: #0f1733;
+    z-index: 1062;
+    transition: left 0.3s ease, right 0.3s ease;
+    overflow-y: auto;
+}
+
+.sideNav {
+    display: block;
+}
+
+.mobile-menu-section {
+    padding: 15px 20px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s ease;
+    text-decoration: none !important;
+    color: white !important;
+    display: block;
+}
+
+#sideNavBar .mobile-menu-section:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+.mobile-menu-section span {
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+}
+
+#sidebarBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1061;
+    cursor: pointer;
+    display: none;
+}
+
+/* RTL Support for mobile menu */
+[dir="rtl"] .custom-sidebar {
+    left: auto;
+    right: -100%;
+}
+
+/* Mobile menu section styling for better appearance */
+.mobile-menu-section div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mobile-menu-section img,
+.mobile-menu-section svg {
+    flex-shrink: 0;
+}
+
+/* Form styling inside mobile menu */
+.mobile-menu-section.border-0 {
+    background: transparent !important;
+    border: none !important;
+    width: 100% !important;
+    text-align: start !important;
+    cursor: pointer;
+}
+
+/* Special styling for exit edit mode button */
+.mobile-menu-section[style*="background-color: #A6832C"] {
+    background-color: #A6832C !important;
+}
+
+#sideNavBar .mobile-menu-section[style*="background-color: #A6832C"]:hover {
+    background-color: #8c6f24 !important;
+}
