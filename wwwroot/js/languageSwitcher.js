@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "record-details-contact-info-title": "Department Contacts",
             // START Admin Page Translations
         "admin-exit-view-button": "Exit Editor view",
+        "admin-panel-button": "Admin Portal",
         "back-button": "Back",
         "admin-chart-title-overview": "University Rules and Guidelines Overview",
         "admin-chart-legend-academic-rules": "Academic rules & regulations",
@@ -610,6 +611,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "record-details-no-description": "لا يوجد وصف متاح",
             "record-details-contact-info-title": "جهات الاتصال بالقسم",
         "admin-exit-view-button": "الخروج من عرض المحرر",
+        "admin-panel-button": "بوابة الإدارة",
         "back-button": "رجوع",
         "admin-chart-title-overview": "نظرة عامة على قواعد وإرشادات الجامعة",
         "admin-chart-legend-academic-rules": "القواعد واللوائح الأكاديمية",

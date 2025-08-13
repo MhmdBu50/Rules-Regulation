@@ -11,13 +11,13 @@
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
     var currentCulture = requestCulture?.RequestCulture.Culture.Name ?? "en-US";
     var isArabic = currentCulture == "ar-SA";
-
-
+    ViewBag.IsArabic = isArabic;
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/addContactInfo.css">
     <link rel="stylesheet" href="~/css/adminPagesHeader.css">
+    <link rel="stylesheet" href="~/css/adminMobileMenu.css">
     <link rel="stylesheet" href="~/css/manageContactInfo.css">
     <link rel="stylesheet" href="~/css/multi-select-dropdown.css">
     <link rel="stylesheet" href="~/css/AdminPage.css">
@@ -25,6 +25,7 @@
 }
 @section Scripts {
     <script src="~/js/adminPagesHeader.js"></script>
+    <script src="~/js/adminMobileMenu.js"></script>
     <script src="~/js/languageSwitcher.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/manageContactInfo.js"></script>

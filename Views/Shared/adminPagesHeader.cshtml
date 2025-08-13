@@ -1,3 +1,7 @@
+@{
+    var isArabic = ViewBag.IsArabic ?? false;
+}
+
 <header class="menu">
 
     <div class="container-fluid h-100 bootstrap-wrapper">
@@ -46,6 +50,25 @@
 
                         </button>
                     </div>
+
+                    <!-------- Vertical Divider (Admin Only) ------>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="vr d-none d-lg-block d-xl-block" style="color: aliceblue; opacity: 0.75;"></div>
+                    }
+                    <!-------- Vertical Divider (Admin Only) ------>
+
+                    <!--------------------- Admin Panel Button ------------------->
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="d-none d-lg-block d-xl-block">
+                            <button class="desktop-logo logo header-nav d-none d-lg-flex"
+                                onclick="location.href='@Url.Action("AdminPortal", "Admin")'">
+                                <img src="~/svgs/navigation/admin.svg" alt="Admin Panel" width="36" height="36" />
+                                <span class="poppins-regular" id="admin-panel-button">Admin Panel</span>
+                            </button>
+                        </div>
+                    }
                 </div>
             </div>
 
@@ -64,3 +87,9 @@
     </div>
 
 </header>
+
+
+@await Html.PartialAsync("adminMobileMenu")
+
+<div id="sidebarBackdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+     background: rgba(0, 0, 0, 0.5); z-index: 1061; cursor: pointer;"></div>

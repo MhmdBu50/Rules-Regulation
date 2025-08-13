@@ -1,0 +1,320 @@
+<!-- ==============================
+     Chatbot HTML Structure
+     ==============================
+     This section defines the visual elements of the chatbot,
+     including the floating chat icon, the chat window, header,
+     messages area, and input field.
+     Intended for the HomePage.cshtml file, but currently unused
+     until chatbot logic is fully implemented.
+-->
+
+<div class="chatbot-container">
+    
+    <!-- Floating circular icon that appears at the bottom-right corner -->
+    <div class="chat-icon" id="chat-icon">
+        <img src="~/svgs/chatbot/chatbot-large.svg" width="80" height="80" />
+    </div>
+
+    <!-- Main chat box (hidden by default, shown when .active is added) -->
+    <div class="chat-box" id="chat-box">
+        
+        <!-- Chatbox header: contains title and close button -->
+        <div class="chat-header">
+            <div class="chat-title">
+                <!-- Icon next to chatbot title -->
+                <img src="~/svgs/chatbot/chatbot-header.svg" width="24" height="24" />
+                <!-- Chatbot name -->
+                <span id="chatbot-name">Chat with Mr. Kabsa</span>
+            </div>
+            <!-- Close button for chat box -->
+            <button class="chat-close" id="chat-close">
+                <img src="~/svgs/chatbot/close-icon.svg" width="24" height="24" />
+            </button>
+        </div>
+
+        <!-- Area where messages appear -->
+        <div class="chat-messages" id="chat-messages">
+            <!-- Initial bot message shown when chat opens -->
+            <div class="message bot-message" id="chatbot-initial-message">
+                Hi, how can I help you today?
+            </div>
+        </div>
+
+        <!-- Input area where users type messages -->
+        <div class="chat-input">
+            <!-- Text input field -->
+            <input type="text" id="message-input" placeholder="Type your message...">
+            <!-- Send button -->
+            <button id="send-button">
+                <img src="~/svgs/chatbot/send-icon.svg" width="24" height="24" />
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+/* ==============================
+   Chatbot Styling
+   ==============================
+   This section controls the look and feel of the chatbot UI.
+   It includes positioning, colors, animations, and responsiveness.
+*/
+
+/* Default font for chatbot */
+.chatbot-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Chatbot container is fixed at the bottom-right corner */
+.chatbot-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000; /* Ensures it appears above most elements */
+}
+
+/* Floating chat icon styling */
+.chat-icon {
+    width: 70px;
+    height: 70px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center; /* Center icon vertically */
+    justify-content: center; /* Center icon horizontally */
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease; /* Smooth hover animation */
+}
+
+/* Hover effect for chat icon */
+.chat-icon:hover {
+    transform: scale(1.05);
+}
+
+/* Chat box container (hidden by default) */
+.chat-box {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, .5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(20px); /* Slightly offset before appearing */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+    z-index: 10000;
+}
+
+/* Chat box when active (visible) */
+.chat-box.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Chat header bar */
+.chat-header {
+    background: #2F3E5F;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Chat title area */
+.chat-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Close button */
+.chat-close {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+/* Close button hover */
+.chat-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Chat messages area */
+.chat-messages {
+    flex: 1; /* Fill remaining space */
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: linear-gradient(180deg, #FFFFFF 8.17%, #FCFBF8 26.44%, #F2EDE1 85.81%);
+}
+
+/* Message bubbles */
+.message {
+    max-width: 80%;
+    padding: 12px 15px;
+    border-radius: 18px;
+    position: relative;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Fade-in animation for messages */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Bot message bubble */
+.bot-message {
+    background: #e9ecef;
+    color: #343a40;
+    border-bottom-left-radius: 5px;
+    align-self: flex-start;
+}
+
+/* User message bubble */
+.user-message {
+    background: #2F3E5F;
+    color: white;
+    border-bottom-right-radius: 5px;
+    align-self: flex-end;
+}
+
+/* Chat input area */
+.chat-input {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid #dee2e6;
+    background: white;
+    box-shadow: 0px -1px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Text input field */
+.chat-input input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px 15px;
+    border-radius: 25px;
+    background: #f8f9fa;
+    font-size: 0.95rem;
+}
+
+/* Send button */
+.chat-input button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: #2F3E5F;
+    border-radius: 50%;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s;
+}
+
+/* Send button hover effect */
+.chat-input button:hover {
+    transform: scale(1.1);
+}
+
+/* Send button icon styling */
+.chat-input button svg {
+    width: 20px;
+    height: 20px;
+    transform: rotate(45deg);
+}
+
+// Chatbot Functionality
+// Handles showing/hiding the chatbox, sending messages,
+receiving a simulated bot response, and closing the chat when clicking outside.
+
+
+ElementById('chat-icon');      // Floating chat icon
+const chatBox = document.getElementById('chat-box');  
+// Get DOM elements
+const chatIcon = document.get      // Main chat window
+const chatClose = document.getElementById('chat-close');    // Close button in chat header
+const messageInput = document.getElementById('message-input'); // Input field for user message
+const sendButton = document.getElementById('send-button');  // Send message button
+const chatMessages = document.getElementById('chat-messages'); // Container for chat messages
+
+// Show chatbox when icon is clicked
+chatIcon.addEventListener('click', () => {
+    chatBox.classList.add('active');
+});
+
+// Hide chatbox when close button is clicked
+chatClose.addEventListener('click', () => {
+    chatBox.classList.remove('active');
+});
+
+// Function to send a message
+function sendMessage() {
+    const message = messageInput.value.trim(); // Remove extra spaces
+
+    if (message !== '') {
+        // Create and append user's message
+        const userMessage = document.createElement('div');
+        userMessage.classList.add('message', 'user-message');
+        userMessage.textContent = message;
+        chatMessages.appendChild(userMessage);
+
+        // Clear input
+        messageInput.value = '';
+
+        // Scroll to bottom to see latest message
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Simulated bot reply after 1 second
+        setTimeout(() => {
+            const botMessage = document.createElement('div');
+            botMessage.classList.add('message', 'bot-message');
+            botMessage.textContent = "Eat kabsa habibi"; // Placeholder text
+            chatMessages.appendChild(botMessage);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1000);
+    }
+}
+
+// Send message when button is clicked
+sendButton.addEventListener('click', sendMessage);
+
+// Send message when pressing Enter in the input field
+messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
+
+// Close chatbox if clicking outside it
+document.addEventListener('click', (event) => {
+    if (
+        chatBox.classList.contains('active') &&
+        !chatBox.contains(event.target) &&
+        !chatIcon.contains(event.target)
+    ) {
+        chatBox.classList.remove('active');
+    }
+});
