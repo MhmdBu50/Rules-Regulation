@@ -176,11 +176,11 @@ function DownloadPdf(id) {
     recordAction(id, 'download')
         .then(() => {
             // Only redirect after history is recorded
-            window.location.href = `/admin/DownloadPdf/${id}`;
+            window.location.href = `/Home/DownloadPdf/${id}`;
         })
         .catch(error => {
             // Even if history fails, still allow download
-            window.location.href = `/admin/DownloadPdf/${id}`;
+            window.location.href = `/Home/DownloadPdf/${id}`;
         });
 }
 
@@ -190,12 +190,12 @@ function ViewPdf(id) {
     recordAction(id, 'view')
         .then(() => {
             // Open PDF after history is recorded
-            window.open(`/admin/ViewPdf/${id}`, '_blank');
+            window.open(`/Home/ViewPdf/${id}`, '_blank');
         })
         .catch(error => {
 
             // Even if history fails, still allow viewing
-            window.open(`/admin/ViewPdf/${id}`, '_blank');
+            window.open(`/Home/ViewPdf/${id}`, '_blank');
         });
 }
 
